@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <!-- DHA Dubai Health Authority Crest -->
+  <g transform="translate(6, 6)">
+    <circle cx="18" cy="18" r="16" fill="#FFFBEB" stroke="#D97706" stroke-width="2" />
+    <path d="M18 8 L22 14 L28 15 L23 20 L25 26 L18 22 L11 26 L13 20 L8 15 L14 14 Z" fill="#D97706" />
+    <circle cx="18" cy="17" r="3.5" fill="#FFFFFF" />
+  </g>
+  <!-- DHA Wordmark -->
+  <text x="48" y="26" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="19" fill="currentColor" letter-spacing="0.5">DHA DUBAI</text>
+  <text x="49" y="37" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="8.5" fill="#D97706" letter-spacing="1.5">HEALTH NETWORK</text>
+</svg>
+

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <!-- Max Healthcare Iconic Green Shield & Red Accent -->
+  <g transform="translate(6, 6)">
+    <!-- Deep Green Shield Base -->
+    <path d="M18 4 L31 9 C31 22 24 30 18 34 C12 30 5 22 5 9 L18 4 Z" fill="#047857" />
+    <!-- White Medical Cross inside -->
+    <rect x="15" y="11" width="6" height="14" rx="1.5" fill="#FFFFFF" />
+    <rect x="11" y="15" width="14" height="6" rx="1.5" fill="#FFFFFF" />
+    <!-- Red heart accent dot -->
+    <circle cx="18" cy="18" r="2" fill="#EF4444" />
+  </g>
+  <!-- Max Wordmark -->
+  <text x="48" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="20" fill="currentColor" letter-spacing="1">MAX</text>
+  <text x="48" y="38" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="8.5" fill="#047857" letter-spacing="1.5">HEALTHCARE</text>
+</svg>
+

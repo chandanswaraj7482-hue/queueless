@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <!-- Apollo Iconic Emblem -->
+  <g transform="translate(4, 4)">
+    <!-- Sun / Radiance circles -->
+    <circle cx="20" cy="10" r="4.5" fill="#F59E0B" />
+    <!-- Stylized Human Reaching Figure / Flame -->
+    <path d="M12 36 C12 28 16 22 20 18 C24 22 28 28 28 36 Z" fill="#D97706" />
+    <path d="M7 26 C11 22 16 19 20 18 C17 24 15 30 14 36" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" fill="none" />
+    <path d="M33 26 C29 22 24 19 20 18 C23 24 25 30 26 36" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" fill="none" />
+    <!-- Base curve -->
+    <path d="M8 38 C14 40 26 40 32 38" stroke="#1D4ED8" stroke-width="2.5" stroke-linecap="round" />
+  </g>
+  <!-- Brand Wordmark -->
+  <text x="50" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="20" fill="currentColor" letter-spacing="-0.5">Apollo</text>
+  <text x="50" y="38" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="8.5" fill="#2563EB" letter-spacing="2.2">CLINICS</text>
+</svg>
+

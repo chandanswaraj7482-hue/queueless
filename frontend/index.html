@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Queueless | Clinic Queue Platform</title>
+    <script>
+      (function() {
+        try {
+          const savedTheme = localStorage.getItem('queueless_theme');
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      ::selection {
+        background-color: #2563eb !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+      }
+      *::selection {
+        background-color: #2563eb !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+      }
+      ::-moz-selection {
+        background-color: #2563eb !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+      }
+      *::-moz-selection {
+        background-color: #2563eb !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+      }
+    </style>
+
+    <style>
+      /* Hide Google Translate top bar and original banner */
+      .goog-te-banner-frame.skiptranslate,
+      .goog-te-banner-frame,
+      #goog-gt-tt,
+      .goog-te-balloon-frame {
+        display: none !important;
+      }
+      body {
+        top: 0px !important;
+      }
+      .goog-tooltip,
+      .goog-tooltip:hover {
+        display: none !important;
+      }
+      .goog-text-highlight {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .skiptranslate {
+        display: inline;
+      }
+      iframe.skiptranslate {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen selection:bg-blue-600 selection:text-white transition-colors duration-200 overflow-x-hidden">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Hidden Google Translate Element -->
+    <div id="google_translate_element" style="display:none; visibility:hidden; position:absolute; left:-9999px;"></div>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: "en",
+          autoDisplay: false
+        }, "google_translate_element");
+      }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </body>
+</html>
+

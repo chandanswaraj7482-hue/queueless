@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <!-- Fortis Caring Hands & Human Emblem -->
+  <g transform="translate(6, 6)">
+    <!-- Green human / heart center -->
+    <circle cx="18" cy="11" r="3.5" fill="#16A34A" />
+    <path d="M14 26 C14 20 18 16 18 16 C18 16 22 20 22 26 C20 28 16 28 14 26 Z" fill="#16A34A" />
+    <!-- Red protective hands / wings -->
+    <path d="M6 18 C6 12 11 8 18 13 C12 12 9 17 10 24 C11 29 15 32 18 34 C12 32 6 25 6 18 Z" fill="#DC2626" />
+    <path d="M30 18 C30 12 25 8 18 13 C24 12 27 17 26 24 C25 29 21 32 18 34 C24 32 30 25 30 18 Z" fill="#DC2626" />
+  </g>
+  <!-- Fortis Wordmark -->
+  <text x="50" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="21" fill="currentColor" letter-spacing="-0.5">Fortis</text>
+  <text x="50" y="38" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="8" fill="#DC2626" letter-spacing="2">HEALTHCARE</text>
+</svg>
+

@@ -1,0 +1,222 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id        String     @id @default(uuid())
+  name      String
+  slug      String     @unique
+  status    String     @default("ACTIVE") // ACTIVE, SUSPENDED
+  createdAt DateTime   @default(now())
+  clinics   Clinic[]
+  users     User[]
+  patients  Patient[]
+  auditLogs AuditLog[]
+}
+
+model Clinic {
+  id           String         @id @default(uuid())
+  tenantId     String
+  name         String
+  slug         String         @unique
+  address      String
+  logoUrl      String?        // Hospital's own custom logo (Image URL or Base64 data)
+  timezone     String         @default("Asia/Kolkata")
+  openingHours String         @default("09:00 - 20:00")
+  contactPhone String?
+  followUpDays      Int            @default(15) // Free follow-up consultation window (days)
+  settings          String?        // JSON string for queue rules, chime settings, etc.
+  adminPassword     String?        @default("admin123") // Hospital Master Admin Password
+  receptionPassword String?        @default("reception123") // Reception Desk Password
+  createdAt         DateTime       @default(now())
+
+  tenant       Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  doctors      Doctor[]
+  services     Service[]
+  queueEntries QueueEntry[]
+  appointments Appointment[]
+  userRoles    UserRole[]
+  payments     Payment[]
+}
+
+model User {
+  id        String     @id @default(uuid())
+  tenantId  String
+  name      String
+  email     String     @unique
+  mobile    String?
+  status    String     @default("ACTIVE")
+  createdAt DateTime   @default(now())
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  roles     UserRole[]
+  doctor    Doctor?
+}
+
+model UserRole {
+  id       String @id @default(uuid())
+  userId   String
+  clinicId String
+  role     String // OWNER, RECEPTION, DOCTOR, ATTENDANT, PLATFORM_ADMIN
+
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clinic   Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, clinicId, role])
+}
+
+model Doctor {
+  id           String         @id @default(uuid())
+  clinicId     String
+  userId       String?        @unique
+  displayName  String
+  specialty    String
+  roomNumber   String?
+  active       Boolean        @default(true)
+  pin          String?        @default("1234") // Quick 4-digit doctor login PIN
+  password     String?        @default("doctor123") // Doctor OPD login password
+
+  clinic       Clinic         @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  user         User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  queueEntries QueueEntry[]
+  appointments Appointment[]
+}
+
+model Service {
+  id              String         @id @default(uuid())
+  clinicId        String
+  name            String
+  durationMinutes Int            @default(15)
+  fee             Float          @default(500.0)
+  active          Boolean        @default(true)
+
+  clinic          Clinic         @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  appointments    Appointment[]
+  queueEntries    QueueEntry[]
+}
+
+model Patient {
+  id               String         @id @default(uuid())
+  tenantId         String
+  name             String
+  mobile           String
+  email            String?
+  age              Int?
+  gender           String?
+  bloodGroup       String?        // A+, B+, O+, AB+, etc.
+  address          String?        // City / Full Address
+  emergencyContact String?        // Emergency relative / phone
+  createdAt        DateTime       @default(now())
+
+  tenant           Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  queueEntries     QueueEntry[]
+  appointments     Appointment[]
+}
+
+model Appointment {
+  id            String       @id @default(uuid())
+  clinicId      String
+  patientId     String
+  doctorId      String?
+  serviceId     String?
+  scheduledAt   DateTime
+  status        String       @default("BOOKED") // BOOKED, CANCELLED, ATTENDED
+  paymentStatus String       @default("PENDING") // PENDING, PAID, PAY_AT_CLINIC
+
+  clinic        Clinic       @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  patient       Patient      @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor        Doctor?      @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+  service       Service?     @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  queueEntry    QueueEntry?
+}
+
+model QueueEntry {
+  id             String         @id @default(uuid())
+  clinicId       String
+  patientId      String
+  doctorId       String?
+  serviceId      String?
+  appointmentId  String?        @unique
+  token          String         // e.g. "A-101", "W-12"
+  publicToken    String         @unique // high-entropy random string for secure URL without exposing patient ID
+  queueDate      String         // YYYY-MM-DD
+  priority       Int            @default(0) // Higher numbers = priority
+  visitReason    String?        // Short complaint / reason
+  status         String         @default("WAITING") // BOOKED, CHECKED_IN, WAITING, CALLED, IN_CONSULTATION, COMPLETED, SKIPPED, NO_SHOW, CANCELLED
+  feeAmount      Float          @default(500.0)
+  paymentStatus  String         @default("PENDING") // PENDING, PAID, PAY_AT_CLINIC, FREE_FOLLOW_UP
+  isFollowUp     Boolean        @default(false)
+  followUpNote   String?
+  diagnosis      String?        // Diagnosis e.g. "Viral Bronchitis"
+  vitalsJson     String?        // BP, Pulse, Temp, SpO2, Weight (JSON)
+  prescriptionJson String?      // Array of medicines (JSON)
+  clinicalNotes  String?        // Doctor advice & instructions
+  joinedAt       DateTime       @default(now())
+  calledAt       DateTime?
+  startedAt      DateTime?
+  completedAt    DateTime?
+
+  clinic         Clinic         @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  patient        Patient        @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor         Doctor?        @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+  service        Service?       @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  appointment    Appointment?   @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  checkInToken   CheckInToken?
+  payment        Payment?
+}
+
+model CheckInToken {
+  id           String      @id @default(uuid())
+  queueEntryId String      @unique
+  tokenHash    String
+  expiresAt    DateTime
+  usedAt       DateTime?
+
+  queueEntry   QueueEntry  @relation(fields: [queueEntryId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id               String      @id @default(uuid())
+  clinicId         String
+  queueEntryId     String?     @unique
+  provider         String      @default("CASH") // RAZORPAY, CASH, UPI_COUNTER
+  providerOrderId  String?
+  providerPaymentId String?
+  amount           Float
+  currency         String      @default("INR")
+  status           String      @default("COMPLETED") // PENDING, COMPLETED, FAILED, REFUNDED
+  createdAt        DateTime    @default(now())
+
+  clinic           Clinic      @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  queueEntry       QueueEntry? @relation(fields: [queueEntryId], references: [id], onDelete: SetNull)
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  tenantId    String
+  actorUserId String?
+  action      String   // e.g., "CALL_NEXT", "CHECK_IN", "STATUS_CHANGE"
+  entityType  String   // e.g., "QueueEntry", "Clinic"
+  entityId    String
+  metadata    String?  // JSON string
+  timestamp   DateTime @default(now())
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+model QueuelessReview {
+  id           String   @id @default(uuid())
+  clinicId     String?
+  queueEntryId String?
+  patientName  String?
+  rating       Int      @default(5) // 1 to 5 stars
+  feedbackTags String?  // JSON array of strings
+  comment      String?
+  createdAt    DateTime @default(now())
+}
+

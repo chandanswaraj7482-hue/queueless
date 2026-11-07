@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <!-- NHS Iconic Lozenge -->
+  <g transform="translate(6, 10)">
+    <rect width="64" height="28" rx="4" fill="#005EB8" />
+    <text x="32" y="21" font-family="'Arial Black', 'Plus Jakarta Sans', system-ui, sans-serif" font-style="italic" font-weight="900" font-size="20" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">NHS</text>
+  </g>
+  <!-- NHS Trust Detail -->
+  <text x="78" y="24" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="800" font-size="13" fill="currentColor" letter-spacing="-0.2">UK TRUSTS</text>
+  <text x="78" y="35" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="8.5" fill="#005EB8" letter-spacing="1">DIGITAL OPD PILOT</text>
+</svg>
+

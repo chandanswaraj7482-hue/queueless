@@ -371,13 +371,13 @@ export const FeaturesPage: React.FC = () => {
         </section>
 
         {/* Global Compliance Grid */}
-        <section className="py-16 px-4 sm:px-6 bg-slate-900 text-white">
+        <section className="py-16 px-4 sm:px-6 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white border-y border-slate-200/80 dark:border-slate-800 transition-colors duration-200">
           <div className="max-w-6xl mx-auto space-y-10">
             <div className="text-center space-y-2">
-              <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
+              <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
                 Enterprise Regulatory & Clinical Compliance
               </h2>
-              <p className="text-xs sm:text-sm text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                 Engineered to meet the most stringent international healthcare data sovereignty standards.
               </p>
             </div>
@@ -386,14 +386,14 @@ export const FeaturesPage: React.FC = () => {
               {GLOBAL_COMPLIANCE.map((comp, idx) => (
                 <div
                   key={idx}
-                  className="p-6 bg-slate-800/80 rounded-2xl border border-slate-700/80 space-y-2 hover-card-premium"
+                  className="p-6 bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 space-y-2 hover-card-premium shadow-sm"
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{comp.flag}</span>
-                    <span className="font-black text-sm text-white">{comp.name}</span>
+                    <span className="font-black text-sm text-slate-900 dark:text-white">{comp.name}</span>
                   </div>
-                  <span className="text-[11px] font-bold text-blue-400 block">{comp.region}</span>
-                  <p className="text-xs text-slate-400 leading-relaxed">{comp.desc}</p>
+                  <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 block">{comp.region}</span>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{comp.desc}</p>
                 </div>
               ))}
             </div>

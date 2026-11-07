@@ -1311,11 +1311,11 @@ export const QueuelessWebsite: React.FC = () => {
                   key={`${hosp.name}-${idx}`}
                   className="px-5 py-3.5 bg-white/90 dark:bg-slate-900/90 rounded-2xl border border-slate-200/90 dark:border-slate-800 flex items-center gap-4 text-xs tracking-tight shadow-sm hover:border-blue-400 dark:hover:border-blue-500 hover:bg-white dark:hover:bg-slate-800 transition-all hover-lift shrink-0 cursor-default group backdrop-blur-md"
                 >
-                  <div className="h-8 flex items-center justify-center shrink-0">
+                  <div className="h-9 flex items-center justify-center shrink-0 px-2.5 py-1 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
                     <img
                       src={hosp.logo}
                       alt={hosp.name}
-                      className="h-7 w-auto max-w-[130px] object-contain transition-transform group-hover:scale-105"
+                      className="h-6 w-auto max-w-[115px] object-contain transition-transform group-hover:scale-105"
                     />
                   </div>
                   <div className="text-left border-l border-slate-200 dark:border-slate-800 pl-3">
@@ -1452,7 +1452,7 @@ export const QueuelessWebsite: React.FC = () => {
               </div>
 
               {/* Icon Container */}
-              <div className="w-16 h-16 rounded-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-[0_4px_20px_rgba(0,0,0,0.05)] flex items-center justify-center text-teal-600 dark:text-teal-400 mb-4 group-hover:scale-105 transition-transform">
+              <div className="w-16 h-16 rounded-2xl bg-teal-50 dark:bg-teal-950/70 border border-teal-200/80 dark:border-teal-700/60 shadow-[0_4px_20px_rgba(20,184,166,0.12)] flex items-center justify-center text-teal-600 dark:text-teal-300 mb-4 group-hover:scale-105 transition-transform">
                 <BriefcaseMedical className="w-7 h-7 stroke-[1.8]" />
               </div>
 
@@ -1481,7 +1481,7 @@ export const QueuelessWebsite: React.FC = () => {
               </div>
 
               {/* Icon Container */}
-              <div className="w-16 h-16 rounded-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-[0_4px_20px_rgba(0,0,0,0.05)] flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4 group-hover:scale-105 transition-transform">
+              <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/70 border border-blue-200/80 dark:border-blue-700/60 shadow-[0_4px_20px_rgba(59,130,246,0.12)] flex items-center justify-center text-blue-600 dark:text-blue-300 mb-4 group-hover:scale-105 transition-transform">
                 <Users className="w-7 h-7 stroke-[1.8]" />
               </div>
 
@@ -1510,7 +1510,7 @@ export const QueuelessWebsite: React.FC = () => {
               </div>
 
               {/* Icon Container */}
-              <div className="w-16 h-16 rounded-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-[0_4px_20px_rgba(0,0,0,0.05)] flex items-center justify-center text-purple-600 dark:text-purple-400 mb-4 group-hover:scale-105 transition-transform">
+              <div className="w-16 h-16 rounded-2xl bg-purple-50 dark:bg-purple-950/70 border border-purple-200/80 dark:border-purple-700/60 shadow-[0_4px_20px_rgba(168,85,247,0.12)] flex items-center justify-center text-purple-600 dark:text-purple-300 mb-4 group-hover:scale-105 transition-transform">
                 <Rocket className="w-7 h-7 stroke-[1.8]" />
               </div>
 
@@ -1526,16 +1526,16 @@ export const QueuelessWebsite: React.FC = () => {
         </div>
 
 {/* Quick-Launch Real Live OPD Portals for Video Recording & Full Demo Presentation */}
-          <div className="mt-10 p-7 sm:p-9 rounded-[32px] bg-slate-950 border border-slate-800 text-white shadow-2xl space-y-6 text-center">
+          <div className="mt-10 p-7 sm:p-9 rounded-[32px] bg-white dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-slate-900 dark:text-white shadow-[0_12px_40px_rgba(0,0,0,0.06)] dark:shadow-2xl space-y-6 text-center transition-colors">
             <div className="space-y-2 max-w-2xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 rounded-full text-xs font-bold uppercase tracking-wider">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>Live Multi-Screen Hospital Ecosystem</span>
               </div>
-              <h4 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+              <h4 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Launch Any Hospital Role in a Dedicated Window
               </h4>
-              <p className="text-xs sm:text-sm text-slate-400 font-normal leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-normal leading-relaxed">
                 Test the live end-to-end OPD flow across multiple screens: patient self-admission, 1-tap doctor calling, frontdesk cash slips, and smart TV synchronization.
               </p>
             </div>
@@ -1551,16 +1551,16 @@ export const QueuelessWebsite: React.FC = () => {
                 <Link
                   to="/check-in/city-health"
                   target="_blank"
-                  className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-500/50 hover:shadow-[0_10px_30px_rgba(59,130,246,0.25)] transition-all flex flex-col justify-between h-full group"
+                  className="p-4 rounded-2xl bg-slate-50/80 hover:bg-white dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 hover:border-blue-500/50 hover:shadow-[0_10px_30px_rgba(59,130,246,0.25)] transition-all flex flex-col justify-between h-full group shadow-2xs"
                 >
                   <div>
-                    <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400 mb-3 group-hover:scale-110 transition-transform">
+                    <div className="w-9 h-9 rounded-xl bg-blue-500/15 dark:bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-3 group-hover:scale-110 transition-transform">
                       <Smartphone className="w-5 h-5" />
                     </div>
-                    <strong className="text-sm font-bold text-white block">Patient Pass</strong>
-                    <span className="text-[11px] text-slate-400 block mt-0.5">Mobile QR Admission</span>
+                    <strong className="text-sm font-bold text-slate-900 dark:text-white block">Patient Pass</strong>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5">Mobile QR Admission</span>
                   </div>
-                  <div className="pt-3 mt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-semibold text-blue-400">
+                  <div className="pt-3 mt-3 border-t border-slate-200/80 dark:border-white/10 flex items-center justify-between text-[11px] font-semibold text-blue-600 dark:text-blue-400">
                     <span>Open Mobile</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </div>
@@ -1575,16 +1575,16 @@ export const QueuelessWebsite: React.FC = () => {
                 <Link
                   to="/display/city-health"
                   target="_blank"
-                  className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-emerald-500/50 hover:shadow-[0_10px_30px_rgba(16,185,129,0.25)] transition-all flex flex-col justify-between h-full group"
+                  className="p-4 rounded-2xl bg-slate-50/80 hover:bg-white dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 hover:border-emerald-500/50 hover:shadow-[0_10px_30px_rgba(16,185,129,0.25)] transition-all flex flex-col justify-between h-full group shadow-2xs"
                 >
                   <div>
-                    <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 mb-3 group-hover:scale-110 transition-transform">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-500/15 dark:bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-3 group-hover:scale-110 transition-transform">
                       <Tv className="w-5 h-5" />
                     </div>
-                    <strong className="text-sm font-bold text-white block">55" TV Kiosk</strong>
-                    <span className="text-[11px] text-slate-400 block mt-0.5">Lobby OLED & Audio</span>
+                    <strong className="text-sm font-bold text-slate-900 dark:text-white block">55" TV Kiosk</strong>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5">Lobby OLED & Audio</span>
                   </div>
-                  <div className="pt-3 mt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-semibold text-emerald-400">
+                  <div className="pt-3 mt-3 border-t border-slate-200/80 dark:border-white/10 flex items-center justify-between text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
                     <span>Open TV Display</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </div>
@@ -1599,16 +1599,16 @@ export const QueuelessWebsite: React.FC = () => {
                 <Link
                   to="/doctor/city-health"
                   target="_blank"
-                  className="p-4 rounded-2xl bg-gradient-to-b from-purple-900/30 to-indigo-900/30 hover:from-purple-900/50 hover:to-indigo-900/50 border border-purple-500/40 hover:border-purple-400 hover:shadow-[0_10px_30px_rgba(168,85,247,0.35)] transition-all flex flex-col justify-between h-full group shadow-lg shadow-purple-950/50"
+                  className="p-4 rounded-2xl bg-purple-50/60 hover:bg-purple-100/60 dark:bg-gradient-to-b dark:from-purple-900/30 dark:to-indigo-900/30 dark:hover:from-purple-900/50 dark:hover:to-indigo-900/50 border border-purple-200/90 dark:border-purple-500/40 hover:border-purple-400 hover:shadow-[0_10px_30px_rgba(168,85,247,0.35)] transition-all flex flex-col justify-between h-full group shadow-2xs dark:shadow-purple-950/50"
                 >
                   <div>
-                    <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center text-purple-300 mb-3 group-hover:scale-110 transition-transform">
+                    <div className="w-9 h-9 rounded-xl bg-purple-500/15 dark:bg-purple-500/20 border border-purple-400/30 flex items-center justify-center text-purple-600 dark:text-purple-300 mb-3 group-hover:scale-110 transition-transform">
                       <Stethoscope className="w-5 h-5" />
                     </div>
-                    <strong className="text-sm font-bold text-white block">Doctor Cabin</strong>
-                    <span className="text-[11px] text-purple-200/70 block mt-0.5">1-Click Calling Desk</span>
+                    <strong className="text-sm font-bold text-slate-900 dark:text-white block">Doctor Cabin</strong>
+                    <span className="text-[11px] text-purple-700/80 dark:text-purple-200/70 block mt-0.5">1-Click Calling Desk</span>
                   </div>
-                  <div className="pt-3 mt-3 border-t border-purple-500/20 flex items-center justify-between text-[11px] font-semibold text-purple-300">
+                  <div className="pt-3 mt-3 border-t border-purple-200/80 dark:border-purple-500/20 flex items-center justify-between text-[11px] font-semibold text-purple-700 dark:text-purple-300">
                     <span>PIN: 1234</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </div>
@@ -1623,16 +1623,16 @@ export const QueuelessWebsite: React.FC = () => {
                 <Link
                   to="/reception/city-health"
                   target="_blank"
-                  className="p-4 rounded-2xl bg-gradient-to-b from-teal-900/30 to-emerald-900/30 hover:from-teal-900/50 hover:to-emerald-900/50 border border-teal-500/40 hover:border-teal-400 hover:shadow-[0_10px_30px_rgba(20,184,166,0.35)] transition-all flex flex-col justify-between h-full group shadow-lg shadow-teal-950/50"
+                  className="p-4 rounded-2xl bg-teal-50/60 hover:bg-teal-100/60 dark:bg-gradient-to-b dark:from-teal-900/30 dark:to-emerald-900/30 dark:hover:from-teal-900/50 dark:hover:to-emerald-900/50 border border-teal-200/90 dark:border-teal-500/40 hover:border-teal-400 hover:shadow-[0_10px_30px_rgba(20,184,166,0.35)] transition-all flex flex-col justify-between h-full group shadow-2xs dark:shadow-teal-950/50"
                 >
                   <div>
-                    <div className="w-9 h-9 rounded-xl bg-teal-500/20 border border-teal-400/30 flex items-center justify-center text-teal-300 mb-3 group-hover:scale-110 transition-transform">
+                    <div className="w-9 h-9 rounded-xl bg-teal-500/15 dark:bg-teal-500/20 border border-teal-400/30 flex items-center justify-center text-teal-600 dark:text-teal-300 mb-3 group-hover:scale-110 transition-transform">
                       <Users className="w-5 h-5" />
                     </div>
-                    <strong className="text-sm font-bold text-white block">Reception POS</strong>
-                    <span className="text-[11px] text-teal-200/70 block mt-0.5">Cashier & Thermal Slips</span>
+                    <strong className="text-sm font-bold text-slate-900 dark:text-white block">Reception POS</strong>
+                    <span className="text-[11px] text-teal-700/80 dark:text-teal-200/70 block mt-0.5">Cashier & Thermal Slips</span>
                   </div>
-                  <div className="pt-3 mt-3 border-t border-teal-500/20 flex items-center justify-between text-[11px] font-semibold text-teal-300">
+                  <div className="pt-3 mt-3 border-t border-teal-200/80 dark:border-teal-500/20 flex items-center justify-between text-[11px] font-semibold text-teal-700 dark:text-teal-300">
                     <span>Pass: reception123</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </div>
@@ -1647,16 +1647,16 @@ export const QueuelessWebsite: React.FC = () => {
                 <Link
                   to="/admin/city-health"
                   target="_blank"
-                  className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-500/50 hover:shadow-[0_10px_30px_rgba(245,158,11,0.25)] transition-all flex flex-col justify-between h-full group"
+                  className="p-4 rounded-2xl bg-slate-50/80 hover:bg-white dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 hover:border-amber-500/50 hover:shadow-[0_10px_30px_rgba(245,158,11,0.25)] transition-all flex flex-col justify-between h-full group shadow-2xs"
                 >
                   <div>
-                    <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-400 mb-3 group-hover:scale-110 transition-transform">
+                    <div className="w-9 h-9 rounded-xl bg-amber-500/15 dark:bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-600 dark:text-amber-400 mb-3 group-hover:scale-110 transition-transform">
                       <Lock className="w-5 h-5" />
                     </div>
-                    <strong className="text-sm font-bold text-white block">Hospital Admin</strong>
-                    <span className="text-[11px] text-slate-400 block mt-0.5">15-Day Policy Engine</span>
+                    <strong className="text-sm font-bold text-slate-900 dark:text-white block">Hospital Admin</strong>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5">15-Day Policy Engine</span>
                   </div>
-                  <div className="pt-3 mt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-semibold text-amber-400">
+                  <div className="pt-3 mt-3 border-t border-slate-200/80 dark:border-white/10 flex items-center justify-between text-[11px] font-semibold text-amber-600 dark:text-amber-400">
                     <span>Pass: admin123</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </div>
@@ -1827,29 +1827,29 @@ export const QueuelessWebsite: React.FC = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* The Old Chaotic Way: The Cost of Legacy Counter Queues */}
-            <div className="p-7 sm:p-9 rounded-[32px] bg-slate-950 border border-rose-500/30 text-white shadow-2xl space-y-6 relative overflow-hidden flex flex-col justify-between">
+            <div className="p-7 sm:p-9 rounded-[32px] bg-rose-50/40 dark:bg-slate-950 border border-rose-200 dark:border-rose-500/30 text-slate-900 dark:text-white shadow-xl space-y-6 relative overflow-hidden flex flex-col justify-between transition-colors">
               <div className="absolute top-0 right-0 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
               <div className="space-y-6 relative z-10">
                 <div className="flex items-center justify-between">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-rose-950/80 border border-rose-500/40 text-rose-300 rounded-full text-[11px] font-black uppercase tracking-wider">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-rose-100 dark:bg-rose-950/80 border border-rose-300/80 dark:border-rose-500/40 text-rose-800 dark:text-rose-300 rounded-full text-[11px] font-black uppercase tracking-wider">
                     <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
                     <span>Critical Revenue Leak Audit</span>
                   </div>
-                  <span className="text-xs font-mono font-bold text-rose-400">Status Quo</span>
+                  <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">Status Quo</span>
                 </div>
 
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                     The Legacy Counter Queue Bottleneck
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                     Broken mechanical ticket dispensers, overcrowded corridors, and zero digital audit trails.
                   </p>
                 </div>
 
                 {/* Photographic Evidence: Legacy Overcrowding */}
-                <div className="relative rounded-2xl overflow-hidden h-36 sm:h-44 border border-rose-500/30 shadow-lg group">
+                <div className="relative rounded-2xl overflow-hidden h-36 sm:h-44 border border-rose-300/70 dark:border-rose-500/30 shadow-lg group">
                   <img
                     src="/assets/hospital-before-chaotic.jpg"
                     alt="Chaotic Overcrowded Hospital Reception Lines"
@@ -1868,64 +1868,64 @@ export const QueuelessWebsite: React.FC = () => {
                 </div>
 
                 {/* Impact Metrics Banner (Dynamic Currency & Mobile Font Scaling) */}
-                <div className="grid grid-cols-3 gap-1 sm:gap-2.5 p-2.5 sm:p-3.5 rounded-2xl bg-white/5 border border-white/10 text-center">
+                <div className="grid grid-cols-3 gap-1 sm:gap-2.5 p-2.5 sm:p-3.5 rounded-2xl bg-white/90 dark:bg-white/5 border border-rose-200 dark:border-white/10 text-center shadow-xs">
                   <div className="px-1">
-                    <span className="text-xs sm:text-base md:text-xl font-black text-rose-400 block font-mono truncate">
+                    <span className="text-xs sm:text-base md:text-xl font-black text-rose-600 dark:text-rose-400 block font-mono truncate">
                       -{selectedCurrency.symbol === '₹' ? '₹2.4L' : `${selectedCurrency.symbol}${(2800 * (selectedCurrency.defaultFee / 500)).toFixed(0)}`}
                     </span>
-                    <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate">Monthly Leak</span>
+                    <span className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium block truncate">Monthly Leak</span>
                   </div>
-                  <div className="border-x border-white/10 px-1">
-                    <span className="text-xs sm:text-base md:text-xl font-black text-rose-400 block font-mono">48 Mins</span>
-                    <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate">Standing Queue</span>
+                  <div className="border-x border-rose-200 dark:border-white/10 px-1">
+                    <span className="text-xs sm:text-base md:text-xl font-black text-rose-600 dark:text-rose-400 block font-mono">48 Mins</span>
+                    <span className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium block truncate">Standing Queue</span>
                   </div>
                   <div className="px-1">
-                    <span className="text-xs sm:text-base md:text-xl font-black text-rose-400 block font-mono">21%</span>
-                    <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate">Walkout Rate</span>
+                    <span className="text-xs sm:text-base md:text-xl font-black text-rose-600 dark:text-rose-400 block font-mono">21%</span>
+                    <span className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium block truncate">Walkout Rate</span>
                   </div>
                 </div>
 
-                <ul className="space-y-4 text-xs text-slate-300">
+                <ul className="space-y-4 text-xs text-slate-600 dark:text-slate-300">
                   <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-rose-950/80 border border-rose-500/40 text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
+                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
                       ✕
                     </div>
                     <div>
-                      <strong className="text-white block font-bold">Lobby Congestion & Viral Hazard:</strong>
-                      <span className="text-slate-400">
+                      <strong className="text-slate-900 dark:text-white block font-bold">Lobby Congestion & Viral Hazard:</strong>
+                      <span className="text-slate-600 dark:text-slate-400">
                         Patients cough and stand shoulder-to-shoulder in 50-person lines, triggering airborne infection risks and angry 1-star Google complaints.
                       </span>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-rose-950/80 border border-rose-500/40 text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
+                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
                       ✕
                     </div>
                     <div>
-                      <strong className="text-white block font-bold">Frontdesk Verbal Friction & Burnout:</strong>
-                      <span className="text-slate-400">
+                      <strong className="text-slate-900 dark:text-white block font-bold">Frontdesk Verbal Friction & Burnout:</strong>
+                      <span className="text-slate-600 dark:text-slate-400">
                         Receptionists answer "When is my turn?" 200+ times per shift, leaving zero bandwidth for billing, emergency triage, or patient empathy.
                       </span>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-rose-950/80 border border-rose-500/40 text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
+                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
                       ✕
                     </div>
                     <div>
-                      <strong className="text-white block font-bold">18-21% Walkout Revenue Bleed:</strong>
-                      <span className="text-slate-400">
+                      <strong className="text-slate-900 dark:text-white block font-bold">18-21% Walkout Revenue Bleed:</strong>
+                      <span className="text-slate-600 dark:text-slate-400">
                         High-value cash and private insurance patients see the crowded lobby and leave for rival clinics, bleeding consultation & pharmacy revenue.
                       </span>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-rose-950/80 border border-rose-500/40 text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
+                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
                       ✕
                     </div>
                     <div>
-                      <strong className="text-white block font-bold">Lost Slips & Zero Follow-Up Sync:</strong>
-                      <span className="text-slate-400">
+                      <strong className="text-slate-900 dark:text-white block font-bold">Lost Slips & Zero Follow-Up Sync:</strong>
+                      <span className="text-slate-600 dark:text-slate-400">
                         Misplaced paper tokens, cabin shouting, manual paper registers, and zero tracking for the 15-day follow-up retention policy.
                       </span>
                     </div>
@@ -1933,8 +1933,8 @@ export const QueuelessWebsite: React.FC = () => {
                 </ul>
               </div>
 
-              <div className="pt-4 border-t border-white/10 text-[11px] text-rose-300/80 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+              <div className="pt-4 border-t border-rose-200 dark:border-white/10 text-[11px] text-rose-700 dark:text-rose-300/80 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-rose-500 dark:text-rose-400 shrink-0" />
                 <span>Result: ₹25L+ yearly revenue loss and frustrated clinical staff.</span>
               </div>
             </div>
@@ -2988,7 +2988,7 @@ export const QueuelessWebsite: React.FC = () => {
                   {/* Scannable Real QR Canvas */}
                   <div className="my-2 p-2.5 bg-white rounded-xl border border-slate-200 shadow-inner inline-block">
                     <QRCodeCanvas
-                      value="http://localhost:5173/check-in/city-health"
+                      value={`${typeof window !== 'undefined' ? window.location.origin : 'https://queueless-os.vercel.app'}/check-in/city-health`}
                       size={120}
                       level="H"
                       includeMargin={false}
@@ -3826,40 +3826,40 @@ export const QueuelessWebsite: React.FC = () => {
       {/* ============================================================== */}
       {showClientPortalModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 relative max-h-[92vh] overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 relative max-h-[92vh] overflow-y-auto">
             {/* Close Button */}
             <button
               onClick={() => setShowClientPortalModal(false)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Header */}
-            <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
-              <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 shrink-0">
+            <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="w-12 h-12 rounded-2xl bg-sky-50 dark:bg-sky-950/70 border border-sky-100 dark:border-sky-800 flex items-center justify-center text-sky-600 dark:text-sky-400 shrink-0">
                 <Building2 className="w-6 h-6" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-black text-slate-950">Hospital Client Setup & Portals</h3>
-                  <span className="text-[10px] font-bold text-sky-800 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded-full">
+                  <h3 className="text-lg font-black text-slate-950 dark:text-white">Hospital Client Setup & Portals</h3>
+                  <span className="text-[10px] font-bold text-sky-800 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-800 px-2 py-0.5 rounded-full">
                     Isolated Tenants
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Commercial SaaS site is on <span className="font-mono text-sky-700 font-bold">/</span>. Each hospital operates via its dedicated link package.
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Commercial SaaS site is on <span className="font-mono text-sky-700 dark:text-sky-400 font-bold">/</span>. Each hospital operates via its dedicated link package.
                 </p>
               </div>
             </div>
 
             {/* Architecture Explanation Banner */}
-            <div className="mt-4 p-3.5 bg-gradient-to-r from-amber-50/70 via-sky-50/70 to-emerald-50/70 rounded-2xl border border-amber-200/80 text-xs text-slate-700">
-              <div className="font-black text-slate-900 flex items-center gap-1.5 mb-1">
-                <Sparkles className="w-4 h-4 text-amber-600" />
+            <div className="mt-4 p-3.5 bg-gradient-to-r from-amber-50/70 via-sky-50/70 to-emerald-50/70 dark:from-slate-800/80 dark:via-slate-800/60 dark:to-slate-800/80 rounded-2xl border border-amber-200/80 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-300">
+              <div className="font-black text-slate-900 dark:text-white flex items-center gap-1.5 mb-1">
+                <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 <span>How Queueless Dedicated Link Setup Works:</span>
               </div>
-              <p className="leading-relaxed text-[11px] text-slate-600">
+              <p className="leading-relaxed text-[11px] text-slate-600 dark:text-slate-400">
                 When a hospital subscribes, our system provisions <strong>5 isolated endpoint links</strong> branded with their unique slug. Patients scan the entrance QR, doctors manage cabins, and receptionists handle billing without any cross-hospital data leakage.
               </p>
             </div>
@@ -3867,10 +3867,10 @@ export const QueuelessWebsite: React.FC = () => {
             {/* Section 1: Demonstration Hospital Suite */}
             <div className="mt-5 space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-400">
+                <span className="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
                   1. Live Demo Hospital: City Health Clinic (/city-health)
                 </span>
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/70 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                   Active OPD
                 </span>
               </div>
@@ -3880,18 +3880,18 @@ export const QueuelessWebsite: React.FC = () => {
                 <Link
                   to="/check-in/city-health"
                   target="_blank"
-                  className="p-3 bg-slate-50 hover:bg-sky-50 border border-slate-200/90 hover:border-sky-300 rounded-2xl transition-all group flex items-start gap-3"
+                  className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-sky-50 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-500 rounded-2xl transition-all group flex items-start gap-3"
                 >
-                  <div className="p-2 bg-white rounded-xl shadow-2xs text-sky-600 group-hover:scale-105 transition-transform shrink-0">
+                  <div className="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-2xs text-sky-600 dark:text-sky-400 group-hover:scale-105 transition-transform shrink-0 border border-slate-100 dark:border-slate-800">
                     <Smartphone className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-black text-slate-900 group-hover:text-sky-700 flex items-center justify-between">
+                    <div className="font-black text-slate-900 dark:text-white group-hover:text-sky-700 dark:group-hover:text-sky-400 flex items-center justify-between">
                       <span>📱 Patient QR Check-In</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="text-[11px] text-slate-500 block truncate font-mono mt-0.5">/check-in/city-health</span>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">Self-entry QR pass & live token pass</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/check-in/city-health</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5">Self-entry QR pass & live token pass</span>
                   </div>
                 </Link>
 
@@ -3899,18 +3899,18 @@ export const QueuelessWebsite: React.FC = () => {
                 <Link
                   to="/display/city-health"
                   target="_blank"
-                  className="p-3 bg-slate-50 hover:bg-emerald-50 border border-slate-200/90 hover:border-emerald-300 rounded-2xl transition-all group flex items-start gap-3"
+                  className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-500 rounded-2xl transition-all group flex items-start gap-3"
                 >
-                  <div className="p-2 bg-white rounded-xl shadow-2xs text-emerald-600 group-hover:scale-105 transition-transform shrink-0">
+                  <div className="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-2xs text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform shrink-0 border border-slate-100 dark:border-slate-800">
                     <Tv className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-black text-slate-900 group-hover:text-emerald-700 flex items-center justify-between">
+                    <div className="font-black text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 flex items-center justify-between">
                       <span>🖥️ Waiting Room TV Kiosk</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="text-[11px] text-slate-500 block truncate font-mono mt-0.5">/display/city-health</span>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">55" lobby TV with voice & chimes</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/display/city-health</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5">55" lobby TV with voice & chimes</span>
                   </div>
                 </Link>
 
@@ -3918,18 +3918,18 @@ export const QueuelessWebsite: React.FC = () => {
                 <Link
                   to="/reception/city-health"
                   target="_blank"
-                  className="p-3 bg-slate-50 hover:bg-teal-50 border border-slate-200/90 hover:border-teal-300 rounded-2xl transition-all group flex items-start gap-3"
+                  className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-teal-50 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-teal-300 dark:hover:border-teal-500 rounded-2xl transition-all group flex items-start gap-3"
                 >
-                  <div className="p-2 bg-white rounded-xl shadow-2xs text-teal-600 group-hover:scale-105 transition-transform shrink-0">
+                  <div className="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-2xs text-teal-600 dark:text-teal-400 group-hover:scale-105 transition-transform shrink-0 border border-slate-100 dark:border-slate-800">
                     <Users className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-black text-slate-900 group-hover:text-teal-700 flex items-center justify-between">
+                    <div className="font-black text-slate-900 dark:text-white group-hover:text-teal-700 dark:group-hover:text-teal-400 flex items-center justify-between">
                       <span>🧾 Reception Desk & POS</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="text-[11px] text-slate-500 block truncate font-mono mt-0.5">/reception/city-health</span>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">Cash approvals & thermal slip printing</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/reception/city-health</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5">Cash approvals & thermal slip printing</span>
                   </div>
                 </Link>
 
@@ -3937,18 +3937,18 @@ export const QueuelessWebsite: React.FC = () => {
                 <Link
                   to="/doctor/city-health"
                   target="_blank"
-                  className="p-3 bg-slate-50 hover:bg-purple-50 border border-slate-200/90 hover:border-purple-300 rounded-2xl transition-all group flex items-start gap-3"
+                  className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-purple-50 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-500 rounded-2xl transition-all group flex items-start gap-3"
                 >
-                  <div className="p-2 bg-white rounded-xl shadow-2xs text-purple-600 group-hover:scale-105 transition-transform shrink-0">
+                  <div className="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-2xs text-purple-600 dark:text-purple-400 group-hover:scale-105 transition-transform shrink-0 border border-slate-100 dark:border-slate-800">
                     <Stethoscope className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-black text-slate-900 group-hover:text-purple-700 flex items-center justify-between">
+                    <div className="font-black text-slate-900 dark:text-white group-hover:text-purple-700 dark:group-hover:text-purple-400 flex items-center justify-between">
                       <span>👨‍⚕️ Doctor Cabin Console</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="text-[11px] text-slate-500 block truncate font-mono mt-0.5">/doctor/city-health</span>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">1-click call next & Rx prescriptions</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/doctor/city-health</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5">1-click call next & Rx prescriptions</span>
                   </div>
                 </Link>
 
@@ -3956,26 +3956,26 @@ export const QueuelessWebsite: React.FC = () => {
                 <Link
                   to="/admin/city-health"
                   target="_blank"
-                  className="p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200/90 hover:border-blue-300 rounded-2xl transition-all group flex items-start gap-3 sm:col-span-2"
+                  className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500 rounded-2xl transition-all group flex items-start gap-3 sm:col-span-2"
                 >
-                  <div className="p-2 bg-white rounded-xl shadow-2xs text-blue-600 group-hover:scale-105 transition-transform shrink-0">
+                  <div className="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-2xs text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform shrink-0 border border-slate-100 dark:border-slate-800">
                     <QrCode className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-black text-slate-900 group-hover:text-blue-700 flex items-center justify-between">
+                    <div className="font-black text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 flex items-center justify-between">
                       <span>🏥 Hospital Management & Admin Panel</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="text-[11px] text-slate-500 block truncate font-mono mt-0.5">/admin/city-health</span>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">Medical Superintendent settings, doctors roster & daily audits</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/admin/city-health</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5">Medical Superintendent settings, doctors roster & daily audits</span>
                   </div>
                 </Link>
               </div>
             </div>
 
             {/* Section 2: Jump by Custom Hospital Slug */}
-            <div className="mt-5 pt-4 border-t border-slate-100">
-              <span className="text-xs font-black uppercase tracking-wider text-slate-400 block mb-2">
+            <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <span className="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2">
                 2. Access Onboarded Hospital by Slug
               </span>
               <div className="flex flex-col sm:flex-row items-center gap-2">
@@ -3986,7 +3986,7 @@ export const QueuelessWebsite: React.FC = () => {
                     placeholder="e.g. caremax-multispecialty"
                     value={customPortalSlug}
                     onChange={(e) => setCustomPortalSlug(e.target.value.toLowerCase().trim())}
-                    className="w-full pl-6 pr-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    className="w-full pl-6 pr-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-mono font-bold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
                   />
                 </div>
                 <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -4000,7 +4000,7 @@ export const QueuelessWebsite: React.FC = () => {
                   <Link
                     to={`/admin/${customPortalSlug || 'city-health'}`}
                     target="_blank"
-                    className="flex-1 sm:flex-initial px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all text-center whitespace-nowrap cursor-pointer shadow-xs"
+                    className="flex-1 sm:flex-initial px-3 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all text-center whitespace-nowrap cursor-pointer shadow-xs border border-transparent dark:border-slate-700"
                   >
                     Admin Desk ➔
                   </Link>
@@ -4009,7 +4009,7 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
 
             {/* Section 3: Queueless Master Platform Headquarters */}
-            <div className="mt-5 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900 text-white p-4 rounded-2xl">
+            <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900 dark:bg-slate-950 text-white p-4 rounded-2xl border border-slate-800">
               <div className="flex items-center gap-2.5">
                 <span className="p-1.5 bg-blue-500/20 text-blue-400 rounded-xl">
                   <Sparkles className="w-4 h-4" />

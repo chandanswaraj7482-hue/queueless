@@ -129,7 +129,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
         }`}
       >
       {/* Top Global Compliance Ribbon */}
-      <div className="bg-slate-950 text-white text-[11px] sm:text-xs py-1.5 sm:py-2 px-3 sm:px-4 border-b border-slate-800/80">
+      <div className="bg-slate-950/80 dark:bg-slate-950/70 backdrop-blur-xl text-white text-[11px] sm:text-xs py-1.5 sm:py-2 px-3 sm:px-4 border-b border-slate-800/50 transition-colors">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
           <div className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-black text-[10px] uppercase tracking-wider shrink-0">
@@ -167,7 +167,13 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
       </div>
 
       {/* Main High-Conversion Commercial Header */}
-      <header className="bg-white/95 dark:bg-slate-950/95 backdrop-blur-2xl border-b border-slate-200/80 dark:border-slate-800/80 px-3 sm:px-6 py-2.5 sm:py-3.5 transition-colors duration-200">
+      <header
+        className={`px-3 sm:px-6 py-2.5 sm:py-3.5 transition-all duration-300 border-b ${
+          isScrolled
+            ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-2xl backdrop-saturate-150 border-slate-200/70 dark:border-slate-800/70 shadow-[0_4px_25px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_25px_rgba(0,0,0,0.35)]'
+            : 'bg-white/65 dark:bg-slate-950/65 backdrop-blur-xl backdrop-saturate-150 border-slate-200/40 dark:border-slate-800/40'
+        }`}
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
@@ -218,10 +224,10 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               <button
                 type="button"
                 onClick={() => setRolesDropdownOpen(!rolesDropdownOpen)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 backdrop-blur-md ${
                   rolesDropdownOpen
                     ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/60'
+                    : 'text-blue-600 dark:text-blue-400 bg-blue-50/70 dark:bg-blue-950/40 hover:bg-blue-100/70 dark:hover:bg-blue-950/70 border border-blue-200/50 dark:border-blue-800/40'
                 }`}
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -234,7 +240,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               </button>
 
               {rolesDropdownOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 bg-white/85 dark:bg-slate-900/85 backdrop-blur-2xl rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                   <div className="px-2.5 py-1.5 border-b border-slate-100 dark:border-slate-800 mb-1 flex items-center justify-between">
                     <span className="text-[10px] uppercase font-black tracking-wider text-slate-400">
                       Open in Separate Tab
@@ -284,7 +290,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
           <div className="flex items-center gap-1.5 sm:gap-2">
             {/* Currency Selector Pill (Hidden on mobile header, available in mobile drawer) */}
             {/* Currency Selector Pill */}
-            <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/90 hover:bg-slate-200/90 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-800 rounded-full text-xs font-bold text-slate-700 dark:text-slate-300 transition-all shadow-2xs">
+            <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/70 hover:bg-slate-200/80 dark:bg-slate-900/60 dark:hover:bg-slate-800/80 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 dark:text-slate-300 transition-all shadow-2xs">
               <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
               <select
                 aria-label="Currency"
@@ -304,7 +310,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             <button
               type="button"
               onClick={toggleTheme}
-              className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-100 hover:bg-slate-200/90 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-800 rounded-full text-slate-700 dark:text-amber-400 transition-all shadow-2xs cursor-pointer flex items-center justify-center active:scale-95 shrink-0"
+              className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-100/70 hover:bg-slate-200/80 dark:bg-slate-900/60 dark:hover:bg-slate-800/80 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-md rounded-full text-slate-700 dark:text-amber-400 transition-all shadow-2xs cursor-pointer flex items-center justify-center active:scale-95 shrink-0"
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               aria-label="Toggle Theme"
             >
@@ -336,7 +342,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             {/* Log In Button (Shown on desktop & tablet; available in mobile drawer on small screens) */}
             <Link
               to="/login"
-              className="hidden sm:inline-flex px-3.5 py-1.5 sm:px-4 sm:py-2 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              className="hidden sm:inline-flex px-3.5 py-1.5 sm:px-4 sm:py-2 bg-white/70 dark:bg-slate-900/70 hover:bg-white/95 dark:hover:bg-slate-800/90 text-slate-900 dark:text-slate-100 border border-slate-300/70 dark:border-slate-700/70 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               title="Hospital Director, Doctor & Receptionist Login"
             >
               <span>Log In</span>
@@ -356,7 +362,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
 
         {/* Mobile Navigation Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden pt-4 pb-3 border-t border-slate-200 dark:border-slate-800 mt-3 space-y-2.5 animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="md:hidden pt-4 pb-3 border-t border-slate-200/60 dark:border-slate-800/60 mt-3 space-y-2.5 bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl rounded-2xl p-3 border shadow-xl animate-in fade-in slide-in-from-top-2 duration-150">
             {navLinks.map((item) => (
               <Link
                 key={item.href}

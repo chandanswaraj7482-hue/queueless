@@ -204,20 +204,21 @@ export function stopClinicVoice() {
   }
 }
 
+export type SpeechLanguageMode = 'en' | 'hi' | 'es' | 'ar' | 'fr';
+
 /**
  * Plays a sweet, cute, broadcast-grade hospital PA announcement.
  * Sequence:
  * 1. Sweet 4-Tone Celesta chime (0 - 0.9s)
  * 2. Natural human breathing silence (0.9s - 1.0s)
- * 3. Warm, cute, pleasant female announcement:
- *    "Attention please... Token A 1 1 6... Please proceed to Cabin 204 for Dr. Rohan Sharma. Thank you!"
- * 4. (Optional) Soft polite Hindi broadcast.
+ * 3. Warm, cute, pleasant female announcement (Global English)
+ * 4. (Optional) Localized secondary polite broadcast (Hindi, Spanish, Arabic, French)
  */
 export function playClinicVoiceAnnouncement(
   token: string,
   cabin: string = 'Cabin 1',
   doctorName?: string,
-  bilingual: boolean = false
+  bilingual: boolean | SpeechLanguageMode = false
 ) {
   // First play the sweet 4-tone melodic celesta chime
   playClinicChime();
@@ -238,7 +239,6 @@ export function playClinicVoiceAnnouncement(
     const utteranceEn = new SpeechSynthesisUtterance(enText);
 
     // Cute, friendly, sweet vocal tuning
-    // Pitch 1.16 gives it that cheerful, warm, sweet receptionist lift!
     utteranceEn.rate = 0.98;
     utteranceEn.pitch = 1.16;
     utteranceEn.volume = 1.0;
@@ -248,28 +248,47 @@ export function playClinicVoiceAnnouncement(
       utteranceEn.voice = enVoice;
     }
 
+    const langMode = typeof bilingual === 'string' ? bilingual : (bilingual ? 'hi' : 'en');
+
     // Delay speech until chime's melodic tail finishes (~900ms)
     setTimeout(() => {
       window.speechSynthesis.speak(utteranceEn);
 
-      if (bilingual) {
+      if (langMode !== 'en') {
         utteranceEn.onend = () => {
           try {
-            // Polite, sweet Hindi announcement
-            const hiText = `कृपया ध्यान दें... टोकन नंबर ${spokenToken}... ${cleanCabin} में पधारें। धन्यवाद!`;
-            const utteranceHi = new SpeechSynthesisUtterance(hiText);
-            utteranceHi.lang = 'hi-IN';
-            utteranceHi.rate = 0.94;
-            utteranceHi.pitch = 1.14;
-            utteranceHi.volume = 1.0;
+            let secondaryText = '';
+            let secondaryLang = 'hi-IN';
 
-            const hiVoice = getBestCuteVoice('hi');
-            if (hiVoice) {
-              utteranceHi.voice = hiVoice;
+            if (langMode === 'hi') {
+              secondaryText = `कृपया ध्यान दें... टोकन नंबर ${spokenToken}... ${cleanCabin} में पधारें। धन्यवाद!`;
+              secondaryLang = 'hi-IN';
+            } else if (langMode === 'es') {
+              secondaryText = `Atención por favor... Turno ${spokenToken}... Por favor pasar al ${cleanCabin}. ¡Gracias!`;
+              secondaryLang = 'es-ES';
+            } else if (langMode === 'ar') {
+              secondaryText = `يرجى الانتباه... التذكرة رقم ${spokenToken}... يرجى التوجه إلى ${cleanCabin}. شكراً لكم!`;
+              secondaryLang = 'ar-SA';
+            } else if (langMode === 'fr') {
+              secondaryText = `Votre attention s'il vous plaît... Ticket ${spokenToken}... Veuillez vous présenter au ${cleanCabin}. Merci !`;
+              secondaryLang = 'fr-FR';
             }
-            window.speechSynthesis.speak(utteranceHi);
+
+            if (secondaryText) {
+              const utteranceSec = new SpeechSynthesisUtterance(secondaryText);
+              utteranceSec.lang = secondaryLang;
+              utteranceSec.rate = 0.94;
+              utteranceSec.pitch = 1.14;
+              utteranceSec.volume = 1.0;
+
+              const secVoice = getBestCuteVoice(langMode);
+              if (secVoice) {
+                utteranceSec.voice = secVoice;
+              }
+              window.speechSynthesis.speak(utteranceSec);
+            }
           } catch {
-            // Ignore if language not installed
+            // Ignore if language synthesis fails
           }
         };
       }

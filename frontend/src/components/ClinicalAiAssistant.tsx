@@ -56,6 +56,7 @@ const PRESET_FAQS = [
 
 export const ClinicalAiAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -282,25 +283,61 @@ export const ClinicalAiAssistant: React.FC = () => {
           </div>
         </div>
       ) : (
-        /* Collapsed Floating Action Button (FAB) */
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="group relative flex items-center gap-2.5 p-3 sm:px-4 sm:py-3 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white shadow-[0_10px_35px_rgba(37,99,235,0.4)] hover:shadow-[0_14px_45px_rgba(37,99,235,0.6)] cursor-pointer transition-all hover:scale-105 active:scale-95 border border-white/20"
-          aria-label="Open Queueless AI Assistant"
-        >
-          {/* Glowing Green Online Status Indicator */}
-          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white dark:border-slate-950 shadow-sm animate-pulse" />
+        /* Collapsed Omni-Style Floating Action Button & Tooltip */
+        <div className="flex items-center gap-3">
+          {/* Omni-Style Speech Bubble Tooltip */}
+          {showTooltip && (
+            <div
+              onClick={() => setIsOpen(true)}
+              className="relative cursor-pointer bg-white dark:bg-slate-900 border border-rose-200/80 dark:border-rose-900/50 rounded-2xl p-3 shadow-xl flex items-center gap-2.5 max-w-[280px] sm:max-w-[310px] animate-in fade-in slide-in-from-right-3 duration-300 group hover:shadow-2xl transition-all"
+            >
+              {/* Triangle pointer pointing right */}
+              <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[8px] border-l-white dark:border-l-slate-900 drop-shadow-xs" />
 
-          <div className="w-6 h-6 flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-amber-300 group-hover:rotate-12 transition-transform" />
-          </div>
+              {/* Cute Robot Avatar */}
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-50 to-pink-100 dark:from-rose-950/60 dark:to-pink-900/40 border border-rose-200/70 dark:border-rose-800/50 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                <Bot className="w-6 h-6 text-rose-500 dark:text-rose-400" />
+              </div>
 
-          <div className="hidden sm:flex flex-col text-left pr-1">
-            <span className="text-[11px] font-black tracking-wide leading-tight">AI Clinical Copilot</span>
-            <span className="text-[9px] text-blue-100 font-medium leading-none">Instant OPD Help</span>
-          </div>
-        </button>
+              {/* Message */}
+              <div className="flex-1 min-w-0 pr-1">
+                <strong className="block text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                  I'm your AI Assistant!
+                </strong>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                  Need help finding or using tools? Ask me 👋
+                </p>
+              </div>
+
+              {/* Dismiss X button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowTooltip(false);
+                }}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0 cursor-pointer"
+                aria-label="Dismiss tooltip"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
+
+          {/* Omni-Style Circular Floating Action Button */}
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            className="group relative w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#FF3B5C] via-[#FA5252] to-[#7950F2] hover:from-[#ff2b4f] hover:to-[#6a3df0] text-white shadow-[0_8px_30px_rgba(250,82,82,0.45)] hover:shadow-[0_12px_40px_rgba(250,82,82,0.65)] cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white/30 flex items-center justify-center shrink-0"
+            aria-label="Open Queueless AI Assistant"
+          >
+            {/* Glowing Green Online Status Indicator */}
+            <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white dark:border-slate-950 shadow-sm animate-pulse" />
+
+            {/* Omni Bot Icon */}
+            <Bot className="w-7 h-7 text-white stroke-[2.2] group-hover:scale-110 transition-transform" />
+          </button>
+        </div>
       )}
     </div>
   );

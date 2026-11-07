@@ -10,7 +10,7 @@
     <circle cx="18" cy="18" r="2" fill="#EF4444" />
   </g>
   <!-- Max Wordmark -->
-  <text x="48" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="20" fill="currentColor" letter-spacing="1">MAX</text>
+  <text x="48" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="20" fill="#0f172a" letter-spacing="1">MAX</text>
   <text x="48" y="38" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="8.5" fill="#047857" letter-spacing="1.5">HEALTHCARE</text>
 </svg>
 

@@ -7,7 +7,7 @@
     <circle cx="18" cy="18" r="4" fill="#F97316" />
   </g>
   <!-- Manipal Wordmark -->
-  <text x="48" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="19" fill="currentColor" letter-spacing="-0.5">Manipal</text>
+  <text x="48" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="19" fill="#0f172a" letter-spacing="-0.5">Manipal</text>
   <text x="49" y="38" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="8" fill="#0284C7" letter-spacing="1.8">HOSPITALS</text>
 </svg>
 

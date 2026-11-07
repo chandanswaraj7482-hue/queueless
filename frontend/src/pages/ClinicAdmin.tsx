@@ -42,6 +42,9 @@ import {
   Star,
   MessageSquare,
   Heart,
+  Tv,
+  Smartphone,
+  ExternalLink,
 } from 'lucide-react';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
 
@@ -122,6 +125,24 @@ export const ClinicAdmin: React.FC = () => {
   const [showSecPasswords, setShowSecPasswords] = useState<{ [key: string]: boolean }>({});
   const [savingSecurity, setSavingSecurity] = useState(false);
   const [loadingSecurity, setLoadingSecurity] = useState(false);
+  const [samePasswordInput, setSamePasswordInput] = useState('');
+
+  const applySamePasswordToAll = (masterPwd: string) => {
+    if (!masterPwd.trim()) return;
+    const pwd = masterPwd.trim();
+    setSecAdminPassword(pwd);
+    setSecReceptionPassword(pwd);
+    const pin = pwd.replace(/\D/g, '').slice(-4) || '1234';
+    setSecDoctorPasswords((prev) =>
+      prev.map((doc) => ({
+        ...doc,
+        password: pwd,
+        pin: pin.length === 4 ? pin : '1234',
+      }))
+    );
+    setToastMessage('Applied same master password to Admin, Reception, and all Doctors! Click "Save All Security Passwords" to persist.');
+    setTimeout(() => setToastMessage(null), 4000);
+  };
 
   const submitAdminLogin = async (pwd: string) => {
     setLoggingIn(true);
@@ -834,6 +855,99 @@ export const ClinicAdmin: React.FC = () => {
             <QrCode className="w-4 h-4" />
             <span>Entrance QR Standee</span>
           </button>
+        </div>
+      </div>
+
+      {/* 👑 HOSPITAL OWNER COMMAND: ROLE SWITCHER & MULTI-SCREEN AUDIT */}
+      <div className="mb-6 p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-xl border border-indigo-500/20 print:hidden relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-black uppercase tracking-wider border border-amber-400/30 flex items-center gap-1">
+                <span>👑</span>
+                <span>Hospital Owner Authority</span>
+              </span>
+              <span className="text-xs text-indigo-200 font-semibold">• Master Multi-Role Access</span>
+            </div>
+            <h2 className="text-base sm:text-lg font-black text-white tracking-tight">
+              Switch & Inspect Any Hospital Role Live
+            </h2>
+            <p className="text-xs text-slate-300 max-w-xl">
+              As the hospital owner, you can switch into any department screen to audit patient flow, calling status, or cashier receipts without getting locked out.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full md:w-auto shrink-0">
+            {/* 1. Doctor Cabin */}
+            <a
+              href={`/doctor/${activeSlug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all flex items-center gap-2 group cursor-pointer"
+              title="Open Doctor Consultation Cabin Desk"
+            >
+              <div className="w-8 h-8 rounded-xl bg-purple-500/30 text-purple-300 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <Stethoscope className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 text-left">
+                <span className="block text-xs font-bold text-white truncate">Doctor Cabin</span>
+                <span className="block text-[10px] text-purple-300 font-mono">1-Tap Call ↗</span>
+              </div>
+            </a>
+
+            {/* 2. Reception POS */}
+            <a
+              href={`/reception/${activeSlug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all flex items-center gap-2 group cursor-pointer"
+              title="Open Frontdesk Reception Cashier & POS"
+            >
+              <div className="w-8 h-8 rounded-xl bg-teal-500/30 text-teal-300 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <Users className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 text-left">
+                <span className="block text-xs font-bold text-white truncate">Reception POS</span>
+                <span className="block text-[10px] text-teal-300 font-mono">Cashier Desk ↗</span>
+              </div>
+            </a>
+
+            {/* 3. 55" TV Kiosk */}
+            <a
+              href={`/display/${activeSlug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all flex items-center gap-2 group cursor-pointer"
+              title="Open Lobby OLED Display & Chimes"
+            >
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/30 text-emerald-300 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <Tv className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 text-left">
+                <span className="block text-xs font-bold text-white truncate">55" TV Display</span>
+                <span className="block text-[10px] text-emerald-300 font-mono">Lobby View ↗</span>
+              </div>
+            </a>
+
+            {/* 4. Patient Mobile Pass */}
+            <a
+              href={`/check-in/${activeSlug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all flex items-center gap-2 group cursor-pointer"
+              title="Open Patient Mobile Check-in Pass"
+            >
+              <div className="w-8 h-8 rounded-xl bg-blue-500/30 text-blue-300 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <Smartphone className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 text-left">
+                <span className="block text-xs font-bold text-white truncate">Patient Pass</span>
+                <span className="block text-[10px] text-blue-300 font-mono">Mobile QR ↗</span>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -1878,6 +1992,42 @@ export const ClinicAdmin: React.FC = () => {
                 <RefreshCw className={`w-3.5 h-3.5 ${loadingSecurity ? 'animate-spin' : ''}`} />
                 <span>Reload</span>
               </button>
+            </div>
+
+            {/* Quick Action: Apply Same Password across All Roles */}
+            <div className="mb-6 p-5 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
+                  <Sparkles className="w-4 h-4 text-amber-600" />
+                  <span>Owner Quick-Sync: Same Password For All Roles</span>
+                </div>
+                <p className="text-[11px] text-amber-800/80 leading-relaxed max-w-lg">
+                  Prefer using a single hospital password everywhere? Set your master password and sync it across Business Admin, Reception Desk, and all Doctor Cabins with 1 click.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
+                <input
+                  type="text"
+                  value={samePasswordInput}
+                  onChange={(e) => setSamePasswordInput(e.target.value)}
+                  placeholder="e.g. hospital123"
+                  className="px-3 py-2 text-xs font-mono font-bold rounded-xl border border-amber-300 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 w-36"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!samePasswordInput.trim()) {
+                      alert('Please enter a password to sync.');
+                      return;
+                    }
+                    applySamePasswordToAll(samePasswordInput.trim());
+                  }}
+                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-xs transition-all whitespace-nowrap cursor-pointer active:scale-95"
+                >
+                  Sync to All Roles
+                </button>
+              </div>
             </div>
 
             <form onSubmit={handleSaveSecuritySettings} className="space-y-6">

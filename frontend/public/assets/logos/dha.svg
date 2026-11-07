@@ -6,7 +6,7 @@
     <circle cx="18" cy="17" r="3.5" fill="#FFFFFF" />
   </g>
   <!-- DHA Wordmark -->
-  <text x="48" y="26" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="19" fill="currentColor" letter-spacing="0.5">DHA DUBAI</text>
+  <text x="48" y="26" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="19" fill="#0f172a" letter-spacing="0.5">DHA DUBAI</text>
   <text x="49" y="37" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="8.5" fill="#D97706" letter-spacing="1.5">HEALTH NETWORK</text>
 </svg>
 

@@ -1309,20 +1309,20 @@ export const QueuelessWebsite: React.FC = () => {
               {[...PARTNER_HOSPITALS, ...PARTNER_HOSPITALS].map((hosp, idx) => (
                 <div
                   key={`${hosp.name}-${idx}`}
-                  className="px-5 py-3.5 bg-white/90 dark:bg-slate-900/90 rounded-2xl border border-slate-200/90 dark:border-slate-800 flex items-center gap-4 text-xs tracking-tight shadow-sm hover:border-blue-400 dark:hover:border-blue-500 hover:bg-white dark:hover:bg-slate-800 transition-all hover-lift shrink-0 cursor-default group backdrop-blur-md"
+                  className="px-5 py-3.5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 flex items-center gap-4 text-xs tracking-tight shadow-sm hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition-all shrink-0 cursor-default group"
                 >
-                  <div className="h-9 flex items-center justify-center shrink-0 px-2.5 py-1 bg-white rounded-xl border border-slate-200/80 shadow-2xs">
+                  <div className="h-9 px-3 py-1 bg-white rounded-xl border border-slate-200/90 shadow-2xs flex items-center justify-center shrink-0">
                     <img
                       src={hosp.logo}
                       alt={hosp.name}
-                      className="h-6 w-auto max-w-[115px] object-contain transition-transform group-hover:scale-105"
+                      className="h-6 w-auto max-w-[125px] object-contain transition-transform group-hover:scale-105"
                     />
                   </div>
                   <div className="text-left border-l border-slate-200 dark:border-slate-800 pl-3">
-                    <span className="block font-black text-slate-800 dark:text-slate-100 text-[11px] leading-tight">
+                    <span className="block font-black text-slate-900 dark:text-white text-xs leading-tight">
                       {hosp.sub}
                     </span>
-                    <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                    <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">
                       {hosp.badge}
                     </span>
                   </div>
@@ -1331,13 +1331,13 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
           </div>
 
-{/* ============================================================== */}
-          {/* USER REFERENCE BANNER: Real Impact for Growing Hospitals (EXACT MATCH) */}
+          {/* ============================================================== */}
+          {/* USER REFERENCE BANNER: Real Impact for Growing Hospitals       */}
           {/* ============================================================== */}
           <motion.div
             whileHover={{ scale: 1.008 }}
             transition={{ duration: 0.3 }}
-            className="relative rounded-2xl sm:rounded-3xl lg:rounded-full bg-gradient-to-r from-[#011438] via-[#022e70] to-[#01173d] border border-sky-400/35 p-4 sm:p-5 lg:px-9 lg:py-5 shadow-[0_20px_50px_rgba(2,132,199,0.28)] text-white overflow-hidden"
+            className="relative rounded-2xl sm:rounded-3xl lg:rounded-full bg-gradient-to-r from-[#011438] via-[#022e70] to-[#01173d] border-2 border-sky-400/40 p-4 sm:p-5 lg:px-9 lg:py-6 shadow-[0_20px_50px_rgba(2,132,199,0.35)] text-white overflow-hidden"
           >
             {/* Ambient Cyan & Sapphire Radial Glows */}
             <div className="absolute -top-12 -left-12 w-48 h-48 bg-cyan-400/15 rounded-full blur-2xl pointer-events-none" />
@@ -1351,10 +1351,10 @@ export const QueuelessWebsite: React.FC = () => {
                   <BarChart3 className="w-6 h-6 sm:w-7 sm:h-7 text-cyan-300 stroke-[2.2]" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
+                  <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug">
                     Real Impact for Growing Hospitals
                   </h3>
-                  <p className="text-xs sm:text-[13px] text-blue-100/75 font-normal leading-relaxed max-w-xs sm:max-w-md mt-0.5">
+                  <p className="text-xs sm:text-[13px] text-cyan-100/90 font-medium leading-relaxed max-w-xs sm:max-w-md mt-0.5">
                     Hospitals using Queueless have seen faster service, happier patients, and smoother operations.
                   </p>
                 </div>
@@ -1367,11 +1367,11 @@ export const QueuelessWebsite: React.FC = () => {
                 <div className="flex flex-col items-center justify-center text-center px-3 sm:px-5 lg:px-7 lg:border-l border-white/20">
                   <div className="flex items-center justify-center gap-2">
                     <Timer className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 stroke-[2.3]" />
-                    <span className="text-2xl sm:text-3xl font-extrabold text-white font-sans tracking-tight">
+                    <span className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
                       72%
                     </span>
                   </div>
-                  <div className="text-[11px] sm:text-xs text-blue-100/80 font-medium leading-tight mt-1.5">
+                  <div className="text-[11px] sm:text-xs text-cyan-100 font-bold leading-tight mt-1.5">
                     <span>Reduction in</span>
                     <span className="block">Waiting Time</span>
                   </div>
@@ -1381,11 +1381,11 @@ export const QueuelessWebsite: React.FC = () => {
                 <div className="flex flex-col items-center justify-center text-center px-3 sm:px-5 lg:px-7 lg:border-l border-white/20">
                   <div className="flex items-center justify-center gap-2">
                     <Users className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 stroke-[2.3]" />
-                    <span className="text-2xl sm:text-3xl font-extrabold text-white font-sans tracking-tight">
+                    <span className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
                       2.4x
                     </span>
                   </div>
-                  <div className="text-[11px] sm:text-xs text-blue-100/80 font-medium leading-tight mt-1.5">
+                  <div className="text-[11px] sm:text-xs text-cyan-100 font-bold leading-tight mt-1.5">
                     <span>More Patients</span>
                     <span className="block">Served</span>
                   </div>
@@ -1395,11 +1395,11 @@ export const QueuelessWebsite: React.FC = () => {
                 <div className="flex flex-col items-center justify-center text-center px-3 sm:px-5 lg:px-7 lg:border-l border-white/20">
                   <div className="flex items-center justify-center gap-2">
                     <ThumbsUp className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 stroke-[2.3]" />
-                    <span className="text-2xl sm:text-3xl font-extrabold text-white font-sans tracking-tight">
+                    <span className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
                       98%
                     </span>
                   </div>
-                  <div className="text-[11px] sm:text-xs text-blue-100/80 font-medium leading-tight mt-1.5">
+                  <div className="text-[11px] sm:text-xs text-cyan-100 font-bold leading-tight mt-1.5">
                     <span>Patient</span>
                     <span className="block">Satisfaction</span>
                   </div>
@@ -1409,11 +1409,11 @@ export const QueuelessWebsite: React.FC = () => {
                 <div className="flex flex-col items-center justify-center text-center px-3 sm:px-5 lg:px-7 lg:border-l border-white/20">
                   <div className="flex items-center justify-center gap-2">
                     <BriefcaseMedical className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 stroke-[2.3]" />
-                    <span className="text-2xl sm:text-3xl font-extrabold text-white font-sans tracking-tight">
+                    <span className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
                       50+
                     </span>
                   </div>
-                  <div className="text-[11px] sm:text-xs text-blue-100/80 font-medium leading-tight mt-1.5">
+                  <div className="text-[11px] sm:text-xs text-cyan-100 font-bold leading-tight mt-1.5">
                     <span>Hospitals</span>
                     <span className="block">Onboarded</span>
                   </div>
@@ -1424,102 +1424,127 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
           </motion.div>
 
-{/* ============================================================== */}
-        {/* SET UP IN 3 SIMPLE STEPS (EXACT MATCH TO REFERENCE DESIGN)     */}
+        {/* ============================================================== */}
+        {/* SET UP IN 3 SIMPLE STEPS                                       */}
         {/* ============================================================== */}
         <div className="mt-20 max-w-5xl mx-auto space-y-9 text-center">
-          <div className="space-y-2">
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <div className="space-y-2 max-w-xl mx-auto">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 rounded-full text-xs font-bold uppercase tracking-wider">
+              <Zap className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Instant Cloud Provisioning</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
               Set Up in 3 Simple Steps
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-normal">
-              Get your hospital up and running in minutes.
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-normal">
+              Get your entire hospital or clinic up and running in minutes — zero IT overhead.
             </p>
           </div>
 
           {/* 3 Step Cards Connected by Soft Arrows */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-6 relative items-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-6 relative items-stretch">
             
             {/* Step 1: Create Your Hospital */}
             <motion.div
-              whileHover={{ y: -8, scale: 1.02 }}
+              whileHover={{ y: -6, scale: 1.02 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="relative p-7 sm:p-8 rounded-3xl bg-white/95 dark:bg-slate-900/95 border border-indigo-100/80 dark:border-slate-800 shadow-[0_8px_30px_rgba(99,102,241,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:shadow-xl transition-shadow text-center flex flex-col items-center group cursor-default"
+              className="relative p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/90 dark:border-slate-800 shadow-md hover:border-teal-500/50 hover:shadow-xl transition-all text-center flex flex-col items-center justify-between group cursor-default"
             >
               {/* Step Badge (Top-Left) */}
-              <div className="w-7 h-7 rounded-full bg-[#6938ef] text-white font-bold text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
+              <div className="w-8 h-8 rounded-full bg-teal-600 text-white font-black text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
                 1
               </div>
 
               {/* Icon Container */}
-              <div className="w-16 h-16 rounded-2xl bg-teal-50 dark:bg-teal-950/70 border border-teal-200/80 dark:border-teal-700/60 shadow-[0_4px_20px_rgba(20,184,166,0.12)] flex items-center justify-center text-teal-600 dark:text-teal-300 mb-4 group-hover:scale-105 transition-transform">
-                <BriefcaseMedical className="w-7 h-7 stroke-[1.8]" />
+              <div className="w-16 h-16 rounded-2xl bg-teal-50 dark:bg-teal-950/80 border border-teal-200/80 dark:border-teal-700/60 shadow-sm flex items-center justify-center text-teal-600 dark:text-teal-300 mb-4 group-hover:scale-105 transition-transform mt-2">
+                <BriefcaseMedical className="w-7 h-7 stroke-[2]" />
               </div>
 
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
-                Create Your Hospital
-              </h3>
-              <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 mt-2 leading-relaxed max-w-[230px]">
-                Add basic details, departments and doctors.
-              </p>
+              <div className="space-y-2">
+                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
+                  Create Your Hospital
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  Add basic hospital details, clinical departments, and consulting doctors with room numbers.
+                </p>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 w-full flex items-center justify-center gap-1.5 text-[11px] font-bold text-teal-700 dark:text-teal-400">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Takes ~60 seconds</span>
+              </div>
             </motion.div>
 
             {/* Connecting Arrow 1 (Desktop) */}
             <div className="hidden md:flex absolute left-1/3 -translate-x-1/2 top-1/2 -translate-y-1/2 z-20 pointer-events-none items-center justify-center">
-              <ArrowRight className="w-5 h-5 text-indigo-400 dark:text-indigo-500 stroke-[2.2] animate-pulse" />
+              <ArrowRight className="w-6 h-6 text-indigo-400 dark:text-indigo-400 stroke-[2.5] animate-pulse" />
             </div>
 
             {/* Step 2: Configure OPD Flow */}
             <motion.div
-              whileHover={{ y: -8, scale: 1.02 }}
+              whileHover={{ y: -6, scale: 1.02 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="relative p-7 sm:p-8 rounded-3xl bg-white/95 dark:bg-slate-900/95 border border-indigo-100/80 dark:border-slate-800 shadow-[0_8px_30px_rgba(99,102,241,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:shadow-xl transition-shadow text-center flex flex-col items-center group cursor-default"
+              className="relative p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/90 dark:border-slate-800 shadow-md hover:border-blue-500/50 hover:shadow-xl transition-all text-center flex flex-col items-center justify-between group cursor-default"
             >
               {/* Step Badge (Top-Left) */}
-              <div className="w-7 h-7 rounded-full bg-[#6938ef] text-white font-bold text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
+              <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-black text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
                 2
               </div>
 
               {/* Icon Container */}
-              <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/70 border border-blue-200/80 dark:border-blue-700/60 shadow-[0_4px_20px_rgba(59,130,246,0.12)] flex items-center justify-center text-blue-600 dark:text-blue-300 mb-4 group-hover:scale-105 transition-transform">
-                <Users className="w-7 h-7 stroke-[1.8]" />
+              <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/80 border border-blue-200/80 dark:border-blue-700/60 shadow-sm flex items-center justify-center text-blue-600 dark:text-blue-300 mb-4 group-hover:scale-105 transition-transform mt-2">
+                <Users className="w-7 h-7 stroke-[2]" />
               </div>
 
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
-                Configure OPD Flow
-              </h3>
-              <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 mt-2 leading-relaxed max-w-[230px]">
-                Set up counters, token rules and queue flow.
-              </p>
+              <div className="space-y-2">
+                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
+                  Configure OPD Flow
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  Set counter admission rules, token prefixes, 15-day follow-up policies, and consultation fees.
+                </p>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 w-full flex items-center justify-center gap-1.5 text-[11px] font-bold text-blue-700 dark:text-blue-400">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Custom token policies</span>
+              </div>
             </motion.div>
 
             {/* Connecting Arrow 2 (Desktop) */}
             <div className="hidden md:flex absolute left-2/3 -translate-x-1/2 top-1/2 -translate-y-1/2 z-20 pointer-events-none items-center justify-center">
-              <ArrowRight className="w-5 h-5 text-indigo-400 dark:text-indigo-500 stroke-[2.2] animate-pulse" />
+              <ArrowRight className="w-6 h-6 text-indigo-400 dark:text-indigo-400 stroke-[2.5] animate-pulse" />
             </div>
 
             {/* Step 3: Go Live */}
             <motion.div
-              whileHover={{ y: -8, scale: 1.02 }}
+              whileHover={{ y: -6, scale: 1.02 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="relative p-7 sm:p-8 rounded-3xl bg-white/95 dark:bg-slate-900/95 border border-indigo-100/80 dark:border-slate-800 shadow-[0_8px_30px_rgba(99,102,241,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:shadow-xl transition-shadow text-center flex flex-col items-center group cursor-default"
+              className="relative p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/90 dark:border-slate-800 shadow-md hover:border-purple-500/50 hover:shadow-xl transition-all text-center flex flex-col items-center justify-between group cursor-default"
             >
               {/* Step Badge (Top-Left) */}
-              <div className="w-7 h-7 rounded-full bg-[#6938ef] text-white font-bold text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
+              <div className="w-8 h-8 rounded-full bg-purple-600 text-white font-black text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
                 3
               </div>
 
               {/* Icon Container */}
-              <div className="w-16 h-16 rounded-2xl bg-purple-50 dark:bg-purple-950/70 border border-purple-200/80 dark:border-purple-700/60 shadow-[0_4px_20px_rgba(168,85,247,0.12)] flex items-center justify-center text-purple-600 dark:text-purple-300 mb-4 group-hover:scale-105 transition-transform">
-                <Rocket className="w-7 h-7 stroke-[1.8]" />
+              <div className="w-16 h-16 rounded-2xl bg-purple-50 dark:bg-purple-950/80 border border-purple-200/80 dark:border-purple-700/60 shadow-sm flex items-center justify-center text-purple-600 dark:text-purple-300 mb-4 group-hover:scale-105 transition-transform mt-2">
+                <Rocket className="w-7 h-7 stroke-[2]" />
               </div>
 
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
-                Go Live
-              </h3>
-              <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 mt-2 leading-relaxed max-w-[230px]">
-                Start managing real patients and queues — instantly.
-              </p>
+              <div className="space-y-2">
+                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
+                  Go Live Instantly
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  Print entrance QR standees, open lobby TV kiosk on any smart TV, and start calling patients.
+                </p>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 w-full flex items-center justify-center gap-1.5 text-[11px] font-bold text-purple-700 dark:text-purple-400">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Zero hardware shipping</span>
+              </div>
             </motion.div>
 
           </div>

@@ -9,7 +9,7 @@
     <path d="M30 18 C30 12 25 8 18 13 C24 12 27 17 26 24 C25 29 21 32 18 34 C24 32 30 25 30 18 Z" fill="#DC2626" />
   </g>
   <!-- Fortis Wordmark -->
-  <text x="50" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="21" fill="currentColor" letter-spacing="-0.5">Fortis</text>
+  <text x="50" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="21" fill="#0f172a" letter-spacing="-0.5">Fortis</text>
   <text x="50" y="38" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="8" fill="#DC2626" letter-spacing="2">HEALTHCARE</text>
 </svg>
 

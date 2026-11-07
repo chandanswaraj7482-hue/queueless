@@ -285,53 +285,56 @@ export const ClinicalAiAssistant: React.FC = () => {
       ) : (
         /* Collapsed Omni-Style Floating Action Button & Tooltip */
         <div className="flex items-center gap-3">
-          {/* Omni-Style Speech Bubble Tooltip */}
+          {/* Omni-Style Speech Bubble Tooltip - Always Crisp Snow White & High Contrast */}
           {showTooltip && (
             <div
               onClick={() => setIsOpen(true)}
-              className="relative cursor-pointer bg-white dark:bg-slate-900 border border-rose-200/80 dark:border-rose-900/50 rounded-2xl p-3 shadow-xl flex items-center gap-2.5 max-w-[280px] sm:max-w-[310px] animate-in fade-in slide-in-from-right-3 duration-300 group hover:shadow-2xl transition-all"
+              className="relative cursor-pointer bg-white border border-[#FFCCD5] rounded-[22px] px-3.5 py-3 shadow-[0_12px_36px_rgba(0,0,0,0.18)] flex items-center gap-3 max-w-[310px] animate-in fade-in slide-in-from-right-3 duration-300 group hover:shadow-[0_16px_45px_rgba(0,0,0,0.25)] transition-all select-none"
             >
-              {/* Triangle pointer pointing right */}
-              <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[8px] border-l-white dark:border-l-slate-900 drop-shadow-xs" />
+              {/* Outer Triangle border */}
+              <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-0 h-0 border-y-[7px] border-y-transparent border-l-[9px] border-l-[#FFCCD5] pointer-events-none" />
+              {/* Inner Triangle white fill */}
+              <div className="absolute top-1/2 -right-[7px] -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[8px] border-l-white pointer-events-none" />
 
-              {/* Cute Omni Robot Avatar with Cheek Blushes & Antenna */}
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 dark:from-rose-950/60 dark:to-pink-900/40 border border-rose-200/80 dark:border-rose-800/60 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform overflow-hidden">
-                <svg className="w-7 h-7" viewBox="0 0 36 36" fill="none">
-                  {/* Top Yellow Antenna with Ball */}
+              {/* Cute Omni Robot Avatar with Pastel Pink Background */}
+              <div className="w-11 h-11 rounded-2xl bg-[#FFF0F3] border border-[#FFD5DC] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform overflow-hidden">
+                <img
+                  src="/omni-robot-avatar.png"
+                  alt="AI Assistant"
+                  className="w-8 h-8 object-contain"
+                  onError={(e) => {
+                    // Fallback to SVG if image not available
+                    (e.target as HTMLElement).style.display = 'none';
+                    const parent = (e.target as HTMLElement).parentElement;
+                    if (parent) {
+                      const svg = parent.querySelector('svg');
+                      if (svg) svg.classList.remove('hidden');
+                    }
+                  }}
+                />
+                <svg className="w-7 h-7 hidden" viewBox="0 0 36 36" fill="none">
                   <line x1="18" y1="5" x2="18" y2="9" stroke="#EAB308" strokeWidth="2.5" strokeLinecap="round" />
                   <circle cx="18" cy="4" r="2.5" fill="#FACC15" />
-                  
-                  {/* Robot Head Body */}
                   <rect x="5" y="9" width="26" height="21" rx="6" fill="#38BDF8" stroke="#0284C7" strokeWidth="1.5" />
-                  
-                  {/* Ears */}
                   <rect x="2" y="16" width="3" height="7" rx="1.5" fill="#F43F5E" />
                   <rect x="31" y="16" width="3" height="7" rx="1.5" fill="#F43F5E" />
-                  
-                  {/* Eye Screen / Face Panel */}
                   <rect x="8" y="12" width="20" height="15" rx="4" fill="#0C4A6E" />
-                  
-                  {/* Glowing Eyes */}
                   <circle cx="13" cy="18" r="2.5" fill="#38BDF8" />
                   <circle cx="13.8" cy="17.2" r="0.9" fill="#FFFFFF" />
                   <circle cx="23" cy="18" r="2.5" fill="#38BDF8" />
                   <circle cx="23.8" cy="17.2" r="0.9" fill="#FFFFFF" />
-                  
-                  {/* Cute Red Cheek Blushes */}
                   <circle cx="10" cy="22.5" r="1.6" fill="#FB7185" opacity="0.9" />
                   <circle cx="26" cy="22.5" r="1.6" fill="#FB7185" opacity="0.9" />
-                  
-                  {/* Friendly Smile */}
                   <path d="M15 22.5C16 23.5 20 23.5 21 22.5" stroke="#38BDF8" strokeWidth="1.2" strokeLinecap="round" />
                 </svg>
               </div>
 
               {/* Message */}
-              <div className="flex-1 min-w-0 pr-1">
-                <strong className="block text-xs font-bold text-slate-900 dark:text-white leading-tight">
+              <div className="flex-1 min-w-0 pr-1 text-left">
+                <strong className="block text-[13px] font-extrabold text-[#0F172A] leading-tight tracking-tight">
                   I'm your AI Assistant!
                 </strong>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                <p className="text-[11.5px] text-[#475569] mt-0.5 leading-snug font-medium">
                   Need help finding or using tools? Ask me 👋
                 </p>
               </div>
@@ -343,7 +346,7 @@ export const ClinicalAiAssistant: React.FC = () => {
                   e.stopPropagation();
                   setShowTooltip(false);
                 }}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0 cursor-pointer"
+                className="text-[#94A3B8] hover:text-[#0F172A] p-1 rounded-full hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
                 aria-label="Dismiss tooltip"
               >
                 <X className="w-3.5 h-3.5" />
@@ -355,33 +358,31 @@ export const ClinicalAiAssistant: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="group relative w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#FF2B56] via-[#FF4668] to-[#9333EA] hover:from-[#f41e4a] hover:to-[#8224d8] text-white shadow-[0_8px_30px_rgba(255,43,86,0.5)] hover:shadow-[0_12px_40px_rgba(255,43,86,0.7)] cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white/90 dark:border-white/80 flex items-center justify-center shrink-0"
+            className="group relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#FF2B56] via-[#FF3B5C] to-[#8B5CF6] hover:from-[#f41e4a] hover:to-[#7c3aed] text-white shadow-[0_8px_30px_rgba(255,43,86,0.55)] hover:shadow-[0_12px_40px_rgba(255,43,86,0.75)] cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white flex items-center justify-center shrink-0"
             aria-label="Open Queueless AI Assistant"
           >
             {/* Glowing Green Online Status Indicator */}
-            <span className="absolute 0 top-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-[#10B981] border-2 border-white dark:border-slate-950 shadow-md animate-pulse" />
+            <span className="absolute top-0 right-0 w-3.5 h-3.5 rounded-full bg-[#10B981] border-2 border-white shadow-sm animate-pulse" />
 
             {/* Omni White Line Robot Icon */}
             <svg
-              className="w-7 h-7 text-white group-hover:scale-110 transition-transform"
+              className="w-7 h-7 text-white stroke-white stroke-[2.2] group-hover:scale-110 transition-transform"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              {/* Top Antenna stem and ball */}
+              {/* Top Antenna stem and horizontal bar */}
               <line x1="12" y1="2" x2="12" y2="5" />
-              <circle cx="12" cy="2" r="1" fill="currentColor" stroke="none" />
+              <line x1="10" y1="2" x2="14" y2="2" />
               {/* Rounded Head Rectangle */}
               <rect x="4" y="5" width="16" height="15" rx="4" />
               {/* Ear tabs on left and right */}
               <line x1="1.5" y1="12.5" x2="4" y2="12.5" />
               <line x1="20" y1="12.5" x2="22.5" y2="12.5" />
               {/* Two capsule eyes */}
-              <line x1="8.5" y1="10.5" x2="8.5" y2="14" strokeWidth="2.6" />
-              <line x1="15.5" y1="10.5" x2="15.5" y2="14" strokeWidth="2.6" />
+              <line x1="8.5" y1="11" x2="8.5" y2="14.5" strokeWidth="2.6" />
+              <line x1="15.5" y1="11" x2="15.5" y2="14.5" strokeWidth="2.6" />
             </svg>
           </button>
         </div>

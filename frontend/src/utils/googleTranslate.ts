@@ -43,15 +43,17 @@ export function changeLanguage(langCode: string) {
   try {
     localStorage.setItem('queueless_language', langCode);
 
-    // Set cookie for Google Translate
     const hostname = window.location.hostname;
-    document.cookie = `googtrans=/en/${langCode}; path=/;`;
-    document.cookie = `googtrans=/en/${langCode}; path=/; domain=.${hostname};`;
+    const cookieVal = `/en/${langCode}`;
 
     if (langCode === 'en') {
-      // Clear cookie if switching back to English
       document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${hostname};`;
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${hostname};`;
+    } else {
+      document.cookie = `googtrans=${cookieVal}; path=/;`;
+      document.cookie = `googtrans=${cookieVal}; path=/; domain=.${hostname};`;
+      document.cookie = `googtrans=${cookieVal}; path=/; domain=${hostname};`;
     }
 
     const select = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
@@ -59,7 +61,7 @@ export function changeLanguage(langCode: string) {
       select.value = langCode;
       select.dispatchEvent(new Event('change'));
     } else {
-      // If widget not mounted yet, reload to apply cookie
+      // If select is not ready yet, reload page so Google Translate applies the googtrans cookie
       window.location.reload();
     }
   } catch (e) {

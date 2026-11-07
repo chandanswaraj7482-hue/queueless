@@ -54,8 +54,8 @@ export const CommercialFooter: React.FC = () => {
 
   const handleLanguageChange = (code: string) => {
     setCurrentLang(code);
-    localStorage.setItem('queueless_language', code);
-    const langObj = SUPPORTED_LANGUAGES.find((l) => l.code === code);
+    changeLanguage(code);
+    const langObj = GOOGLE_LANGUAGES.find((l) => l.code === code);
     if (langObj) {
       setLangToast(`${langObj.native} (${langObj.name}) active`);
       setTimeout(() => setLangToast(null), 3000);

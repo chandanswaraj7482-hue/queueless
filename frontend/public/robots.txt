@@ -8,3 +8,4 @@ Disallow: /reception/
 # Sitemap for Google Search Indexing & Sitelinks
 Sitemap: https://queueless-os.vercel.app/sitemap.xml
 Sitemap: https://frontend-red-ten-39.vercel.app/sitemap.xml
+

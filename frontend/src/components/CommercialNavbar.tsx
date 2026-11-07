@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Globe,
@@ -11,13 +11,6 @@ import {
   ShieldCheck,
   Sun,
   Moon,
-  ChevronDown,
-  Smartphone,
-  Tv,
-  Stethoscope,
-  Users,
-  Lock,
-  ExternalLink,
 } from 'lucide-react';
 import { WORLDWIDE_CURRENCIES, CurrencyConfig } from '../data/commercialData';
 import { useTheme } from '../context/ThemeContext';
@@ -36,8 +29,6 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [rolesDropdownOpen, setRolesDropdownOpen] = useState(false);
-  const rolesRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -46,16 +37,6 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (rolesRef.current && !rolesRef.current.contains(e.target as Node)) {
-        setRolesDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const selectedCurrency: CurrencyConfig =
@@ -74,49 +55,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
     { label: 'Live Simulator', href: '/#interactive-demo' },
     { label: 'ROI Calculator', href: '/roi-calculator' },
     { label: 'Pricing', href: '/pricing' },
-  ];
-
-  const hospitalRoles = [
-    {
-      to: '/check-in/city-health',
-      title: 'Patient QR Pass',
-      desc: 'Mobile Check-in & Live Queue',
-      icon: Smartphone,
-      color: 'text-blue-500 bg-blue-500/10 border-blue-500/20',
-      badge: 'Mobile Pass',
-    },
-    {
-      to: '/display/city-health',
-      title: '55" TV Waiting Kiosk',
-      desc: 'Lobby OLED with Audio Chimes',
-      icon: Tv,
-      color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20',
-      badge: 'Smart TV',
-    },
-    {
-      to: '/doctor/city-health',
-      title: 'Doctor Cabin Desk',
-      desc: '1-Click Calling & Hotkey Alt+N',
-      icon: Stethoscope,
-      color: 'text-purple-500 bg-purple-500/10 border-purple-500/20',
-      badge: 'PIN: 1234',
-    },
-    {
-      to: '/reception/city-health',
-      title: 'Reception Cashier POS',
-      desc: 'Counter Admission & Thermal Slips',
-      icon: Users,
-      color: 'text-teal-500 bg-teal-500/10 border-teal-500/20',
-      badge: 'Pass: reception123',
-    },
-    {
-      to: '/admin/city-health',
-      title: 'Hospital Admin Console',
-      desc: '15-Day Free Follow-Up Rules',
-      icon: Lock,
-      color: 'text-amber-500 bg-amber-500/10 border-amber-500/20',
-      badge: 'Pass: admin123',
-    },
+    { label: 'About Founder', href: '/#about-founder' },
   ];
 
   return (
@@ -201,7 +140,9 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             {navLinks.map((item, idx) => {
               const isActive =
                 location.pathname === item.href ||
-                (item.href === '/#interactive-demo' && location.pathname === '/' && location.hash === '#interactive-demo');
+                (item.href === '/#interactive-demo' && location.pathname === '/' && location.hash === '#interactive-demo') ||
+                (item.href === '/#about-founder' && location.pathname === '/' && location.hash === '#about-founder');
+              const isLast = idx === navLinks.length - 1;
               return (
                 <React.Fragment key={item.href}>
                   <Link
@@ -214,76 +155,12 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   >
                     {item.label}
                   </Link>
-                  <span className="text-slate-300 dark:text-slate-700 select-none font-bold">·</span>
+                  {!isLast && (
+                    <span className="text-slate-300 dark:text-slate-700 select-none font-bold">·</span>
+                  )}
                 </React.Fragment>
               );
             })}
-
-            {/* Live Roles Dropdown */}
-            <div className="relative" ref={rolesRef}>
-              <button
-                type="button"
-                onClick={() => setRolesDropdownOpen(!rolesDropdownOpen)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 backdrop-blur-md ${
-                  rolesDropdownOpen
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-blue-600 dark:text-blue-400 bg-blue-50/70 dark:bg-blue-950/40 hover:bg-blue-100/70 dark:hover:bg-blue-950/70 border border-blue-200/50 dark:border-blue-800/40'
-                }`}
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Live Roles</span>
-                <ChevronDown
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                    rolesDropdownOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-
-              {rolesDropdownOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 bg-white/85 dark:bg-slate-900/85 backdrop-blur-2xl rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="px-2.5 py-1.5 border-b border-slate-100 dark:border-slate-800 mb-1 flex items-center justify-between">
-                    <span className="text-[10px] uppercase font-black tracking-wider text-slate-400">
-                      Open in Separate Tab
-                    </span>
-                    <span className="text-[9px] font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded-full">Live Sync</span>
-                  </div>
-                  <div className="space-y-1">
-                    {hospitalRoles.map((role) => {
-                      const Icon = role.icon;
-                      return (
-                        <Link
-                          key={role.to}
-                          to={role.to}
-                          target="_blank"
-                          onClick={() => setRolesDropdownOpen(false)}
-                          className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
-                        >
-                          <div className="flex items-center gap-2.5 min-w-0">
-                            <div
-                              className={`w-7 h-7 rounded-lg flex items-center justify-center border shrink-0 ${role.color}`}
-                            >
-                              <Icon className="w-3.5 h-3.5" />
-                            </div>
-                            <div className="min-w-0">
-                              <span className="block text-xs font-bold text-slate-900 dark:text-white truncate">
-                                {role.title}
-                              </span>
-                              <span className="block text-[10px] text-slate-400 truncate">
-                                {role.desc}
-                              </span>
-                            </div>
-                          </div>
-                          <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-1.5 py-0.5 rounded shrink-0 flex items-center gap-0.5">
-                            <span>{role.badge}</span>
-                            <ExternalLink className="w-2.5 h-2.5" />
-                          </span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
           </nav>
 
           {/* Right Action Bar */}
@@ -377,36 +254,6 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                 {item.label}
               </Link>
             ))}
-
-            {/* Mobile Hospital Roles */}
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 px-3 block mb-1.5">
-                Live Hospital Roles (Separate Links)
-              </span>
-              <div className="space-y-1">
-                {hospitalRoles.map((role) => {
-                  const Icon = role.icon;
-                  return (
-                    <Link
-                      key={role.to}
-                      to={role.to}
-                      target="_blank"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Icon className="w-4 h-4 text-blue-500" />
-                        <span>{role.title}</span>
-                      </div>
-                      <span className="text-[10px] text-blue-600 font-bold bg-blue-50 dark:bg-blue-900/30 px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                        {role.badge}
-                        <ExternalLink className="w-2.5 h-2.5" />
-                      </span>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
 
             {/* Mobile Currency Picker in Drawer */}
             <div className="p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">

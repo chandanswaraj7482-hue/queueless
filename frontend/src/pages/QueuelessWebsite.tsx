@@ -3252,6 +3252,168 @@ export const QueuelessWebsite: React.FC = () => {
 
       </section>
 
+
+      {/* ============================================================== */}
+      {/* 8.5. GOOGLE-STYLE SITELINKS & DIRECTORY CARDS                  */}
+      {/* ============================================================== */}
+      <section className="py-16 px-4 sm:px-6 bg-slate-50/70 dark:bg-slate-950/70 border-t border-slate-200/80 dark:border-slate-800 transition-colors duration-200">
+        <div className="max-w-6xl mx-auto space-y-8">
+          
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-[11px] font-bold uppercase tracking-wider">
+                <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <span>Verified Direct Sitelinks</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                Queueless OS Directory & Quick Navigation
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                Direct access to core hospital modules, calculators, and clinical systems.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Google Indexed • Schema.org Verified</span>
+            </div>
+          </div>
+
+          {/* 6 Google-Style Sitelinks Cards in a Clean 2-Column or 3-Column Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            
+            {/* Card 1: About Founder */}
+            <a
+              href="#about-founder"
+              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
+            >
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
+                    <span>About Founder: Chandan Swaraj</span>
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Meet Chandan Swaraj, founder & lead architect. Dismantling crowded hospital queues with zero-capex vector QR architecture.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
+                #about-founder
+              </span>
+            </a>
+
+            {/* Card 2: Live Simulator */}
+            <a
+              href="#interactive-demo"
+              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
+            >
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
+                    <span>Interactive Live OPD Simulator</span>
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Test the live end-to-end patient check-in, 1-tap doctor calling, and 55" smart TV synchronization in real time.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
+                #interactive-demo
+              </span>
+            </a>
+
+            {/* Card 3: ROI Calculator */}
+            <Link
+              to="/roi-calculator"
+              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
+            >
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
+                    <span>Hospital ROI & Capex Calculator</span>
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Calculate monthly OPD revenue recovery and hardware maintenance savings by replacing ₹2.5L+ metal kiosk machines.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
+                /roi-calculator
+              </span>
+            </Link>
+
+            {/* Card 4: Pricing */}
+            <Link
+              to="/pricing"
+              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
+            >
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
+                    <span>Queueless OS Pricing & Plans</span>
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Transparent clinical tier plans starting at ₹2,999/mo ($58/mo). ABDM Level 3 certified with zero hidden fees.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
+                /pricing
+              </span>
+            </Link>
+
+            {/* Card 5: Smart TV Kiosk */}
+            <Link
+              to="/display/city-health"
+              target="_blank"
+              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
+            >
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
+                    <span>55" TV Waiting Room Kiosk</span>
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Zero-scroll 1080p lobby OLED display with multilingual acoustic voice announcements in 5 worldwide languages.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
+                /display/city-health
+              </span>
+            </Link>
+
+            {/* Card 6: Features */}
+            <Link
+              to="/features"
+              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
+            >
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
+                    <span>Enterprise Features & ABDM Suite</span>
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Explore Ayushman Bharat Digital Mission (M1/M2) certified interoperability, HIPAA privacy, and doctor hotkeys.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
+                /features
+              </span>
+            </Link>
+
+          </div>
+
+        </div>
+      </section>
+
       {/* ============================================================== */}
       {/* 9. CORPORATE FOOTER (CLEAN LIGHT THEME)                        */}
       {/* ============================================================== */}
@@ -3417,7 +3579,7 @@ export const QueuelessWebsite: React.FC = () => {
             <div className="space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-3">
-                  <img src="/logo.jpg" alt="Queueless" className="w-10 h-10 rounded-2xl object-cover border border-slate-200 dark:border-slate-700" />
+                  <img src="/queueless-logo.svg" alt="Queueless" className="w-10 h-10 rounded-full object-cover border border-sky-400/30 dark:border-sky-500/30" />
                   <div>
                     <h3 className="text-base font-black text-slate-900 dark:text-white">Queueless Hospital OS</h3>
                     <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Boardroom Procurement & Clinical Brief (v2.4)</span>

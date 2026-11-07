@@ -118,11 +118,11 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
           <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
             <div className="relative">
               <img
-                src="/logo.jpg"
+                src="/queueless-logo.svg"
                 alt="Queueless"
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl object-cover shadow-sm border border-slate-200/90 dark:border-slate-700 group-hover:scale-105 transition-transform"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover shadow-sm border border-sky-400/30 dark:border-sky-500/30 group-hover:scale-105 transition-transform"
               />
-              <span className="absolute -top-1 -right-1 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-950 animate-pulse"></span>
+              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-950 animate-pulse"></span>
             </div>
             <div>
               <div className="flex items-center gap-1 sm:gap-1.5">

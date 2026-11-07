@@ -75,11 +75,11 @@ export const CommercialFooter: React.FC = () => {
             <Link to="/" className="flex items-center gap-3 group w-fit">
               <div className="relative">
                 <img
-                  src="/logo.jpg"
+                  src="/queueless-logo.svg"
                   alt="Queueless"
-                  className="w-10 h-10 rounded-2xl object-cover border border-slate-700 shadow-md group-hover:scale-105 transition-transform"
+                  className="w-10 h-10 rounded-full object-cover border border-sky-500/30 shadow-md group-hover:scale-105 transition-transform"
                 />
-                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-950 animate-pulse" />
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-950 animate-pulse" />
               </div>
               <div>
                 <div className="flex items-center gap-2">

@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <!-- Circular Clip -->
+    <clipPath id="circleClip">
+      <circle cx="100" cy="100" r="98" />
+    </clipPath>
+
+    <!-- Outer Ring Gradient -->
+    <linearGradient id="ringGrad" x1="20" y1="20" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00F2FE" />
+      <stop offset="45%" stop-color="#0099FF" />
+      <stop offset="100%" stop-color="#4F46E5" />
+    </linearGradient>
+
+    <!-- Background Radial Glow -->
+    <radialGradient id="bgRadial" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#0f2b5c" />
+      <stop offset="60%" stop-color="#03132e" />
+      <stop offset="100%" stop-color="#010818" />
+    </radialGradient>
+
+    <!-- Swoosh Tail Gradient -->
+    <linearGradient id="tailGrad" x1="85" y1="110" x2="165" y2="165" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00F2FE" />
+      <stop offset="50%" stop-color="#00A3FF" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+
+    <!-- Medical Pulse Glow -->
+    <radialGradient id="pulseGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00F2FE" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#0099FF" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Subtle Outer Border Gradient -->
+    <linearGradient id="borderGrad" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.6" />
+      <stop offset="50%" stop-color="#6366F1" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#0284C7" stop-opacity="0.6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Circular Outer Container -->
+  <g clip-path="url(#circleClip)">
+    <!-- Midnight Sapphire Background -->
+    <circle cx="100" cy="100" r="98" fill="url(#bgRadial)" />
+
+    <!-- Ambient Center Light -->
+    <circle cx="100" cy="95" r="55" fill="url(#pulseGlow)" filter="blur(8px)" opacity="0.6" />
+
+    <!-- Background Geometric Accent Rings -->
+    <circle cx="100" cy="95" r="62" stroke="#0284C7" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.3" />
+
+    <!-- Dynamic "Q" Loop Body (Gradient Electric Cyan to Royal Blue - Zero White) -->
+    <circle
+      cx="98"
+      cy="94"
+      r="48"
+      fill="none"
+      stroke="url(#ringGrad)"
+      stroke-width="18"
+      stroke-linecap="round"
+    />
+
+    <!-- Inner Soft Ring Highlight -->
+    <circle
+      cx="98"
+      cy="94"
+      r="38"
+      fill="none"
+      stroke="#38BDF8"
+      stroke-width="1.5"
+      opacity="0.4"
+    />
+
+    <!-- Medical Plus Symbol inside Q Center (Electric Cyan / Aqua) -->
+    <g transform="translate(98, 94)">
+      <rect x="-3" y="-12" width="6" height="24" rx="3" fill="#38BDF8" opacity="0.9" />
+      <rect x="-12" y="-3" width="24" height="6" rx="3" fill="#38BDF8" opacity="0.9" />
+      <circle cx="0" cy="0" r="2.5" fill="#FFFFFF" opacity="0.95" />
+    </g>
+
+    <!-- "Q" Dynamic Flowing Tail Sweep (Curves out towards bottom-right) -->
+    <path
+      d="M 112 112 C 122 122, 134 134, 152 144 C 158 147, 164 148, 160 154 C 154 161, 142 155, 132 146 C 120 135, 110 124, 106 118 Z"
+      fill="url(#tailGrad)"
+    />
+
+    <!-- Tail Highlight Wave -->
+    <path
+      d="M 116 116 Q 138 136 156 148"
+      stroke="#E0F2FE"
+      stroke-width="3"
+      stroke-linecap="round"
+      opacity="0.85"
+    />
+  </g>
+
+  <!-- Outer Crisp Circular Precision Border -->
+  <circle
+    cx="100"
+    cy="100"
+    r="97"
+    fill="none"
+    stroke="url(#borderGrad)"
+    stroke-width="2.5"
+  />
+</svg>

@@ -75,7 +75,7 @@ export const CommercialFooter: React.FC = () => {
             <Link to="/" className="flex items-center gap-3 group w-fit">
               <div className="relative">
                 <img
-                  src="/queueless-logo.svg"
+                  src="/logo.png"
                   alt="Queueless"
                   className="w-10 h-10 rounded-full object-cover border border-sky-500/30 shadow-md group-hover:scale-105 transition-transform"
                 />

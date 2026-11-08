@@ -63,7 +63,6 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
     { label: 'Live Simulator', href: '/#interactive-demo' },
     { label: 'ROI Calculator', href: '/roi-calculator' },
     { label: 'Pricing', href: '/pricing' },
-    { label: 'About Founder', href: '/#about-founder' },
   ];
 
   return (

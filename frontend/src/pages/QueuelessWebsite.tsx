@@ -2921,203 +2921,6 @@ export const QueuelessWebsite: React.FC = () => {
 
 
       {/* ============================================================== */}
-      {/* 7.5. ABOUT FOUNDER & LEAD ARCHITECT (CHANDAN SWARAJ)           */}
-      {/* ============================================================== */}
-      <section
-        id="about-founder"
-        className="py-24 px-4 sm:px-6 relative z-10 bg-gradient-to-b from-white via-slate-50/60 to-white dark:from-slate-950 dark:via-slate-900/60 dark:to-slate-950 border-t border-slate-200/80 dark:border-slate-800 transition-colors duration-200 overflow-hidden"
-      >
-        {/* Ambient background glow accents */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-teal-500/10 dark:from-blue-600/15 dark:via-purple-600/10 dark:to-teal-500/15 blur-3xl rounded-full pointer-events-none" />
-
-        <div className="max-w-6xl mx-auto space-y-12 relative">
-          
-          {/* Header */}
-          <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/80 rounded-full text-xs font-bold uppercase tracking-wider shadow-2xs">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              <span>Founder & Systems Architect</span>
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight">
-              Meet <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-600 dark:from-blue-400 dark:via-indigo-300 dark:to-teal-300 bg-clip-text text-transparent">Chandan Swaraj</span>
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 font-normal leading-relaxed">
-              Engineering a world where no patient suffers in a crowded waiting room, and no clinic wastes millions on fragile proprietary hardware.
-            </p>
-          </div>
-
-          {/* Main Card Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Left: Founder Portrait Card (5 cols) */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="lg:col-span-5 relative"
-            >
-              <div className="relative mx-auto max-w-sm lg:max-w-none rounded-[32px] p-2 bg-gradient-to-b from-blue-500/20 via-slate-200 to-transparent dark:from-blue-500/30 dark:via-slate-800 dark:to-slate-900 shadow-2xl">
-                <div className="relative rounded-[28px] overflow-hidden bg-slate-950 aspect-[3/4]">
-                  <img
-                    src="/chandan-founder.webp"
-                    alt="Chandan Swaraj - Founder & Systems Architect of Queueless"
-                    className="w-full h-full object-cover object-top hover:scale-102 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  
-                  {/* Subtle vignette gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-
-                  {/* Top-Right Badge: Active Status */}
-                  <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1 bg-slate-900/80 backdrop-blur-md border border-white/20 rounded-full text-[11px] font-bold text-white shadow-lg">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Founder Verified</span>
-                  </div>
-
-                  {/* Bottom Caption Pill */}
-                  <div className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-slate-900/85 backdrop-blur-xl border border-white/10 text-white space-y-1">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-base font-black text-white tracking-tight">Chandan Swaraj</h4>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-teal-400 bg-teal-950/80 px-2 py-0.5 rounded-full border border-teal-500/30">
-                        Lead Architect
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-300 font-medium">
-                      Queueless Clinical Queue Operating System
-                    </p>
-                    <div className="pt-2 flex items-center gap-2 text-[11px] text-slate-400">
-                      <MapPin className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                      <span>Building globally • ABDM & HIPAA Cloud Engine</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating Quick Credibility Badges */}
-              <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-                <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-xs">
-                  <div className="text-xs font-black text-blue-600 dark:text-blue-400">Zero Capex</div>
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400">100% Cloud Native</div>
-                </div>
-                <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-xs">
-                  <div className="text-xs font-black text-emerald-600 dark:text-emerald-400">&lt;200ms</div>
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400">Sync Latency</div>
-                </div>
-                <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-xs">
-                  <div className="text-xs font-black text-purple-600 dark:text-purple-400">M1 & M2</div>
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400">ABDM Ready</div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right: Vision, Philosophy & Engineering Pillars (7 cols) */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="lg:col-span-7 space-y-6"
-            >
-              {/* Quote Block */}
-              <div className="p-6 rounded-3xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-900/40 relative">
-                <span className="text-4xl text-blue-400/40 font-serif absolute top-3 left-4 select-none leading-none">“</span>
-                <p className="text-sm sm:text-base text-slate-800 dark:text-slate-200 font-medium italic pl-6 leading-relaxed">
-                  Healthcare in 2026 shouldn’t begin with a 2-hour queue in a chaotic waiting hall. I created Queueless to eliminate predatory hardware costs and give every doctor, clinic, and multi-specialty hospital a lightning-fast clinical queue operating system running on screens they already own.
-                </p>
-                <div className="mt-4 pl-6 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
-                  <span className="font-bold text-slate-900 dark:text-white">— Chandan Swaraj</span>
-                  <span className="text-[11px] text-blue-600 dark:text-blue-400 font-semibold">Founder’s Note</span>
-                </div>
-              </div>
-
-              {/* The Three Core Architectural Principles */}
-              <div className="space-y-3.5">
-                <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                  <Award className="w-4 h-4 text-amber-500" />
-                  <span>The Engineering Pillars of Queueless</span>
-                </h3>
-
-                {/* Pillar 1 */}
-                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs hover:border-blue-500/40 transition-colors">
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-8 h-8 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5 font-black text-xs">
-                      01
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
-                        Dismantling Kiosk Monopolies with Instant Vector QR
-                      </h4>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                        Legacy vendors force hospitals to spend thousands of dollars on bulky metal kiosk machines that constantly jam. Chandan architected an instant vector QR engine: any smart TV acts as a lobby display, and any smartphone camera acts as a digital ticket pass — zero app downloads required.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Pillar 2 */}
-                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs hover:border-emerald-500/40 transition-colors">
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-8 h-8 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 font-black text-xs">
-                      02
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
-                        ABDM (M1/M2) & HIPAA Bank-Grade Data Sovereignty
-                      </h4>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                        Patient privacy is non-negotiable. Queueless was architected with end-to-end cryptographic tokenization, Ayushman Bharat Digital Mission compliance, and HIPAA encryption standards ensuring clinical data stays strictly isolated and confidential.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Pillar 3 */}
-                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs hover:border-purple-500/40 transition-colors">
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-8 h-8 rounded-xl bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 mt-0.5 font-black text-xs">
-                      03
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
-                        Real-World Clinical Workflow & Doctor-Centric Ergonomics
-                      </h4>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                        Built for intense OPD hours. Doctors call the next patient in 1 click or with the Alt+N hotkey, receptionists process walk-ins with instant thermal slips, and the automated 15-day policy engine handles free post-consultation follow-ups without manual billing hassles.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setShowDemoModal(true)}
-                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 transition-all inline-flex items-center gap-2 cursor-pointer active:scale-95"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Book a Private Walkthrough with Chandan</span>
-                </button>
-                <a
-                  href="mailto:chandanswaraj7482@gmail.com"
-                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700 transition-all inline-flex items-center gap-2 cursor-pointer active:scale-95"
-                >
-                  <Mail className="w-3.5 h-3.5 text-blue-500" />
-                  <span>Direct Founder Inquiry</span>
-                </a>
-              </div>
-
-            </motion.div>
-
-          </div>
-
-        </div>
-      </section>
-
-
-      {/* ============================================================== */}
       {/* 8. FAQS & ENTERPRISE INQUIRY (ACCORDION STYLE)                */}
       {/* ============================================================== */}
       <section id="faqs" className="py-20 px-4 sm:px-6 relative z-10 bg-white dark:bg-slate-900 transition-colors duration-200">
@@ -3282,26 +3085,26 @@ export const QueuelessWebsite: React.FC = () => {
           {/* 6 Google-Style Sitelinks Cards in a Clean 2-Column or 3-Column Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             
-            {/* Card 1: About Founder */}
-            <a
-              href="#about-founder"
+            {/* Card 1: Clinical Security & Standards */}
+            <Link
+              to="/security"
               className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
             >
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
-                    <span>About Founder: Chandan Swaraj</span>
+                    <span>Clinical Security & ABDM Standards</span>
                     <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </h3>
                 </div>
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Meet Chandan Swaraj, founder & lead architect. Dismantling crowded hospital queues with zero-capex vector QR architecture.
+                  Ayushman Bharat Digital Mission (M1/M2) certified, HIPAA privacy, bank-grade AES-256 data sovereignty and DPDP compliance.
                 </p>
               </div>
               <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
-                #about-founder
+                /security
               </span>
-            </a>
+            </Link>
 
             {/* Card 2: Live Simulator */}
             <a

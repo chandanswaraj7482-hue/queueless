@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Globe,
-  Languages,
   Zap,
   LogIn,
   Menu,
@@ -15,7 +14,6 @@ import {
 } from 'lucide-react';
 import { WORLDWIDE_CURRENCIES, CurrencyConfig } from '../data/commercialData';
 import { useTheme } from '../context/ThemeContext';
-import { GOOGLE_LANGUAGES, changeLanguage, getStoredLanguage } from '../utils/googleTranslate';
 
 interface CommercialNavbarProps {
   currentCurrencyCode?: string;
@@ -31,13 +29,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [currentLang, setCurrentLang] = useState<string>(getStoredLanguage());
   const { theme, toggleTheme } = useTheme();
-
-  const handleLanguageChange = (code: string) => {
-    setCurrentLang(code);
-    changeLanguage(code);
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,6 +55,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
     { label: 'Live Simulator', href: '/#interactive-demo' },
     { label: 'ROI Calculator', href: '/roi-calculator' },
     { label: 'Pricing', href: '/pricing' },
+    { label: 'About', href: '/#about' },
   ];
 
   return (
@@ -172,24 +165,6 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
 
           {/* Right Action Bar */}
           <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Currency Selector Pill (Hidden on mobile header, available in mobile drawer) */}
-            {/* Language Selector Pill (Desktop) */}
-            <div className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/70 hover:bg-slate-200/80 dark:bg-slate-900/60 dark:hover:bg-slate-800/80 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 dark:text-slate-300 transition-all shadow-2xs">
-              <Languages className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
-              <select
-                aria-label="Language"
-                value={currentLang}
-                onChange={(e) => handleLanguageChange(e.target.value)}
-                className="bg-transparent text-slate-800 dark:text-slate-200 font-bold cursor-pointer focus:outline-none pr-0.5 text-xs"
-              >
-                {GOOGLE_LANGUAGES.map((l) => (
-                  <option key={l.code} value={l.code} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-medium">
-                    {l.flag} {l.native}
-                  </option>
-                ))}
-              </select>
-            </div>
-
             {/* Currency Selector Pill */}
             <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/70 hover:bg-slate-200/80 dark:bg-slate-900/60 dark:hover:bg-slate-800/80 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 dark:text-slate-300 transition-all shadow-2xs">
               <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
@@ -278,29 +253,6 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                 {item.label}
               </Link>
             ))}
-
-            {/* Mobile Language Picker in Drawer */}
-            <div className="p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
-              <span className="flex items-center gap-1.5">
-                <Languages className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                <span>Select Language:</span>
-              </span>
-              <select
-                aria-label="Mobile Language"
-                value={currentLang}
-                onChange={(e) => {
-                  handleLanguageChange(e.target.value);
-                  setMobileMenuOpen(false);
-                }}
-                className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-bold px-2 py-1 rounded-lg focus:outline-none text-xs"
-              >
-                {GOOGLE_LANGUAGES.map((l) => (
-                  <option key={l.code} value={l.code}>
-                    {l.flag} {l.native} ({l.name})
-                  </option>
-                ))}
-              </select>
-            </div>
 
             {/* Mobile Currency Picker in Drawer */}
             <div className="p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">

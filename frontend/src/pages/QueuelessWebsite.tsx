@@ -1550,8 +1550,8 @@ export const QueuelessWebsite: React.FC = () => {
           </div>
         </div>
 
-{/* Section Heading: Why Hospitals Choose Queueless */}
-          <div className="text-center pt-4 space-y-2 max-w-2xl mx-auto">
+{/* Section Heading: Why Hospitals Choose Queueless (About Section) */}
+          <div id="about" className="text-center pt-4 space-y-2 max-w-2xl mx-auto scroll-mt-28">
             <h2 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
               Why Hospitals Choose <span className="text-blue-600 dark:text-blue-400">Queueless</span>
             </h2>

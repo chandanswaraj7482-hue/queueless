@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Bot,
+  Stethoscope,
   Sparkles,
   X,
   Send,
@@ -13,6 +13,7 @@ import {
   RefreshCw,
   MessageSquare,
   HelpCircle,
+  Activity,
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -156,16 +157,16 @@ export const ClinicalAiAssistant: React.FC = () => {
           <div className="p-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between border-b border-slate-800/80">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-500 text-white flex items-center justify-center shadow-md">
-                  <Bot className="w-5 h-5 text-white" />
+                <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 text-white flex items-center justify-center shadow-md">
+                  <Stethoscope className="w-5 h-5 text-white stroke-[2.2]" />
                 </div>
                 <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse" />
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
-                  <h3 className="text-xs font-black text-white tracking-wide">Queueless Copilot</h3>
+                  <h3 className="text-xs font-black text-white tracking-wide">Queueless Clinical Copilot</h3>
                   <span className="text-[9px] font-black uppercase tracking-wider bg-blue-500/25 text-blue-300 border border-blue-400/30 px-1.5 py-0.2 rounded-full">
-                    AI
+                    Hospital AI
                   </span>
                 </div>
                 <p className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
@@ -285,57 +286,32 @@ export const ClinicalAiAssistant: React.FC = () => {
       ) : (
         /* Collapsed Omni-Style Floating Action Button & Tooltip */
         <div className="flex items-center gap-3">
-          {/* Omni-Style Speech Bubble Tooltip - Always Crisp Snow White & High Contrast */}
+          {/* Omni-Style Speech Bubble Tooltip - Hospital Clinical Theme */}
           {showTooltip && (
             <div
               onClick={() => setIsOpen(true)}
-              className="relative cursor-pointer bg-white border border-[#FFCCD5] rounded-[22px] px-3.5 py-3 shadow-[0_12px_36px_rgba(0,0,0,0.18)] flex items-center gap-3 max-w-[310px] animate-in fade-in slide-in-from-right-3 duration-300 group hover:shadow-[0_16px_45px_rgba(0,0,0,0.25)] transition-all select-none"
+              className="relative cursor-pointer bg-white dark:bg-slate-900 border border-sky-200 dark:border-sky-800/80 rounded-[22px] px-3.5 py-3 shadow-[0_12px_36px_rgba(2,132,199,0.18)] dark:shadow-[0_12px_36px_rgba(0,0,0,0.5)] flex items-center gap-3 max-w-[320px] animate-in fade-in slide-in-from-right-3 duration-300 group hover:shadow-[0_16px_45px_rgba(2,132,199,0.28)] transition-all select-none"
             >
               {/* Outer Triangle border */}
-              <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-0 h-0 border-y-[7px] border-y-transparent border-l-[9px] border-l-[#FFCCD5] pointer-events-none" />
+              <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-0 h-0 border-y-[7px] border-y-transparent border-l-[9px] border-l-sky-200 dark:border-l-sky-800 pointer-events-none" />
               {/* Inner Triangle white fill */}
-              <div className="absolute top-1/2 -right-[7px] -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[8px] border-l-white pointer-events-none" />
+              <div className="absolute top-1/2 -right-[7px] -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[8px] border-l-white dark:border-l-slate-900 pointer-events-none" />
 
-              {/* Cute Omni Robot Avatar with Pastel Pink Background */}
-              <div className="w-11 h-11 rounded-2xl bg-[#FFF0F3] border border-[#FFD5DC] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform overflow-hidden">
-                <img
-                  src="/omni-robot-avatar.png"
-                  alt="AI Assistant"
-                  className="w-8 h-8 object-contain"
-                  onError={(e) => {
-                    // Fallback to SVG if image not available
-                    (e.target as HTMLElement).style.display = 'none';
-                    const parent = (e.target as HTMLElement).parentElement;
-                    if (parent) {
-                      const svg = parent.querySelector('svg');
-                      if (svg) svg.classList.remove('hidden');
-                    }
-                  }}
-                />
-                <svg className="w-7 h-7 hidden" viewBox="0 0 36 36" fill="none">
-                  <line x1="18" y1="5" x2="18" y2="9" stroke="#EAB308" strokeWidth="2.5" strokeLinecap="round" />
-                  <circle cx="18" cy="4" r="2.5" fill="#FACC15" />
-                  <rect x="5" y="9" width="26" height="21" rx="6" fill="#38BDF8" stroke="#0284C7" strokeWidth="1.5" />
-                  <rect x="2" y="16" width="3" height="7" rx="1.5" fill="#F43F5E" />
-                  <rect x="31" y="16" width="3" height="7" rx="1.5" fill="#F43F5E" />
-                  <rect x="8" y="12" width="20" height="15" rx="4" fill="#0C4A6E" />
-                  <circle cx="13" cy="18" r="2.5" fill="#38BDF8" />
-                  <circle cx="13.8" cy="17.2" r="0.9" fill="#FFFFFF" />
-                  <circle cx="23" cy="18" r="2.5" fill="#38BDF8" />
-                  <circle cx="23.8" cy="17.2" r="0.9" fill="#FFFFFF" />
-                  <circle cx="10" cy="22.5" r="1.6" fill="#FB7185" opacity="0.9" />
-                  <circle cx="26" cy="22.5" r="1.6" fill="#FB7185" opacity="0.9" />
-                  <path d="M15 22.5C16 23.5 20 23.5 21 22.5" stroke="#38BDF8" strokeWidth="1.2" strokeLinecap="round" />
-                </svg>
+              {/* Clinical Medical Stethoscope Avatar with Light Sky Blue Background */}
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100 dark:from-slate-800 dark:to-blue-950 border border-sky-200/90 dark:border-sky-700/60 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform overflow-hidden">
+                <div className="relative flex items-center justify-center">
+                  <Stethoscope className="w-6 h-6 text-blue-600 dark:text-cyan-400 stroke-[2.2]" />
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 absolute -top-0.5 -right-0.5 ring-2 ring-white dark:ring-slate-900 animate-ping" />
+                </div>
               </div>
 
               {/* Message */}
               <div className="flex-1 min-w-0 pr-1 text-left">
-                <strong className="block text-[13px] font-extrabold text-[#0F172A] leading-tight tracking-tight">
-                  I'm your AI Assistant!
+                <strong className="block text-[13px] font-extrabold text-[#0F172A] dark:text-white leading-tight tracking-tight">
+                  I'm your Clinical Assistant!
                 </strong>
-                <p className="text-[11.5px] text-[#475569] mt-0.5 leading-snug font-medium">
-                  Need help finding or using tools? Ask me 👋
+                <p className="text-[11.5px] text-[#475569] dark:text-slate-300 mt-0.5 leading-snug font-medium">
+                  Need help with OPD queues, TV kiosk, or ROI? Ask me 👋
                 </p>
               </div>
 
@@ -346,7 +322,7 @@ export const ClinicalAiAssistant: React.FC = () => {
                   e.stopPropagation();
                   setShowTooltip(false);
                 }}
-                className="text-[#94A3B8] hover:text-[#0F172A] p-1 rounded-full hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
+                className="text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0 cursor-pointer"
                 aria-label="Dismiss tooltip"
               >
                 <X className="w-3.5 h-3.5" />
@@ -354,36 +330,21 @@ export const ClinicalAiAssistant: React.FC = () => {
             </div>
           )}
 
-          {/* Omni-Style Circular Floating Action Button */}
+          {/* Clinical Hospital Floating Action Button */}
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="group relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#FF2B56] via-[#FF3B5C] to-[#8B5CF6] hover:from-[#f41e4a] hover:to-[#7c3aed] text-white shadow-[0_8px_30px_rgba(255,43,86,0.55)] hover:shadow-[0_12px_40px_rgba(255,43,86,0.75)] cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white flex items-center justify-center shrink-0"
-            aria-label="Open Queueless AI Assistant"
+            className="group relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#0284C7] via-[#2563EB] to-[#4F46E5] hover:from-[#0369A1] hover:to-[#4338CA] text-white shadow-[0_8px_30px_rgba(37,99,235,0.45)] hover:shadow-[0_12px_40px_rgba(37,99,235,0.65)] cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white dark:border-slate-800 flex items-center justify-center shrink-0"
+            aria-label="Open Queueless Clinical Assistant"
           >
             {/* Glowing Green Online Status Indicator */}
-            <span className="absolute top-0 right-0 w-3.5 h-3.5 rounded-full bg-[#10B981] border-2 border-white shadow-sm animate-pulse" />
+            <span className="absolute top-0 right-0 w-3.5 h-3.5 rounded-full bg-[#10B981] border-2 border-white dark:border-slate-900 shadow-sm animate-pulse" />
 
-            {/* Omni White Line Robot Icon */}
-            <svg
-              className="w-7 h-7 text-white stroke-white stroke-[2.2] group-hover:scale-110 transition-transform"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              {/* Top Antenna stem and horizontal bar */}
-              <line x1="12" y1="2" x2="12" y2="5" />
-              <line x1="10" y1="2" x2="14" y2="2" />
-              {/* Rounded Head Rectangle */}
-              <rect x="4" y="5" width="16" height="15" rx="4" />
-              {/* Ear tabs on left and right */}
-              <line x1="1.5" y1="12.5" x2="4" y2="12.5" />
-              <line x1="20" y1="12.5" x2="22.5" y2="12.5" />
-              {/* Two capsule eyes */}
-              <line x1="8.5" y1="11" x2="8.5" y2="14.5" strokeWidth="2.6" />
-              <line x1="15.5" y1="11" x2="15.5" y2="14.5" strokeWidth="2.6" />
-            </svg>
+            {/* Medical Stethoscope & Sparkle Icon */}
+            <div className="relative flex items-center justify-center">
+              <Stethoscope className="w-7 h-7 text-white stroke-[2.3] group-hover:scale-110 transition-transform" />
+              <Sparkles className="w-3.5 h-3.5 text-cyan-200 fill-cyan-200 absolute -bottom-1 -right-1 animate-pulse" />
+            </div>
           </button>
         </div>
       )}

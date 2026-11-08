@@ -1551,136 +1551,230 @@ export const QueuelessWebsite: React.FC = () => {
         </div>
 
 {/* Section Heading: Why Hospitals Choose Queueless (About Section) */}
-          <div id="about" className="text-center pt-4 space-y-2 max-w-2xl mx-auto scroll-mt-28">
+          <div id="about" className="text-center pt-4 space-y-3 max-w-2xl mx-auto scroll-mt-28">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-full text-xs font-black uppercase tracking-wider">
+              <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>Clinical Infrastructure & Trust</span>
+            </div>
             <h2 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
-              Why Hospitals Choose <span className="text-blue-600 dark:text-blue-400">Queueless</span>
+              Why Hospitals Choose <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 dark:from-blue-400 dark:via-indigo-400 dark:to-teal-300 bg-clip-text text-transparent">Queueless</span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-normal leading-relaxed">
               Designed for clinical superintendents, doctors, and hospital administrators to operate zero-wait OPDs with bank-grade security and zero hardware capex.
             </p>
           </div>
 
-          {/* 4 Pillars of Clinical Credibility & Regulatory Compliance Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-left pt-2">
+          {/* 4 Pillars of Clinical Credibility & Regulatory Compliance Grid (Rich Bento Style) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 text-left pt-2">
             
             {/* Pillar 1: ABDM & NABH */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:border-blue-400/50 transition-all flex flex-col justify-between space-y-4">
-              <div className="space-y-3">
+            <div className="p-6 sm:p-7 rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-md hover:border-emerald-500/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5 group">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-2xs">
-                    <ShieldCheck className="w-5 h-5" />
+                  <div className="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-2xs group-hover:scale-105 transition-transform">
+                    <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                  <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/90 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                     NHA & NABH Aligned
                   </span>
                 </div>
-                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
-                  Ayushman Bharat (ABDM) & NABH Audit-Ready
-                </h3>
-                <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Pre-configured for India's digital health mission. Features seamless ABHA verification, ABDM M1/M2 milestone reporting, and automated waiting-time documentation for periodic NABH accreditation audits.
-                </p>
+
+                <div>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                    Ayushman Bharat (ABDM) & NABH Audit-Ready
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal mt-1.5">
+                    Pre-configured for India's digital health mission. Features seamless ABHA verification, ABDM M1/M2 milestone reporting, and automated patient wait-time documentation for periodic NABH accreditation audits.
+                  </p>
+                </div>
+
+                {/* Micro-Mockup Visual */}
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      ABDM ABHA M1/M2 Sync
+                    </span>
+                    <span className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold text-[10px] bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                      NHA VERIFIED
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1.5 border-t border-slate-200/60 dark:border-slate-800/80">
+                    <span>Periodic NABH Quality Log</span>
+                    <span className="font-mono font-bold text-slate-700 dark:text-slate-200">Avg Wait: 6.2 mins (Grade A)</span>
+                  </div>
+                </div>
               </div>
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 text-[11px] font-bold text-slate-500 dark:text-slate-400">
-                <Check className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Automated Patient Wait-Time Logs for Hospital Quality Audits</span>
+
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2 text-[11.5px] font-bold text-slate-600 dark:text-slate-300">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <span>Automated Wait-Time Logs for Hospital Quality Accreditation</span>
               </div>
             </div>
 
             {/* Pillar 2: Patient Privacy & Phone Masking */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:border-indigo-400/50 transition-all flex flex-col justify-between space-y-4">
-              <div className="space-y-3">
+            <div className="p-6 sm:p-7 rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-md hover:border-indigo-500/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5 group">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-2xs">
-                    <Lock className="w-5 h-5" />
+                  <div className="w-11 h-11 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-2xs group-hover:scale-105 transition-transform">
+                    <Lock className="w-6 h-6 stroke-[2.2]" />
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                  <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/90 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
                     256-Bit Cryptography
                   </span>
                 </div>
-                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
-                  100% Patient Phone Privacy & Zero App Download
-                </h3>
-                <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Patients scan a QR pass and receive an instant browser token — zero app downloads, zero spam notifications. Public TV kiosks automatically mask mobile numbers (<code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-mono text-xs">98****3210</code>) with data hosted in AWS Mumbai.
-                </p>
+
+                <div>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                    100% Patient Phone Privacy & Zero App Download
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal mt-1.5">
+                    Patients scan an entrance QR pass and receive an instant browser token — zero app downloads, zero spam notifications. Public TV kiosks automatically mask mobile numbers with bank-grade data encryption hosted in AWS Mumbai.
+                  </p>
+                </div>
+
+                {/* Micro-Mockup Visual */}
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-bold">
+                      <Lock className="w-3.5 h-3.5 text-indigo-500" />
+                      Public TV Phone Masking
+                    </span>
+                    <span className="font-mono font-black text-indigo-600 dark:text-indigo-400 text-xs tracking-wider bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
+                      +91 98*** **210
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1.5 border-t border-slate-200/60 dark:border-slate-800/80">
+                    <span>Web Token Admission</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">Zero App Download Needed</span>
+                  </div>
+                </div>
               </div>
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 text-[11px] font-bold text-slate-500 dark:text-slate-400">
-                <Check className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Zero Patient Data Reselling • 100% Hospital Ownership</span>
+
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2 text-[11.5px] font-bold text-slate-600 dark:text-slate-300">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <span>Zero Patient Data Reselling • 100% Hospital Data Ownership</span>
               </div>
             </div>
 
             {/* Pillar 3: 15-Day Free Follow-Up Engine */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:border-rose-400/50 transition-all flex flex-col justify-between space-y-4">
-              <div className="space-y-3">
+            <div className="p-6 sm:p-7 rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-md hover:border-rose-500/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5 group">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-rose-50 dark:bg-rose-950/80 border border-rose-200 dark:border-rose-800 flex items-center justify-center text-rose-600 dark:text-rose-400 shadow-2xs">
-                    <HeartPulse className="w-5 h-5" />
+                  <div className="w-11 h-11 rounded-2xl bg-rose-50 dark:bg-rose-950/80 border border-rose-200 dark:border-rose-800 flex items-center justify-center text-rose-600 dark:text-rose-400 shadow-2xs group-hover:scale-105 transition-transform">
+                    <HeartPulse className="w-6 h-6 stroke-[2.2]" />
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                  <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/90 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
                     Indian Healthcare Standard
                   </span>
                 </div>
-                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
-                  Hospital Admin 15-Day Free Follow-Up Rule Engine
-                </h3>
-                <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Configured specifically for Indian clinical consultation policies. Patients revisiting within 15 days for the same ailment are flagged as "Free Follow-Up" directly in the hospital admin console, eliminating counter arguments and billing chaos.
-                </p>
+
+                <div>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                    15-Day Free Follow-Up Consultation Rule Engine
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal mt-1.5">
+                    Configured specifically for Indian clinical consultation policies. Patients revisiting within 15 days for the same ailment are flagged as "Free Follow-Up" directly in the cashier and doctor consoles, eliminating counter arguments and billing chaos.
+                  </p>
+                </div>
+
+                {/* Micro-Mockup Visual */}
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-bold">
+                      <RefreshCw className="w-3.5 h-3.5 text-rose-500" />
+                      Returning Revisit Patient
+                    </span>
+                    <span className="font-mono font-bold text-rose-600 dark:text-rose-400 text-[10px] bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20">
+                      DAY 9 OF 15
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1.5 border-t border-slate-200/60 dark:border-slate-800/80">
+                    <span>Consultation Fee</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">₹0 Free Follow-Up Auto-Applied</span>
+                  </div>
+                </div>
               </div>
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 text-[11px] font-bold text-slate-500 dark:text-slate-400">
-                <Check className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Customizable Follow-Up Duration per Doctor or Specialty</span>
+
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2 text-[11.5px] font-bold text-slate-600 dark:text-slate-300">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <span>Customizable Follow-Up Duration per Specialty or Doctor</span>
               </div>
             </div>
 
-            {/* Pillar 4: Zero Capex & No Lock-In Guarantee */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:border-teal-400/50 transition-all flex flex-col justify-between space-y-4">
-              <div className="space-y-3">
+            {/* Pillar 4: Zero Capex & Runs on Existing Screens */}
+            <div className="p-6 sm:p-7 rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-md hover:border-teal-500/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5 group">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-teal-50 dark:bg-teal-950/80 border border-teal-200 dark:border-teal-800 flex items-center justify-center text-teal-600 dark:text-teal-400 shadow-2xs">
-                    <Tv className="w-5 h-5" />
+                  <div className="w-11 h-11 rounded-2xl bg-teal-50 dark:bg-teal-950/80 border border-teal-200 dark:border-teal-800 flex items-center justify-center text-teal-600 dark:text-teal-400 shadow-2xs group-hover:scale-105 transition-transform">
+                    <Tv className="w-6 h-6 stroke-[2.2]" />
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-teal-50 dark:bg-teal-950 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+                  <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950/90 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
                     Zero Proprietary Hardware
                   </span>
                 </div>
-                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
-                  Runs on Existing Screens + 14-Day Free Pilot
-                </h3>
-                <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Turn your existing Sony, Samsung, LG TVs into 55" waiting hall kiosks in 3 minutes. Zero annual maintenance contracts (AMCs). Test risk-free for 14 days with full patient queue history exportable in 1 click.
-                </p>
+
+                <div>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                    Runs on Screens You Already Own + Zero AMC Fees
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal mt-1.5">
+                    Turn your existing Sony, Samsung, LG or Android TVs into 55" waiting hall kiosks in 30 seconds. Zero expensive hardware kiosks to buy, zero annual maintenance contracts (AMCs), and synchronized bilingual voice announcements out-of-the-box.
+                  </p>
+                </div>
+
+                {/* Micro-Mockup Visual */}
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-bold">
+                      <Tv className="w-3.5 h-3.5 text-teal-500" />
+                      Lobby 55" Smart TV Display
+                    </span>
+                    <span className="font-mono font-bold text-teal-600 dark:text-teal-400 text-[10px] bg-teal-500/10 px-2 py-0.5 rounded-full border border-teal-500/20">
+                      READY IN 30s
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1.5 border-t border-slate-200/60 dark:border-slate-800/80">
+                    <span>Hardware Investment</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">Zero Capex • Pure Cloud URL</span>
+                  </div>
+                </div>
               </div>
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 text-[11px] font-bold text-slate-500 dark:text-slate-400">
-                <Check className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>100% Data Export Guarantee • Zero Vendor Lock-In</span>
+
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2 text-[11.5px] font-bold text-slate-600 dark:text-slate-300">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <span>100% Patient Queue Data Export Guarantee • Zero Lock-In</span>
               </div>
             </div>
 
           </div>
 
           {/* Quick Reassurance Action Banner */}
-          <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-blue-50/80 via-indigo-50/60 to-teal-50/80 dark:from-slate-900/90 dark:via-blue-950/40 dark:to-slate-900/90 border border-blue-200/80 dark:border-blue-900/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
-            <div className="space-y-1">
+          <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-r from-blue-50/90 via-indigo-50/70 to-teal-50/90 dark:from-slate-900/90 dark:via-blue-950/40 dark:to-slate-900/90 border border-blue-200/80 dark:border-blue-900/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-left shadow-sm">
+            <div className="space-y-1.5">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-                <span className="text-xs font-black text-slate-900 dark:text-white">
-                  Want to verify compliance before deploying?
+                <span className="text-sm font-black text-slate-900 dark:text-white">
+                  Want to verify compliance before deploying in your hospital?
                 </span>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-300">
-                Download our official ABDM & NABH Architecture Whitepaper or request a dedicated 1-on-1 hospital review.
+              <p className="text-xs text-slate-600 dark:text-slate-300 max-w-xl">
+                Experience our live multi-screen hospital simulator, or book a personalized 15-minute walkthrough with our deployment team.
               </p>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-2.5 shrink-0 w-full sm:w-auto">
+              <Link
+                to="/#interactive-demo"
+                className="w-full sm:w-auto text-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer whitespace-nowrap"
+              >
+                Try Live Simulator ➔
+              </Link>
               <button
                 type="button"
                 onClick={() => setShowDemoModal(true)}
-                className="px-5 py-2.5 bg-slate-950 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 font-bold text-xs rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer whitespace-nowrap"
+                className="w-full sm:w-auto px-5 py-2.5 bg-slate-950 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 font-bold text-xs rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer whitespace-nowrap"
               >
-                Schedule Hospital Review ➔
+                Schedule Review
               </button>
             </div>
           </div>

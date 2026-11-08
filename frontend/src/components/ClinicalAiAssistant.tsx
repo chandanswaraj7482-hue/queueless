@@ -113,7 +113,7 @@ export const ClinicalAiAssistant: React.FC = () => {
         replyLinks = matchedFaq.links;
       } else if (query.toLowerCase().includes('price') || query.toLowerCase().includes('cost') || query.toLowerCase().includes('plan')) {
         replyText =
-          'Queueless plans start at straightforward monthly or discounted annual subscriptions with zero hardware fees. Includes doctor consoles, reception desk, TV display kiosk, and unlimited patient admissions.';
+          'Queueless offers predictable credit-based plans matched to your clinic footfall: 1,500 tokens/mo for Starter, 10,000 tokens/mo for Growth OPD, and 50,000+ for Enterprise, with instant pay-as-you-grow refills for seasonal surges.';
         replyLinks = [
           { label: 'View Pricing Plans', url: '/pricing' },
           { label: 'Start 14-Day Trial', url: '/signup' },

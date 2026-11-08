@@ -68,7 +68,7 @@ export const PricingPage: React.FC = () => {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-normal">
-              Eliminate paper tokens and lobby crowding with our all-in-one clinical queue operating system. All plans include unlimited patient tokens and automatic software updates.
+              Eliminate paper tokens and lobby crowding with predictable, credit-based plans matched to your OPD patient footfall. Includes instant pay-as-you-grow token refills for seasonal surges.
             </p>
 
             {/* Billing Cycle Toggle */}
@@ -268,10 +268,53 @@ export const PricingPage: React.FC = () => {
                     <td className="p-4 sm:p-5 text-center font-bold text-slate-900 dark:text-white">Unlimited</td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">Monthly Digital Patient Tokens</td>
-                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">Unlimited</td>
-                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400 bg-blue-50/30 dark:bg-blue-950/30">Unlimited</td>
-                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">Unlimited</td>
+                    <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">
+                      <div>Monthly Digital Patient Tokens</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal mt-0.5">Base patient queue allowance per month</div>
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-slate-800 dark:text-slate-200">
+                      <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">1,500 Tokens</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal">~50 patients / day</div>
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-blue-700 dark:text-blue-300 bg-blue-50/30 dark:bg-blue-950/30">
+                      <div className="text-xs sm:text-sm font-black text-blue-700 dark:text-blue-400">10,000 Tokens</div>
+                      <div className="text-[10px] text-blue-600/80 dark:text-blue-400/80 font-normal">~350 patients / day</div>
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">
+                      <div className="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-400">50,000+ Tokens</div>
+                      <div className="text-[10px] text-emerald-600/80 dark:text-emerald-400/80 font-normal">High-Volume Custom SLA</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">
+                      <div>Pay-As-You-Grow Token Refills</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal mt-0.5">Top-up credit packs if patient volume surges</div>
+                    </td>
+                    <td className="p-4 sm:p-5 text-center text-slate-600 dark:text-slate-400 font-semibold">
+                      ₹0.20 / $0.003 per credit
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-blue-700 dark:text-blue-300 bg-blue-50/30 dark:bg-blue-950/30">
+                      ₹0.15 / $0.002 per credit
+                      <span className="block text-[9px] text-blue-600 dark:text-blue-400 font-medium">25% Volume Discount</span>
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-slate-900 dark:text-white">
+                      Volume Discounted Tier
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">
+                      <div>Token Credit Roll-Over & Validity</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal mt-0.5">Retention policy for unused top-up credits</div>
+                    </td>
+                    <td className="p-4 sm:p-5 text-center text-slate-600 dark:text-slate-400 font-medium">
+                      30-Day Cycle
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400 bg-blue-50/30 dark:bg-blue-950/30">
+                      ✓ 60-Day Roll-Over
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">
+                      ✓ Perpetual Enterprise Pool
+                    </td>
                   </tr>
                   <tr>
                     <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">Lobby 55" TV Kiosk Display</td>

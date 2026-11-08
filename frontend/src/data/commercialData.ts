@@ -175,7 +175,8 @@ export const PLAN_TEMPLATES: PlanTemplate[] = [
     hardwareIncluded: 'Instant Cloud Setup & Print-Ready Vector QR Kit',
     features: [
       'Zero-app patient QR mobile check-in',
-      'Unlimited digital queue tokens per month',
+      '1,500 monthly digital patient tokens (~50 patients/day)',
+      'Pay-as-you-grow token credit top-ups (₹0.20 / credit)',
       'Live queue token countdown on patient smartphone',
       'Reception queue admission & search desk',
       'Doctor 1-tap call next interface',
@@ -196,6 +197,8 @@ export const PLAN_TEMPLATES: PlanTemplate[] = [
     hardwareIncluded: 'Instant Cloud Setup & Multi-Screen TV Kiosk URL',
     features: [
       'Everything in Starter Clinic +',
+      '10,000 monthly digital patient tokens (~350 patients/day)',
+      'Discounted token refill rate (₹0.15 / credit)',
       'Multi-Cabin Lobby TV Display Kiosk with Audio Chimes',
       'Bilingual Text-to-Speech Hindi & English Announcements',
       'Dodo Payments & PayPal Digital Fee Collection (0% platform markup)',
@@ -218,6 +221,8 @@ export const PLAN_TEMPLATES: PlanTemplate[] = [
     hardwareIncluded: 'Dedicated Cloud Cluster, Custom Domain & HMS Webhooks',
     features: [
       'Everything in Growth Super OPD +',
+      '50,000+ monthly digital tokens or custom hospital volume',
+      'Enterprise volume refill rates & dedicated bandwidth',
       'Custom hospital domain (e.g. queue.yourhospital.com)',
       'Multi-floor & multi-department queue routing',
       'HL7 FHIR & Custom HMS / EMR API integration webhooks',
@@ -349,6 +354,12 @@ export const FAQS: FaqItem[] = [
     categoryLabel: 'For Hospital Directors',
     q: 'Does Queueless support international clinics outside India?',
     a: 'Yes! Queueless OS is deployed across 120+ countries supporting USD, GBP, EUR, AED, SGD, AUD, and CAD with local phone formats, multi-currency accounting, and HIPAA/GDPR regulatory compliance.',
+  },
+  {
+    category: 'PAYMENTS_COMPLIANCE',
+    categoryLabel: 'Credits & Token Limits',
+    q: 'How do monthly patient token credits work, and what if we exceed them?',
+    a: 'Each plan comes with a generous monthly patient token allowance designed for your clinic size (1,500 tokens for Starter, 10,000 tokens for Growth OPD, and 50,000+ for Enterprise). If your OPD experiences seasonal surges or patient spikes, you can instantly top up extra token credit packs starting at just ₹0.15–₹0.20 ($0.002–$0.003) per patient token directly in your admin console with zero service disruption.',
   },
 ];
 

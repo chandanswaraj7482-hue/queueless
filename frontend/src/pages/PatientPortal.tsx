@@ -221,7 +221,7 @@ export const PatientPortal: React.FC = () => {
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="relative">
                 <img
-                  src="/logo.jpg"
+                  src="/logo.png"
                   alt="Queueless"
                   className="w-12 h-12 rounded-2xl shadow-sm border border-slate-200 object-cover"
                 />

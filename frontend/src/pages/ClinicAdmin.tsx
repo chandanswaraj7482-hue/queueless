@@ -678,7 +678,7 @@ export const ClinicAdmin: React.FC = () => {
       // Platform Footer: Powered by Queueless (with Queueless 'Q' Logo)
       const qLogoImg = new Image();
       qLogoImg.crossOrigin = 'anonymous';
-      qLogoImg.src = '/logo.jpg';
+      qLogoImg.src = '/logo.png';
       await new Promise((resolve) => {
         qLogoImg.onload = resolve;
         qLogoImg.onerror = resolve;
@@ -2263,7 +2263,7 @@ export const ClinicAdmin: React.FC = () => {
 
               {/* Platform Provider Footer (Powered by Queueless) */}
               <div className="mt-8 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400 font-medium">
-                <img src="/logo.jpg" alt="Queueless" className="w-4 h-4 rounded-md object-cover shadow-xs" />
+                <img src="/logo.png" alt="Queueless" className="w-4 h-4 rounded-md object-cover shadow-xs" />
                 <span>Powered by Queueless • Smart Clinic OS</span>
               </div>
             </div>

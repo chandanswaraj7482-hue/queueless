@@ -483,7 +483,7 @@ export const FounderDashboard: React.FC = () => {
           <div className="flex items-start sm:items-center gap-4">
             <div className="relative shrink-0">
               <img
-                src="/logo.jpg"
+                src="/logo.png"
                 alt="Queueless"
                 className="w-16 h-16 rounded-2xl object-cover shadow-2xl border-2 border-white/20 ring-4 ring-amber-500/20"
               />
@@ -1612,7 +1612,7 @@ export const FounderDashboard: React.FC = () => {
             <div id="testimonial-share-card" className="p-6 rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border border-slate-800 shadow-2xl space-y-4 relative overflow-hidden">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5">
-                  <img src="/logo.jpg" alt="Queueless" className="w-9 h-9 rounded-xl object-cover border border-white/20 shadow-md" />
+                  <img src="/logo.png" alt="Queueless" className="w-9 h-9 rounded-xl object-cover border border-white/20 shadow-md" />
                   <div>
                     <strong className="text-sm font-black text-white block">Queueless Zero-Wait</strong>
                     <span className="text-[10px] text-sky-400 font-mono">VERIFIED PATIENT SENTIMENT</span>

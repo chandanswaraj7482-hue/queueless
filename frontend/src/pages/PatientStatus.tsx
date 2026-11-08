@@ -495,7 +495,7 @@ export const PatientStatus: React.FC = () => {
       // Footer: Powered by Queueless
       const qLogoImg = new Image();
       qLogoImg.crossOrigin = 'anonymous';
-      qLogoImg.src = '/logo.jpg';
+      qLogoImg.src = '/logo.png';
       await new Promise((resolve) => {
         qLogoImg.onload = resolve;
         qLogoImg.onerror = resolve;
@@ -623,7 +623,7 @@ export const PatientStatus: React.FC = () => {
                   <div className="flex justify-center mb-2.5">
                     <div className="relative">
                       <img
-                        src="/logo.jpg"
+                        src="/logo.png"
                         alt="Queueless"
                         className="w-14 h-14 rounded-2xl shadow-md border-2 border-white object-cover ring-4 ring-sky-100"
                       />
@@ -965,7 +965,7 @@ export const PatientStatus: React.FC = () => {
 
               {/* Powered by Queueless Footer */}
               <div className="pt-2 border-t border-slate-100 flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-semibold">
-                <img src="/logo.jpg" alt="Queueless" className="w-3.5 h-3.5 rounded object-cover shadow-2xs" />
+                <img src="/logo.png" alt="Queueless" className="w-3.5 h-3.5 rounded object-cover shadow-2xs" />
                 <span>Powered by Queueless • Zero-Wait Healthcare Operating System</span>
               </div>
             </div>
@@ -1620,7 +1620,7 @@ export const PatientStatus: React.FC = () => {
             <div className="mt-3 p-3 bg-gradient-to-r from-sky-50 via-indigo-50/60 to-emerald-50 rounded-2xl border border-sky-100 flex items-center justify-between gap-3 shadow-2xs">
               <div className="flex items-center gap-2.5">
                 <div className="relative shrink-0">
-                  <img src="/logo.jpg" alt="Queueless" className="w-8 h-8 rounded-xl object-cover shadow-2xs border border-white" />
+                  <img src="/logo.png" alt="Queueless" className="w-8 h-8 rounded-xl object-cover shadow-2xs border border-white" />
                   <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border border-white"></span>
                 </div>
                 <div>
@@ -1644,7 +1644,7 @@ export const PatientStatus: React.FC = () => {
             </div>
 
             <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400 font-semibold">
-              <img src="/logo.jpg" alt="Queueless" className="w-4 h-4 rounded-md object-cover shadow-xs" />
+              <img src="/logo.png" alt="Queueless" className="w-4 h-4 rounded-md object-cover shadow-xs" />
               <span>Powered by Queueless • Smart Clinic OS</span>
             </div>
           </div>

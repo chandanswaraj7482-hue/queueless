@@ -1045,7 +1045,7 @@ export const PatientCheckIn: React.FC = () => {
 
       {/* Powered by Queueless Footer */}
       <div className="mt-8 pt-4 text-center flex items-center justify-center gap-2 text-xs text-slate-400 font-medium">
-        <img src="/logo.jpg" alt="Queueless" className="w-4 h-4 rounded-md object-cover shadow-xs" />
+        <img src="/logo.png" alt="Queueless" className="w-4 h-4 rounded-md object-cover shadow-xs" />
         <span>Powered by Queueless Clinic OS • Zero-Wait Healthcare</span>
       </div>
     </div>

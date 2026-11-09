@@ -83,7 +83,7 @@ export const RefundPolicy: React.FC = () => {
                   <strong>Method 1 (Director Admin Console):</strong> Log into your hospital portal at <Link to="/login" className="text-blue-600 dark:text-blue-400 underline font-bold">/login</Link>, navigate to <em>Settings ➔ Subscription & Billing</em>, and click "Request 30-Day Guarantee Refund".
                 </li>
                 <li>
-                  <strong>Method 2 (Email Support):</strong> Send an email to <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-blue-600 dark:text-blue-400">billing@queueless.com</code> with your Hospital Name, Admin Email, and Receipt / Invoice ID (e.g., INV-560760).
+                  <strong>Method 2 (Email Support):</strong> Send an email to <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-blue-600 dark:text-blue-400">billing@queuelesslabs.com</code> with your Hospital Name, Admin Email, and Receipt / Invoice ID (e.g., INV-560760).
                 </li>
               </ul>
             </section>
@@ -162,10 +162,10 @@ export const RefundPolicy: React.FC = () => {
                 Have questions about an upcoming charge or need help with your receipt? Our billing specialists are on standby:
               </p>
               <div className="p-4 bg-slate-50 dark:bg-slate-950/80 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1 text-xs">
-                <p><strong>Queueless Financial Operations Desk</strong></p>
+                <p><strong>Queueless Labs Financial Operations Desk</strong></p>
                 <p className="flex items-center gap-1.5 text-blue-700 dark:text-blue-400 font-bold">
                   <Mail className="w-3.5 h-3.5" />
-                  <span>billing@queueless.com</span>
+                  <a href="mailto:billing@queuelesslabs.com" className="hover:underline">billing@queuelesslabs.com</a>
                 </p>
                 <p className="text-slate-500 dark:text-slate-400">Dedicated assistance for Dodo Payments, PayPal & Bank Transfer Invoicing</p>
               </div>

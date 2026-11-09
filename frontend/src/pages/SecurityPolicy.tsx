@@ -157,10 +157,10 @@ export const SecurityPolicy: React.FC = () => {
                 We welcome responsible security disclosures from cybersecurity researchers and healthcare IT teams. Please report potential vulnerabilities to:
               </p>
               <div className="p-4 bg-slate-50 dark:bg-slate-950/80 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1 text-xs">
-                <p><strong>Queueless Security Response Team</strong></p>
+                <p><strong>Queueless Labs Security Response Team</strong></p>
                 <p className="flex items-center gap-1.5 text-blue-700 dark:text-blue-400 font-bold">
                   <Mail className="w-3.5 h-3.5" />
-                  <span>security@queueless.com</span>
+                  <a href="mailto:security@queuelesslabs.com" className="hover:underline">security@queuelesslabs.com</a>
                 </p>
                 <p className="text-slate-500 dark:text-slate-400">Security Response SLA: Acknowledged within 12 hours</p>
               </div>

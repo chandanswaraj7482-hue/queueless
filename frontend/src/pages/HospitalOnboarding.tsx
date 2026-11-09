@@ -392,7 +392,7 @@ export const HospitalOnboarding: React.FC = () => {
                       />
                     </div>
                     <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
-                      Your patient QR link will be: queueless.com/check-in/<strong>{slug || 'your-clinic'}</strong>
+                      Your patient QR link will be: {window.location.host || 'queueless-os.vercel.app'}/check-in/<strong>{slug || 'your-clinic'}</strong>
                     </p>
                   </div>
                 </div>

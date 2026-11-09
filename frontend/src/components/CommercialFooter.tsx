@@ -158,6 +158,25 @@ export const CommercialFooter: React.FC = () => {
               </span>
             </div>
 
+            {/* Queueless Labs Official Inquiries */}
+            <div className="pt-2 space-y-1.5">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
+                QUEUELess LABS • OFFICIAL INQUIRIES
+              </span>
+              <div className="flex flex-col gap-1 text-xs">
+                <a
+                  href="mailto:contact@queuelesslabs.com"
+                  className="text-slate-200 hover:text-blue-400 flex items-center gap-2 transition-colors font-semibold group w-fit"
+                >
+                  <Mail className="w-3.5 h-3.5 text-blue-400 group-hover:scale-110 transition-transform" />
+                  <span>contact@queuelesslabs.com</span>
+                </a>
+                <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
+                  Enterprise deployments, hospital network onboarding & integrations
+                </p>
+              </div>
+            </div>
+
             {/* Payment & Security Verification Badges */}
             <div className="pt-2 space-y-2">
               <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
@@ -343,7 +362,7 @@ export const CommercialFooter: React.FC = () => {
         {/* Bottom Legal / Copyright Row with Clinical Language Selector & Trust Badges */}
         <div className="pt-8 pb-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-slate-400 border-b border-slate-800/70">
           <div className="flex items-center gap-2">
-            <span>© {new Date().getFullYear()} <strong>Queueless Technologies Inc.</strong> All rights reserved.</span>
+            <span>© {new Date().getFullYear()} <strong>Queueless Labs Inc.</strong> All rights reserved.</span>
           </div>
 
           {/* Interactive Multi-Language Switcher */}

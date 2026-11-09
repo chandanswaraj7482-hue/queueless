@@ -17,6 +17,8 @@ import {
   Clock,
   CheckCircle2,
   Zap,
+  Mail,
+  FlaskConical,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
@@ -223,6 +225,40 @@ export const AboutPage: React.FC = () => {
                   Overcrowded lobbies bleed 8.5% of OPD walk-in patients to competitor clinics. Queueless recovers up to 85% of that lost revenue on Day 1 while eliminating expensive hardware maintenance contracts.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ============================================================== */}
+        {/* QUEUELESS LABS RESEARCH & ENGINEERING DIVISION                 */}
+        {/* ============================================================== */}
+        <section className="py-16 px-4 sm:px-6 bg-slate-50 dark:bg-slate-900/60 border-t border-slate-200/80 dark:border-slate-800">
+          <div className="max-w-4xl mx-auto p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xl space-y-6 text-center">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/70 border border-blue-200/80 dark:border-blue-800 text-blue-700 dark:text-cyan-300 text-xs font-black uppercase tracking-wider mx-auto">
+              <FlaskConical className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
+              <span>Queueless Labs • Clinical Engineering Division</span>
+            </div>
+            
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white tracking-tight">
+              Pioneering Zero-Friction Outpatient Architecture
+            </h3>
+            
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+              At <strong>Queueless Labs</strong>, our engineering and healthcare operations research team designs next-generation distributed queue protocols, sub-second WebSocket hospital synchronization, and privacy-first clinical telemetry.
+            </p>
+
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-medium">
+              <a
+                href="mailto:contact@queuelesslabs.com"
+                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold inline-flex items-center gap-2 shadow-sm transition-all hover:scale-105 active:scale-95"
+              >
+                <Mail className="w-4 h-4" />
+                <span>contact@queuelesslabs.com</span>
+              </a>
+              <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5" />
+                <span>Executive response within 12 business hours</span>
+              </span>
             </div>
           </div>
         </section>

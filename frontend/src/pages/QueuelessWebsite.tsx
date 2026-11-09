@@ -3303,7 +3303,7 @@ export const QueuelessWebsite: React.FC = () => {
                   Thank you <strong>{demoName}</strong>. Our Healthcare Implementation Specialist has booked your 1-on-1 walkthrough for <strong>{demoHospital}</strong>. A calendar invite has been sent to <strong>{demoEmail || demoPhone}</strong>.
                 </p>
                 <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-600 dark:text-slate-400">
-                  Assigned Solutions Lead: Dr. Sameer Sen (Healthtech Solutions Architect)
+                  Assigned Solutions Lead: Queueless Labs Healthcare Solutions Architecture Team
                 </div>
                 <button
                   onClick={() => {
@@ -3506,7 +3506,7 @@ export const QueuelessWebsite: React.FC = () => {
               </div>
 
               <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
-                <span className="text-[11px] text-slate-400">Published by Queueless Healthcare Systems Inc.</span>
+                <span className="text-[11px] text-slate-400">Published by Queueless Labs Inc.</span>
                 <button
                   onClick={() => {
                     setShowPitchDeckModal(false);

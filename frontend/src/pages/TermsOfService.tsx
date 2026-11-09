@@ -58,7 +58,7 @@ export const TermsOfService: React.FC = () => {
                 <span>Agreement to Terms & Applicability</span>
               </h2>
               <p>
-                These Terms of Service ("Terms") constitute a legally binding agreement between Queueless Technologies Inc. ("Queueless", "we", "us") and the healthcare practice, clinic, polyclinic, or hospital entity ("Customer", "you") subscribing to or using the Queueless Healthcare Operating System.
+                These Terms of Service ("Terms") constitute a legally binding agreement between Queueless Labs Inc. ("Queueless Labs", "Queueless", "we", "us") and the healthcare practice, clinic, polyclinic, or hospital entity ("Customer", "you") subscribing to or using the Queueless Healthcare Operating System.
               </p>
               <p>
                 By completing subscription registration, checking out through our payment gateways (Dodo Payments or PayPal), or accessing any clinical dashboard, you agree to be bound by these Terms and our Privacy Policy.
@@ -172,7 +172,7 @@ export const TermsOfService: React.FC = () => {
                 <span>Subscription Cancellation & Account Termination</span>
               </h2>
               <p>
-                You may cancel your subscription at any time directly through your Director Admin Console or by contacting <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-blue-600 dark:text-blue-400">billing@queueless.com</code>. There are zero cancellation fees or lock-in penalties. Access remains active until the end of your paid billing term.
+                You may cancel your subscription at any time directly through your Director Admin Console or by contacting <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-blue-600 dark:text-blue-400">billing@queuelesslabs.com</code>. There are zero cancellation fees or lock-in penalties. Access remains active until the end of your paid billing term.
               </p>
             </section>
 
@@ -186,11 +186,11 @@ export const TermsOfService: React.FC = () => {
                 For contractual inquiries, Enterprise custom MSAs, or HIPAA Business Associate execution, reach out to our legal department:
               </p>
               <div className="p-4 bg-slate-50 dark:bg-slate-950/80 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1 text-xs">
-                <p><strong>Queueless Technologies Inc. — Legal Counsel</strong></p>
+                <p><strong>Queueless Labs Inc. — Legal Counsel</strong></p>
                 <p>Global SaaS Contracts & Enterprise Healthcare Division</p>
                 <p className="flex items-center gap-1.5 text-blue-700 dark:text-blue-400 font-bold">
                   <Mail className="w-3.5 h-3.5" />
-                  <span>legal@queueless.com</span>
+                  <a href="mailto:legal@queuelesslabs.com" className="hover:underline">legal@queuelesslabs.com</a>
                 </p>
               </div>
             </section>

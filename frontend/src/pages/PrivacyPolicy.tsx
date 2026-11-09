@@ -60,7 +60,7 @@ export const PrivacyPolicy: React.FC = () => {
                 <span>Our Role & Commitment to Patient Privacy</span>
               </h2>
               <p>
-                Queueless Technologies Inc. ("Queueless", "we", "us", or "our") operates the Queueless Healthcare Operating System, a zero-wait clinical queue coordination platform utilized by hospitals, polyclinics, and healthcare facilities worldwide.
+                Queueless Labs Inc. ("Queueless Labs", "Queueless", "we", "us", or "our") operates the Queueless Healthcare Operating System, a zero-wait clinical queue coordination platform utilized by hospitals, polyclinics, and healthcare facilities worldwide.
               </p>
               <p>
                 In technical data protection terms, the <strong>subscribing Hospital or Clinic acts as the Data Controller</strong> regarding patient clinical encounters. <strong>Queueless acts as the Data Processor (or Business Associate under HIPAA)</strong>, securely storing and executing queue coordination strictly on the hospital's verified instructions.
@@ -184,11 +184,11 @@ export const PrivacyPolicy: React.FC = () => {
                 If you have questions regarding this Privacy Policy, your patient rights, or wish to execute a HIPAA Business Associate Agreement, please contact our dedicated compliance office:
               </p>
               <div className="p-4 bg-slate-50 dark:bg-slate-950/80 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1 text-xs">
-                <p><strong>Queueless Technologies Inc. — Data Protection Office</strong></p>
+                <p><strong>Queueless Labs Inc. — Data Protection Office</strong></p>
                 <p>Attn: Chief Privacy Officer & Grievance Officer</p>
                 <p className="flex items-center gap-1.5 text-blue-700 dark:text-blue-400 font-bold">
                   <Mail className="w-3.5 h-3.5" />
-                  <span>privacy@queueless.com</span>
+                  <a href="mailto:privacy@queuelesslabs.com" className="hover:underline">privacy@queuelesslabs.com</a>
                 </p>
                 <p className="text-slate-500 dark:text-slate-400">Response SLA: Within 24-48 business hours</p>
               </div>

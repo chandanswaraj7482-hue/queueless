@@ -207,7 +207,104 @@ async function main() {
     },
   });
 
-  console.log(`Seeding complete! Clinic ID: ${clinic.id}, Slug: ${clinic.slug}`);
+  // 7. Caremax OPD
+  const caremaxClinic = await prisma.clinic.create({
+    data: {
+      tenantId: tenant.id,
+      name: 'Caremax OPD',
+      slug: 'caremax-opd',
+      address: 'Suite 402, Metro Healthcare Towers, MG Road',
+      timezone: 'Asia/Kolkata',
+      openingHours: '08:30 AM - 08:30 PM',
+      contactPhone: '+91 98765 43210',
+      settings: JSON.stringify({
+        allowWalkIns: true,
+        allowPreBooking: true,
+        chimeSoundEnabled: true,
+        callMode: 'SINGLE_ACTIVE',
+        currency: 'INR',
+      }),
+    },
+  });
+
+  const caremaxDoc = await prisma.doctor.create({
+    data: {
+      clinicId: caremaxClinic.id,
+      displayName: 'Dr. Rohan Sharma, MD',
+      specialty: 'Orthopedics & Joint Care',
+      roomNumber: 'Cabin 1',
+      active: true,
+    },
+  });
+
+  const caremaxSrv = await prisma.service.create({
+    data: {
+      clinicId: caremaxClinic.id,
+      name: 'General Consultation OPD',
+      durationMinutes: 15,
+      fee: 250,
+      active: true,
+    },
+  });
+
+  await prisma.queueEntry.create({
+    data: {
+      clinicId: caremaxClinic.id,
+      patientId: p1.id,
+      doctorId: caremaxDoc.id,
+      serviceId: caremaxSrv.id,
+      token: 'A-101',
+      publicToken: 'QL-84920',
+      queueDate: today,
+      priority: 0,
+      visitReason: 'Orthopedic joint consultation',
+      status: 'WAITING',
+      feeAmount: 250,
+      paymentStatus: 'PAID',
+    },
+  });
+
+  // 8. Apollo Heart Institute
+  const apolloClinic = await prisma.clinic.create({
+    data: {
+      tenantId: tenant.id,
+      name: 'Apollo Heart Institute',
+      slug: 'apollo-hospital',
+      address: 'Plot 14, Banjara Hills Road No. 2, Hyderabad, Telangana 500034',
+      timezone: 'Asia/Kolkata',
+      openingHours: '08:00 AM - 09:00 PM',
+      contactPhone: '+91 40 2360 7777',
+      settings: JSON.stringify({
+        allowWalkIns: true,
+        allowPreBooking: true,
+        chimeSoundEnabled: true,
+        callMode: 'SINGLE_ACTIVE',
+        currency: 'INR',
+      }),
+    },
+  });
+
+  const apolloDoc = await prisma.doctor.create({
+    data: {
+      clinicId: apolloClinic.id,
+      displayName: 'Dr. Rajesh Verma, MD',
+      specialty: 'Chief Cardiologist',
+      roomNumber: 'Cabin 1',
+      active: true,
+    },
+  });
+
+  await prisma.service.create({
+    data: {
+      clinicId: apolloClinic.id,
+      name: 'Cardiology Consultation & ECG',
+      durationMinutes: 20,
+      fee: 800,
+      active: true,
+    },
+  });
+
+  console.log(`Seeding complete! Added City Health, Caremax OPD, & Apollo Heart Institute.`);
 }
 
 main()

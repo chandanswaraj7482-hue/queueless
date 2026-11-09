@@ -216,16 +216,16 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               customAddress = storedHospitals[clinicSlug].address || customAddress;
               customLogo = storedHospitals[clinicSlug].logoUrl || '';
             } else if (clinicSlug && clinicSlug !== 'city-health') {
-              const cleanWords = clinicSlug
+              const words = clinicSlug
                 .split('-')
                 .map((w) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
                 .join(' ');
-              customName = cleanWords.toLowerCase().endsWith('opd') ||
-                cleanWords.toLowerCase().endsWith('clinic') ||
-                cleanWords.toLowerCase().endsWith('hospital') ||
-                cleanWords.toLowerCase().endsWith('center')
-                ? cleanWords
-                : cleanWords + ' OPD';
+              customName = words.toLowerCase().endsWith('opd') ||
+                words.toLowerCase().endsWith('clinic') ||
+                words.toLowerCase().endsWith('hospital') ||
+                words.toLowerCase().endsWith('center')
+                ? words
+                : words + ' OPD';
             }
             if (!customLogo && clinicSlug) {
               customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';
@@ -255,10 +255,16 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             customAddress = storedHospitals[clinicSlug].address || customAddress;
             customLogo = storedHospitals[clinicSlug].logoUrl || '';
           } else if (clinicSlug && clinicSlug !== 'city-health') {
-            customName = clinicSlug
+            const words = clinicSlug
               .split('-')
-              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-              .join(' ') + ' OPD';
+              .map((w) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+              .join(' ');
+            customName = words.toLowerCase().endsWith('opd') ||
+              words.toLowerCase().endsWith('clinic') ||
+              words.toLowerCase().endsWith('hospital') ||
+              words.toLowerCase().endsWith('center')
+              ? words
+              : words + ' OPD';
           }
           if (!customLogo && clinicSlug) {
             customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';

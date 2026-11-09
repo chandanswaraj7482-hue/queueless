@@ -32,7 +32,6 @@ import {
   Languages,
   Check,
 } from 'lucide-react';
-import { ClinicalAiAssistant } from './ClinicalAiAssistant';
 import { GOOGLE_LANGUAGES, getStoredLanguage, changeLanguage } from '../utils/googleTranslate';
 
 const SUPPORTED_LANGUAGES = [
@@ -403,11 +402,6 @@ export const CommercialFooter: React.FC = () => {
           </h2>
         </div>
       </div>
-
-      {/* ============================================================== */}
-      {/* PROFESSIONAL INTERACTIVE AI CLINICAL ASSISTANT                 */}
-      {/* ============================================================== */}
-      <ClinicalAiAssistant />
     </footer>
   );
 };

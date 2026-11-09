@@ -20,7 +20,6 @@ import {
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
-import { ClinicalAiAssistant } from '../components/ClinicalAiAssistant';
 import { WORLDWIDE_CURRENCIES, CurrencyConfig } from '../data/commercialData';
 
 export const AboutPage: React.FC = () => {
@@ -259,9 +258,6 @@ export const AboutPage: React.FC = () => {
           </div>
         </section>
       </main>
-
-      {/* Floating Clinical AI Copilot */}
-      <ClinicalAiAssistant />
 
       {/* Commercial Footer */}
       <CommercialFooter />

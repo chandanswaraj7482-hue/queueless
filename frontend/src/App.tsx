@@ -12,6 +12,7 @@ import { QueuelessWebsite } from './pages/QueuelessWebsite';
 import { FeaturesPage } from './pages/FeaturesPage';
 import { PricingPage } from './pages/PricingPage';
 import { RoiCalculatorPage } from './pages/RoiCalculatorPage';
+import { AboutPage } from './pages/AboutPage';
 import { HospitalLogin } from './pages/HospitalLogin';
 import { HospitalOnboarding } from './pages/HospitalOnboarding';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
@@ -55,6 +56,7 @@ function Navigation() {
     location.pathname === '/features' ||
     location.pathname === '/pricing' ||
     location.pathname === '/roi-calculator' ||
+    location.pathname === '/about' ||
     location.pathname === '/login' ||
     location.pathname === '/signup' ||
     location.pathname === '/get-started' ||
@@ -364,6 +366,7 @@ export function App() {
             <Route path="/features" element={<FeaturesPage />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/roi-calculator" element={<RoiCalculatorPage />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route path="/login" element={<HospitalLogin />} />
             <Route path="/signup" element={<HospitalOnboarding />} />
             <Route path="/get-started" element={<HospitalOnboarding />} />

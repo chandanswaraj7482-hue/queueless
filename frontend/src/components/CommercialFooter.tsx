@@ -191,6 +191,11 @@ export const CommercialFooter: React.FC = () => {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
+                <Link to="/about" className="hover:text-blue-400 transition-colors hover:translate-x-0.5 inline-block">
+                  About Queueless OS
+                </Link>
+              </li>
+              <li>
                 <Link to="/features" className="hover:text-blue-400 transition-colors hover:translate-x-0.5 inline-block">
                   Platform Architecture
                 </Link>

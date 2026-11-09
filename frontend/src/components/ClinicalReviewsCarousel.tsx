@@ -205,9 +205,37 @@ export const ClinicalReviewsCarousel: React.FC = () => {
 
   const totalPages = Math.ceil(filteredReviews.length / itemsPerPage);
   const currentPage = Math.min(Math.floor(startIndex / itemsPerPage), totalPages - 1);
+  const [direction, setDirection] = useState<'right' | 'left'>('right');
+
+  // Touch Gesture Detection (Mobile Swiping)
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const minSwipeDistance = 40;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    if (distance > minSwipeDistance) {
+      handleNext();
+    } else if (distance < -minSwipeDistance) {
+      handlePrev();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
 
   // Handle slide movement
   const handleNext = () => {
+    setDirection('right');
     setStartIndex((prev) => {
       const next = prev + itemsPerPage;
       return next >= filteredReviews.length ? 0 : next;
@@ -215,6 +243,7 @@ export const ClinicalReviewsCarousel: React.FC = () => {
   };
 
   const handlePrev = () => {
+    setDirection('left');
     setStartIndex((prev) => {
       const prevIdx = prev - itemsPerPage;
       if (prevIdx < 0) {
@@ -226,20 +255,22 @@ export const ClinicalReviewsCarousel: React.FC = () => {
   };
 
   const handlePageSelect = (pageIndex: number) => {
+    setDirection(pageIndex > currentPage ? 'right' : 'left');
     setStartIndex(pageIndex * itemsPerPage);
   };
 
-  // Autoplay timer
+  // Autoplay timer with 4.5s loop
   useEffect(() => {
-    if (!isAutoplay || isHovered || isModalOpen) return;
+    if (!isAutoplay || isModalOpen) return;
     const interval = setInterval(() => {
       handleNext();
-    }, 5500);
+    }, 4500);
     return () => clearInterval(interval);
-  }, [isAutoplay, isHovered, isModalOpen, startIndex, filteredReviews.length, itemsPerPage]);
+  }, [isAutoplay, isModalOpen, startIndex, filteredReviews.length, itemsPerPage]);
 
   // Reset startIndex when category changes
   const handleCategoryChange = (cat: 'ALL' | 'DOCTORS' | 'PATIENTS') => {
+    setDirection('right');
     setSelectedCategory(cat);
     setStartIndex(0);
   };
@@ -419,14 +450,29 @@ export const ClinicalReviewsCarousel: React.FC = () => {
         </div>
       </div>
 
-      {/* Dynamic Animated Carousel Grid */}
-      <div className="relative min-h-[380px] overflow-hidden">
-        <AnimatePresence mode="wait">
+      {/* Dynamic Animated Carousel Grid with Full Touch Gesture & Drag Support */}
+      <div
+        className="relative min-h-[380px] overflow-hidden touch-pan-y cursor-grab active:cursor-grabbing select-none"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={`${selectedCategory}-${startIndex}`}
-            initial={{ opacity: 0, x: 25 }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -40 || info.velocity.x < -200) {
+                handleNext();
+              } else if (info.offset.x > 40 || info.velocity.x > 200) {
+                handlePrev();
+              }
+            }}
+            initial={{ opacity: 0, x: direction === 'right' ? 60 : -60 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -25 }}
+            exit={{ opacity: 0, x: direction === 'right' ? -60 : 60 }}
             transition={{ duration: 0.35, ease: 'easeInOut' }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
@@ -522,21 +568,41 @@ export const ClinicalReviewsCarousel: React.FC = () => {
         </AnimatePresence>
       </div>
 
-      {/* Bottom Progress Indicator Dots */}
-      <div className="flex items-center justify-center gap-2 pt-2">
-        {Array.from({ length: totalPages }).map((_, idx) => (
-          <button
-            key={idx}
-            type="button"
-            onClick={() => handlePageSelect(idx)}
-            className={`h-2 rounded-full transition-all cursor-pointer ${
-              currentPage === idx
-                ? 'w-7 bg-blue-600 dark:bg-cyan-400'
-                : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600'
-            }`}
-            aria-label={`Go to review page ${idx + 1}`}
-          />
-        ))}
+      {/* Bottom Progress Indicator Dots & Touch Gesture Hint */}
+      <div className="flex flex-col items-center justify-center gap-2 pt-2">
+        <div className="flex items-center gap-2">
+          {Array.from({ length: totalPages }).map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => handlePageSelect(idx)}
+              className={`h-2 rounded-full transition-all cursor-pointer ${
+                currentPage === idx
+                  ? 'w-8 bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-400 shadow-sm'
+                  : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600'
+              }`}
+              aria-label={`Go to review page ${idx + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Subtle Gesture & Autoplay Indicator */}
+        <div className="flex items-center gap-2 text-[10.5px] font-medium text-slate-400 dark:text-slate-500 pt-0.5">
+          <span className="inline-flex items-center gap-1">
+            <span>👈</span>
+            <span>Swipe or drag to browse</span>
+            <span>👉</span>
+          </span>
+          {isAutoplay && (
+            <>
+              <span>•</span>
+              <span className="inline-flex items-center gap-1 text-blue-600 dark:text-cyan-400 font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Auto-sliding</span>
+              </span>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Interactive Modal: Submit Clinical Review */}

@@ -64,6 +64,7 @@ import {
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
+import { ClinicalReviewsCarousel } from '../components/ClinicalReviewsCarousel';
 import {
   WORLDWIDE_CURRENCIES,
   PLAN_TEMPLATES,
@@ -2626,68 +2627,8 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
           </div>
 
-          {/* Clean, Non-Bloated 3 Endorsement Cards */}
-          <div className="pt-8 border-t border-slate-200/80 dark:border-slate-800 space-y-8">
-            <div className="text-center space-y-2 max-w-xl mx-auto">
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                <span>Verified Director Endorsements • 4.9/5 Across 450+ Hospitals</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-                What Hospital Superintendents Say
-              </h3>
-            </div>
-
-            {/* Exactly 3 High-Trust, Authoritative Clinical Endorsement Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {VERIFIED_REVIEWS.slice(0, 3).map((review, idx) => (
-                <div
-                  key={idx}
-                  className="p-6 sm:p-7 rounded-3xl bg-slate-50/80 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500/40 hover:bg-white dark:hover:bg-slate-900 hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-5"
-                >
-                  <div className="space-y-3.5">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-amber-400">
-                        {[...Array(review.rating)].map((_, i) => (
-                          <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                        ))}
-                      </div>
-                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                        {review.badge}
-                      </span>
-                    </div>
-
-                    <div className="inline-block px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 rounded-lg text-xs font-black tracking-wide border border-emerald-200 dark:border-emerald-800">
-                      {review.highlight}
-                    </div>
-
-                    <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
-                      "{review.text}"
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-200/80 dark:border-slate-800 flex items-center gap-3">
-                    <img
-                      src={review.avatar}
-                      alt={review.author}
-                      className="w-11 h-11 rounded-full object-cover border-2 border-blue-500 shadow-sm shrink-0"
-                    />
-                    <div className="min-w-0">
-                      <strong className="text-xs font-black text-slate-900 dark:text-white block truncate">
-                        {review.author}
-                      </strong>
-                      <span className="text-[10px] text-slate-500 dark:text-slate-400 block truncate font-medium">
-                        {review.role}
-                      </span>
-                      <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold block truncate">
-                        {review.org}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Interactive Clinical Reviews Carousel with Category Filters & Working Animations */}
+          <ClinicalReviewsCarousel />
         </div>
 
       </section>

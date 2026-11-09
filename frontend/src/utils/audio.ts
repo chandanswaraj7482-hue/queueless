@@ -1,9 +1,9 @@
 // ============================================================================
-// WARM & PLEASANT CLINICAL HOSPITAL PUBLIC ADDRESS (PA) AUDIO ENGINE
+// REALISTIC BROADCAST-GRADE HOSPITAL PUBLIC ADDRESS (PA) AUDIO ENGINE
 // Features: 
-// 1. Sweet 4-Tone Melodic Celesta / Crystal Marimba Chime (Boutique Healthcare Sanctuary Grade)
-// 2. Sweet, Cute, Friendly Female Voice Synthesis (Natural high-clarity pronunciation)
-// 3. Human Respiratory Pauses & Polite Receptionist Cadence
+// 1. Crystal 2-Tone Melodic Hospital Chime (G4 -> C5 Ding-Dong / Airport-Hospital PA Grade)
+// 2. Realistic, Natural, Calm Broadcast Voice (Natural human pitch 1.0 & clear cadence)
+// 3. High-Fidelity Voice Selection (Prioritizes Apple Enhanced / Google Neural / Microsoft Natural)
 // ============================================================================
 
 let sharedAudioCtx: AudioContext | null = null;
@@ -25,8 +25,8 @@ function getAudioContext(): AudioContext | null {
 }
 
 /**
- * Plays a warm, melodic, cheerful 4-tone celesta chime (E5 -> G#5 -> B5 -> E6).
- * Gives patients a calm, pleasant, sweet auditory cue without harsh industrial alarms.
+ * Plays an authentic, warm, broadcast-grade hospital 2-tone acoustic chime (Ding-Dong: G4 392Hz -> C5 523.25Hz).
+ * Engineered with gentle harmonic overtones and natural exponential room decay.
  */
 export function playClinicChime() {
   try {
@@ -35,56 +35,56 @@ export function playClinicChime() {
 
     const now = ctx.currentTime;
 
-    // Acoustic soft ceiling filter
-    const masterFilter = ctx.createBiquadFilter();
-    masterFilter.type = 'lowpass';
-    masterFilter.frequency.setValueAtTime(4200, now);
-    masterFilter.Q.setValueAtTime(0.9, now);
+    // Acoustic soft ceiling filter (simulates hospital acoustic ceiling tiles)
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(3600, now);
+    filter.Q.setValueAtTime(0.7, now);
 
     const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(0.65, now);
+    masterGain.gain.setValueAtTime(0.55, now);
 
-    masterFilter.connect(masterGain);
+    filter.connect(masterGain);
     masterGain.connect(ctx.destination);
 
-    // Play a crystal bell tone with harmonic sparkle
-    const playBellTone = (freq: number, startTime: number, duration: number, gainLevel: number) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, startTime);
+    const playChimeTone = (freq: number, start: number, duration: number, peakVol: number) => {
+      // Fundamental sine wave
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, start);
 
-      // Sweet bell attack and natural exponential decay
-      gain.gain.setValueAtTime(0.0001, startTime);
-      gain.gain.exponentialRampToValueAtTime(gainLevel, startTime + 0.012);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      gain1.gain.setValueAtTime(0.0001, start);
+      gain1.gain.exponentialRampToValueAtTime(peakVol, start + 0.015);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, start + duration);
 
-      osc.connect(gain);
-      gain.connect(masterFilter);
-      osc.start(startTime);
-      osc.stop(startTime + duration);
+      osc1.connect(gain1);
+      gain1.connect(filter);
+      osc1.start(start);
+      osc1.stop(start + duration);
 
-      // Delicate 2nd Harmonic sparkle (octave up, very soft)
+      // Warm 2nd harmonic overtone for natural hospital chime resonance
       const osc2 = ctx.createOscillator();
       const gain2 = ctx.createGain();
       osc2.type = 'sine';
-      osc2.frequency.setValueAtTime(freq * 2, startTime);
+      osc2.frequency.setValueAtTime(freq * 2, start);
 
-      gain2.gain.setValueAtTime(0.0001, startTime);
-      gain2.gain.exponentialRampToValueAtTime(gainLevel * 0.18, startTime + 0.008);
-      gain2.gain.exponentialRampToValueAtTime(0.0001, startTime + (duration * 0.65));
+      gain2.gain.setValueAtTime(0.0001, start);
+      gain2.gain.exponentialRampToValueAtTime(peakVol * 0.15, start + 0.012);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, start + (duration * 0.7));
 
       osc2.connect(gain2);
-      gain2.connect(masterFilter);
-      osc2.start(startTime);
-      osc2.stop(startTime + (duration * 0.65));
+      gain2.connect(filter);
+      osc2.start(start);
+      osc2.stop(start + (duration * 0.7));
     };
 
-    // 4-Tone Melodic Sequence: E5 (659.25Hz) -> G#5 (830.61Hz) -> B5 (987.77Hz) -> E6 (1318.51Hz)
-    playBellTone(659.25, now, 0.40, 0.30);          // Tone 1: E5
-    playBellTone(830.61, now + 0.14, 0.45, 0.35);   // Tone 2: G#5
-    playBellTone(987.77, now + 0.28, 0.55, 0.40);   // Tone 3: B5
-    playBellTone(1318.51, now + 0.44, 0.95, 0.45);  // Tone 4: E6 (Sparkling resolution bell)
+    // Authentic Hospital PA Ding-Dong Chime:
+    // Tone 1 ("Ding"): G4 (392.00 Hz)
+    playChimeTone(392.00, now, 0.65, 0.40);
+
+    // Tone 2 ("Dong"): C5 (523.25 Hz) - bright, resolving
+    playChimeTone(523.25, now + 0.28, 1.10, 0.45);
 
   } catch (err) {
     console.warn('Audio chime could not play due to browser policy', err);
@@ -107,10 +107,10 @@ export function getAvailableVoices(): SpeechSynthesisVoice[] {
 }
 
 /**
- * Selects the sweetest, most pleasant, cute natural female voice available.
- * Prioritizes Tara, Samantha, Ava, Victoria, Zoe, Lekha, Swara, Neerja, and Google/Microsoft Natural voices.
+ * Selects the most realistic, natural, human broadcast voice available on the device.
+ * Prioritizes Apple Enhanced / Siri Natural, Google Neural, Microsoft Natural, and clear Indian English voices.
  */
-function getBestCuteVoice(langPrefix: string = 'en'): SpeechSynthesisVoice | null {
+function getBestNaturalVoice(langPrefix: string = 'en'): SpeechSynthesisVoice | null {
   const voices = getAvailableVoices();
   if (!voices || voices.length === 0) return null;
 
@@ -119,56 +119,59 @@ function getBestCuteVoice(langPrefix: string = 'en'): SpeechSynthesisVoice | nul
     const name = v.name.toLowerCase();
     const lang = v.lang.toLowerCase();
 
-    // Disqualify deep, robotic, or harsh male voices
+    // Heavy penalty for mechanical / robotic legacy novelty voices
     if (
-      (name.includes('male') && !name.includes('female')) ||
-      name.includes('daniel') ||
-      name.includes('david') ||
-      name.includes('george') ||
-      name.includes('rishi') ||
-      name.includes('aman') ||
-      name.includes('alex') ||
-      name.includes('fred') ||
-      name.includes('albert') ||
-      name.includes('bruce') ||
       name.includes('bad news') ||
-      name.includes('eddy')
+      name.includes('bells') ||
+      name.includes('boing') ||
+      name.includes('bubbles') ||
+      name.includes('cellos') ||
+      name.includes('deranged') ||
+      name.includes('good news') ||
+      name.includes('hysterical') ||
+      name.includes('pipe organ') ||
+      name.includes('trinoids') ||
+      name.includes('whisper') ||
+      name.includes('zarvox') ||
+      name.includes('eddy') ||
+      name.includes('fred') ||
+      name.includes('albert')
     ) {
-      return -100;
+      return -500;
     }
 
-    // Top tier: Sweet, cute, warm, friendly female voices
-    if (name.includes('tara')) score += 200;       // Apple en_IN sweet female
-    if (name.includes('samantha')) score += 180;   // Apple en_US pleasant female
-    if (name.includes('neerja')) score += 175;     // Microsoft en_IN natural female
-    if (name.includes('lekha')) score += 170;      // Apple hi_IN natural female
-    if (name.includes('swara')) score += 165;      // Microsoft hi_IN natural female
-    if (name.includes('zoe')) score += 150;        // macOS cute premium female
-    if (name.includes('ava')) score += 145;        // Siri natural female
-    if (name.includes('victoria')) score += 140;   // Soft pleasant female
-    if (name.includes('karen')) score += 130;      // Australian friendly female
-    if (name.includes('tessa')) score += 125;      // Clear gentle female
-    if (name.includes('serena')) score += 120;     // UK gentle female
-    if (name.includes('jenny')) score += 115;      // Microsoft Natural female
-    if (name.includes('aria')) score += 110;       // Microsoft Natural female
-
-    // Explicit female indicators
-    if (name.includes('female')) score += 60;
-    if (name.includes('natural') || name.includes('enhanced') || name.includes('neural') || name.includes('premium')) {
-      score += 40;
+    // Top tier: Broadcast-grade, high-definition natural human voices
+    if (name.includes('enhanced') || name.includes('natural') || name.includes('neural') || name.includes('premium')) {
+      score += 300;
     }
+
+    // High quality Apple / Siri / Google / Microsoft voices
+    if (name.includes('samantha')) score += 220;
+    if (name.includes('ava')) score += 210;
+    if (name.includes('karen')) score += 190;
+    if (name.includes('serena')) score += 185;
+    if (name.includes('veena')) score += 180;
+    if (name.includes('lekha')) score += 180;
+    if (name.includes('neerja')) score += 175;
+    if (name.includes('swara')) score += 170;
+    if (name.includes('zoe')) score += 160;
+    if (name.includes('moira')) score += 155;
+    if (name.includes('tara')) score += 150;
+    if (name.includes('aria')) score += 140;
+    if (name.includes('jenny')) score += 140;
+    if (name.includes('google')) score += 130;
 
     // Language prefix preference
     if (langPrefix === 'hi') {
       if (lang.startsWith('hi') || name.includes('hindi') || name.includes('lekha') || name.includes('swara')) {
-        score += 250;
+        score += 400;
       }
     } else {
-      if (lang.includes('en-in')) score += 40;
-      else if (lang.startsWith('en')) score += 20;
+      if (lang.includes('en-in')) score += 60; // Natural Indian English for Indian hospitals
+      else if (lang.startsWith('en')) score += 30;
     }
 
-    if (v.localService) score += 10;
+    if (v.localService) score += 20;
     return score;
   };
 
@@ -177,8 +180,8 @@ function getBestCuteVoice(langPrefix: string = 'en'): SpeechSynthesisVoice | nul
 }
 
 /**
- * Formats token so it is read clearly:
- * "A-116" -> "A... 1 1 6"
+ * Formats token so it is read with clear, dignified hospital cadence:
+ * "A-102" -> "A... 1 0 2"
  */
 function formatTokenForHumanSpeech(token: string): string {
   if (!token) return '';
@@ -207,12 +210,12 @@ export function stopClinicVoice() {
 export type SpeechLanguageMode = 'en' | 'hi' | 'es' | 'ar' | 'fr';
 
 /**
- * Plays a sweet, cute, broadcast-grade hospital PA announcement.
+ * Plays a realistic, studio broadcast-grade hospital PA announcement.
  * Sequence:
- * 1. Sweet 4-Tone Celesta chime (0 - 0.9s)
- * 2. Natural human breathing silence (0.9s - 1.0s)
- * 3. Warm, cute, pleasant female announcement (Global English)
- * 4. (Optional) Localized secondary polite broadcast (Hindi, Spanish, Arabic, French)
+ * 1. Authentic 2-Tone Ding-Dong hospital chime (0 - 0.75s)
+ * 2. Natural human respiratory silence (~750ms)
+ * 3. Clear, dignified, broadcast-grade announcement (pitch 1.0, steady natural cadence 0.93)
+ * 4. (Optional) Localized polite secondary announcement (Hindi, Spanish, Arabic, French)
  */
 export function playClinicVoiceAnnouncement(
   token: string,
@@ -220,7 +223,7 @@ export function playClinicVoiceAnnouncement(
   doctorName?: string,
   bilingual: boolean | SpeechLanguageMode = false
 ) {
-  // First play the sweet 4-tone melodic celesta chime
+  // First play the authentic hospital 2-tone chime
   playClinicChime();
 
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
@@ -234,23 +237,23 @@ export function playClinicVoiceAnnouncement(
     const cleanCabin = cabin.replace(/\(.*\)/, '').trim() || 'Cabin 1';
     const cleanDoctor = doctorName ? `for ${doctorName.replace(/,.*$/, '').trim()}` : '';
 
-    // Warm, welcoming, cute announcement phrasing with polite closing
-    const enText = `Attention please... Token ${spokenToken}... Please proceed to ${cleanCabin}${cleanDoctor ? ', ' + cleanDoctor : ''}. Thank you!`;
+    // Realistic hospital public address announcement phrasing
+    const enText = `Attention please. Token ${spokenToken}. Please proceed to ${cleanCabin}${cleanDoctor ? ', ' + cleanDoctor : ''}. Thank you.`;
     const utteranceEn = new SpeechSynthesisUtterance(enText);
 
-    // Cute, friendly, sweet vocal tuning
-    utteranceEn.rate = 0.98;
-    utteranceEn.pitch = 1.16;
+    // Realistic human broadcast tuning: natural pitch 1.0, calm clear rate 0.93
+    utteranceEn.rate = 0.93;
+    utteranceEn.pitch = 1.0;
     utteranceEn.volume = 1.0;
 
-    const enVoice = getBestCuteVoice('en');
+    const enVoice = getBestNaturalVoice('en');
     if (enVoice) {
       utteranceEn.voice = enVoice;
     }
 
     const langMode = typeof bilingual === 'string' ? bilingual : (bilingual ? 'hi' : 'en');
 
-    // Delay speech until chime's melodic tail finishes (~900ms)
+    // Wait for the hospital chime to ring cleanly before speaking (~750ms)
     setTimeout(() => {
       window.speechSynthesis.speak(utteranceEn);
 
@@ -261,38 +264,38 @@ export function playClinicVoiceAnnouncement(
             let secondaryLang = 'hi-IN';
 
             if (langMode === 'hi') {
-              secondaryText = `कृपया ध्यान दें... टोकन नंबर ${spokenToken}... ${cleanCabin} में पधारें। धन्यवाद!`;
+              secondaryText = `कृपया ध्यान दें। टोकन नंबर ${spokenToken}। कृपया ${cleanCabin} में पधारें। धन्यवाद।`;
               secondaryLang = 'hi-IN';
             } else if (langMode === 'es') {
-              secondaryText = `Atención por favor... Turno ${spokenToken}... Por favor pasar al ${cleanCabin}. ¡Gracias!`;
+              secondaryText = `Atención por favor. Turno ${spokenToken}. Por favor pasar al ${cleanCabin}. Gracias.`;
               secondaryLang = 'es-ES';
             } else if (langMode === 'ar') {
-              secondaryText = `يرجى الانتباه... التذكرة رقم ${spokenToken}... يرجى التوجه إلى ${cleanCabin}. شكراً لكم!`;
+              secondaryText = `يرجى الانتباه. التذكرة رقم ${spokenToken}. يرجى التوجه إلى ${cleanCabin}. شكراً لكم.`;
               secondaryLang = 'ar-SA';
             } else if (langMode === 'fr') {
-              secondaryText = `Votre attention s'il vous plaît... Ticket ${spokenToken}... Veuillez vous présenter au ${cleanCabin}. Merci !`;
+              secondaryText = `Votre attention s'il vous plaît. Ticket ${spokenToken}. Veuillez vous présenter au ${cleanCabin}. Merci.`;
               secondaryLang = 'fr-FR';
             }
 
             if (secondaryText) {
               const utteranceSec = new SpeechSynthesisUtterance(secondaryText);
               utteranceSec.lang = secondaryLang;
-              utteranceSec.rate = 0.94;
-              utteranceSec.pitch = 1.14;
+              utteranceSec.rate = 0.92;
+              utteranceSec.pitch = 1.0;
               utteranceSec.volume = 1.0;
 
-              const secVoice = getBestCuteVoice(langMode);
+              const secVoice = getBestNaturalVoice(langMode);
               if (secVoice) {
                 utteranceSec.voice = secVoice;
               }
               window.speechSynthesis.speak(utteranceSec);
             }
           } catch {
-            // Ignore if language synthesis fails
+            // Ignore if secondary speech fails
           }
         };
       }
-    }, 900);
+    }, 750);
   } catch (err) {
     console.warn('Speech synthesis unavailable or blocked by browser', err);
   }

@@ -14,6 +14,7 @@ import {
   MessageSquare,
   HelpCircle,
   Activity,
+  Minus,
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -57,14 +58,13 @@ const PRESET_FAQS = [
 
 export const ClinicalAiAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(true);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
       sender: 'ai',
-      text: 'Namaste! 👋 I am your Queueless Clinical Copilot. How can I help optimize your hospital OPD or answer questions about our zero-hardware setup?',
+      text: 'Namaste! 👋 I am your Queueless Clinical Copilot. How can I assist with your hospital OPD flow, smart TV kiosk, or token credits?',
       time: 'Just now',
     },
   ]);
@@ -80,6 +80,13 @@ export const ClinicalAiAssistant: React.FC = () => {
       scrollToBottom();
     }
   }, [messages, isOpen, isTyping]);
+
+  // Global listener so top-right navbar "Ask AI" button opens the assistant
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('open-clinical-ai', handleOpen);
+    return () => window.removeEventListener('open-clinical-ai', handleOpen);
+  }, []);
 
   const handleSend = (textToSend?: string) => {
     const query = (textToSend || inputText).trim();
@@ -144,56 +151,66 @@ export const ClinicalAiAssistant: React.FC = () => {
 
       setMessages((prev) => [...prev, aiReply]);
       setIsTyping(false);
-    }, 450);
+    }, 400);
   };
 
   return (
-    <div className="fixed bottom-5 sm:bottom-6 right-4 sm:right-6 z-50 select-none">
-      {/* Expanded Interactive Chat Modal */}
+    <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 select-none">
+      {/* Expanded Interactive Chat Modal (Compact, Non-Intrusive, Sleek) */}
       {isOpen ? (
-        <div className="w-[calc(100vw-32px)] sm:w-[380px] max-w-[420px] h-[520px] max-h-[80vh] rounded-[28px] bg-white/95 dark:bg-slate-950/95 backdrop-blur-2xl border border-slate-200/90 dark:border-slate-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.35)] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200 ring-1 ring-slate-900/10 dark:ring-white/10">
+        <div className="w-[calc(100vw-32px)] sm:w-[360px] max-w-[390px] h-[490px] max-h-[82vh] rounded-3xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-2xl border border-slate-200/90 dark:border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200 ring-1 ring-slate-900/10 dark:ring-white/10">
           
           {/* Header */}
-          <div className="p-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between border-b border-slate-800/80">
-            <div className="flex items-center gap-3">
+          <div className="px-4 py-3 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+            <div className="flex items-center gap-2.5">
               <div className="relative">
-                <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 text-white flex items-center justify-center shadow-md">
-                  <Stethoscope className="w-5 h-5 text-white stroke-[2.2]" />
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 text-white flex items-center justify-center shadow-md">
+                  <Stethoscope className="w-4 h-4 text-white stroke-[2.2]" />
                 </div>
-                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse" />
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse" />
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
-                  <h3 className="text-xs font-black text-white tracking-wide">Queueless Clinical Copilot</h3>
-                  <span className="text-[9px] font-black uppercase tracking-wider bg-blue-500/25 text-blue-300 border border-blue-400/30 px-1.5 py-0.2 rounded-full">
+                  <h3 className="text-xs font-black text-white tracking-wide">Queueless Copilot</h3>
+                  <span className="text-[8px] font-black uppercase tracking-wider bg-blue-500/25 text-cyan-300 border border-blue-400/30 px-1.5 py-0.2 rounded-full">
                     Hospital AI
                   </span>
                 </div>
-                <p className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
+                <p className="text-[9.5px] text-emerald-400 font-medium flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  Clinical OPD Specialist • Online
+                  Clinical OPD Specialist • Active
                 </p>
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setIsOpen(false)}
-              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-              title="Close Assistant"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                title="Minimize Copilot"
+              >
+                <Minus className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                title="Close Assistant"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
 
           {/* Quick FAQ Suggestion Chips */}
-          <div className="px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 overflow-x-auto no-scrollbar flex items-center gap-2">
+          <div className="px-3 py-2 bg-slate-50 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 overflow-x-auto no-scrollbar flex items-center gap-1.5">
             {PRESET_FAQS.map((faq, idx) => (
               <button
                 key={idx}
                 type="button"
                 onClick={() => handleSend(faq.question)}
-                className="whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] font-bold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all shadow-2xs cursor-pointer active:scale-95"
+                className="whitespace-nowrap px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all shadow-2xs cursor-pointer active:scale-95"
               >
                 {faq.chip}
               </button>
@@ -201,24 +218,24 @@ export const ClinicalAiAssistant: React.FC = () => {
           </div>
 
           {/* Messages Body */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3.5 text-xs text-left">
+          <div className="flex-1 p-3.5 overflow-y-auto space-y-3 text-xs text-left">
             {messages.map((msg) => (
               <div
                 key={msg.id}
                 className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
               >
                 <div
-                  className={`max-w-[85%] rounded-2xl p-3 leading-relaxed ${
+                  className={`max-w-[88%] rounded-2xl p-2.5 leading-relaxed ${
                     msg.sender === 'user'
                       ? 'bg-blue-600 text-white rounded-br-xs shadow-sm font-medium'
                       : 'bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 rounded-bl-xs border border-slate-200/80 dark:border-slate-800 shadow-2xs'
                   }`}
                 >
-                  <p className="text-[11px] sm:text-xs">{msg.text}</p>
+                  <p className="text-[11px] sm:text-xs leading-normal">{msg.text}</p>
 
-                  {/* Optional Action Links inside AI reply */}
+                  {/* Action Links inside AI reply */}
                   {msg.links && msg.links.length > 0 && (
-                    <div className="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-slate-800 flex flex-wrap gap-1.5">
+                    <div className="mt-2 pt-1.5 border-t border-slate-200/60 dark:border-slate-800 flex flex-wrap gap-1">
                       {msg.links.map((link, lIdx) => (
                         <Link
                           key={lIdx}
@@ -226,7 +243,7 @@ export const ClinicalAiAssistant: React.FC = () => {
                           onClick={() => {
                             if (link.url.startsWith('/#')) setIsOpen(false);
                           }}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-bold text-[10px] hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors border border-blue-200 dark:border-blue-800"
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-bold text-[9.5px] hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors border border-blue-200 dark:border-blue-800"
                         >
                           <span>{link.label}</span>
                           <ArrowRight className="w-2.5 h-2.5" />
@@ -235,120 +252,72 @@ export const ClinicalAiAssistant: React.FC = () => {
                     </div>
                   )}
                 </div>
-                <span className="text-[9px] text-slate-400 mt-1 px-1">{msg.time}</span>
+                <span className="text-[8.5px] text-slate-400 mt-0.5 px-1">{msg.time}</span>
               </div>
             ))}
 
             {isTyping && (
-              <div className="flex items-center gap-1.5 p-3 rounded-2xl bg-slate-100 dark:bg-slate-900 text-slate-400 w-fit rounded-bl-xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce"></span>
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce [animation-delay:0.2s]"></span>
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce [animation-delay:0.4s]"></span>
+              <div className="flex items-center gap-1.5 p-2 rounded-2xl bg-slate-100 dark:bg-slate-900 max-w-[90px] border border-slate-200/80 dark:border-slate-800">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-bounce"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-bounce [animation-delay:0.15s]"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-bounce [animation-delay:0.3s]"></span>
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Footer Input Form */}
-          <div className="p-3 bg-white dark:bg-slate-950 border-t border-slate-200/80 dark:border-slate-800">
+          {/* Input Footer */}
+          <div className="p-3 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSend();
               }}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900 rounded-2xl p-1 border border-slate-200 dark:border-slate-800 focus-within:border-blue-500"
             >
               <input
                 type="text"
+                placeholder="Ask about tokens, TV kiosk, pricing..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder="Ask about QR passes, follow-up, TVs..."
-                className="flex-1 px-3.5 py-2.5 bg-slate-100 dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                className="flex-1 bg-transparent px-3 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none"
               />
               <button
                 type="submit"
                 disabled={!inputText.trim()}
-                className="w-9 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-sm active:scale-95"
-                title="Send Message"
+                className="w-7 h-7 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white flex items-center justify-center transition-all cursor-pointer shadow-xs shrink-0"
+                aria-label="Send message"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-3.5 h-3.5" />
               </button>
             </form>
 
-            <div className="mt-2 flex items-center justify-between text-[9px] text-slate-400 px-1">
-              <span>Ayushman Bharat & HIPAA Compliant</span>
+            <div className="mt-1.5 flex items-center justify-between text-[8.5px] text-slate-400 px-1">
+              <span>ABDM & HIPAA Compliant</span>
               <Link to="/signup" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
-                Set up OPD in 3 Mins ➔
+                Instant OPD Setup ➔
               </Link>
             </div>
           </div>
         </div>
       ) : (
-        /* Collapsed Omni-Style Floating Action Button & Tooltip */
-        <div className="flex items-center gap-3">
-          {/* Omni-Style Speech Bubble Tooltip - Hospital Clinical Theme */}
-          {showTooltip && (
-            <div
-              onClick={() => setIsOpen(true)}
-              className="relative cursor-pointer bg-white dark:bg-slate-900 border border-sky-200 dark:border-sky-800/80 rounded-[22px] px-3.5 py-3 shadow-[0_12px_36px_rgba(2,132,199,0.18)] dark:shadow-[0_12px_36px_rgba(0,0,0,0.5)] flex items-center gap-3 max-w-[320px] animate-in fade-in slide-in-from-right-3 duration-300 group hover:shadow-[0_16px_45px_rgba(2,132,199,0.28)] transition-all select-none"
-            >
-              {/* Outer Triangle border */}
-              <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-0 h-0 border-y-[7px] border-y-transparent border-l-[9px] border-l-sky-200 dark:border-l-sky-800 pointer-events-none" />
-              {/* Inner Triangle white fill */}
-              <div className="absolute top-1/2 -right-[7px] -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[8px] border-l-white dark:border-l-slate-900 pointer-events-none" />
-
-              {/* Clinical Medical Stethoscope Avatar with Light Sky Blue Background */}
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100 dark:from-slate-800 dark:to-blue-950 border border-sky-200/90 dark:border-sky-700/60 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform overflow-hidden">
-                <div className="relative flex items-center justify-center">
-                  <Stethoscope className="w-6 h-6 text-blue-600 dark:text-cyan-400 stroke-[2.2]" />
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 absolute -top-0.5 -right-0.5 ring-2 ring-white dark:ring-slate-900 animate-ping" />
-                </div>
-              </div>
-
-              {/* Message */}
-              <div className="flex-1 min-w-0 pr-1 text-left">
-                <strong className="block text-[13px] font-extrabold text-[#0F172A] dark:text-white leading-tight tracking-tight">
-                  I'm your Clinical Assistant!
-                </strong>
-                <p className="text-[11.5px] text-[#475569] dark:text-slate-300 mt-0.5 leading-snug font-medium">
-                  Need help with OPD queues, TV kiosk, or ROI? Ask me 👋
-                </p>
-              </div>
-
-              {/* Dismiss X button */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowTooltip(false);
-                }}
-                className="text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0 cursor-pointer"
-                aria-label="Dismiss tooltip"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          )}
-
-          {/* Clinical Hospital Floating Action Button */}
+        /* Collapsed Compact Floating Pill Button */
+        <div className="flex items-center gap-2 group">
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="group relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#0284C7] via-[#2563EB] to-[#4F46E5] hover:from-[#0369A1] hover:to-[#4338CA] text-white shadow-[0_8px_30px_rgba(37,99,235,0.45)] hover:shadow-[0_12px_40px_rgba(37,99,235,0.65)] cursor-pointer transition-all hover:scale-105 active:scale-95 border-2 border-white dark:border-slate-800 flex items-center justify-center shrink-0"
+            className="flex items-center gap-2 pl-3.5 pr-4 py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white shadow-[0_8px_25px_rgba(37,99,235,0.4)] hover:shadow-[0_12px_35px_rgba(37,99,235,0.6)] cursor-pointer transition-all hover:scale-105 active:scale-95 border border-white/30 dark:border-slate-800"
             aria-label="Open Queueless Clinical Assistant"
           >
-            {/* Glowing Green Online Status Indicator */}
-            <span className="absolute top-0 right-0 w-3.5 h-3.5 rounded-full bg-[#10B981] border-2 border-white dark:border-slate-900 shadow-sm animate-pulse" />
-
-            {/* Medical Stethoscope & Sparkle Icon */}
             <div className="relative flex items-center justify-center">
-              <Stethoscope className="w-7 h-7 text-white stroke-[2.3] group-hover:scale-110 transition-transform" />
-              <Sparkles className="w-3.5 h-3.5 text-cyan-200 fill-cyan-200 absolute -bottom-1 -right-1 animate-pulse" />
+              <Stethoscope className="w-4 h-4 text-white stroke-[2.3]" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 absolute -top-1 -right-1 ring-1 ring-white animate-pulse" />
             </div>
+            <span className="text-xs font-black tracking-wide">Ask AI</span>
+            <Sparkles className="w-3 h-3 text-cyan-200" />
           </button>
         </div>
       )}
     </div>
   );
 };
-

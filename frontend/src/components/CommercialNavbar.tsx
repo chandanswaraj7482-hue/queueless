@@ -165,6 +165,18 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
 
           {/* Right Action Bar */}
           <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Clinical AI Copilot Quick Launch Pill (Top Right) */}
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-clinical-ai'))}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/70 dark:hover:bg-blue-900/80 text-blue-700 dark:text-cyan-300 border border-blue-200 dark:border-blue-800 font-bold text-xs shadow-2xs hover:scale-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap shrink-0"
+              title="Open Queueless Clinical AI Copilot"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 animate-pulse" />
+              <span>Ask AI</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            </button>
+
             {/* Currency Selector Pill */}
             <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/70 hover:bg-slate-200/80 dark:bg-slate-900/60 dark:hover:bg-slate-800/80 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 dark:text-slate-300 transition-all shadow-2xs">
               <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
@@ -253,6 +265,21 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                 {item.label}
               </Link>
             ))}
+
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                window.dispatchEvent(new CustomEvent('open-clinical-ai'));
+              }}
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-cyan-300 border border-blue-200 dark:border-blue-800"
+            >
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                <span>Ask Clinical AI Copilot</span>
+              </span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            </button>
 
             {/* Mobile Currency Picker in Drawer */}
             <div className="p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">

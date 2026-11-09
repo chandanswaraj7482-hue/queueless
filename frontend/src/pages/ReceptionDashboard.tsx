@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { socket } from '../utils/socket';
 import {
@@ -94,6 +94,21 @@ interface SummaryData {
 export const ReceptionDashboard: React.FC = () => {
   const { slug } = useParams<{ slug?: string }>();
   const activeSlug = slug || 'city-health';
+
+  const hospitalDisplayName = useMemo(() => {
+    try {
+      const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+      if (activeSlug && storedHospitals[activeSlug]) {
+        return storedHospitals[activeSlug].name;
+      } else if (activeSlug && activeSlug !== 'city-health') {
+        return activeSlug
+          .split('-')
+          .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(' ') + ' OPD';
+      }
+    } catch (e) {}
+    return 'City Health Clinic';
+  }, [activeSlug]);
   const [clinicId, setClinicId] = useState<string>('85234de5-9582-4220-a9c7-e862fa7e742d');
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [summary, setSummary] = useState<SummaryData | null>(null);
@@ -665,7 +680,7 @@ export const ReceptionDashboard: React.FC = () => {
             <Users className="w-7 h-7" />
           </div>
 
-          <h1 className="text-xl font-black text-slate-900 tracking-tight">Reception & Cashier Desk</h1>
+          <h1 className="text-xl font-black text-slate-900 tracking-tight">{hospitalDisplayName} • Reception Desk</h1>
           <p className="text-xs text-slate-500 mt-1 mb-6">
             Enter receptionist password to manage OPD walk-ins, cash token issuance, and patient calls.
           </p>
@@ -752,7 +767,7 @@ export const ReceptionDashboard: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
-            <span>Reception & Cashier Desk</span>
+            <span>{hospitalDisplayName} • Reception Desk</span>
             <span className="flex h-2.5 w-2.5 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>

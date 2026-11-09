@@ -354,31 +354,73 @@ export const DoctorView: React.FC = () => {
     fetch(`${API_BASE_URL}/api/v1/clinics/public/${activeSlug}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.data) {
-          setClinicData(data.data);
-          setClinicId(data.data.id);
-          if (data.data.doctors?.length > 0) {
-            setDoctors(data.data.doctors);
-            setSelectedDoctorId(data.data.doctors[0].id);
+        let customHospitalName = 'City Health Multi-Specialty Hospital';
+        try {
+          const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+          if (activeSlug && storedHospitals[activeSlug]) {
+            customHospitalName = storedHospitals[activeSlug].name;
+          } else if (activeSlug && activeSlug !== 'city-health') {
+            customHospitalName = activeSlug
+              .split('-')
+              .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ') + ' OPD';
           }
-        } else {
-          const fallbackDocs = [
-            { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', roomNumber: 'Cabin 1' },
-            { id: 'doc-2', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology', roomNumber: 'Cabin 2' },
-            { id: 'doc-3', displayName: 'Dr. Priya Patel, MBBS', specialty: 'Pediatrics', roomNumber: 'Cabin 3' },
-            { id: 'doc-4', displayName: 'Dr. Amit Roy, MS', specialty: 'General Medicine', roomNumber: 'Cabin 4' },
-          ];
-          setDoctors(fallbackDocs);
-          setSelectedDoctorId('doc-1');
-        }
-      })
-      .catch(() => {
+        } catch (e) {}
+
         const fallbackDocs = [
           { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', roomNumber: 'Cabin 1' },
           { id: 'doc-2', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology', roomNumber: 'Cabin 2' },
           { id: 'doc-3', displayName: 'Dr. Priya Patel, MBBS', specialty: 'Pediatrics', roomNumber: 'Cabin 3' },
           { id: 'doc-4', displayName: 'Dr. Amit Roy, MS', specialty: 'General Medicine', roomNumber: 'Cabin 4' },
         ];
+
+        if (data.success && data.data) {
+          setClinicData({
+            ...data.data,
+            name: data.data.name || customHospitalName,
+          });
+          setClinicId(data.data.id);
+          if (data.data.doctors?.length > 0) {
+            setDoctors(data.data.doctors);
+            setSelectedDoctorId(data.data.doctors[0].id);
+          }
+        } else {
+          setClinicData({
+            id: activeSlug,
+            name: customHospitalName,
+            slug: activeSlug,
+            doctors: fallbackDocs,
+          });
+          setDoctors(fallbackDocs);
+          setSelectedDoctorId('doc-1');
+        }
+      })
+      .catch(() => {
+        let customHospitalName = 'City Health Multi-Specialty Hospital';
+        try {
+          const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+          if (activeSlug && storedHospitals[activeSlug]) {
+            customHospitalName = storedHospitals[activeSlug].name;
+          } else if (activeSlug && activeSlug !== 'city-health') {
+            customHospitalName = activeSlug
+              .split('-')
+              .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ') + ' OPD';
+          }
+        } catch (e) {}
+
+        const fallbackDocs = [
+          { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', roomNumber: 'Cabin 1' },
+          { id: 'doc-2', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology', roomNumber: 'Cabin 2' },
+          { id: 'doc-3', displayName: 'Dr. Priya Patel, MBBS', specialty: 'Pediatrics', roomNumber: 'Cabin 3' },
+          { id: 'doc-4', displayName: 'Dr. Amit Roy, MS', specialty: 'General Medicine', roomNumber: 'Cabin 4' },
+        ];
+        setClinicData({
+          id: activeSlug,
+          name: customHospitalName,
+          slug: activeSlug,
+          doctors: fallbackDocs,
+        });
         setDoctors(fallbackDocs);
         setSelectedDoctorId('doc-1');
       });
@@ -861,7 +903,9 @@ export const DoctorView: React.FC = () => {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-black text-slate-900 tracking-tight">Doctor OPD & EMR Console</h1>
+              <h1 className="text-xl font-black text-slate-900 tracking-tight">
+                {clinicData?.name ? `${clinicData.name} • Doctor Cabin` : 'Doctor OPD & EMR Console'}
+              </h1>
               <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">
                 Live EMR
               </span>

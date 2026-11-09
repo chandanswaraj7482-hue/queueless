@@ -100,15 +100,37 @@ export const DisplayKiosk: React.FC = () => {
     fetch(`${API_BASE_URL}/api/v1/queue/clinics/${clinicId}/display`)
       .then((res) => res.json())
       .then((resData) => {
+        let fallbackName = 'City Health Multi-Specialty Hospital';
+        let fallbackAddress = 'Suite 402, Metro Healthcare Towers, MG Road';
+        try {
+          const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+          if (clinicId && storedHospitals[clinicId]) {
+            fallbackName = storedHospitals[clinicId].name;
+            fallbackAddress = storedHospitals[clinicId].address || fallbackAddress;
+          } else if (clinicId && clinicId !== 'city-health') {
+            fallbackName = clinicId
+              .split('-')
+              .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ') + ' OPD';
+          }
+        } catch (e) {}
+
         if (resData.success && resData.data && (resData.data.nowServing?.length > 0 || resData.data.nextWaiting?.length > 0)) {
-          setData(resData.data);
+          setData({
+            ...resData.data,
+            clinic: {
+              ...resData.data.clinic,
+              name: resData.data.clinic?.name || fallbackName,
+              slug: clinicId,
+            },
+          });
         } else {
           setData({
             clinic: {
-              id: 'city-health',
-              name: 'City Health Multi-Specialty Hospital',
-              slug: 'city-health',
-              address: 'Suite 402, Metro Healthcare Towers, MG Road',
+              id: clinicId,
+              name: fallbackName,
+              slug: clinicId,
+              address: fallbackAddress,
             },
             nowServing: [
               {
@@ -134,12 +156,27 @@ export const DisplayKiosk: React.FC = () => {
         }
       })
       .catch(() => {
+        let fallbackName = 'City Health Multi-Specialty Hospital';
+        let fallbackAddress = 'Suite 402, Metro Healthcare Towers, MG Road';
+        try {
+          const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+          if (clinicId && storedHospitals[clinicId]) {
+            fallbackName = storedHospitals[clinicId].name;
+            fallbackAddress = storedHospitals[clinicId].address || fallbackAddress;
+          } else if (clinicId && clinicId !== 'city-health') {
+            fallbackName = clinicId
+              .split('-')
+              .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ') + ' OPD';
+          }
+        } catch (e) {}
+
         setData({
           clinic: {
-            id: 'city-health',
-            name: 'City Health Multi-Specialty Hospital',
-            slug: 'city-health',
-            address: 'Suite 402, Metro Healthcare Towers, MG Road',
+            id: clinicId,
+            name: fallbackName,
+            slug: clinicId,
+            address: fallbackAddress,
           },
           nowServing: [
             {

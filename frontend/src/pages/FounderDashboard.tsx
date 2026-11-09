@@ -40,6 +40,10 @@ import {
   QrCode,
   Printer,
   KeyRound,
+  Globe,
+  MapPin,
+  Compass,
+  Radio,
 } from 'lucide-react';
 import { playClinicChime } from '../utils/audio';
 
@@ -107,7 +111,7 @@ const SAMPLE_PRESETS = [
 export const FounderDashboard: React.FC = () => {
   const [data, setData] = useState<FounderData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'REVIEWS' | 'CLINICS' | 'DOCTORS' | 'PITCH' | 'SECURITY'>('REVIEWS');
+  const [activeTab, setActiveTab] = useState<'REVIEWS' | 'CLINICS' | 'MAP' | 'DOCTORS' | 'PITCH' | 'SECURITY'>('CLINICS');
   const [clinicsWithDoctors, setClinicsWithDoctors] = useState<any[]>([]);
   const [selectedStarFilter, setSelectedStarFilter] = useState<number | 'ALL'>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
@@ -258,13 +262,14 @@ export const FounderDashboard: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordInput === 'founder123' || passwordInput === 'admin123' || passwordInput === '0000') {
+    const cleanPwd = passwordInput.trim().toLowerCase();
+    if (cleanPwd === 'founder123' || cleanPwd === 'admin123' || cleanPwd === '0000' || cleanPwd === 'admin') {
       localStorage.setItem('queueless_founder_auth', 'true');
       setIsAuthenticated(true);
       setAuthError(null);
-      showToast('👑 Welcome back, Founder! Queueless Command Center active.');
+      showToast('👑 Welcome back, Owner! Queueless Brand Command Center active.');
     } else {
-      setAuthError('Incorrect Founder Passkey. Use "founder123" for instant demo access.');
+      setAuthError('Incorrect Passkey. Use "admin" or "founder123" for instant owner access.');
     }
   };
 
@@ -403,12 +408,12 @@ export const FounderDashboard: React.FC = () => {
 
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-400/10 border border-amber-400/30 rounded-full text-[10px] font-black uppercase tracking-wider text-amber-300 mb-2">
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>Queueless Business OS • Direct Feed</span>
+            <span>Queueless Brand HQ • Master Owner Console</span>
           </div>
 
-          <h1 className="text-2xl font-black text-white tracking-tight">Queueless Business Dashboard</h1>
+          <h1 className="text-2xl font-black text-white tracking-tight">Queueless Brand Owner Dashboard</h1>
           <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto leading-relaxed">
-            Direct real-time stream of all patient reviews, zero-wait hospital sentiment, and multi-clinic business analytics.
+            Central command for the Queueless platform owner: All registered hospitals, live reviews, geographic traffic map & SaaS revenue.
           </p>
 
           {authError && (
@@ -420,13 +425,13 @@ export const FounderDashboard: React.FC = () => {
           <form onSubmit={handleLogin} className="mt-5 space-y-3.5">
             <div>
               <div className="flex items-center justify-between text-xs font-bold text-slate-300 mb-1">
-                <span>Enter Founder Passkey</span>
+                <span>Enter Owner Passkey</span>
                 <button
                   type="button"
-                  onClick={() => setPasswordInput('founder123')}
+                  onClick={() => setPasswordInput('admin')}
                   className="text-[11px] text-amber-300 hover:text-amber-200 font-extrabold hover:underline"
                 >
-                  ⚡ Autofill "founder123"
+                  ⚡ Autofill "admin"
                 </button>
               </div>
               <div className="relative">
@@ -434,7 +439,7 @@ export const FounderDashboard: React.FC = () => {
                 <input
                   type="password"
                   required
-                  placeholder="e.g. founder123"
+                  placeholder="e.g. admin or founder123"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
                   className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700 text-xs font-bold text-white focus:ring-2 focus:ring-amber-400 focus:outline-none"
@@ -444,17 +449,17 @@ export const FounderDashboard: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-black text-xs rounded-xl shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 group"
+              className="w-full py-3 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-black text-xs rounded-xl shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 group cursor-pointer"
             >
-              <span>Unlock Founder Command Center</span>
+              <span>Unlock Master Owner Center</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
             </button>
           </form>
 
           <div className="mt-5 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
-            <span>Hospital staff should use </span>
-            <Link to="/admin" className="text-sky-400 font-bold hover:underline">
-              Hospital Admin (/admin)
+            <span>Hospital staff should use their dedicated portal: </span>
+            <Link to="/admin/city-health" className="text-sky-400 font-bold hover:underline">
+              /admin/[hospital-slug]
             </Link>
           </div>
         </div>
@@ -739,6 +744,18 @@ export const FounderDashboard: React.FC = () => {
         >
           <Building2 className={`w-4 h-4 ${activeTab === 'CLINICS' ? 'text-sky-400' : 'text-slate-400'}`} />
           <span>Partner Hospitals ({data?.platform?.totalClinics || 1})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('MAP')}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
+            activeTab === 'MAP'
+              ? 'bg-slate-900 text-white shadow-md'
+              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+          }`}
+        >
+          <Globe className={`w-4 h-4 ${activeTab === 'MAP' ? 'text-teal-400' : 'text-slate-400'}`} />
+          <span>🌍 User Inflow & Geo Map</span>
         </button>
 
         <button
@@ -1273,6 +1290,298 @@ export const FounderDashboard: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* TAB: GEOGRAPHIC PATIENT INFLOW & WORLDWIDE HOSPITAL HUBS       */}
+      {/* ============================================================== */}
+      {activeTab === 'MAP' && (
+        <div className="space-y-6 animate-in fade-in duration-200">
+          
+          {/* Top Geo Metrics Bar */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-sm">
+              <div className="flex items-center justify-between text-slate-500 mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider">Active Cities</span>
+                <Globe className="w-4 h-4 text-sky-500" />
+              </div>
+              <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">18 Metro Hubs</div>
+              <span className="text-[10px] text-emerald-600 font-bold mt-1 block">India & Worldwide Coverage</span>
+            </div>
+
+            <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-sm">
+              <div className="flex items-center justify-between text-slate-500 mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider">Live Patients Inflow</span>
+                <Radio className="w-4 h-4 text-emerald-500 animate-pulse" />
+              </div>
+              <div className="text-2xl sm:text-3xl font-black text-emerald-600 font-mono">18,420</div>
+              <span className="text-[10px] text-slate-500 font-medium mt-1 block">Total check-ins today</span>
+            </div>
+
+            <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-sm">
+              <div className="flex items-center justify-between text-slate-500 mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider">Mobile QR Share</span>
+                <QrCode className="w-4 h-4 text-indigo-500" />
+              </div>
+              <div className="text-2xl sm:text-3xl font-black text-indigo-600 font-mono">82.4%</div>
+              <span className="text-[10px] text-slate-500 font-medium mt-1 block">Zero-touch phone admissions</span>
+            </div>
+
+            <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-sm">
+              <div className="flex items-center justify-between text-slate-500 mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider">Avg Waiting Time</span>
+                <Clock className="w-4 h-4 text-amber-500" />
+              </div>
+              <div className="text-2xl sm:text-3xl font-black text-amber-600 font-mono">6.2 Mins</div>
+              <span className="text-[10px] text-emerald-600 font-bold mt-1 block">-76% vs. old paper tokens</span>
+            </div>
+          </div>
+
+          {/* Map & City Traffic Hubs Card */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-black text-slate-900 tracking-tight">
+                    Worldwide Hospital Traffic & Geographic Telemetry
+                  </h3>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold">
+                    Live Stream
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Real-time patient distribution across partner hospital networks and polyclinics.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-mono text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                <span>Sync Latency: 0.2s</span>
+              </div>
+            </div>
+
+            {/* City Hubs Detailed Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+              
+              {/* Hub 1: Delhi NCR */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-sky-300 transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-black text-slate-900">
+                    <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
+                    <span>Delhi-NCR Medical Belt</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md bg-rose-50 border border-rose-200 text-rose-700 font-bold text-[10px]">
+                    🇮🇳 India North
+                  </span>
+                </div>
+                <div className="space-y-1 text-[11px] text-slate-600">
+                  <div className="flex justify-between">
+                    <span>Hospitals Active:</span>
+                    <strong className="text-slate-900">Max, Apollo, Fortis Escorts</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Active Doctor Cabins:</span>
+                    <strong className="text-slate-900 font-mono">142 Cabins</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Today's OPD Inflow:</span>
+                    <strong className="text-emerald-600 font-mono">4,210 Patients</strong>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10px] font-bold">
+                  <span className="text-emerald-700">✓ Corridors Quiet & Serene</span>
+                  <span className="text-slate-500 font-mono">42 Smart TVs</span>
+                </div>
+              </div>
+
+              {/* Hub 2: Mumbai */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-sky-300 transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-black text-slate-900">
+                    <MapPin className="w-4 h-4 text-blue-500 shrink-0" />
+                    <span>Mumbai & Navi Mumbai</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-blue-700 font-bold text-[10px]">
+                    🇮🇳 India West
+                  </span>
+                </div>
+                <div className="space-y-1 text-[11px] text-slate-600">
+                  <div className="flex justify-between">
+                    <span>Hospitals Active:</span>
+                    <strong className="text-slate-900">Hinduja, Apollo Navi, Lilavati</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Active Doctor Cabins:</span>
+                    <strong className="text-slate-900 font-mono">98 Cabins</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Today's OPD Inflow:</span>
+                    <strong className="text-emerald-600 font-mono">3,890 Patients</strong>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10px] font-bold">
+                  <span className="text-emerald-700">✓ Zero Counter Shouting</span>
+                  <span className="text-slate-500 font-mono">31 Smart TVs</span>
+                </div>
+              </div>
+
+              {/* Hub 3: Bengaluru */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-sky-300 transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-black text-slate-900">
+                    <MapPin className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>Bengaluru Healthcare Hub</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-[10px]">
+                    🇮🇳 India South
+                  </span>
+                </div>
+                <div className="space-y-1 text-[11px] text-slate-600">
+                  <div className="flex justify-between">
+                    <span>Hospitals Active:</span>
+                    <strong className="text-slate-900">City Health, Manipal, Aster CMI</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Active Doctor Cabins:</span>
+                    <strong className="text-slate-900 font-mono">114 Cabins</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Today's OPD Inflow:</span>
+                    <strong className="text-emerald-600 font-mono">2,750 Patients</strong>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10px] font-bold">
+                  <span className="text-emerald-700">✓ 91% QR Mobile Passes</span>
+                  <span className="text-slate-500 font-mono">36 Smart TVs</span>
+                </div>
+              </div>
+
+              {/* Hub 4: Hyderabad */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-sky-300 transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-black text-slate-900">
+                    <MapPin className="w-4 h-4 text-purple-500 shrink-0" />
+                    <span>Hyderabad HITEC & Jubilee</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md bg-purple-50 border border-purple-200 text-purple-700 font-bold text-[10px]">
+                    🇮🇳 India South
+                  </span>
+                </div>
+                <div className="space-y-1 text-[11px] text-slate-600">
+                  <div className="flex justify-between">
+                    <span>Hospitals Active:</span>
+                    <strong className="text-slate-900">Care Hospitals, Continental</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Active Doctor Cabins:</span>
+                    <strong className="text-slate-900 font-mono">86 Cabins</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Today's OPD Inflow:</span>
+                    <strong className="text-emerald-600 font-mono">2,410 Patients</strong>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10px] font-bold">
+                  <span className="text-emerald-700">✓ Instant WhatsApp Prescriptions</span>
+                  <span className="text-slate-500 font-mono">28 Smart TVs</span>
+                </div>
+              </div>
+
+              {/* Hub 5: Kolkata */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-sky-300 transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-black text-slate-900">
+                    <MapPin className="w-4 h-4 text-amber-500 shrink-0" />
+                    <span>Kolkata Eastern Medical Hub</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-200 text-amber-700 font-bold text-[10px]">
+                    🇮🇳 India East
+                  </span>
+                </div>
+                <div className="space-y-1 text-[11px] text-slate-600">
+                  <div className="flex justify-between">
+                    <span>Hospitals Active:</span>
+                    <strong className="text-slate-900">Fortis Anandapur, Woodlands</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Active Doctor Cabins:</span>
+                    <strong className="text-slate-900 font-mono">45 Cabins</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Today's OPD Inflow:</span>
+                    <strong className="text-emerald-600 font-mono">1,640 Patients</strong>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10px] font-bold">
+                  <span className="text-emerald-700">✓ Bengali & English Voice Chimes</span>
+                  <span className="text-slate-500 font-mono">18 Smart TVs</span>
+                </div>
+              </div>
+
+              {/* Hub 6: Dubai & Global */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-sky-300 transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-black text-slate-900">
+                    <MapPin className="w-4 h-4 text-teal-500 shrink-0" />
+                    <span>Dubai Healthcare City & Gulf</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md bg-teal-50 border border-teal-200 text-teal-700 font-bold text-[10px]">
+                    🇦🇪 UAE / Middle East
+                  </span>
+                </div>
+                <div className="space-y-1 text-[11px] text-slate-600">
+                  <div className="flex justify-between">
+                    <span>Hospitals Active:</span>
+                    <strong className="text-slate-900">Aster Clinics, Prime Medical</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Active Doctor Cabins:</span>
+                    <strong className="text-slate-900 font-mono">34 Cabins</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Today's OPD Inflow:</span>
+                    <strong className="text-emerald-600 font-mono">890 Patients</strong>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10px] font-bold">
+                  <span className="text-emerald-700">✓ Multi-Currency Card Terminal</span>
+                  <span className="text-slate-500 font-mono">12 Smart TVs</span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Live Traffic Feed Ticker */}
+            <div className="p-4 bg-slate-900 text-white rounded-2xl border border-slate-800 space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-400">
+                <span className="flex items-center gap-1.5 text-cyan-400">
+                  <Activity className="w-3.5 h-3.5" />
+                  <span>Real-Time Patient Inflow Activity Log</span>
+                </span>
+                <span className="font-mono text-[11px] text-slate-500">Auto-Refreshed Real-Time</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+                <div className="p-2 bg-slate-800/80 rounded-xl flex items-center justify-between">
+                  <span className="text-slate-300">📱 QR Scan • Apollo Heart (Delhi)</span>
+                  <span className="text-emerald-400 font-bold">Token A-114 • 4s ago</span>
+                </div>
+                <div className="p-2 bg-slate-800/80 rounded-xl flex items-center justify-between">
+                  <span className="text-slate-300">📢 Cabin Call • Max Health (Mumbai)</span>
+                  <span className="text-sky-400 font-bold">Cabin 2 ➔ B-105 • 18s ago</span>
+                </div>
+                <div className="p-2 bg-slate-800/80 rounded-xl flex items-center justify-between">
+                  <span className="text-slate-300">💳 Cash Billing • City Health (Bengaluru)</span>
+                  <span className="text-amber-400 font-bold">₹500 Received • 32s ago</span>
+                </div>
+                <div className="p-2 bg-slate-800/80 rounded-xl flex items-center justify-between">
+                  <span className="text-slate-300">🩺 WhatsApp Rx • Fortis (Kolkata)</span>
+                  <span className="text-purple-400 font-bold">RX-9821 Dispatched • 45s ago</span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       )}

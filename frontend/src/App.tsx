@@ -397,8 +397,11 @@ export function App() {
             <Route path="/doctor/:slug" element={<DoctorView />} />
             <Route path="/display" element={<DisplayKiosk />} />
             <Route path="/display/:clinicId" element={<DisplayKiosk />} />
-            <Route path="/admin" element={<ClinicAdmin />} />
+            <Route path="/admin" element={<FounderDashboard />} />
             <Route path="/admin/:slug" element={<ClinicAdmin />} />
+            <Route path="/hospital-admin" element={<ClinicAdmin />} />
+            <Route path="/hospital-admin/:slug" element={<ClinicAdmin />} />
+            <Route path="/owner" element={<FounderDashboard />} />
 
             {/* 3. Patient Tracking & History */}
             <Route path="/portal" element={<PatientPortal />} />

@@ -329,7 +329,10 @@ export const ClinicAdmin: React.FC = () => {
     } catch (e) {}
 
     try {
-      const cRes = await fetch(`${API_BASE_URL}/api/v1/clinics/public/${activeSlug}`);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
+      const cRes = await fetch(`${API_BASE_URL}/api/v1/clinics/public/${activeSlug}`, { signal: controller.signal });
+      clearTimeout(timeoutId);
       const cData = await cRes.json();
       if (cData.success && cData.data) {
         setClinic(cData.data);

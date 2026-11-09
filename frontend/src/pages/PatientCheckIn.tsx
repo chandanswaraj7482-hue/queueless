@@ -179,9 +179,13 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
 };
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/v1/clinics/public/${clinicSlug}`)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+    fetch(`${API_BASE_URL}/api/v1/clinics/public/${clinicSlug}`, { signal: controller.signal })
       .then((res) => res.json())
       .then((data) => {
+        clearTimeout(timeoutId);
         if (data.success && data.data) {
           let customLogo = '';
           try {

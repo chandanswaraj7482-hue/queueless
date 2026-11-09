@@ -102,16 +102,21 @@ export const DisplayKiosk: React.FC = () => {
       .then((resData) => {
         let fallbackName = 'City Health Multi-Specialty Hospital';
         let fallbackAddress = 'Suite 402, Metro Healthcare Towers, MG Road';
+        let fallbackLogo = '';
         try {
           const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
           if (clinicId && storedHospitals[clinicId]) {
             fallbackName = storedHospitals[clinicId].name;
             fallbackAddress = storedHospitals[clinicId].address || fallbackAddress;
+            fallbackLogo = storedHospitals[clinicId].logoUrl || '';
           } else if (clinicId && clinicId !== 'city-health') {
             fallbackName = clinicId
               .split('-')
               .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
               .join(' ') + ' OPD';
+          }
+          if (!fallbackLogo && clinicId) {
+            fallbackLogo = localStorage.getItem('queueless_clinic_logo_' + clinicId) || '';
           }
         } catch (e) {}
 
@@ -122,6 +127,7 @@ export const DisplayKiosk: React.FC = () => {
               ...resData.data.clinic,
               name: resData.data.clinic?.name || fallbackName,
               slug: clinicId,
+              logoUrl: resData.data.clinic?.logoUrl || fallbackLogo,
             },
           });
         } else {
@@ -131,6 +137,7 @@ export const DisplayKiosk: React.FC = () => {
               name: fallbackName,
               slug: clinicId,
               address: fallbackAddress,
+              logoUrl: fallbackLogo,
             },
             nowServing: [
               {

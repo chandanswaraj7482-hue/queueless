@@ -124,7 +124,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
   name: 'City Health Multi-Specialty Hospital',
   slug: 'city-health',
   address: 'Suite 402, Metro Healthcare Towers, MG Road',
-  logoUrl: '/logo.png',
+  logoUrl: '',
   openingHours: '08:30 AM - 08:30 PM',
   contactPhone: '+91 98765 43210',
   followUpDays: 15,
@@ -183,23 +183,42 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.data) {
-          setClinic(data.data);
+          let customLogo = '';
+          try {
+            const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+            if (clinicSlug && storedHospitals[clinicSlug]?.logoUrl) {
+              customLogo = storedHospitals[clinicSlug].logoUrl;
+            }
+            if (!customLogo && clinicSlug) {
+              customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';
+            }
+          } catch (e) {}
+
+          setClinic({
+            ...data.data,
+            logoUrl: customLogo || data.data.logoUrl || '',
+          });
           if (data.data.doctors?.length > 0) setDoctorId(data.data.doctors[0].id);
           const activeServices = data.data.services?.filter((s: any) => s.active !== false) || [];
           if (activeServices.length > 0) setServiceId(activeServices[0].id);
         } else {
           let customName = DEFAULT_CLINIC_DATA.name;
           let customAddress = DEFAULT_CLINIC_DATA.address;
+          let customLogo = '';
           try {
             const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
             if (clinicSlug && storedHospitals[clinicSlug]) {
               customName = storedHospitals[clinicSlug].name;
               customAddress = storedHospitals[clinicSlug].address || customAddress;
+              customLogo = storedHospitals[clinicSlug].logoUrl || '';
             } else if (clinicSlug && clinicSlug !== 'city-health') {
               customName = clinicSlug
                 .split('-')
                 .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
                 .join(' ') + ' OPD';
+            }
+            if (!customLogo && clinicSlug) {
+              customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';
             }
           } catch (e) {}
 
@@ -207,6 +226,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             ...DEFAULT_CLINIC_DATA,
             name: customName,
             address: customAddress,
+            logoUrl: customLogo,
             slug: clinicSlug || 'city-health',
           };
           setClinic(activeClinic);
@@ -217,16 +237,21 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
       .catch(() => {
         let customName = DEFAULT_CLINIC_DATA.name;
         let customAddress = DEFAULT_CLINIC_DATA.address;
+        let customLogo = '';
         try {
           const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
           if (clinicSlug && storedHospitals[clinicSlug]) {
             customName = storedHospitals[clinicSlug].name;
             customAddress = storedHospitals[clinicSlug].address || customAddress;
+            customLogo = storedHospitals[clinicSlug].logoUrl || '';
           } else if (clinicSlug && clinicSlug !== 'city-health') {
             customName = clinicSlug
               .split('-')
               .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
               .join(' ') + ' OPD';
+          }
+          if (!customLogo && clinicSlug) {
+            customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';
           }
         } catch (e) {}
 
@@ -234,6 +259,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
           ...DEFAULT_CLINIC_DATA,
           name: customName,
           address: customAddress,
+          logoUrl: customLogo,
           slug: clinicSlug || 'city-health',
         };
         setClinic(activeClinic);
@@ -351,6 +377,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
       clinicName: clinic?.name || 'City Health Multi-Specialty Hospital',
       clinicAddress: clinic?.address || 'Suite 402, Metro Healthcare Towers, MG Road',
       clinicPhone: clinic?.contactPhone || '+91 98765 43210',
+      clinicLogo: clinic?.logoUrl || '',
       doctorName: clinic?.doctors?.[0]?.displayName || 'Dr. Rohan Sharma, MD',
       doctorSpecialty: clinic?.doctors?.[0]?.specialty || 'Orthopedic & Joint Care (Cabin 1)',
       roomNumber: 'Cabin 1',
@@ -441,6 +468,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
         clinicName: clinic?.name || DEFAULT_CLINIC_DATA.name,
         clinicAddress: clinic?.address || DEFAULT_CLINIC_DATA.address,
         clinicPhone: clinic?.contactPhone || DEFAULT_CLINIC_DATA.contactPhone,
+        clinicLogo: clinic?.logoUrl || '',
         status: 'WAITING',
         patientsAhead: selectedDoc.waitingCount || 2,
         estimatedWaitMinutes: String(selectedDoc.estimatedWaitMinutes || 6),
@@ -549,11 +577,11 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               <img
                 src={clinic.logoUrl}
                 alt={clinic.name}
-                className="w-12 h-12 rounded-2xl border border-slate-200 object-contain p-1 bg-white shadow-2xs"
+                className="w-12 h-12 rounded-2xl border border-slate-200 object-contain p-1 bg-white shadow-2xs shrink-0"
               />
             ) : (
-              <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 font-bold">
-                <Building2 className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-sky-600 text-white flex items-center justify-center font-black text-xl shadow-md border border-white/20 shrink-0 select-none">
+                {clinic?.name ? clinic.name.charAt(0).toUpperCase() : <Building2 className="w-6 h-6" />}
               </div>
             )}
             <div>

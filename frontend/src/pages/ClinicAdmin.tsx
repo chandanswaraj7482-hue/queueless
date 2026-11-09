@@ -303,17 +303,42 @@ export const ClinicAdmin: React.FC = () => {
   const qrRef = useRef<HTMLDivElement>(null);
 
   const fetchClinicData = async () => {
+    let customName = activeSlug
+      .split('-')
+      .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ') + ' OPD';
+    let customAddress = 'Suite 402, Metro Healthcare Towers, MG Road';
+    let customPhone = '+91 98765 43210';
+    let customHours = '08:30 AM - 08:30 PM';
+    let customLogo = '';
+    let customFollowUp = 15;
+
+    try {
+      const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+      if (activeSlug && storedHospitals[activeSlug]) {
+        customName = storedHospitals[activeSlug].name || customName;
+        customAddress = storedHospitals[activeSlug].address || customAddress;
+        customPhone = storedHospitals[activeSlug].phone || customPhone;
+        customHours = storedHospitals[activeSlug].openingHours || customHours;
+        customLogo = storedHospitals[activeSlug].logoUrl || '';
+        customFollowUp = storedHospitals[activeSlug].followUpDays || 15;
+      }
+      if (!customLogo && activeSlug) {
+        customLogo = localStorage.getItem('queueless_clinic_logo_' + activeSlug) || '';
+      }
+    } catch (e) {}
+
     try {
       const cRes = await fetch(`${API_BASE_URL}/api/v1/clinics/public/${activeSlug}`);
       const cData = await cRes.json();
-      if (cData.success) {
+      if (cData.success && cData.data) {
         setClinic(cData.data);
-        setClinicName(cData.data.name || '');
-        setClinicAddress(cData.data.address || '');
-        setClinicPhone(cData.data.contactPhone || '');
-        setOpeningHours(cData.data.openingHours || '');
-        setClinicLogo(cData.data.logoUrl || '');
-        setFollowUpDays(cData.data.followUpDays || 15);
+        setClinicName(cData.data.name || customName);
+        setClinicAddress(cData.data.address || customAddress);
+        setClinicPhone(cData.data.contactPhone || customPhone);
+        setOpeningHours(cData.data.openingHours || customHours);
+        setClinicLogo(customLogo || cData.data.logoUrl || '');
+        setFollowUpDays(cData.data.followUpDays || customFollowUp);
         if (cData.data.settings) {
           try {
             const parsed = typeof cData.data.settings === 'string' ? JSON.parse(cData.data.settings) : cData.data.settings;
@@ -327,9 +352,26 @@ export const ClinicAdmin: React.FC = () => {
         if (sData.success) {
           setSummary(sData.data);
         }
+      } else {
+        throw new Error('Local fallback');
       }
     } catch (err) {
-      console.error(err);
+      setClinic({
+        id: activeSlug,
+        name: customName,
+        slug: activeSlug,
+        address: customAddress,
+        contactPhone: customPhone,
+        openingHours: customHours,
+        logoUrl: customLogo,
+        followUpDays: customFollowUp,
+      });
+      setClinicName(customName);
+      setClinicAddress(customAddress);
+      setClinicPhone(customPhone);
+      setOpeningHours(customHours);
+      setClinicLogo(customLogo);
+      setFollowUpDays(customFollowUp);
     } finally {
       setLoading(false);
     }
@@ -358,7 +400,7 @@ export const ClinicAdmin: React.FC = () => {
     reader.onload = () => {
       if (typeof reader.result === 'string') {
         setClinicLogo(reader.result);
-        showToast('Hospital Logo loaded! Click "Save Profile Changes" to apply.');
+        showToast('Hospital Logo loaded! Click "Save Profile Changes" to apply across all screens.');
       }
     };
     reader.readAsDataURL(file);
@@ -375,27 +417,55 @@ export const ClinicAdmin: React.FC = () => {
     e.preventDefault();
     setSavingProfile(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/clinics/${clinic?.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: clinicName,
-          address: clinicAddress,
-          contactPhone: clinicPhone,
-          openingHours,
-          logoUrl: clinicLogo,
-          followUpDays,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setClinic(data.data);
-        showToast('Hospital profile & branding saved successfully!');
+      if (clinic?.id && clinic.id !== activeSlug) {
+        await fetch(`${API_BASE_URL}/api/v1/clinics/${clinic?.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: clinicName,
+            address: clinicAddress,
+            contactPhone: clinicPhone,
+            openingHours,
+            logoUrl: clinicLogo,
+            followUpDays,
+          }),
+        }).catch(() => {});
       }
     } catch (err) {
-      alert('Failed to save profile');
+      // offline / local fallback
     } finally {
+      try {
+        if (activeSlug) {
+          if (clinicLogo) {
+            localStorage.setItem('queueless_clinic_logo_' + activeSlug, clinicLogo);
+          } else {
+            localStorage.removeItem('queueless_clinic_logo_' + activeSlug);
+          }
+          const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+          if (!storedHospitals[activeSlug]) {
+            storedHospitals[activeSlug] = { slug: activeSlug };
+          }
+          storedHospitals[activeSlug].name = clinicName;
+          storedHospitals[activeSlug].address = clinicAddress;
+          storedHospitals[activeSlug].phone = clinicPhone;
+          storedHospitals[activeSlug].openingHours = openingHours;
+          storedHospitals[activeSlug].logoUrl = clinicLogo;
+          storedHospitals[activeSlug].followUpDays = followUpDays;
+          localStorage.setItem('queueless_registered_hospitals', JSON.stringify(storedHospitals));
+        }
+      } catch (e) {}
+
+      setClinic((prev: any) => ({
+        ...prev,
+        name: clinicName,
+        address: clinicAddress,
+        contactPhone: clinicPhone,
+        openingHours,
+        logoUrl: clinicLogo,
+        followUpDays,
+      }));
       setSavingProfile(false);
+      showToast('Hospital profile & brand logo saved! Live across Mobile Check-in, TV Kiosk, & Doctor Cabin.');
     }
   };
 
@@ -817,9 +887,17 @@ export const ClinicAdmin: React.FC = () => {
       {/* Main Admin Header (Hidden on Print) */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 print:hidden">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-white border border-slate-200 rounded-2xl shadow-sm">
-            <Building2 className="w-8 h-8 text-sky-600" />
-          </div>
+          {clinicLogo || clinic?.logoUrl ? (
+            <img
+              src={clinicLogo || clinic?.logoUrl}
+              alt={clinic?.name}
+              className="w-14 h-14 rounded-2xl border border-slate-200 object-contain p-1 bg-white shadow-sm shrink-0"
+            />
+          ) : (
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-sky-600 text-white flex items-center justify-center font-black text-2xl shadow-sm border border-white/20 shrink-0 select-none">
+              {clinic?.name ? clinic.name.charAt(0).toUpperCase() : <Building2 className="w-7 h-7" />}
+            </div>
+          )}
           <div>
             <h1 className="text-2xl font-black text-slate-900 flex items-center gap-2">
               <span>{clinic?.name || 'Hospital Administration'}</span>

@@ -355,15 +355,20 @@ export const DoctorView: React.FC = () => {
       .then((res) => res.json())
       .then((data) => {
         let customHospitalName = 'City Health Multi-Specialty Hospital';
+        let customHospitalLogo = '';
         try {
           const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
           if (activeSlug && storedHospitals[activeSlug]) {
             customHospitalName = storedHospitals[activeSlug].name;
+            customHospitalLogo = storedHospitals[activeSlug].logoUrl || '';
           } else if (activeSlug && activeSlug !== 'city-health') {
             customHospitalName = activeSlug
               .split('-')
               .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
               .join(' ') + ' OPD';
+          }
+          if (!customHospitalLogo && activeSlug) {
+            customHospitalLogo = localStorage.getItem('queueless_clinic_logo_' + activeSlug) || '';
           }
         } catch (e) {}
 
@@ -378,6 +383,7 @@ export const DoctorView: React.FC = () => {
           setClinicData({
             ...data.data,
             name: data.data.name || customHospitalName,
+            logoUrl: data.data.logoUrl || customHospitalLogo,
           });
           setClinicId(data.data.id);
           if (data.data.doctors?.length > 0) {
@@ -388,6 +394,7 @@ export const DoctorView: React.FC = () => {
           setClinicData({
             id: activeSlug,
             name: customHospitalName,
+            logoUrl: customHospitalLogo,
             slug: activeSlug,
             doctors: fallbackDocs,
           });
@@ -397,15 +404,20 @@ export const DoctorView: React.FC = () => {
       })
       .catch(() => {
         let customHospitalName = 'City Health Multi-Specialty Hospital';
+        let customHospitalLogo = '';
         try {
           const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
           if (activeSlug && storedHospitals[activeSlug]) {
             customHospitalName = storedHospitals[activeSlug].name;
+            customHospitalLogo = storedHospitals[activeSlug].logoUrl || '';
           } else if (activeSlug && activeSlug !== 'city-health') {
             customHospitalName = activeSlug
               .split('-')
               .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
               .join(' ') + ' OPD';
+          }
+          if (!customHospitalLogo && activeSlug) {
+            customHospitalLogo = localStorage.getItem('queueless_clinic_logo_' + activeSlug) || '';
           }
         } catch (e) {}
 
@@ -418,6 +430,7 @@ export const DoctorView: React.FC = () => {
         setClinicData({
           id: activeSlug,
           name: customHospitalName,
+          logoUrl: customHospitalLogo,
           slug: activeSlug,
           doctors: fallbackDocs,
         });
@@ -898,9 +911,17 @@ export const DoctorView: React.FC = () => {
       {/* Header with Doctor Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200/90 shadow-sm mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-sky-50 text-sky-600 rounded-2xl">
-            <Stethoscope className="w-6 h-6" />
-          </div>
+          {clinicData?.logoUrl ? (
+            <img
+              src={clinicData.logoUrl}
+              alt={clinicData.name}
+              className="w-12 h-12 rounded-2xl border border-slate-200 object-contain p-1 bg-white shadow-2xs shrink-0"
+            />
+          ) : (
+            <div className="p-3 bg-sky-50 text-sky-600 rounded-2xl shrink-0">
+              <Stethoscope className="w-6 h-6" />
+            </div>
+          )}
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-black text-slate-900 tracking-tight">

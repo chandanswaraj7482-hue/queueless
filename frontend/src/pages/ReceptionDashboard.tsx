@@ -101,10 +101,16 @@ export const ReceptionDashboard: React.FC = () => {
       if (activeSlug && storedHospitals[activeSlug]) {
         return storedHospitals[activeSlug].name;
       } else if (activeSlug && activeSlug !== 'city-health') {
-        return activeSlug
+        const cleanWords = activeSlug
           .split('-')
-          .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(' ') + ' OPD';
+          .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+          .join(' ');
+        return cleanWords.toLowerCase().endsWith('opd') ||
+          cleanWords.toLowerCase().endsWith('clinic') ||
+          cleanWords.toLowerCase().endsWith('hospital') ||
+          cleanWords.toLowerCase().endsWith('center')
+          ? cleanWords
+          : cleanWords + ' OPD';
       }
     } catch (e) {}
     return 'City Health Clinic';

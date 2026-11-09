@@ -216,10 +216,16 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               customAddress = storedHospitals[clinicSlug].address || customAddress;
               customLogo = storedHospitals[clinicSlug].logoUrl || '';
             } else if (clinicSlug && clinicSlug !== 'city-health') {
-              customName = clinicSlug
+              const cleanWords = clinicSlug
                 .split('-')
-                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                .join(' ') + ' OPD';
+                .map((w) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+                .join(' ');
+              customName = cleanWords.toLowerCase().endsWith('opd') ||
+                cleanWords.toLowerCase().endsWith('clinic') ||
+                cleanWords.toLowerCase().endsWith('hospital') ||
+                cleanWords.toLowerCase().endsWith('center')
+                ? cleanWords
+                : cleanWords + ' OPD';
             }
             if (!customLogo && clinicSlug) {
               customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';

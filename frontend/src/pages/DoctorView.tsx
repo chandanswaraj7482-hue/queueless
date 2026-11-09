@@ -362,10 +362,16 @@ export const DoctorView: React.FC = () => {
             customHospitalName = storedHospitals[activeSlug].name;
             customHospitalLogo = storedHospitals[activeSlug].logoUrl || '';
           } else if (activeSlug && activeSlug !== 'city-health') {
-            customHospitalName = activeSlug
+            const cleanWords = activeSlug
               .split('-')
-              .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-              .join(' ') + ' OPD';
+              .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+              .join(' ');
+            customHospitalName = cleanWords.toLowerCase().endsWith('opd') ||
+              cleanWords.toLowerCase().endsWith('clinic') ||
+              cleanWords.toLowerCase().endsWith('hospital') ||
+              cleanWords.toLowerCase().endsWith('center')
+              ? cleanWords
+              : cleanWords + ' OPD';
           }
           if (!customHospitalLogo && activeSlug) {
             customHospitalLogo = localStorage.getItem('queueless_clinic_logo_' + activeSlug) || '';
@@ -411,10 +417,16 @@ export const DoctorView: React.FC = () => {
             customHospitalName = storedHospitals[activeSlug].name;
             customHospitalLogo = storedHospitals[activeSlug].logoUrl || '';
           } else if (activeSlug && activeSlug !== 'city-health') {
-            customHospitalName = activeSlug
+            const cleanWords = activeSlug
               .split('-')
-              .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-              .join(' ') + ' OPD';
+              .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+              .join(' ');
+            customHospitalName = cleanWords.toLowerCase().endsWith('opd') ||
+              cleanWords.toLowerCase().endsWith('clinic') ||
+              cleanWords.toLowerCase().endsWith('hospital') ||
+              cleanWords.toLowerCase().endsWith('center')
+              ? cleanWords
+              : cleanWords + ' OPD';
           }
           if (!customHospitalLogo && activeSlug) {
             customHospitalLogo = localStorage.getItem('queueless_clinic_logo_' + activeSlug) || '';

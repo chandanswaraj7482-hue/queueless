@@ -110,10 +110,16 @@ export const DisplayKiosk: React.FC = () => {
             fallbackAddress = storedHospitals[clinicId].address || fallbackAddress;
             fallbackLogo = storedHospitals[clinicId].logoUrl || '';
           } else if (clinicId && clinicId !== 'city-health') {
-            fallbackName = clinicId
+            const cleanWords = clinicId
               .split('-')
-              .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-              .join(' ') + ' OPD';
+              .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+              .join(' ');
+            fallbackName = cleanWords.toLowerCase().endsWith('opd') ||
+              cleanWords.toLowerCase().endsWith('clinic') ||
+              cleanWords.toLowerCase().endsWith('hospital') ||
+              cleanWords.toLowerCase().endsWith('center')
+              ? cleanWords
+              : cleanWords + ' OPD';
           }
           if (!fallbackLogo && clinicId) {
             fallbackLogo = localStorage.getItem('queueless_clinic_logo_' + clinicId) || '';
@@ -171,10 +177,16 @@ export const DisplayKiosk: React.FC = () => {
             fallbackName = storedHospitals[clinicId].name;
             fallbackAddress = storedHospitals[clinicId].address || fallbackAddress;
           } else if (clinicId && clinicId !== 'city-health') {
-            fallbackName = clinicId
+            const cleanWords = clinicId
               .split('-')
-              .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-              .join(' ') + ' OPD';
+              .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+              .join(' ');
+            fallbackName = cleanWords.toLowerCase().endsWith('opd') ||
+              cleanWords.toLowerCase().endsWith('clinic') ||
+              cleanWords.toLowerCase().endsWith('hospital') ||
+              cleanWords.toLowerCase().endsWith('center')
+              ? cleanWords
+              : cleanWords + ' OPD';
           }
         } catch (e) {}
 

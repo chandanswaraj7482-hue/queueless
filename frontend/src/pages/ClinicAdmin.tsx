@@ -303,10 +303,16 @@ export const ClinicAdmin: React.FC = () => {
   const qrRef = useRef<HTMLDivElement>(null);
 
   const fetchClinicData = async () => {
-    let customName = activeSlug
+    const cleanWords = activeSlug
       .split('-')
-      .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(' ') + ' OPD';
+      .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+      .join(' ');
+    let customName = cleanWords.toLowerCase().endsWith('opd') ||
+      cleanWords.toLowerCase().endsWith('clinic') ||
+      cleanWords.toLowerCase().endsWith('hospital') ||
+      cleanWords.toLowerCase().endsWith('center')
+      ? cleanWords
+      : cleanWords + ' OPD';
     let customAddress = 'Suite 402, Metro Healthcare Towers, MG Road';
     let customPhone = '+91 98765 43210';
     let customHours = '08:30 AM - 08:30 PM';

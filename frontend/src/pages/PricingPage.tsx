@@ -71,32 +71,59 @@ export const PricingPage: React.FC = () => {
               Eliminate paper tokens and lobby crowding with predictable, credit-based plans matched to your OPD patient footfall. Includes instant pay-as-you-grow token refills for seasonal surges.
             </p>
 
-            {/* Billing Cycle Toggle */}
-            <div className="pt-6 flex items-center justify-center gap-3">
-              <span className={`text-xs font-bold ${billingCycle === 'MONTHLY' ? 'text-slate-900 dark:text-white font-black' : 'text-slate-500 dark:text-slate-400'}`}>
-                Monthly Billing
-              </span>
-              <button
-                type="button"
-                onClick={() => setBillingCycle(billingCycle === 'MONTHLY' ? 'ANNUAL' : 'MONTHLY')}
-                className="relative inline-flex h-7 w-14 items-center rounded-full bg-blue-600 transition-colors focus:outline-none p-1 cursor-pointer shadow-inner"
-                role="switch"
-                aria-checked={billingCycle === 'ANNUAL'}
-              >
-                <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform ${
-                    billingCycle === 'ANNUAL' ? 'translate-x-7' : 'translate-x-0'
+            {/* High-Conversion Interactive Billing Cycle Segmented Control */}
+            <div className="pt-6 flex flex-col items-center justify-center gap-2.5">
+              <div className="p-1 rounded-full bg-slate-200/80 dark:bg-slate-800/80 border border-slate-300/80 dark:border-slate-700/80 backdrop-blur-md inline-flex items-center shadow-inner">
+                {/* Monthly Button */}
+                <button
+                  type="button"
+                  onClick={() => setBillingCycle('MONTHLY')}
+                  className={`px-5 py-2 sm:px-6 sm:py-2.5 rounded-full text-xs font-black transition-all cursor-pointer ${
+                    billingCycle === 'MONTHLY'
+                      ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-cyan-400 shadow-md scale-100 ring-1 ring-slate-900/5 dark:ring-white/10'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
-                />
-              </button>
-              <div className="flex items-center gap-2">
-                <span className={`text-xs font-bold ${billingCycle === 'ANNUAL' ? 'text-slate-900 dark:text-white font-black' : 'text-slate-500 dark:text-slate-400'}`}>
-                  Annual Billing
-                </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 font-extrabold text-[10px] tracking-wide uppercase border border-emerald-300 dark:border-emerald-700">
-                  Save ~17% (Annual Plan)
-                </span>
+                >
+                  Monthly Billing
+                </button>
+
+                {/* Annual Button with Savings Pill */}
+                <button
+                  type="button"
+                  onClick={() => setBillingCycle('ANNUAL')}
+                  className={`px-5 py-2 sm:px-6 sm:py-2.5 rounded-full text-xs font-black transition-all cursor-pointer flex items-center gap-2 ${
+                    billingCycle === 'ANNUAL'
+                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 scale-100'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <span>Annual Billing</span>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider transition-colors ${
+                      billingCycle === 'ANNUAL'
+                        ? 'bg-emerald-400 text-slate-950 shadow-2xs'
+                        : 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
+                    }`}
+                  >
+                    Save ~17% (2 Mo Free)
+                  </span>
+                </button>
               </div>
+
+              {/* Real-time Dynamic Feedback Hint */}
+              <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 animate-in fade-in duration-200">
+                {billingCycle === 'ANNUAL' ? (
+                  <>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Annual discount applied: Pay for 10 months, get 12 months full service.</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    <span>Flexible month-to-month billing with zero lock-in or cancellation penalties.</span>
+                  </>
+                )}
+              </p>
             </div>
           </div>
         </section>

@@ -188,15 +188,57 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
           const activeServices = data.data.services?.filter((s: any) => s.active !== false) || [];
           if (activeServices.length > 0) setServiceId(activeServices[0].id);
         } else {
-          setClinic(DEFAULT_CLINIC_DATA);
-          setDoctorId(DEFAULT_CLINIC_DATA.doctors[0].id);
-          setServiceId(DEFAULT_CLINIC_DATA.services[0].id);
+          let customName = DEFAULT_CLINIC_DATA.name;
+          let customAddress = DEFAULT_CLINIC_DATA.address;
+          try {
+            const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+            if (clinicSlug && storedHospitals[clinicSlug]) {
+              customName = storedHospitals[clinicSlug].name;
+              customAddress = storedHospitals[clinicSlug].address || customAddress;
+            } else if (clinicSlug && clinicSlug !== 'city-health') {
+              customName = clinicSlug
+                .split('-')
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(' ') + ' OPD';
+            }
+          } catch (e) {}
+
+          const activeClinic = {
+            ...DEFAULT_CLINIC_DATA,
+            name: customName,
+            address: customAddress,
+            slug: clinicSlug || 'city-health',
+          };
+          setClinic(activeClinic);
+          setDoctorId(activeClinic.doctors[0].id);
+          setServiceId(activeClinic.services[0].id);
         }
       })
       .catch(() => {
-        setClinic(DEFAULT_CLINIC_DATA);
-        setDoctorId(DEFAULT_CLINIC_DATA.doctors[0].id);
-        setServiceId(DEFAULT_CLINIC_DATA.services[0].id);
+        let customName = DEFAULT_CLINIC_DATA.name;
+        let customAddress = DEFAULT_CLINIC_DATA.address;
+        try {
+          const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+          if (clinicSlug && storedHospitals[clinicSlug]) {
+            customName = storedHospitals[clinicSlug].name;
+            customAddress = storedHospitals[clinicSlug].address || customAddress;
+          } else if (clinicSlug && clinicSlug !== 'city-health') {
+            customName = clinicSlug
+              .split('-')
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ') + ' OPD';
+          }
+        } catch (e) {}
+
+        const activeClinic = {
+          ...DEFAULT_CLINIC_DATA,
+          name: customName,
+          address: customAddress,
+          slug: clinicSlug || 'city-health',
+        };
+        setClinic(activeClinic);
+        setDoctorId(activeClinic.doctors[0].id);
+        setServiceId(activeClinic.services[0].id);
       })
       .finally(() => setLoading(false));
   }, [clinicSlug]);

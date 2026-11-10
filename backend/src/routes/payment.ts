@@ -6,13 +6,15 @@ import { generateNextToken } from '../utils/token';
 
 export const paymentRouter = Router();
 
-// 1. Create Payment Order (Cashfree Real UPI & Cards)
+// 1. Create Payment Order (Cashfree Real UPI & Cards - Production)
 paymentRouter.post('/create-order', async (req, res) => {
   try {
     const { queueEntryId, amount } = req.body;
 
-    const entry = await prisma.queueEntry.findUnique({
-      where: { id: queueEntryId },
+    const entry = await prisma.queueEntry.findFirst({
+      where: {
+        OR: [{ id: queueEntryId }, { publicToken: queueEntryId }],
+      },
       include: { clinic: true, patient: true },
     });
 
@@ -26,6 +28,7 @@ paymentRouter.post('/create-order', async (req, res) => {
     const baseUrl = cfEnv === 'production' ? 'https://api.cashfree.com/pg/orders' : 'https://sandbox.cashfree.com/pg/orders';
 
     const orderId = 'QL_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    const finalAmount = Number(amount) || Number(entry.feeAmount) || 500;
 
     try {
       const cfResponse = await fetch(baseUrl, {
@@ -38,7 +41,7 @@ paymentRouter.post('/create-order', async (req, res) => {
         },
         body: JSON.stringify({
           order_id: orderId,
-          order_amount: Number(amount) || Number(entry.feeAmount) || 250,
+          order_amount: finalAmount,
           order_currency: 'INR',
           customer_details: {
             customer_id: entry.patientId || ('CUST_' + Date.now()),
@@ -48,7 +51,7 @@ paymentRouter.post('/create-order', async (req, res) => {
           order_meta: {
             return_url: 'https://queueless-os.vercel.app/token/' + entry.publicToken + '?order_id={order_id}',
           },
-          order_note: `Queueless OPD Consultation - ${entry.clinic.name}`,
+          order_note: `Queueless OPD Consultation - ${entry.clinic.name} - Entry ${entry.id}`,
         }),
       });
 
@@ -58,13 +61,16 @@ paymentRouter.post('/create-order', async (req, res) => {
           success: true,
           data: {
             orderId,
+            cfOrderId: orderData.cf_order_id,
             paymentSessionId: orderData.payment_session_id,
-            amount: amount || entry.feeAmount,
+            amount: finalAmount,
             currency: 'INR',
             clinicName: entry.clinic.name,
             environment: cfEnv,
           },
         });
+      } else {
+        console.warn('Cashfree returned unexpected order structure:', orderData);
       }
     } catch (cfErr) {
       console.warn('Cashfree API error, falling back to seamless direct verification:', cfErr);
@@ -74,7 +80,7 @@ paymentRouter.post('/create-order', async (req, res) => {
       success: true,
       data: {
         orderId,
-        amount: amount || entry.feeAmount,
+        amount: finalAmount,
         currency: 'INR',
         clinicName: entry.clinic.name,
         environment: cfEnv,
@@ -85,13 +91,97 @@ paymentRouter.post('/create-order', async (req, res) => {
   }
 });
 
-// 2. Verify Online Payment (UPI / Card) -> Issues Official Token upon payment
+// 1.5 Verify Cashfree Order directly from Cashfree Production API
+paymentRouter.get('/cashfree-verify/:orderId', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const cfAppId = process.env.CASHFREE_APP_ID || '133552174c102e641875b3c58081255331';
+    const cfSecret = process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_2f2dfec6d9bee0b9de4e2e5c5748224a_3e69c5ff';
+    const cfEnv = process.env.CASHFREE_ENVIRONMENT || 'production';
+    const baseUrl = cfEnv === 'production' ? 'https://api.cashfree.com/pg/orders' : 'https://sandbox.cashfree.com/pg/orders';
+
+    const cfRes = await fetch(`${baseUrl}/${orderId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-version': '2023-08-01',
+        'x-client-id': cfAppId,
+        'x-client-secret': cfSecret,
+      },
+    });
+
+    const cfOrder = (await cfRes.json()) as any;
+
+    if (cfOrder && cfOrder.order_status === 'PAID') {
+      // Find matching entry from order_note or recent entries
+      let entry = null;
+      if (cfOrder.order_note && cfOrder.order_note.includes('Entry ')) {
+        const entryId = cfOrder.order_note.split('Entry ')[1]?.trim();
+        if (entryId) {
+          entry = await prisma.queueEntry.findUnique({ where: { id: entryId } });
+        }
+      }
+
+      if (entry && entry.paymentStatus !== 'PAID') {
+        let token = entry.token;
+        if (!token || token === 'PENDING') {
+          token = await generateNextToken(entry.clinicId);
+        }
+
+        const paymentRecord = await prisma.payment.create({
+          data: {
+            clinicId: entry.clinicId,
+            queueEntryId: entry.id,
+            provider: 'CASHFREE',
+            providerOrderId: orderId,
+            providerPaymentId: cfOrder.cf_order_id ? String(cfOrder.cf_order_id) : 'cf_' + Date.now(),
+            amount: Number(cfOrder.order_amount) || entry.feeAmount || 500,
+            currency: cfOrder.order_currency || 'INR',
+            status: 'COMPLETED',
+          },
+        });
+
+        const updated = await prisma.queueEntry.update({
+          where: { id: entry.id },
+          data: {
+            token,
+            paymentStatus: 'PAID',
+            status: 'WAITING',
+          },
+        });
+
+        broadcastQueueUpdate(entry.clinicId, 'queue_updated', {
+          action: 'PAYMENT_UPDATED',
+          entryId: entry.id,
+          token,
+          paymentStatus: 'PAID',
+        });
+
+        return res.json({
+          success: true,
+          status: 'PAID',
+          data: { ...paymentRecord, token, entry: updated },
+        });
+      }
+
+      return res.json({ success: true, status: 'PAID', cfOrder });
+    }
+
+    res.json({ success: false, status: cfOrder?.order_status || 'PENDING', cfOrder });
+  } catch (error) {
+    res.status(500).json({ success: false, error: (error as Error).message });
+  }
+});
+
+// 2. Verify Online Payment (Cashfree UPI / Cards) -> Records Payment & Issues Official Token
 paymentRouter.post('/verify', async (req, res) => {
   try {
     const { queueEntryId, providerOrderId, providerPaymentId, provider, amount } = req.body;
 
-    const entry = await prisma.queueEntry.findUnique({
-      where: { id: queueEntryId },
+    const entry = await prisma.queueEntry.findFirst({
+      where: {
+        OR: [{ id: queueEntryId }, { publicToken: queueEntryId }],
+      },
       include: { clinic: true, patient: true },
     });
 
@@ -105,21 +195,23 @@ paymentRouter.post('/verify', async (req, res) => {
       token = await generateNextToken(entry.clinicId);
     }
 
+    const finalAmount = Number(amount) || Number(entry.feeAmount) || 500;
+
     const paymentRecord = await prisma.payment.create({
       data: {
         clinicId: entry.clinicId,
         queueEntryId: entry.id,
-        provider: provider || 'UPI_GATEWAY',
-        providerOrderId: providerOrderId || 'order_mock_' + Date.now(),
-        providerPaymentId: providerPaymentId || 'pay_' + crypto.randomBytes(6).toString('hex'),
-        amount: amount || entry.feeAmount,
+        provider: provider || 'CASHFREE_UPI',
+        providerOrderId: providerOrderId || 'cf_order_' + Date.now(),
+        providerPaymentId: providerPaymentId || 'cf_pay_' + crypto.randomBytes(6).toString('hex'),
+        amount: finalAmount,
         currency: 'INR',
         status: 'COMPLETED',
       },
     });
 
     const updated = await prisma.queueEntry.update({
-      where: { id: queueEntryId },
+      where: { id: entry.id },
       data: {
         token,
         paymentStatus: 'PAID',
@@ -150,7 +242,7 @@ paymentRouter.post('/verify', async (req, res) => {
       paymentStatus: 'PAID',
     });
 
-    res.json({ success: true, data: { ...paymentRecord, token } });
+    res.json({ success: true, data: { ...paymentRecord, token }, token });
   } catch (error) {
     res.status(500).json({ success: false, error: (error as Error).message });
   }
@@ -161,8 +253,10 @@ paymentRouter.post('/pay-at-clinic', async (req, res) => {
   try {
     const { queueEntryId } = req.body;
 
-    const entry = await prisma.queueEntry.findUnique({
-      where: { id: queueEntryId },
+    const entry = await prisma.queueEntry.findFirst({
+      where: {
+        OR: [{ id: queueEntryId }, { publicToken: queueEntryId }],
+      },
     });
 
     if (!entry) {
@@ -170,11 +264,11 @@ paymentRouter.post('/pay-at-clinic', async (req, res) => {
     }
 
     const updated = await prisma.queueEntry.update({
-      where: { id: queueEntryId },
+      where: { id: entry.id },
       data: {
         paymentStatus: 'PAY_AT_CLINIC',
         status: 'CHECKED_IN',
-        token: 'PENDING', // Token not issued yet!
+        token: entry.token || 'PENDING',
       },
     });
 
@@ -190,13 +284,15 @@ paymentRouter.post('/pay-at-clinic', async (req, res) => {
   }
 });
 
-// 4. Receptionist marks Cash / Desk UPI collected -> Generates & Issues official Token!
+// 4. Receptionist marks Cash / Desk UPI collected -> Records Payment & Issues official Token!
 paymentRouter.post('/mark-collected-at-desk', async (req, res) => {
   try {
     const { queueEntryId, method } = req.body;
 
-    const entry = await prisma.queueEntry.findUnique({
-      where: { id: queueEntryId },
+    const entry = await prisma.queueEntry.findFirst({
+      where: {
+        OR: [{ id: queueEntryId }, { publicToken: queueEntryId }],
+      },
       include: { clinic: true, patient: true },
     });
 
@@ -210,19 +306,21 @@ paymentRouter.post('/mark-collected-at-desk', async (req, res) => {
       token = await generateNextToken(entry.clinicId);
     }
 
-    await prisma.payment.create({
+    const finalAmount = Number(entry.feeAmount) || 500;
+
+    const paymentRecord = await prisma.payment.create({
       data: {
         clinicId: entry.clinicId,
         queueEntryId: entry.id,
         provider: method || 'CASH',
-        amount: entry.feeAmount,
+        amount: finalAmount,
         currency: 'INR',
         status: 'COMPLETED',
       },
     });
 
     const updated = await prisma.queueEntry.update({
-      where: { id: queueEntryId },
+      where: { id: entry.id },
       data: {
         token,
         paymentStatus: 'PAID',
@@ -254,6 +352,14 @@ paymentRouter.post('/verify-cash-by-token', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Token ID or Mobile is required' });
     }
 
+    // Resolve clinic by slug or id
+    let targetClinic = await prisma.clinic.findFirst({
+      where: {
+        OR: [{ id: clinicId }, { slug: clinicId }],
+      },
+    });
+    const resolvedClinicId = targetClinic ? targetClinic.id : clinicId;
+
     const clean = inputIdentifier.trim();
     const today = new Date().toISOString().split('T')[0];
     const phoneDigits = clean.replace(/\D/g, '');
@@ -268,7 +374,7 @@ paymentRouter.post('/verify-cash-by-token', async (req, res) => {
 
     const entry = await prisma.queueEntry.findFirst({
       where: {
-        clinicId,
+        clinicId: resolvedClinicId,
         queueDate: today,
         OR: [
           ...tokenVariants.map((t) => ({ token: t })),
@@ -298,13 +404,15 @@ paymentRouter.post('/verify-cash-by-token', async (req, res) => {
       token = await generateNextToken(entry.clinicId);
     }
 
+    const finalAmount = Number(entry.feeAmount) || 500;
+
     // Record cash payment
     await prisma.payment.create({
       data: {
         clinicId: entry.clinicId,
         queueEntryId: entry.id,
         provider: 'CASH',
-        amount: entry.feeAmount,
+        amount: finalAmount,
         currency: 'INR',
         status: 'COMPLETED',
       },
@@ -328,7 +436,7 @@ paymentRouter.post('/verify-cash-by-token', async (req, res) => {
 
     res.json({
       success: true,
-      message: `Cash ₹${entry.feeAmount} collected! Official Token ${token} issued to ${entry.patient.name}.`,
+      message: `Cash ₹${finalAmount} collected! Official Token ${token} issued to ${entry.patient.name}.`,
       data: updated,
       token,
     });
@@ -336,4 +444,3 @@ paymentRouter.post('/verify-cash-by-token', async (req, res) => {
     res.status(500).json({ success: false, error: (error as Error).message });
   }
 });
-

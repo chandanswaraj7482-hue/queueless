@@ -525,7 +525,7 @@ export const ReceptionDashboard: React.FC = () => {
   // Mark payment collected at desk (Cash/Counter UPI) and issue official token
   const handleCollectCash = async (entryId: string, method = 'CASH') => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/clinics/auth/verify`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/payments/mark-collected-at-desk`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ queueEntryId: entryId, method }),
@@ -551,7 +551,7 @@ export const ReceptionDashboard: React.FC = () => {
     }
     setVerifyingCash(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/clinics/auth/verify`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/payments/verify-cash-by-token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

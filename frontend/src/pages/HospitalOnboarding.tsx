@@ -74,8 +74,8 @@ export const HospitalOnboarding: React.FC = () => {
   const [initialDoctorSpecialty, setInitialDoctorSpecialty] = useState('General Medicine');
   const [initialDoctorRoom, setInitialDoctorRoom] = useState('Cabin 1');
 
-  // Step 3: Payment Gateway (Simulated Test Mode, Dodo Payments, PayPal)
-  const [paymentGateway, setPaymentGateway] = useState<'TEST_MODE' | 'DODOPAYMENTS' | 'PAYPAL'>('TEST_MODE');
+  // Step 3: Payment Gateway (Cashfree Real Production, Simulated Test Mode, Dodo Payments, PayPal)
+  const [paymentGateway, setPaymentGateway] = useState<'CASHFREE' | 'TEST_MODE' | 'DODOPAYMENTS' | 'PAYPAL'>('CASHFREE');
   const [cardNumber, setCardNumber] = useState('4242 •••• •••• 4242');
   const [cardExpiry, setCardExpiry] = useState('12/28');
   const [cardCvc, setCardCvc] = useState('888');
@@ -747,7 +747,32 @@ export const HospitalOnboarding: React.FC = () => {
                   Select Payment Method:
                 </span>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
+                  {/* Cashfree Payments Production Tab */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPaymentGateway('CASHFREE');
+                      setPaymentCancelledNotice(null);
+                    }}
+                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${
+                      paymentGateway === 'CASHFREE'
+                        ? 'border-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/40 shadow-md ring-2 ring-emerald-500/10'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                        <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span>Cashfree</span>
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">LIVE</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
+                      UPI, Cards, Netbanking
+                    </span>
+                  </button>
+
                   {/* Test Mode Simulation Tab */}
                   <button
                     type="button"
@@ -755,7 +780,7 @@ export const HospitalOnboarding: React.FC = () => {
                       setPaymentGateway('TEST_MODE');
                       setPaymentCancelledNotice(null);
                     }}
-                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${
+                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${
                       paymentGateway === 'TEST_MODE'
                         ? 'border-blue-600 bg-blue-50/40 dark:bg-blue-950/40 shadow-md ring-2 ring-blue-500/10'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
@@ -769,11 +794,11 @@ export const HospitalOnboarding: React.FC = () => {
                       {paymentGateway === 'TEST_MODE' ? (
                         <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
                       ) : (
-                        <span className="px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[9px] font-bold">Recommended</span>
+                        <span className="px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[9px] font-bold">Sandbox</span>
                       )}
                     </div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 text-left">
-                      Instant Yes/No Simulation (No real card required)
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
+                      Instant Simulation
                     </span>
                   </button>
 
@@ -784,7 +809,7 @@ export const HospitalOnboarding: React.FC = () => {
                       setPaymentGateway('DODOPAYMENTS');
                       setPaymentCancelledNotice(null);
                     }}
-                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
+                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
                       paymentGateway === 'DODOPAYMENTS'
                         ? 'border-blue-600 bg-blue-50/40 dark:bg-blue-950/40 shadow-md ring-2 ring-blue-500/10'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
@@ -793,14 +818,14 @@ export const HospitalOnboarding: React.FC = () => {
                     <div className="flex items-center justify-between w-full">
                       <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
                         <CreditCard className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        <span>Dodo Payments</span>
+                        <span>Dodo</span>
                       </span>
                       {paymentGateway === 'DODOPAYMENTS' && (
                         <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
                       )}
                     </div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 text-left">
-                      Cards, UPI, RuPay & NetBanking
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
+                      Global Cards
                     </span>
                   </button>
 
@@ -811,7 +836,7 @@ export const HospitalOnboarding: React.FC = () => {
                       setPaymentGateway('PAYPAL');
                       setPaymentCancelledNotice(null);
                     }}
-                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
+                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
                       paymentGateway === 'PAYPAL'
                         ? 'border-blue-600 bg-blue-50/40 dark:bg-blue-950/40 shadow-md ring-2 ring-blue-500/10'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
@@ -821,14 +846,13 @@ export const HospitalOnboarding: React.FC = () => {
                       <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1">
                         <span className="text-[#003087] dark:text-[#387df5]">Pay</span>
                         <span className="text-[#0079C1] dark:text-[#52a6e6] -ml-1">Pal</span>
-                        <span className="text-slate-500 dark:text-slate-400 text-[10px] ml-1">Worldwide</span>
                       </span>
                       {paymentGateway === 'PAYPAL' && (
                         <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
                       )}
                     </div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 text-left">
-                      PayPal Balance or Linked Bank
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
+                      Worldwide USD
                     </span>
                   </button>
                 </div>
@@ -836,7 +860,22 @@ export const HospitalOnboarding: React.FC = () => {
 
               {/* Gateway-Specific Form */}
               <form onSubmit={handleInitiatePayment} className="space-y-4 pt-2">
-                {paymentGateway === 'TEST_MODE' ? (
+                {paymentGateway === 'CASHFREE' ? (
+                  <div className="p-5 bg-gradient-to-br from-emerald-50/80 to-teal-50/40 dark:from-emerald-950/40 dark:to-teal-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800 space-y-3">
+                    <div className="flex items-center justify-between text-xs font-bold text-slate-900 dark:text-white">
+                      <div className="flex items-center gap-2">
+                        <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span>Cashfree Production Gateway (Live Account)</span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-[10px] font-black uppercase border border-emerald-200 dark:border-emerald-800">
+                        256-Bit SSL Secured
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                      Instant settlement powered by your verified <strong>Cashfree Production Merchant Account</strong>. Supports Google Pay, PhonePe, Paytm, RuPay, Visa, Mastercard, and Indian NetBanking.
+                    </p>
+                  </div>
+                ) : paymentGateway === 'TEST_MODE' ? (
                   <div className="p-5 bg-gradient-to-br from-blue-50/80 to-indigo-50/40 dark:from-blue-950/40 dark:to-indigo-950/40 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-3">
                     <div className="flex items-center justify-between text-xs font-bold text-slate-900 dark:text-white">
                       <div className="flex items-center gap-2">

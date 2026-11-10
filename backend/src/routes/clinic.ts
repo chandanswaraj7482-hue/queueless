@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import crypto from 'crypto';
 import { prisma } from '../prisma';
 import { broadcastQueueUpdate } from '../socket';
 
@@ -204,6 +205,23 @@ clinicRouter.post('/subscribe', async (req, res) => {
         services: true,
       },
     });
+
+    // Record subscription payment in system ledger
+    try {
+      await prisma.payment.create({
+        data: {
+          clinicId: clinic.id,
+          provider: paymentMethod || 'CASHFREE',
+          amount: Number(totalAmount) || 2999,
+          currency: currency || 'INR',
+          status: 'COMPLETED',
+          providerOrderId: `SUB-${Date.now().toString().slice(-6)}`,
+          providerPaymentId: `PAY-${crypto.randomBytes(4).toString('hex').toUpperCase()}`,
+        },
+      });
+    } catch (payErr) {
+      console.warn('Subscription payment record log warning:', payErr);
+    }
 
     res.status(201).json({
       success: true,

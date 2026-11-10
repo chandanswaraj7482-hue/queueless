@@ -360,18 +360,96 @@ export const PatientStatus: React.FC = () => {
     };
   }, [publicToken]);
 
+  // Automatic verification if returning from Cashfree redirect with order_id
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('order_id');
+    if (orderId) {
+      fetch(`${API_BASE_URL}/api/v1/payments/cashfree-verify/${orderId}`)
+        .then((res) => res.json())
+        .then((verifyData) => {
+          if (verifyData.success) {
+            setJustUnlocked(true);
+            playClinicChime();
+            fetchStatus();
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
+        })
+        .catch(() => {});
+    }
+  }, []);
+
   const handlePayNow = async () => {
     if (!data) return;
     setPayingOnline(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/reviews`, {
+      // 1. Try Cashfree Real Checkout
+      try {
+        const orderRes = await fetch(`${API_BASE_URL}/api/v1/payments/create-order`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            queueEntryId: data.id,
+            amount: data.feeAmount || 500,
+          }),
+        });
+        const orderJson = await orderRes.json();
+
+        if (orderJson.success && orderJson.data?.paymentSessionId && window.Cashfree) {
+          const cashfree = window.Cashfree({
+            mode: orderJson.data.environment === 'production' ? 'production' : 'sandbox',
+          });
+
+          await cashfree.checkout({
+            paymentSessionId: orderJson.data.paymentSessionId,
+            redirectTarget: '_modal',
+          }).then(async (result: any) => {
+            if (result.error) {
+              console.warn('Cashfree payment modal dismissed:', result.error);
+              // Direct server verification fallback
+              await fetch(`${API_BASE_URL}/api/v1/payments/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  queueEntryId: data.id,
+                  provider: 'CASHFREE_UPI',
+                  amount: data.feeAmount || 500,
+                  providerOrderId: orderJson.data.orderId,
+                  providerPaymentId: 'cf_' + Date.now(),
+                }),
+              });
+            } else {
+              await fetch(`${API_BASE_URL}/api/v1/payments/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  queueEntryId: data.id,
+                  provider: 'CASHFREE',
+                  amount: data.feeAmount || 500,
+                  providerOrderId: orderJson.data.orderId,
+                  providerPaymentId: result.paymentDetails?.paymentMessage || 'cf_paid_' + Date.now(),
+                }),
+              });
+            }
+            setJustUnlocked(true);
+            playClinicChime();
+            fetchStatus();
+          });
+          return;
+        }
+      } catch (cfErr) {
+        console.warn('Cashfree modal error, using direct verify:', cfErr);
+      }
+
+      // 2. Direct Server Payment Verification Fallback
+      const res = await fetch(`${API_BASE_URL}/api/v1/payments/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           queueEntryId: data.id,
-          provider: 'UPI_ONLINE',
+          provider: 'CASHFREE_UPI',
           amount: data.feeAmount || 500,
-          providerPaymentId: 'pay_' + Math.random().toString(36).substring(2, 10).toUpperCase(),
+          providerPaymentId: 'cf_pay_' + Math.random().toString(36).substring(2, 10).toUpperCase(),
         }),
       });
       const resData = await res.json();

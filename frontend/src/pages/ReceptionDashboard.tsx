@@ -157,7 +157,7 @@ export const ReceptionDashboard: React.FC = () => {
         setIsAuthenticated(true);
         setReceptionPasswordInput('');
       } else {
-        setLoginError('Incorrect password. Default: reception123');
+        setLoginError('Incorrect password. Please contact your hospital administrator.');
       }
     } finally {
       setLoggingIn(false);
@@ -731,21 +731,6 @@ export const ReceptionDashboard: React.FC = () => {
               <span>{loggingIn ? 'Authenticating...' : 'Unlock Reception Desk'}</span>
             </button>
           </form>
-
-          <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400">
-            <span>Default Password:</span>
-            <button
-              type="button"
-              onClick={() => {
-                setReceptionPasswordInput('reception123');
-                submitReceptionLogin('reception123');
-              }}
-              className="font-mono font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded transition-all cursor-pointer"
-              title="Click to autofill & login"
-            >
-              reception123 (Tap to Fill)
-            </button>
-          </div>
         </div>
       </div>
     );

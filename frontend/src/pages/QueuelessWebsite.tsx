@@ -3746,7 +3746,7 @@ export const QueuelessWebsite: React.FC = () => {
                       <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Set Hospital Admin Password</label>
                       <input
                         type="password"
-                        placeholder="admin123"
+                        placeholder="••••••••"
                         value={adminPassword}
                         onChange={(e) => setAdminPassword(e.target.value)}
                         className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white dark:focus:bg-slate-900"

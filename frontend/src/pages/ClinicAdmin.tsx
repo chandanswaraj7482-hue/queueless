@@ -2209,7 +2209,7 @@ export const ClinicAdmin: React.FC = () => {
                       <div className="sm:col-span-3">
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">4-Digit PIN</label>
                         <input
-                          type="text"
+                          type={showSecPasswords[doc.doctorId] ? 'text' : 'password'}
                           maxLength={6}
                           value={doc.pin}
                           onChange={(e) => {
@@ -2217,7 +2217,7 @@ export const ClinicAdmin: React.FC = () => {
                             updated[idx].pin = e.target.value;
                             setSecDoctorPasswords(updated);
                           }}
-                          placeholder="PIN e.g. 1234"
+                          placeholder="••••"
                           className="w-full px-3 py-1.5 text-xs font-mono font-bold rounded-lg border border-slate-200 bg-slate-50 text-center tracking-widest focus:outline-none focus:ring-1 focus:ring-sky-500"
                         />
                       </div>

@@ -1747,8 +1747,8 @@ export const FounderDashboard: React.FC = () => {
               <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80">
                 <span className="text-[10px] font-black uppercase tracking-wider text-amber-800">Platform Master Admin</span>
                 <div className="text-sm font-black text-slate-900 mt-1">Queueless SuperAdmin</div>
-                <div className="mt-2 text-xs font-mono font-bold text-amber-900 bg-white px-2.5 py-1.5 rounded-xl border border-amber-200 inline-block">
-                  founder123
+                <div className="mt-2 text-xs font-mono font-bold text-amber-900 bg-white px-2.5 py-1.5 rounded-xl border border-amber-200 inline-block tracking-widest">
+                  ••••••••
                 </div>
                 <p className="text-[10px] text-amber-700 mt-1">Full platform telemetry & multi-clinic management</p>
               </div>
@@ -1756,8 +1756,8 @@ export const FounderDashboard: React.FC = () => {
               <div className="p-4 rounded-2xl bg-sky-50/60 border border-sky-200/80">
                 <span className="text-[10px] font-black uppercase tracking-wider text-sky-800">Hospital Staff Admin</span>
                 <div className="text-sm font-black text-slate-900 mt-1">Hospital Admin (/admin)</div>
-                <div className="mt-2 text-xs font-mono font-bold text-sky-900 bg-white px-2.5 py-1.5 rounded-xl border border-sky-200 inline-block">
-                  admin123
+                <div className="mt-2 text-xs font-mono font-bold text-sky-900 bg-white px-2.5 py-1.5 rounded-xl border border-sky-200 inline-block tracking-widest">
+                  ••••••••
                 </div>
                 <p className="text-[10px] text-sky-700 mt-1">Clinic doctors, cabins, cash counters & rules</p>
               </div>
@@ -1765,8 +1765,8 @@ export const FounderDashboard: React.FC = () => {
               <div className="p-4 rounded-2xl bg-teal-50/60 border border-teal-200/80">
                 <span className="text-[10px] font-black uppercase tracking-wider text-teal-800">Frontdesk Staff</span>
                 <div className="text-sm font-black text-slate-900 mt-1">Reception Dashboard</div>
-                <div className="mt-2 text-xs font-mono font-bold text-teal-900 bg-white px-2.5 py-1.5 rounded-xl border border-teal-200 inline-block">
-                  reception123
+                <div className="mt-2 text-xs font-mono font-bold text-teal-900 bg-white px-2.5 py-1.5 rounded-xl border border-teal-200 inline-block tracking-widest">
+                  ••••••••
                 </div>
                 <p className="text-[10px] text-teal-700 mt-1">Patient queue admission & physical fee approvals</p>
               </div>
@@ -1774,8 +1774,8 @@ export const FounderDashboard: React.FC = () => {
               <div className="p-4 rounded-2xl bg-purple-50/60 border border-purple-200/80">
                 <span className="text-[10px] font-black uppercase tracking-wider text-purple-800">Doctor Quick Login</span>
                 <div className="text-sm font-black text-slate-900 mt-1">Doctor OPD Cabin</div>
-                <div className="mt-2 text-xs font-mono font-bold text-purple-900 bg-white px-2.5 py-1.5 rounded-xl border border-purple-200 inline-block">
-                  PIN: 1234
+                <div className="mt-2 text-xs font-mono font-bold text-purple-900 bg-white px-2.5 py-1.5 rounded-xl border border-purple-200 inline-block tracking-widest">
+                  ••••
                 </div>
                 <p className="text-[10px] text-purple-700 mt-1">One-tap cabin call next & consultation complete</p>
               </div>
@@ -2441,15 +2441,14 @@ export const FounderDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Default Access Passwords */}
+            {/* Security Verification Notice */}
             <div className="mt-4 p-3 bg-slate-900 text-white rounded-2xl text-xs flex flex-wrap items-center justify-between gap-2">
-              <span className="text-slate-400 font-bold">Standard Role Passwords:</span>
-              <div className="flex items-center gap-3 font-mono text-[11px]">
-                <span>Admin: <strong className="text-amber-400">admin123</strong></span>
-                <span>•</span>
-                <span>Reception: <strong className="text-teal-400">reception123</strong></span>
-                <span>•</span>
-                <span>Doctor PIN: <strong className="text-purple-400">1234</strong></span>
+              <span className="text-slate-400 font-bold">Encrypted Credentials:</span>
+              <div className="flex items-center gap-3 font-mono text-[11px] text-emerald-400">
+                <span className="flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Hospital Master Keys Provisioned & Encrypted</span>
+                </span>
               </div>
             </div>
 

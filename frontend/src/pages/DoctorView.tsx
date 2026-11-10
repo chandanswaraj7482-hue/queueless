@@ -871,7 +871,7 @@ export const DoctorView: React.FC = () => {
                   type={showLoginPassword ? 'text' : 'password'}
                   value={doctorPasswordInput}
                   onChange={(e) => setDoctorPasswordInput(e.target.value)}
-                  placeholder="e.g. PIN 1234 or doctor123"
+                  placeholder="Enter your 4-digit PIN or password"
                   autoFocus
                   className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-xs font-mono font-bold text-slate-900 pr-10 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
                 />
@@ -894,35 +894,6 @@ export const DoctorView: React.FC = () => {
               <span>{loggingIn ? 'Verifying PIN...' : 'Unlock Doctor OPD Console'}</span>
             </button>
           </form>
-
-          <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400">
-            <span>Default:</span>
-            <button
-              type="button"
-              onClick={() => {
-                const docId = loginDoctorId || selectedDoctorId || (doctors.length > 0 ? doctors[0].id : '');
-                setDoctorPasswordInput('1234');
-                submitDoctorLogin(docId, '1234');
-              }}
-              className="font-mono font-bold text-sky-800 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-2 py-0.5 rounded cursor-pointer transition-all"
-              title="Click to autofill PIN 1234 & login"
-            >
-              PIN: 1234
-            </button>
-            <span className="text-slate-300">•</span>
-            <button
-              type="button"
-              onClick={() => {
-                const docId = loginDoctorId || selectedDoctorId || (doctors.length > 0 ? doctors[0].id : '');
-                setDoctorPasswordInput('doctor123');
-                submitDoctorLogin(docId, 'doctor123');
-              }}
-              className="font-mono font-bold text-sky-800 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-2 py-0.5 rounded cursor-pointer transition-all"
-              title="Click to autofill doctor123 & login"
-            >
-              doctor123
-            </button>
-          </div>
         </div>
       </div>
     );

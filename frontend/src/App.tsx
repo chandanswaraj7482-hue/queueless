@@ -21,6 +21,7 @@ import { SecurityPolicy } from './pages/SecurityPolicy';
 import { RefundPolicy } from './pages/RefundPolicy';
 import { API_BASE_URL } from './config/api';
 import { PrescriptionView } from './pages/PrescriptionView';
+import { ScrollToTop } from './components/ScrollToTop';
 import {
   Users,
   Stethoscope,
@@ -317,6 +318,7 @@ function Navigation() {
 export function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="min-h-screen bg-slate-50/60 dark:bg-slate-950 flex flex-col font-sans transition-colors duration-200">
         <Navigation />
         <main className="flex-1">

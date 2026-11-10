@@ -130,7 +130,7 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
     const isFutureDate = targetDate > today;
 
     // Every patient receives an official Token Number right away (e.g. A-116).
-    const token = await generateNextToken(clinicId);
+    const token = await generateNextToken(clinic.id);
     let initialStatus = isFutureDate ? 'BOOKED' : 'CHECKED_IN';
     if (paymentStatus === 'FREE_FOLLOW_UP') {
       initialStatus = isFutureDate ? 'BOOKED' : 'WAITING';
@@ -142,7 +142,7 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
 
     const queueEntry = await prisma.queueEntry.create({
       data: {
-        clinicId,
+        clinicId: clinic.id,
         patientId: patient.id,
         doctorId: doctorId || null,
         serviceId: serviceId || null,
@@ -174,7 +174,7 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
     });
 
     // Broadcast realtime update to clinic staff and screens
-    broadcastQueueUpdate(clinicId, 'queue_updated', {
+    broadcastQueueUpdate(clinic.id, 'queue_updated', {
       action: 'NEW_CHECK_IN',
       token: queueEntry.token,
     });

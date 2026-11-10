@@ -40,7 +40,12 @@ app.get('/health', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5001;
-server.listen(PORT, () => {
-  console.log(`🚀 Queueless Backend API running on http://localhost:${PORT}`);
-});
+if (process.env.VERCEL !== '1') {
+  server.listen(PORT, () => {
+    console.log(`🚀 Queueless Backend API running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
+export { app };
 

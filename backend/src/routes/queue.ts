@@ -710,14 +710,18 @@ queueRouter.post('/:entryId/transition', async (req, res) => {
       },
     });
 
-    // If called, notify attendant/display
+    // If called, notify attendant/display (broadcast to both UUID and slug)
     if (targetStatus === 'CALLED') {
-      broadcastQueueUpdate(current.clinicId, 'patient_called', {
+      const callPayload = {
         token: updated.token,
         patientName: updated.patient.name,
-        roomNumber: updated.doctor?.roomNumber || 'Room',
+        roomNumber: updated.doctor?.roomNumber || 'Cabin 1',
         doctorName: updated.doctor?.displayName,
-      });
+      };
+      broadcastQueueUpdate(current.clinicId, 'patient_called', callPayload);
+      if (current.clinic?.slug && current.clinic.slug !== current.clinicId) {
+        broadcastQueueUpdate(current.clinic.slug, 'patient_called', callPayload);
+      }
     }
 
     broadcastQueueUpdate(current.clinicId, 'queue_updated', {
@@ -725,6 +729,13 @@ queueRouter.post('/:entryId/transition', async (req, res) => {
       entryId: updated.id,
       status: targetStatus,
     });
+    if (current.clinic?.slug && current.clinic.slug !== current.clinicId) {
+      broadcastQueueUpdate(current.clinic.slug, 'queue_updated', {
+        action: 'STATUS_CHANGED',
+        entryId: updated.id,
+        status: targetStatus,
+      });
+    }
 
     res.json({ success: true, data: updated });
   } catch (error) {

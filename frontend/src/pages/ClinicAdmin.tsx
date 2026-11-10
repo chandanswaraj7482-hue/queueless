@@ -857,21 +857,6 @@ export const ClinicAdmin: React.FC = () => {
               <span>{loggingIn ? 'Authenticating...' : 'Unlock Business Admin'}</span>
             </button>
           </form>
-
-          <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400">
-            <span>Default Password:</span>
-            <button
-              type="button"
-              onClick={() => {
-                setAdminPasswordInput('admin123');
-                submitAdminLogin('admin123');
-              }}
-              className="font-mono font-bold text-sky-800 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-2 py-0.5 rounded transition-all cursor-pointer"
-              title="Click to autofill & login"
-            >
-              admin123 (Tap to Fill)
-            </button>
-          </div>
         </div>
       </div>
     );

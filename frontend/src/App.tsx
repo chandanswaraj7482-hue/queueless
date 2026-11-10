@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { PatientCheckIn } from './pages/PatientCheckIn';
 import { PatientStatus } from './pages/PatientStatus';
 import { ReceptionDashboard } from './pages/ReceptionDashboard';
@@ -63,6 +63,16 @@ function Navigation() {
     location.pathname.startsWith('/reception') ||
     location.pathname === '/admin' ||
     location.pathname.startsWith('/admin') ||
+    location.pathname === '/hospital-admin' ||
+    location.pathname.startsWith('/hospital-admin') ||
+    location.pathname === '/queueless-admin' ||
+    location.pathname.startsWith('/queueless-admin') ||
+    location.pathname === '/super-admin' ||
+    location.pathname === '/platform-admin' ||
+    location.pathname === '/business' ||
+    location.pathname === '/founder' ||
+    location.pathname === '/hq' ||
+    location.pathname === '/owner' ||
     location.pathname === '/features' ||
     location.pathname === '/pricing' ||
     location.pathname === '/roi-calculator' ||
@@ -179,84 +189,24 @@ function Navigation() {
             </div>
           </Link>
 
-          {/* Nav & Admin Section */}
-          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto py-1">
+          {/* Minimal, Clean Public Nav Bar */}
+          <div className="flex items-center gap-2">
             {/* Quick Track Token Button */}
             <button
               onClick={() => setShowSearchModal(true)}
-              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200/80 rounded-xl text-xs font-black transition-all shadow-xs shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200/80 rounded-xl text-xs font-bold transition-all shadow-xs"
               title="Track Token ID e.g. A-108"
             >
               <Search className="w-3.5 h-3.5 text-sky-600 shrink-0" />
-              <span className="hidden sm:inline">Track Token</span>
+              <span>Track Token</span>
             </button>
 
-            {/* Frontline Clinic Navigation Tabs */}
-            <nav className="flex items-center gap-0.5 sm:gap-1 bg-slate-100/80 p-1 rounded-2xl border border-slate-200/60 shrink-0">
-              {links.map((link) => {
-                const Icon = link.icon;
-                const isActive =
-                  location.pathname === link.to ||
-                  (link.to.startsWith('/check-in') && (location.pathname.startsWith('/check-in') || location.pathname.startsWith('/token')));
-                return (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                      isActive
-                        ? 'bg-white text-slate-900 shadow-sm border border-slate-200/50 scale-[1.02]'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
-                    }`}
-                  >
-                    <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
-                    <span className="hidden md:inline">{link.label}</span>
-                  </Link>
-                );
-              })}
-            </nav>
-
-            <div className="h-5 w-px bg-slate-200 mx-0.5 shrink-0 hidden sm:block"></div>
-
-            {/* 1. Hospital Admin (/admin) */}
-            <Link
-              to="/admin"
-              className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 border ${
-                isHospitalAdmin
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-              }`}
-              title="Hospital Clinic Staff Administration"
-            >
-              <QrCode className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-              <span className="hidden lg:inline">Hospital Admin</span>
-              <span className="lg:hidden">Admin</span>
-            </Link>
-
-            {/* 2. Standalone Dedicated Queueless Master Admin Panel (/queueless-admin) */}
-            <Link
-              to="/queueless-admin"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black transition-all shrink-0 shadow-sm border ${
-                isQueuelessAdmin
-                  ? 'bg-gradient-to-r from-amber-500 via-indigo-600 to-purple-700 text-white border-amber-300 ring-2 ring-amber-400/30'
-                  : 'bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-amber-300 border-indigo-800/80 hover:border-amber-400/50 hover:shadow-indigo-500/20'
-              }`}
-              title="Queueless Platform SuperAdmin HQ (Live Reviews, Multi-Hospital, Telemetry)"
-            >
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
-              </span>
-              <span>⚡ Queueless Admin</span>
-            </Link>
-
-            {/* 3. Official Commercial SaaS Website (Buy / Onboard) */}
+            {/* Back to Home / Commercial SaaS */}
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black transition-all shrink-0 shadow-sm border bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white border-blue-500 hover:shadow-blue-500/25 active:scale-98"
-              title="Official Queueless Commercial Website (Hospital Solutions & Buy Plans)"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-900 hover:bg-slate-800 text-white shadow-xs"
             >
-              <Zap className="w-3.5 h-3.5 fill-white shrink-0" />
-              <span>🌐 Queueless SaaS HQ</span>
+              <span>Home</span>
             </Link>
           </div>
         </div>
@@ -403,11 +353,11 @@ export function App() {
             <Route path="/doctor/:slug" element={<DoctorView />} />
             <Route path="/display" element={<DisplayKiosk />} />
             <Route path="/display/:clinicId" element={<DisplayKiosk />} />
-            <Route path="/admin" element={<FounderDashboard />} />
+            <Route path="/admin" element={<Navigate to="/admin/caremax-opd" replace />} />
             <Route path="/admin/:slug" element={<ClinicAdmin />} />
-            <Route path="/hospital-admin" element={<ClinicAdmin />} />
+            <Route path="/hospital-admin" element={<Navigate to="/admin/caremax-opd" replace />} />
             <Route path="/hospital-admin/:slug" element={<ClinicAdmin />} />
-            <Route path="/owner" element={<FounderDashboard />} />
+            <Route path="/owner" element={<Navigate to="/admin/caremax-opd" replace />} />
 
             {/* 3. Patient Tracking & History */}
             <Route path="/portal" element={<PatientPortal />} />

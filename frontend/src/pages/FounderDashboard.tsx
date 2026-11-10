@@ -490,10 +490,10 @@ export const FounderDashboard: React.FC = () => {
               <img
                 src="/logo.png"
                 alt="Queueless"
-                className="w-16 h-16 rounded-2xl object-cover shadow-2xl border-2 border-white/20 ring-4 ring-amber-500/20"
+                className="w-14 h-14 rounded-2xl object-cover shadow-2xl border border-white/20 ring-4 ring-amber-500/20"
               />
-              <span className="absolute -bottom-1 -right-1 px-1.5 py-0.2 bg-amber-400 text-slate-950 rounded-full shadow-md font-black text-[9px] uppercase tracking-wider">
-                Founder
+              <span className="absolute -bottom-1 -right-1 px-1.5 py-0.5 bg-amber-400 text-slate-950 rounded-full shadow-md font-black text-[9px] uppercase tracking-wider">
+                HQ
               </span>
             </div>
 
@@ -501,11 +501,11 @@ export const FounderDashboard: React.FC = () => {
               <div className="flex flex-wrap items-center gap-2 mb-1">
                 <span className="inline-flex items-center gap-1.5 px-3 py-0.5 bg-amber-400/20 border border-amber-400/30 text-amber-300 rounded-full text-[10px] font-black uppercase tracking-wider">
                   <Sparkles className="w-3 h-3 text-amber-300" />
-                  <span>Queueless Business HQ</span>
+                  <span>Queueless Enterprise Platform</span>
                 </span>
                 <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  Direct Live Patient Stream Active (Auto-Sync 3s)
+                  Live Telemetry Active
                 </span>
               </div>
 
@@ -513,7 +513,7 @@ export const FounderDashboard: React.FC = () => {
                 Queueless Business Command Center
               </h1>
               <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
-                Direct real-time feed: All patient reviews, ratings, OPD throughput, and multi-clinic telemetry arrive here automatically.
+                Central multi-hospital telemetry: Real-time patient throughput, partner facilities, and clinical analytics.
               </p>
             </div>
           </div>
@@ -523,7 +523,7 @@ export const FounderDashboard: React.FC = () => {
             <button
               onClick={() => fetchFounderData(false)}
               disabled={loading}
-              className="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold border border-white/15 transition-all flex items-center gap-1.5 backdrop-blur-xs"
+              className="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold border border-white/15 transition-all flex items-center gap-1.5 backdrop-blur-xs cursor-pointer"
               title="Refresh Telemetry"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
@@ -532,7 +532,7 @@ export const FounderDashboard: React.FC = () => {
 
             <button
               onClick={() => setShowAddReviewModal(true)}
-              className="px-3.5 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 rounded-xl text-xs font-black shadow-md transition-all flex items-center gap-1.5 active:scale-98"
+              className="px-3.5 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 rounded-xl text-xs font-black shadow-md transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Simulate Review</span>
@@ -540,181 +540,97 @@ export const FounderDashboard: React.FC = () => {
 
             <button
               onClick={handleLogout}
-              className="px-3 py-2 bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 rounded-xl text-xs font-bold border border-white/10 transition-colors"
+              className="px-3 py-2 bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 rounded-xl text-xs font-bold border border-white/10 transition-colors cursor-pointer"
             >
               Lock Desk
             </button>
           </div>
         </div>
-
-        {/* 1-Click Fast Operational Role Launchers */}
-        <div className="mt-5 pt-4 border-t border-slate-800/80 flex flex-wrap items-center gap-2 text-xs">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">
-            Jump to App View:
-          </span>
-          <Link
-            to="/"
-            target="_blank"
-            className="px-2.5 py-1 bg-white/10 hover:bg-white/15 text-slate-200 rounded-lg font-semibold flex items-center gap-1 border border-white/10 transition-colors"
-          >
-            <Zap className="w-3 h-3 text-emerald-400" />
-            <span>Patient Check-in (QR)</span>
-          </Link>
-          <Link
-            to="/portal"
-            target="_blank"
-            className="px-2.5 py-1 bg-white/10 hover:bg-white/15 text-slate-200 rounded-lg font-semibold flex items-center gap-1 border border-white/10 transition-colors"
-          >
-            <Users className="w-3 h-3 text-sky-400" />
-            <span>Patient Vault</span>
-          </Link>
-          <Link
-            to="/reception"
-            target="_blank"
-            className="px-2.5 py-1 bg-white/10 hover:bg-white/15 text-slate-200 rounded-lg font-semibold flex items-center gap-1 border border-white/10 transition-colors"
-          >
-            <Building2 className="w-3 h-3 text-indigo-400" />
-            <span>Reception Desk</span>
-          </Link>
-          <Link
-            to="/doctor"
-            target="_blank"
-            className="px-2.5 py-1 bg-white/10 hover:bg-white/15 text-slate-200 rounded-lg font-semibold flex items-center gap-1 border border-white/10 transition-colors"
-          >
-            <Stethoscope className="w-3 h-3 text-purple-400" />
-            <span>Doctor OPD</span>
-          </Link>
-          <Link
-            to="/display"
-            target="_blank"
-            className="px-2.5 py-1 bg-white/10 hover:bg-white/15 text-slate-200 rounded-lg font-semibold flex items-center gap-1 border border-white/10 transition-colors"
-          >
-            <Tv className="w-3 h-3 text-amber-400" />
-            <span>TV Kiosk</span>
-          </Link>
-          <Link
-            to="/admin"
-            target="_blank"
-            className="px-2.5 py-1 bg-white/10 hover:bg-white/15 text-slate-200 rounded-lg font-semibold flex items-center gap-1 border border-white/10 transition-colors"
-          >
-            <Layers className="w-3 h-3 text-rose-400" />
-            <span>Hospital Admin</span>
-          </Link>
-        </div>
-
-        {/* Live System Telemetry Ticker Ribbon */}
-        <div className="mt-4 pt-3.5 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-300 font-mono overflow-x-auto gap-4">
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span className="font-bold text-emerald-400 uppercase tracking-widest text-[10px]">LIVE TELEMETRY:</span>
-          </div>
-          <div className="flex items-center gap-6 whitespace-nowrap text-slate-400 text-xs font-sans">
-            <span className="flex items-center gap-1.5 text-slate-300">
-              <span className="text-emerald-400 font-bold">●</span>
-              <span>100% Zero-Wait Network Target Active</span>
-            </span>
-            <span className="flex items-center gap-1.5 text-slate-300">
-              <span className="text-sky-400 font-bold">●</span>
-              <span>~38 mins saved per patient vs physical lines</span>
-            </span>
-            <span className="flex items-center gap-1.5 text-slate-300">
-              <span className="text-amber-400 font-bold">●</span>
-              <span>Digital PIN Patient Medical Vault Encrypted</span>
-            </span>
-            <span className="flex items-center gap-1.5 text-slate-300">
-              <span className="text-purple-400 font-bold">●</span>
-              <span>15-Day Follow-Up Pass Protocol Active</span>
-            </span>
-          </div>
-        </div>
       </div>
 
       {/* Top Executive KPI Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4">
         {/* Rating KPI */}
-        <div className="bg-white p-4.5 rounded-3xl border border-slate-200/90 shadow-sm relative overflow-hidden group hover:border-amber-300 transition-all">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs relative overflow-hidden group hover:border-amber-300 transition-all">
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
             <span>Brand Rating</span>
             <span className="text-amber-500 font-black">★★★★★</span>
           </div>
-          <div className="text-3xl font-black text-amber-500 flex items-center gap-1.5 my-0.5">
+          <div className="text-2xl sm:text-3xl font-black text-amber-500 flex items-center gap-1.5 my-1">
             <span>{data?.reviews?.average?.toFixed(1) || '5.0'}</span>
-            <Star className="w-6 h-6 fill-amber-400 text-amber-400" />
+            <Star className="w-5 h-5 fill-amber-400 text-amber-400 shrink-0" />
           </div>
-          <span className="text-[11px] text-slate-500 font-medium block">
+          <span className="text-[11px] text-slate-500 font-medium block truncate">
             From {data?.reviews?.total || 0} verified patients
           </span>
         </div>
 
         {/* Zero-Wait CSAT */}
-        <div className="bg-white p-4.5 rounded-3xl border border-slate-200/90 shadow-sm hover:border-emerald-300 transition-all">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-emerald-300 transition-all">
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
             <span>Zero-Wait CSAT</span>
             <Zap className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500" />
           </div>
-          <div className="text-3xl font-black text-emerald-600 my-0.5">
+          <div className="text-2xl sm:text-3xl font-black text-emerald-600 my-1">
             {data?.reviews?.zeroWaitScore || 100}%
           </div>
-          <span className="text-[11px] text-slate-500 font-medium block">
+          <span className="text-[11px] text-slate-500 font-medium block truncate">
             4★ & 5★ satisfaction rate
           </span>
         </div>
 
         {/* Total Tokens Generated */}
-        <div className="bg-white p-4.5 rounded-3xl border border-slate-200/90 shadow-sm hover:border-sky-300 transition-all">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-sky-300 transition-all">
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
             <span>Tokens Issued</span>
             <Users className="w-3.5 h-3.5 text-sky-500" />
           </div>
-          <div className="text-3xl font-black text-slate-900 my-0.5">
+          <div className="text-2xl sm:text-3xl font-black text-slate-900 my-1">
             {data?.platform?.totalTokensIssued || 0}
           </div>
-          <span className="text-[11px] text-sky-600 font-bold block">
+          <span className="text-[11px] text-sky-600 font-bold block truncate">
             +{data?.platform?.todayTokens || 0} today
           </span>
         </div>
 
         {/* Patient Hours Saved */}
-        <div className="bg-white p-4.5 rounded-3xl border border-slate-200/90 shadow-sm hover:border-indigo-300 transition-all">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-indigo-300 transition-all">
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
             <span>Hours Saved</span>
             <Clock className="w-3.5 h-3.5 text-indigo-500" />
           </div>
-          <div className="text-3xl font-black text-indigo-600 my-0.5">
+          <div className="text-2xl sm:text-3xl font-black text-indigo-600 my-1">
             ~{data?.platform?.totalHoursSaved || 0}h
           </div>
-          <span className="text-[11px] text-slate-500 font-medium block">
+          <span className="text-[11px] text-slate-500 font-medium block truncate">
             Eliminated lobby wait
           </span>
         </div>
 
         {/* Total Fees / GMV Processed */}
-        <div className="bg-white p-4.5 rounded-3xl border border-slate-200/90 shadow-sm hover:border-teal-300 transition-all">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-teal-300 transition-all">
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
             <span>Fees Processed</span>
             <TrendingUp className="w-3.5 h-3.5 text-teal-500" />
           </div>
-          <div className="text-3xl font-black text-teal-600 my-0.5">
+          <div className="text-2xl sm:text-3xl font-black text-teal-600 my-1">
             ₹{data?.platform?.totalGmv?.toLocaleString('en-IN') || 0}
           </div>
-          <span className="text-[11px] text-slate-500 font-medium block">
+          <span className="text-[11px] text-slate-500 font-medium block truncate">
             Digital & cash collections
           </span>
         </div>
 
         {/* Active Clinics */}
-        <div className="bg-white p-4.5 rounded-3xl border border-slate-200/90 shadow-sm hover:border-sky-300 transition-all">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-sky-300 transition-all">
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
             <span>Clinics Live</span>
             <Building2 className="w-3.5 h-3.5 text-sky-500" />
           </div>
-          <div className="text-3xl font-black text-slate-900 my-0.5">
+          <div className="text-2xl sm:text-3xl font-black text-slate-900 my-1">
             {data?.platform?.totalClinics || 1}
           </div>
-          <span className="text-[11px] text-slate-500 font-medium block">
+          <span className="text-[11px] text-slate-500 font-medium block truncate">
             Active hospital accounts
           </span>
         </div>

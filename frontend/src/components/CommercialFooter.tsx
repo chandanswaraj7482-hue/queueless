@@ -4,48 +4,21 @@ import {
   ShieldCheck,
   Zap,
   Lock,
-  Phone,
   Mail,
-  Heart,
   Globe,
-  Award,
   CreditCard,
   Building2,
-  Tv,
-  Stethoscope,
-  Users,
-  Smartphone,
-  Printer,
   Sparkles,
-  QrCode,
   ArrowRight,
-  Clock,
   CheckCircle2,
-  TrendingUp,
   Youtube,
   Instagram,
   Linkedin,
   Twitter,
-  Bot,
-  X,
-  MessageSquare,
   Languages,
-  Check,
+  ExternalLink,
 } from 'lucide-react';
 import { GOOGLE_LANGUAGES, getStoredLanguage, changeLanguage } from '../utils/googleTranslate';
-
-const SUPPORTED_LANGUAGES = [
-  { code: 'en-IN', name: 'English (India)', native: 'English', flag: '🇮🇳' },
-  { code: 'hi-IN', name: 'Hindi', native: 'हिन्दी', flag: '🇮🇳' },
-  { code: 'ta-IN', name: 'Tamil', native: 'தமிழ்', flag: '🇮🇳' },
-  { code: 'te-IN', name: 'Telugu', native: 'తెలుగు', flag: '🇮🇳' },
-  { code: 'kn-IN', name: 'Kannada', native: 'ಕನ್ನಡ', flag: '🇮🇳' },
-  { code: 'mr-IN', name: 'Marathi', native: 'मराठी', flag: '🇮🇳' },
-  { code: 'bn-IN', name: 'Bengali', native: 'বাংলা', flag: '🇮🇳' },
-  { code: 'gu-IN', name: 'Gujarati', native: 'ગુજરાતી', flag: '🇮🇳' },
-  { code: 'ar-AE', name: 'Arabic', native: 'العربية', flag: '🇦🇪' },
-  { code: 'en-US', name: 'English (Global)', native: 'English (US)', flag: '🇺🇸' },
-];
 
 export const CommercialFooter: React.FC = () => {
   const [currentLang, setCurrentLang] = useState<string>(getStoredLanguage);
@@ -56,320 +29,246 @@ export const CommercialFooter: React.FC = () => {
     changeLanguage(code);
     const langObj = GOOGLE_LANGUAGES.find((l) => l.code === code);
     if (langObj) {
-      setLangToast(`${langObj.native} (${langObj.name}) active`);
+      setLangToast(`${langObj.native} active`);
       setTimeout(() => setLangToast(null), 3000);
     }
   };
 
   return (
-    <footer className="bg-slate-950 dark:bg-[#030712] text-slate-400 border-t border-slate-800/80 text-xs relative z-10 pt-16 pb-6 overflow-hidden transition-colors duration-200">
+    <footer className="bg-slate-950 text-slate-400 border-t border-slate-800/80 text-xs relative z-10 pt-16 pb-8 overflow-hidden transition-colors duration-200">
       {/* Subtle Ambient Radial Backlight for High-End Depth */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-gradient-to-b from-blue-600/10 via-indigo-600/5 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[320px] bg-gradient-to-b from-sky-600/10 via-indigo-600/5 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        {/* Main 5-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800/80">
-          {/* Col 1: Brand, Bio, Social Links & Security */}
-          <div className="lg:col-span-2 space-y-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 space-y-12">
+        {/* Main 5-Column Balanced Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10">
+          
+          {/* Col 1: Brand & Identity */}
+          <div className="sm:col-span-2 lg:col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-3 group w-fit">
               <div className="relative">
                 <img
                   src="/logo.png"
                   alt="Queueless"
-                  className="w-10 h-10 rounded-full object-cover border border-sky-500/30 shadow-md group-hover:scale-105 transition-transform"
+                  className="w-10 h-10 rounded-xl object-cover border border-sky-500/30 shadow-md group-hover:scale-105 transition-transform"
                 />
                 <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-950 animate-pulse" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-black text-xl text-white tracking-tight group-hover:text-blue-400 transition-colors">
+                  <span className="font-black text-xl text-white tracking-tight group-hover:text-sky-400 transition-colors">
                     Queueless
                   </span>
-                  <span className="text-[9px] font-black uppercase tracking-wider bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-2 py-0.5 rounded-full shadow-2xs">
+                  <span className="text-[9px] font-black uppercase tracking-wider bg-sky-500/15 text-sky-400 border border-sky-500/30 px-2 py-0.5 rounded-full">
                     HEALTHCARE OS
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 font-medium">Zero-Wait Clinical Queue Operating System</p>
+                <p className="text-[11px] text-slate-400 font-medium">Zero-Wait Clinical Queue Operating System</p>
               </div>
             </Link>
 
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              Empowering hospitals and polyclinics across 120+ countries to eliminate waiting room crowding, stop walkout patient revenue leakage, and deliver dignified zero-wait patient experiences.
+              Empowering hospitals and healthcare facilities across 120+ countries to eliminate waiting room congestion, prevent walkout revenue leakage, and deliver dignified zero-wait patient experiences.
             </p>
 
-            {/* OmniTools-Inspired Social Media Buttons Row */}
-            <div className="pt-1 space-y-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
-                FOLLOW US & CLINICAL COMMUNITY
-              </span>
-              <div className="flex flex-wrap items-center gap-2">
-                <a
-                  href="https://youtube.com/@queueless"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-[11px] font-bold inline-flex items-center gap-1.5 transition-all shadow-2xs hover:scale-105 active:scale-95"
-                >
-                  <Youtube className="w-3.5 h-3.5 fill-current" />
-                  <span>YouTube</span>
-                </a>
-                <a
-                  href="https://instagram.com/queueless"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-pink-500/10 hover:bg-pink-500/20 text-pink-400 border border-pink-500/30 text-[11px] font-bold inline-flex items-center gap-1.5 transition-all shadow-2xs hover:scale-105 active:scale-95"
-                >
-                  <Instagram className="w-3.5 h-3.5" />
-                  <span>Instagram</span>
-                </a>
-                <a
-                  href="https://linkedin.com/company/queueless"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[11px] font-bold inline-flex items-center gap-1.5 transition-all shadow-2xs hover:scale-105 active:scale-95"
-                >
-                  <Linkedin className="w-3.5 h-3.5 fill-current" />
-                  <span>LinkedIn</span>
-                </a>
-                <a
-                  href="https://twitter.com/queueless"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px] font-bold inline-flex items-center gap-1.5 transition-all shadow-2xs hover:scale-105 active:scale-95"
-                >
-                  <Twitter className="w-3.5 h-3.5 fill-current" />
-                  <span>X (Twitter)</span>
-                </a>
-              </div>
+            {/* Clean Minimalist Social Media Icon Buttons */}
+            <div className="pt-2 flex items-center gap-2">
+              <a
+                href="https://twitter.com/queueless"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-slate-900 hover:bg-sky-500/20 text-slate-400 hover:text-sky-400 border border-slate-800 hover:border-sky-500/40 flex items-center justify-center transition-all"
+                title="X (Twitter)"
+              >
+                <Twitter className="w-3.5 h-3.5 fill-current" />
+              </a>
+              <a
+                href="https://linkedin.com/company/queueless"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-slate-900 hover:bg-blue-500/20 text-slate-400 hover:text-blue-400 border border-slate-800 hover:border-blue-500/40 flex items-center justify-center transition-all"
+                title="LinkedIn"
+              >
+                <Linkedin className="w-3.5 h-3.5 fill-current" />
+              </a>
+              <a
+                href="https://youtube.com/@queueless"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-slate-900 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-800 hover:border-rose-500/40 flex items-center justify-center transition-all"
+                title="YouTube"
+              >
+                <Youtube className="w-3.5 h-3.5 fill-current" />
+              </a>
+              <a
+                href="https://instagram.com/queueless"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-slate-900 hover:bg-pink-500/20 text-slate-400 hover:text-pink-400 border border-slate-800 hover:border-pink-500/40 flex items-center justify-center transition-all"
+                title="Instagram"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+              </a>
             </div>
 
-            {/* OmniTools-Inspired Badges Ribbon */}
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              <span className="px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-emerald-400 font-bold text-[10px] inline-flex items-center gap-1.5 shadow-2xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Zero Patient App Download
-              </span>
-              <span className="px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-blue-400 font-bold text-[10px] inline-flex items-center gap-1.5 shadow-2xs">
-                <ShieldCheck className="w-3 h-3 text-blue-400" />
-                ABDM & HIPAA Certified
-              </span>
-              <span className="px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-purple-400 font-bold text-[10px] inline-flex items-center gap-1.5 shadow-2xs">
-                <Zap className="w-3 h-3 text-purple-400" />
-                20-Second QR Check-In
-              </span>
-            </div>
-
-            {/* Queueless Labs Official Inquiries */}
-            <div className="pt-2 space-y-1.5">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
-                QUEUELess LABS • OFFICIAL INQUIRIES
-              </span>
-              <div className="flex flex-col gap-1 text-xs">
-                <a
-                  href="mailto:contact@queuelesslabs.com"
-                  className="text-slate-200 hover:text-blue-400 flex items-center gap-2 transition-colors font-semibold group w-fit"
-                >
-                  <Mail className="w-3.5 h-3.5 text-blue-400 group-hover:scale-110 transition-transform" />
-                  <span>contact@queuelesslabs.com</span>
-                </a>
-                <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
-                  Enterprise deployments, hospital network onboarding & integrations
-                </p>
-              </div>
-            </div>
-
-            {/* Payment & Security Verification Badges */}
-            <div className="pt-2 space-y-2">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <Lock className="w-3 h-3 text-emerald-400" />
-                <span>Authorized Global Payment Gateways</span>
-              </p>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-300 font-bold text-[11px] inline-flex items-center gap-1.5 shadow-2xs hover:border-slate-700 transition-colors">
-                  <CreditCard className="w-3.5 h-3.5 text-blue-400" />
-                  <span>Dodo Payments (Cards & UPI)</span>
-                </span>
-                <span className="px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-300 font-bold text-[11px] inline-flex items-center gap-1.5 shadow-2xs hover:border-slate-700 transition-colors">
-                  <span className="text-[#0079C1] font-black">P</span>
-                  <span className="text-[#00457C] font-black">P</span>
-                  <span className="text-slate-200">PayPal Verified</span>
-                </span>
-                <span className="px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-300 font-bold text-[11px] inline-flex items-center gap-1.5 shadow-2xs hover:border-slate-700 transition-colors">
-                  <Lock className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>256-Bit SSL Banking Grade</span>
-                </span>
-              </div>
+            {/* Direct Official Contact */}
+            <div className="pt-2">
+              <a
+                href="mailto:contact@queuelesslabs.com"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-sky-400 transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                <span>contact@queuelesslabs.com</span>
+              </a>
+              <p className="text-[11px] text-slate-400 mt-0.5">Enterprise onboarding, hospital networks & custom integrations</p>
             </div>
           </div>
 
-          {/* Col 2: Solutions & Product */}
+          {/* Col 2: Platform Capabilities */}
           <div className="space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-              <span>Product Suite</span>
+              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+              <span>Platform Suite</span>
             </h4>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-2.5 text-xs">
               <li>
-                <Link to="/about" className="hover:text-blue-400 transition-colors hover:translate-x-0.5 inline-block">
-                  About Queueless OS
+                <Link to="/features" className="hover:text-white transition-colors">
+                  Autonomous Queue Engine
                 </Link>
               </li>
               <li>
-                <Link to="/features" className="hover:text-blue-400 transition-colors hover:translate-x-0.5 inline-block">
-                  Platform Architecture
+                <Link to="/features" className="hover:text-white transition-colors">
+                  Zero-Scroll TV Wall Display
                 </Link>
               </li>
               <li>
-                <Link to="/roi-calculator" className="hover:text-blue-400 transition-colors hover:translate-x-0.5 inline-block">
-                  OPD Revenue Calculator
+                <Link to="/features" className="hover:text-white transition-colors">
+                  15 Regional Voice Chimes
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="hover:text-blue-400 transition-colors hover:translate-x-0.5 inline-block">
-                  Transparent Pricing
+                <Link to="/features" className="hover:text-white transition-colors">
+                  WhatsApp Prescription Suite
                 </Link>
               </li>
               <li>
-                <Link to="/signup" className="hover:text-blue-300 transition-colors text-blue-400 font-bold flex items-center gap-1 group">
-                  <span>Activate Queueless OS</span>
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                <Link to="/roi-calculator" className="hover:text-white transition-colors">
+                  OPD Revenue Leakage Audit
                 </Link>
               </li>
               <li>
-                <span className="text-slate-400 font-medium">ABDM ABHA M1/M2 Bridge</span>
-              </li>
-              <li>
-                <span className="text-slate-400 font-medium">Bilingual Voice Chime Engine</span>
-              </li>
-              <li>
-                <span className="text-slate-400 font-medium">15-Day Follow-Up Engine</span>
+                <Link to="/pricing" className="text-sky-400 font-bold hover:text-sky-300 flex items-center gap-1">
+                  <span>Transparent Pricing</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Live Hospital Portals */}
+          {/* Col 3: Healthcare Solutions */}
           <div className="space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
               <Building2 className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Hospital Portals</span>
+              <span>Solutions</span>
             </h4>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-2.5 text-xs">
               <li>
-                <Link to="/login" className="hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Hospital Director Console</span>
+                <Link to="/features" className="hover:text-white transition-colors">
+                  Multi-Specialty Hospitals
                 </Link>
               </li>
               <li>
-                <Link to="/login" className="hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Frontdesk Admission Desk</span>
+                <Link to="/features" className="hover:text-white transition-colors">
+                  Polyclinics & Daycare OPDs
                 </Link>
               </li>
               <li>
-                <Link to="/login" className="hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                  <Stethoscope className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Doctor Cabin Interface</span>
+                <Link to="/features" className="hover:text-white transition-colors">
+                  Diagnostics & Imaging Centers
                 </Link>
               </li>
               <li>
-                <Link to="/display" className="hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                  <Tv className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Waiting Hall Smart TV Kiosk</span>
+                <Link to="/features" className="hover:text-white transition-colors">
+                  Enterprise Hospital Chains
                 </Link>
               </li>
               <li>
-                <Link to="/patient-portal" className="hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                  <Smartphone className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Patient Live Token Pass</span>
+                <Link to="/portal" className="hover:text-white transition-colors">
+                  Patient Token Tracker
+                </Link>
+              </li>
+              <li>
+                <Link to="/login" className="hover:text-white transition-colors flex items-center gap-1">
+                  <Lock className="w-3 h-3 text-slate-500" />
+                  <span>Hospital Staff Login</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Compliance & Legal Policies */}
+          {/* Col 4: Trust & Compliance */}
           <div className="space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Privacy & Legal</span>
+              <span>Trust & Legal</span>
             </h4>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-2.5 text-xs">
               <li>
-                <Link to="/privacy" className="hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Privacy Policy (HIPAA/GDPR)</span>
+                <Link to="/privacy" className="hover:text-white transition-colors">
+                  Privacy Policy (HIPAA / GDPR)
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                  <span>Terms of Service</span>
+                <Link to="/terms" className="hover:text-white transition-colors">
+                  Terms of Service
                 </Link>
               </li>
               <li>
-                <Link to="/security" className="hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                  <span>Security Architecture</span>
+                <Link to="/security" className="hover:text-white transition-colors">
+                  Security Architecture
                 </Link>
               </li>
               <li>
-                <Link to="/refund-policy" className="hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                  <CreditCard className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                  <span>30-Day Money-Back Guarantee</span>
+                <Link to="/refund-policy" className="hover:text-white transition-colors">
+                  Refund & Cancellation Policy
                 </Link>
               </li>
-              <li className="pt-1 text-[11px] text-slate-500">
-                SOC-2 Type II, HIPAA & ABDM Aligned
+              <li className="pt-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold">
+                  <CheckCircle2 className="w-3 h-3 shrink-0" />
+                  <span>ABDM M1/M2 Certified</span>
+                </span>
               </li>
             </ul>
           </div>
+
         </div>
 
-        {/* ============================================================== */}
-        {/* OMNITOOLS-INSPIRED: TRENDING CLINICAL HUB BAR                   */}
-        {/* ============================================================== */}
-        <div className="py-6 border-b border-slate-800/80">
-          <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/90 flex flex-wrap items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2 text-slate-300 font-bold shrink-0">
-              <Globe className="w-4 h-4 text-blue-400" />
-              <span>Trending Clinical Hub:</span>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <Link to="/features" className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors text-[11px] font-medium flex items-center gap-1">
-                ✦ ABDM M1/M2 Bridge
-              </Link>
-              <Link to="/features" className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors text-[11px] font-medium flex items-center gap-1">
-                ✦ OPD Queue Optimization
-              </Link>
-              <Link to="/display" className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors text-[11px] font-medium flex items-center gap-1">
-                ✦ Smart TV Waiting Kiosk
-              </Link>
-              <Link to="/roi-calculator" className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors text-[11px] font-medium flex items-center gap-1">
-                ✦ Zero-Wait Token Pass
-              </Link>
-              <Link to="/pricing" className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors text-[11px] font-medium flex items-center gap-1">
-                ✦ 15-Day Follow-Up Engine
-              </Link>
-              <Link to="/features" className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors text-[11px] font-medium flex items-center gap-1">
-                ✦ Doctor Cabin Alt+N Hotkey
-              </Link>
-              <Link to="/signup" className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors text-[11px] font-medium flex items-center gap-1">
-                ✦ Instant Digital Setup
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Legal / Copyright Row with Clinical Language Selector & Trust Badges */}
-        <div className="pt-8 pb-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-slate-400 border-b border-slate-800/70">
-          <div className="flex items-center gap-2">
-            <span>© {new Date().getFullYear()} <strong>Queueless Labs Inc.</strong> All rights reserved.</span>
+        {/* Global Payment & Verification Security Ribbon */}
+        <div className="pt-6 pb-4 border-t border-slate-800/70 flex flex-wrap items-center justify-between gap-4 text-[11px] text-slate-400">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="font-semibold text-slate-400 uppercase tracking-wider text-[10px]">
+              Security & Payment Standards:
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
+              <Lock className="w-3 h-3 text-emerald-400" />
+              <span>256-Bit Cryptographic SSL</span>
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
+              <CreditCard className="w-3 h-3 text-sky-400" />
+              <span>Dodo Payments & UPI</span>
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
+              <span className="text-[#0079C1] font-bold">Pay</span>
+              <span className="text-[#00457C] font-bold">Pal</span>
+              <span className="ml-1 text-slate-200">Verified</span>
+            </span>
           </div>
 
           {/* Interactive Multi-Language Switcher */}
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 transition-all text-xs font-semibold shadow-2xs">
-              <Languages className="w-4 h-4 text-blue-400 shrink-0" />
-              <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">Language:</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 transition-all text-xs font-semibold">
+              <Languages className="w-3.5 h-3.5 text-sky-400 shrink-0" />
               <select
                 aria-label="Select Clinical Language"
                 value={currentLang}
@@ -384,42 +283,33 @@ export const CommercialFooter: React.FC = () => {
               </select>
             </div>
 
-            {/* Language Confirmation Alert Toast */}
             {langToast && (
-              <span className="animate-in fade-in slide-in-from-bottom-2 text-[10px] text-emerald-400 font-bold bg-emerald-950/80 border border-emerald-800 px-2.5 py-1 rounded-full whitespace-nowrap">
+              <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950/80 border border-emerald-800 px-2 py-0.5 rounded-lg whitespace-nowrap">
                 ✓ {langToast}
               </span>
             )}
           </div>
+        </div>
 
-          {/* Trust Center Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className="px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-[10px] font-semibold">
-              🇮🇳 India DPDP Compliant
-            </span>
-            <span className="px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-[10px] font-semibold">
-              🔒 Zero Patient PHI Monetization
-            </span>
-            <span className="px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-[10px] font-semibold">
-              ⚡ 99.99% Hospital SLA Uptime
-            </span>
+        {/* Bottom Copyright & Compliance Notice */}
+        <div className="pt-4 border-t border-slate-800/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
+          <p>© {new Date().getFullYear()} <strong className="text-slate-300 font-bold">Queueless Labs Inc.</strong> All rights reserved.</p>
+          <div className="flex flex-wrap items-center gap-3">
+            <span>India DPDP Compliant</span>
+            <span>•</span>
+            <span>Zero Patient PHI Monetization</span>
+            <span>•</span>
+            <span>99.99% Hospital SLA Uptime</span>
           </div>
         </div>
 
-        {/* ============================================================== */}
-        {/* SIGNATURE MASSIVE "Queueless" WORDMARK WATERMARK (EXACT TO REF) */}
-        {/* ============================================================== */}
-        <div className="relative pt-6 sm:pt-10 pb-4 text-center overflow-hidden select-none pointer-events-none w-full flex items-center justify-center">
-          {/* Subtle Ambient Backlight Glow under the wordmark */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[140px] bg-gradient-to-r from-blue-600/15 via-indigo-600/15 to-teal-500/15 rounded-full blur-[100px] pointer-events-none" />
-
-          <h2
-            className="text-[44px] min-[380px]:text-[54px] min-[480px]:text-[72px] sm:text-[110px] md:text-[150px] lg:text-[195px] xl:text-[240px] font-black tracking-tight sm:tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-b from-slate-600/90 via-slate-700/40 to-slate-900/10 dark:from-slate-600 dark:via-slate-700/35 dark:to-transparent transition-all duration-700 select-none whitespace-nowrap block"
-            aria-hidden="true"
-          >
+        {/* Sleek, Low-Opacity Subtle Watermark */}
+        <div className="pt-4 pb-2 text-center select-none pointer-events-none w-full flex items-center justify-center opacity-15 hover:opacity-25 transition-opacity">
+          <h2 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-slate-700 whitespace-nowrap">
             Queueless
           </h2>
         </div>
+
       </div>
     </footer>
   );

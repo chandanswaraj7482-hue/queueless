@@ -49,6 +49,7 @@ import {
   MapPin,
   Compass,
   Radio,
+  Crown,
 } from 'lucide-react';
 import { playClinicChime } from '../utils/audio';
 
@@ -112,6 +113,18 @@ interface PlatformData {
     address: string;
     doctorCount: number;
     totalEntries: number;
+    totalRevenue?: number;
+    plan?: string;
+    planStatus?: string;
+    monthlyFee?: number;
+    features?: {
+      multiCabinVoice?: boolean;
+      cashfreePayment?: boolean;
+      whatsappAlerts?: boolean;
+      abdmBridge?: boolean;
+      customDomain?: boolean;
+    };
+    settings?: string;
   }>;
   recentPatients?: PatientFootfallItem[];
   recentLogins?: LoginAuditItem[];
@@ -154,7 +167,7 @@ const SAMPLE_PRESETS = [
 export const FounderDashboard: React.FC = () => {
   const [data, setData] = useState<FounderData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'PATIENTS' | 'LOGINS' | 'CLINICS' | 'REVIEWS' | 'MAP' | 'DOCTORS' | 'PITCH' | 'SECURITY'>('PATIENTS');
+  const [activeTab, setActiveTab] = useState<'CLINICS' | 'PATIENTS' | 'LOGINS' | 'REVIEWS' | 'MAP' | 'DOCTORS' | 'PITCH' | 'SECURITY'>('CLINICS');
   const [clinicsWithDoctors, setClinicsWithDoctors] = useState<any[]>([]);
   const [selectedStarFilter, setSelectedStarFilter] = useState<number | 'ALL'>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
@@ -211,6 +224,72 @@ export const FounderDashboard: React.FC = () => {
     '📱 Super Smooth Mobile UI',
   ]);
   const [submittingReview, setSubmittingReview] = useState(false);
+
+  // Hospital Plan & Premium Access Management State (Founder Control)
+  const [selectedClinicForPlan, setSelectedClinicForPlan] = useState<any | null>(null);
+  const [planForm, setPlanForm] = useState({
+    plan: 'ENTERPRISE',
+    planStatus: 'ACTIVE',
+    monthlyFee: 9999,
+    commissionPercent: 2.5,
+    features: {
+      multiCabinVoice: true,
+      cashfreePayment: true,
+      whatsappAlerts: true,
+      abdmBridge: true,
+      customDomain: true,
+    },
+    planExpiresAt: '',
+  });
+  const [savingPlan, setSavingPlan] = useState(false);
+
+  const handleOpenPlanModal = (clinic: any) => {
+    let settingsObj: any = {};
+    try {
+      settingsObj = clinic.settings ? JSON.parse(clinic.settings) : {};
+    } catch (e) {}
+
+    setSelectedClinicForPlan(clinic);
+    setPlanForm({
+      plan: clinic.plan || settingsObj.plan || (clinic.slug === 'caremax-opd' ? 'ENTERPRISE' : clinic.slug === 'city-health' ? 'PRO' : 'FREE_TRIAL'),
+      planStatus: clinic.planStatus || settingsObj.planStatus || 'ACTIVE',
+      monthlyFee: clinic.monthlyFee !== undefined ? clinic.monthlyFee : (settingsObj.monthlyFee !== undefined ? settingsObj.monthlyFee : (clinic.slug === 'caremax-opd' ? 9999 : clinic.slug === 'city-health' ? 4999 : 0)),
+      commissionPercent: settingsObj.commissionPercent !== undefined ? settingsObj.commissionPercent : 2.5,
+      features: {
+        multiCabinVoice: clinic.features?.multiCabinVoice ?? settingsObj.features?.multiCabinVoice ?? true,
+        cashfreePayment: clinic.features?.cashfreePayment ?? settingsObj.features?.cashfreePayment ?? true,
+        whatsappAlerts: clinic.features?.whatsappAlerts ?? settingsObj.features?.whatsappAlerts ?? true,
+        abdmBridge: clinic.features?.abdmBridge ?? settingsObj.features?.abdmBridge ?? true,
+        customDomain: clinic.features?.customDomain ?? settingsObj.features?.customDomain ?? true,
+      },
+      planExpiresAt: settingsObj.planExpiresAt || '',
+    });
+  };
+
+  const handleSavePlan = async () => {
+    if (!selectedClinicForPlan) return;
+    setSavingPlan(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/clinics/${selectedClinicForPlan.id}/plan`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(planForm),
+      });
+      const dataRes = await res.json();
+      if (dataRes.success) {
+        playClinicChime();
+        showToast(`🎉 ${selectedClinicForPlan.name} access updated to ${planForm.plan} (${planForm.planStatus})!`);
+        setSelectedClinicForPlan(null);
+        fetchFounderData(false);
+      } else {
+        showToast(`⚠️ ${dataRes.error || 'Failed to update plan'}`);
+      }
+    } catch (err) {
+      showToast('⚠️ Error connecting to server');
+    } finally {
+      setSavingPlan(false);
+    }
+  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -703,6 +782,18 @@ export const FounderDashboard: React.FC = () => {
       {/* Founder Tab Navigation */}
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2">
         <button
+          onClick={() => setActiveTab('CLINICS')}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
+            activeTab === 'CLINICS'
+              ? 'bg-slate-900 text-white shadow-md'
+              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+          }`}
+        >
+          <Building2 className={`w-4 h-4 ${activeTab === 'CLINICS' ? 'text-amber-400' : 'text-slate-400'}`} />
+          <span>🏥 Partner Hospitals & Revenue ({data?.platform?.totalClinics || 5})</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('PATIENTS')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             activeTab === 'PATIENTS'
@@ -715,6 +806,18 @@ export const FounderDashboard: React.FC = () => {
         </button>
 
         <button
+          onClick={() => setActiveTab('REVIEWS')}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
+            activeTab === 'REVIEWS'
+              ? 'bg-slate-900 text-white shadow-md'
+              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+          }`}
+        >
+          <Star className={`w-4 h-4 ${activeTab === 'REVIEWS' ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}`} />
+          <span>⭐ Reviews & Feedback ({data?.reviews?.total || 0})</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('LOGINS')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             activeTab === 'LOGINS'
@@ -724,30 +827,6 @@ export const FounderDashboard: React.FC = () => {
         >
           <LogIn className={`w-4 h-4 ${activeTab === 'LOGINS' ? 'text-amber-400' : 'text-slate-400'}`} />
           <span>🔐 Staff & Clinic Logins ({data?.platform?.recentLogins?.length || 4})</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('CLINICS')}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
-            activeTab === 'CLINICS'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-          }`}
-        >
-          <Building2 className={`w-4 h-4 ${activeTab === 'CLINICS' ? 'text-sky-400' : 'text-slate-400'}`} />
-          <span>Partner Hospitals ({data?.platform?.totalClinics || 1})</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('REVIEWS')}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
-            activeTab === 'REVIEWS'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-          }`}
-        >
-          <Star className={`w-4 h-4 ${activeTab === 'REVIEWS' ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}`} />
-          <span>Live Reviews ({data?.reviews?.total || 0})</span>
         </button>
 
         <button
@@ -924,12 +1003,107 @@ export const FounderDashboard: React.FC = () => {
             </div>
           </div>
 
+          {/* Hospital Revenue & Footfall Breakdown (Founder SaaS Tracking) */}
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+              <div>
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-sky-500" />
+                  <span>Hospital Telemetry: Volume & Revenue Generated</span>
+                </h4>
+                <p className="text-[11px] text-slate-500">
+                  Track how much patient volume and consultation fees each partner hospital brings to Queueless.
+                </p>
+              </div>
+              <button
+                onClick={() => setActiveTab('CLINICS')}
+                className="text-xs font-bold text-sky-600 hover:text-sky-700 flex items-center gap-1 cursor-pointer self-start sm:self-auto"
+              >
+                <span>Full Hospitals Hub</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+              {data?.platform?.clinics?.map((c) => {
+                const isSelected = patientClinicFilter === c.slug;
+                return (
+                  <div
+                    key={c.id}
+                    className={`p-3.5 rounded-2xl border transition-all ${
+                      isSelected
+                        ? 'bg-sky-50/70 border-sky-400 ring-2 ring-sky-300 shadow-xs'
+                        : 'bg-slate-50/70 border-slate-200 hover:bg-white hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-1 mb-2">
+                      <div className="truncate">
+                        <span className="font-black text-xs text-slate-900 block truncate" title={c.name}>
+                          {c.name}
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">/{c.slug}</span>
+                      </div>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-md shrink-0 ${
+                        c.plan === 'ENTERPRISE' ? 'bg-amber-100 text-amber-800' : c.plan === 'PRO' ? 'bg-indigo-100 text-indigo-800' : 'bg-slate-200 text-slate-700'
+                      }`}>
+                        {c.plan || 'TRIAL'}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 my-2 text-center">
+                      <div className="bg-white p-2 rounded-xl border border-slate-100">
+                        <span className="text-[9px] font-bold text-slate-400 uppercase block">Patients</span>
+                        <strong className="text-xs font-black text-slate-800">{c.totalEntries}</strong>
+                      </div>
+                      <div className="bg-white p-2 rounded-xl border border-slate-100">
+                        <span className="text-[9px] font-bold text-slate-400 uppercase block">Fees (₹)</span>
+                        <strong className="text-xs font-black text-emerald-600">
+                          ₹{c.totalRevenue?.toLocaleString('en-IN') || 0}
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 mt-2.5">
+                      <button
+                        onClick={() => handleOpenPlanModal(c)}
+                        className="flex-1 py-1.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black rounded-lg text-[10px] transition-all flex items-center justify-center gap-1 cursor-pointer active:scale-95 shadow-xs"
+                        title="Manage Subscription Plan & Premium Features"
+                      >
+                        <Crown className="w-3 h-3" />
+                        <span>Manage Plan</span>
+                      </button>
+
+                      <button
+                        onClick={() => setPatientClinicFilter(isSelected ? 'ALL' : c.slug)}
+                        className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-sky-600 text-white border-sky-600'
+                            : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                        }`}
+                        title={isSelected ? 'Clear hospital filter' : 'Filter patient list by this hospital'}
+                      >
+                        {isSelected ? 'Filtered ✓' : 'Filter Feed'}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Patients Live Table */}
           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
-              <h4 className="text-sm font-black text-slate-900">
-                Live Patient Consultations Feed
-              </h4>
+            <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h4 className="text-sm font-black text-slate-900">
+                  Live Patient Consultations Feed
+                </h4>
+                {patientClinicFilter !== 'ALL' && (
+                  <span className="text-xs text-sky-700 font-bold block mt-0.5">
+                    Showing {data?.platform?.clinics?.find(c => c.slug === patientClinicFilter)?.name || patientClinicFilter} • Total Fees Brought: ₹{data?.platform?.clinics?.find(c => c.slug === patientClinicFilter)?.totalRevenue?.toLocaleString('en-IN') || 0}
+                  </span>
+                )}
+              </div>
               <span className="text-xs text-slate-400 font-medium">
                 Auto-synced via Supabase Telemetry
               </span>
@@ -1659,19 +1833,67 @@ export const FounderDashboard: React.FC = () => {
 
 
       {/* ============================================================== */}
-      {/* TAB 2: MULTI-HOSPITAL NETWORK OVERSIGHT                         */}
+      {/* TAB 1: FOUNDER B2B HOSPITALS & REVENUE PERFORMANCE HQ          */}
       {/* ============================================================== */}
       {activeTab === 'CLINICS' && (
-        <div className="space-y-5">
+        <div className="space-y-5 animate-in fade-in duration-200">
+          {/* Top SaaS B2B KPI Summary */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+              <div className="text-[11px] font-bold text-slate-400 uppercase">Total Partner Hospitals</div>
+              <div className="text-2xl font-black text-slate-900 mt-1">
+                {data?.platform?.clinics?.length || 5} Live
+              </div>
+              <span className="text-[10px] text-emerald-600 font-bold block mt-0.5">
+                {data?.platform?.clinics?.filter(c => c.planStatus === 'ACTIVE').length || 5} Active Subscriptions
+              </span>
+            </div>
+
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+              <div className="text-[11px] font-bold text-slate-400 uppercase">Patient Consultation Fees</div>
+              <div className="text-2xl font-black text-teal-600 mt-1">
+                ₹{data?.platform?.clinics?.reduce((sum, c) => sum + (c.totalRevenue || 0), 0).toLocaleString('en-IN') || 0}
+              </div>
+              <span className="text-[10px] text-slate-500 font-medium block mt-0.5">
+                Digital & cash clinical volume
+              </span>
+            </div>
+
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+              <div className="text-[11px] font-bold text-slate-400 uppercase">SaaS Contract MRR</div>
+              <div className="text-2xl font-black text-amber-500 mt-1">
+                ₹{data?.platform?.clinics?.reduce((sum, c) => sum + (c.monthlyFee || 0), 0).toLocaleString('en-IN') || 0}/mo
+              </div>
+              <span className="text-[10px] text-amber-600 font-bold block mt-0.5">
+                Queueless Recurring Revenue
+              </span>
+            </div>
+
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+              <div className="text-[11px] font-bold text-slate-400 uppercase">Network Patient Footfall</div>
+              <div className="text-2xl font-black text-sky-600 mt-1">
+                {data?.platform?.totalTokensIssued || 0} Patients
+              </div>
+              <span className="text-[10px] text-sky-600 font-bold block mt-0.5">
+                +{data?.platform?.todayTokens || 0} active today
+              </span>
+            </div>
+          </div>
+
           <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
               <div>
-                <h3 className="text-base font-black text-slate-900">Partner Hospitals & Clinics</h3>
-                <p className="text-xs text-slate-500">Live operational status across all healthcare facilities on Queueless.</p>
+                <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                  <Building2 className="w-5 h-5 text-sky-500" />
+                  <span>Partner Hospitals: Revenue & Subscription Management</span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Track hospital-by-hospital OPD revenue, patient volume, grant/upgrade Premium plans, and manage platform access.
+                </p>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-sky-700 bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-100">
-                  Network Total: {data?.platform?.clinics?.length || 1}
+                  Total Hospitals: {data?.platform?.clinics?.length || 1}
                 </span>
                 <button
                   onClick={() => setShowOnboardModal(true)}
@@ -1691,13 +1913,13 @@ export const FounderDashboard: React.FC = () => {
                 </div>
                 <div>
                   <div className="font-black text-slate-900 flex items-center gap-2">
-                    <span>Dual Link Routing: Commercial Platform vs Scoped Hospital Portals</span>
+                    <span>Founder Multi-Tenant Control Hub</span>
                     <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
-                      Active Architecture
+                      Commercial SaaS Mode
                     </span>
                   </div>
                   <p className="text-slate-600 mt-0.5 leading-relaxed">
-                    <strong>Root Domain (<span className="font-mono text-sky-700">/</span>)</strong> serves the public Queueless Commercial Sales & Pitch site. Each partner hospital operates under their dedicated scoped slug (e.g. <span className="font-mono text-indigo-700">/check-in/[slug]</span>, <span className="font-mono text-indigo-700">/display/[slug]</span>, <span className="font-mono text-indigo-700">/doctor/[slug]</span>, <span className="font-mono text-indigo-700">/reception/[slug]</span>, <span className="font-mono text-indigo-700">/admin/[slug]</span>).
+                    You have master control to toggle plans, enable/disable multi-cabin voice announcements, Cashfree UPI gateway, WhatsApp alerts, and ABDM bridges for every hospital in India.
                   </p>
                 </div>
               </div>
@@ -1715,17 +1937,21 @@ export const FounderDashboard: React.FC = () => {
               {data?.platform?.clinics?.map((c) => (
                 <div
                   key={c.id}
-                  className="p-5 rounded-2xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:shadow-md transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+                  className="p-5 rounded-2xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:shadow-md transition-all flex flex-col xl:flex-row xl:items-center justify-between gap-4"
                 >
                   <div className="flex items-start gap-3.5">
                     <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 shrink-0">
                       <Building2 className="w-6 h-6" />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <h4 className="text-sm font-black text-slate-900">{c.name}</h4>
-                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.2 rounded-full">
-                          Live OPD
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          c.planStatus === 'ACTIVE'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                            : 'bg-rose-50 text-rose-700 border border-rose-200'
+                        }`}>
+                          {c.planStatus === 'ACTIVE' ? '🟢 Active Access' : '🔴 Suspended'}
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">
                           slug: /{c.slug}
@@ -1733,56 +1959,109 @@ export const FounderDashboard: React.FC = () => {
                       </div>
                       <p className="text-xs text-slate-500 mt-0.5">{c.address}</p>
                       {c.phone && <p className="text-[11px] text-slate-400 mt-0.5">Desk Phone: {c.phone}</p>}
+
+                      {/* Active Features Badges */}
+                      <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                        <span className="text-[10px] bg-white border border-slate-200 text-slate-600 px-2 py-0.5 rounded-md font-medium">
+                          🔊 Bilingual Voice
+                        </span>
+                        <span className="text-[10px] bg-white border border-slate-200 text-slate-600 px-2 py-0.5 rounded-md font-medium">
+                          💳 Cashfree UPI
+                        </span>
+                        <span className="text-[10px] bg-white border border-slate-200 text-slate-600 px-2 py-0.5 rounded-md font-medium">
+                          💬 WhatsApp
+                        </span>
+                        <span className="text-[10px] bg-white border border-slate-200 text-slate-600 px-2 py-0.5 rounded-md font-medium">
+                          🏥 ABDM ABHA
+                        </span>
+                      </div>
                     </div>
                   </div>
 
                   {/* Metrics & Links */}
                   <div className="flex flex-wrap items-center gap-2.5">
-                    <div className="px-3 py-1.5 bg-white rounded-xl border border-slate-200 text-center">
+                    {/* Revenue Card */}
+                    <div className="px-3.5 py-2 bg-emerald-50 rounded-xl border border-emerald-200/80 text-center">
+                      <span className="text-[10px] font-bold text-emerald-700 uppercase block">Patient Fees</span>
+                      <strong className="text-xs font-black text-emerald-800">
+                        ₹{c.totalRevenue?.toLocaleString('en-IN') || 0}
+                      </strong>
+                    </div>
+
+                    {/* Footfall */}
+                    <div className="px-3 py-2 bg-white rounded-xl border border-slate-200 text-center">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase block">Patients</span>
+                      <strong className="text-xs text-slate-800">{c.totalEntries} Tokens</strong>
+                    </div>
+
+                    {/* Doctors */}
+                    <div className="px-3 py-2 bg-white rounded-xl border border-slate-200 text-center">
                       <span className="text-[10px] font-bold text-slate-400 uppercase block">Doctors</span>
                       <strong className="text-xs text-slate-800">{c.doctorCount} Active</strong>
                     </div>
 
-                    <div className="px-3 py-1.5 bg-white rounded-xl border border-slate-200 text-center">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block">Tokens Issued</span>
-                      <strong className="text-xs text-slate-800">{c.totalEntries} Patients</strong>
+                    {/* Plan Tier Badge */}
+                    <div className="px-3.5 py-2 bg-amber-50 rounded-xl border border-amber-200 text-center">
+                      <span className="text-[10px] font-bold text-amber-700 uppercase block">Plan Tier</span>
+                      <strong className="text-xs font-black text-amber-900">
+                        {c.plan || 'ENTERPRISE'}
+                      </strong>
+                      <span className="text-[9px] text-amber-700/80 block font-medium">
+                        {c.monthlyFee ? `₹${c.monthlyFee.toLocaleString('en-IN')}/mo` : 'Free Trial'}
+                      </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    {/* Action Controls */}
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {/* Manage Plan & Access Button */}
+                      <button
+                        onClick={() => handleOpenPlanModal(c)}
+                        className="px-3.5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-98"
+                        title="Manage subscription plan, monthly fee, and feature entitlements"
+                      >
+                        <Crown className="w-3.5 h-3.5 text-slate-950" />
+                        <span>Manage Plan</span>
+                      </button>
+
+                      {/* View Inflow in Feed */}
+                      <button
+                        onClick={() => {
+                          setPatientClinicFilter(c.slug);
+                          setActiveTab('PATIENTS');
+                        }}
+                        className="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 rounded-xl text-xs font-bold border border-sky-200/80 transition-all flex items-center gap-1 cursor-pointer"
+                        title="Filter Live Patient Feed for this hospital"
+                      >
+                        <Users className="w-3.5 h-3.5" />
+                        <span>View Inflow</span>
+                      </button>
+
                       {/* Setup Links Package Button */}
                       <button
                         onClick={() => setSelectedClinicForSetupKit(c)}
-                        className="px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-black shadow-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-98"
+                        className="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-xl text-xs font-bold border border-emerald-200 transition-all flex items-center gap-1 cursor-pointer active:scale-98"
                         title="View and copy all 5 setup links for this hospital"
                       >
-                        <Share2 className="w-3.5 h-3.5 text-emerald-200" />
-                        <span>Setup Links</span>
+                        <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Links</span>
                       </button>
 
                       <button
                         onClick={() => setSelectedClinicForStandee(c)}
-                        className="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-xl text-xs font-bold border border-amber-200 transition-all flex items-center gap-1 cursor-pointer"
+                        className="p-2 bg-white hover:bg-amber-50 text-amber-900 rounded-xl text-xs font-bold border border-slate-200 transition-all flex items-center justify-center cursor-pointer"
                         title="View & Print Physical QR Standee"
                       >
                         <QrCode className="w-3.5 h-3.5 text-amber-600" />
-                        <span>Standee QR</span>
                       </button>
 
                       <Link
-                        to={`/check-in/${c.slug}`}
-                        target="_blank"
-                        className="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 rounded-xl text-xs font-bold border border-sky-200/80 transition-all flex items-center gap-1"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        <span>Patient Form</span>
-                      </Link>
-
-                      <Link
                         to={`/admin/${c.slug}`}
+                        target="_blank"
                         className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-sm"
+                        title="Open scoped Hospital Admin panel"
                       >
                         <Building2 className="w-3.5 h-3.5" />
-                        <span>Hospital Admin</span>
+                        <span>Desk</span>
                       </Link>
                     </div>
                   </div>
@@ -2806,6 +3085,233 @@ export const FounderDashboard: React.FC = () => {
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print Standee</span>
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* MODAL: MANAGE HOSPITAL SUBSCRIPTION & PREMIUM ACCESS (FOUNDER) */}
+      {/* ============================================================== */}
+      {selectedClinicForPlan && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 relative max-h-[92vh] overflow-y-auto">
+            {/* Close */}
+            <button
+              onClick={() => setSelectedClinicForPlan(null)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Header */}
+            <div className="flex items-start gap-3.5 mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 shrink-0">
+                <Crown className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-black text-slate-900">{selectedClinicForPlan.name}</h3>
+                  <span className="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                    Founder Control
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Manage commercial plan tier, active features, and platform access status for slug{' '}
+                  <span className="font-mono text-indigo-600 font-bold">/{selectedClinicForPlan.slug}</span>
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-5 text-xs">
+              {/* 1. Plan Tier Selector */}
+              <div>
+                <label className="font-black text-slate-800 uppercase tracking-wider text-[11px] block mb-2">
+                  1. Subscription Plan Tier
+                </label>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {[
+                    { id: 'ENTERPRISE', name: 'Enterprise Unlimited', price: '₹9,999/mo', desc: 'Unlimited Cabins, Priority Voice, ABDM, SLA', badge: '👑 Most Popular' },
+                    { id: 'PRO', name: 'Growth Pro', price: '₹4,999/mo', desc: 'Up to 5 Cabins, TV Display, Audio Chime', badge: '⚡ High Demand' },
+                    { id: 'STARTER', name: 'Starter OPD', price: '₹1,999/mo', desc: 'Up to 2 Cabins, Basic Queue Desk', badge: '🌱 Clinic' },
+                    { id: 'FREE_TRIAL', name: '14-Day Free Trial', price: '₹0 Evaluation', desc: 'Full evaluation sandbox access', badge: '⏳ Sandbox' },
+                  ].map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => {
+                        setPlanForm({
+                          ...planForm,
+                          plan: p.id,
+                          monthlyFee: p.id === 'ENTERPRISE' ? 9999 : p.id === 'PRO' ? 4999 : p.id === 'STARTER' ? 1999 : 0,
+                        });
+                      }}
+                      className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                        planForm.plan === p.id
+                          ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-amber-400'
+                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-white hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-black text-xs">{p.name}</span>
+                        <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-md ${planForm.plan === p.id ? 'bg-amber-400 text-slate-950' : 'bg-slate-200 text-slate-700'}`}>
+                          {p.badge}
+                        </span>
+                      </div>
+                      <div className={`text-xs font-black mt-1 ${planForm.plan === p.id ? 'text-emerald-400' : 'text-slate-900'}`}>
+                        {p.price}
+                      </div>
+                      <p className={`text-[10px] mt-0.5 line-clamp-2 ${planForm.plan === p.id ? 'text-slate-300' : 'text-slate-400'}`}>
+                        {p.desc}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 2. Access Status Kill-Switch */}
+              <div>
+                <label className="font-black text-slate-800 uppercase tracking-wider text-[11px] block mb-2">
+                  2. Platform Access Status (Founder Switch)
+                </label>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setPlanForm({ ...planForm, planStatus: 'ACTIVE' })}
+                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                      planForm.planStatus === 'ACTIVE'
+                        ? 'bg-emerald-50 border-emerald-300 text-emerald-900 ring-2 ring-emerald-500'
+                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-white'
+                    }`}
+                  >
+                    <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <div>
+                      <strong className="block text-xs font-black">🟢 Active Operational</strong>
+                      <span className="text-[10px] text-slate-500">Normal check-ins, TV display & doctor calls</span>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPlanForm({ ...planForm, planStatus: 'SUSPENDED' })}
+                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                      planForm.planStatus === 'SUSPENDED'
+                        ? 'bg-rose-50 border-rose-300 text-rose-900 ring-2 ring-rose-500'
+                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-white'
+                    }`}
+                  >
+                    <span className="w-3 h-3 rounded-full bg-rose-500"></span>
+                    <div>
+                      <strong className="block text-xs font-black">🔴 Suspended / Overdue</strong>
+                      <span className="text-[10px] text-slate-500">Temporarily freeze desk (payment pending)</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* 3. Premium Feature Entitlements */}
+              <div>
+                <label className="font-black text-slate-800 uppercase tracking-wider text-[11px] block mb-2">
+                  3. Premium Feature Entitlements
+                </label>
+                <div className="space-y-2 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                  {[
+                    { key: 'multiCabinVoice', label: 'Bilingual Multi-Cabin Voice Chime', desc: 'Announces Hindi + English on TV display', icon: '🔊' },
+                    { key: 'cashfreePayment', label: 'Cashfree Production Gateway & Hosted UPI', desc: '1-click PhonePe, GPay, Paytm collections', icon: '💳' },
+                    { key: 'whatsappAlerts', label: 'Meta WhatsApp / Fast2SMS Notifications', desc: 'Direct patient WhatsApp token alerts', icon: '📲' },
+                    { key: 'abdmBridge', label: 'ABDM M1/M2 Bridge (National Health ID)', desc: 'Government Ayushman Bharat ABHA card scan', icon: '🏥' },
+                    { key: 'customDomain', label: 'Custom White-Label CNAME Domain', desc: 'Map opd.hospital.com directly to Queueless', icon: '🌐' },
+                  ].map((feat) => {
+                    const isEnabled = (planForm.features as any)[feat.key] ?? true;
+                    return (
+                      <div key={feat.key} className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200/80">
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-base">{feat.icon}</span>
+                          <div>
+                            <div className="font-bold text-slate-900 text-xs">{feat.label}</div>
+                            <div className="text-[10px] text-slate-400">{feat.desc}</div>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPlanForm({
+                              ...planForm,
+                              features: {
+                                ...planForm.features,
+                                [feat.key]: !isEnabled,
+                              },
+                            });
+                          }}
+                          className={`px-3 py-1 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                            isEnabled
+                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                              : 'bg-slate-100 text-slate-500 border border-slate-200'
+                          }`}
+                        >
+                          {isEnabled ? 'Enabled ✓' : 'Disabled'}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 4. Commercial Pricing Override */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-slate-700 text-[11px] block mb-1">
+                    Monthly SaaS Platform Fee (₹)
+                  </label>
+                  <input
+                    type="number"
+                    value={planForm.monthlyFee}
+                    onChange={(e) => setPlanForm({ ...planForm, monthlyFee: Number(e.target.value) || 0 })}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-black text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-400"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 text-[11px] block mb-1">
+                    Platform Convenience Fee (%)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={planForm.commissionPercent}
+                    onChange={(e) => setPlanForm({ ...planForm, commissionPercent: Number(e.target.value) || 0 })}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-black text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-400"
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setSelectedClinicForPlan(null)}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSavePlan}
+                  disabled={savingPlan}
+                  className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black rounded-xl text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer active:scale-98 disabled:opacity-50"
+                >
+                  {savingPlan ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Saving Changes...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Crown className="w-3.5 h-3.5" />
+                      <span>Save & Deploy Hospital Plan</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>

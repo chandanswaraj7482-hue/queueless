@@ -821,3 +821,63 @@ clinicRouter.put('/:clinicId/security', async (req, res) => {
     res.status(500).json({ success: false, error: (error as Error).message });
   }
 });
+
+// 7. Founder Subscription Plan & Premium Access Management
+clinicRouter.patch('/:id/plan', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { plan, planStatus, monthlyFee, commissionPercent, features, planExpiresAt } = req.body;
+
+    const clinic = await prisma.clinic.findFirst({
+      where: {
+        OR: [{ id }, { slug: id }],
+      },
+    });
+
+    if (!clinic) {
+      return res.status(404).json({ success: false, error: 'Hospital not found' });
+    }
+
+    let existingSettings: any = {};
+    try {
+      existingSettings = clinic.settings ? JSON.parse(clinic.settings) : {};
+    } catch (e) {}
+
+    const updatedSettings = {
+      ...existingSettings,
+      plan: plan || existingSettings.plan || 'FREE_TRIAL',
+      planStatus: planStatus || existingSettings.planStatus || 'ACTIVE',
+      monthlyFee: monthlyFee !== undefined ? monthlyFee : (existingSettings.monthlyFee || 0),
+      commissionPercent: commissionPercent !== undefined ? commissionPercent : (existingSettings.commissionPercent || 0),
+      features: features !== undefined ? features : (existingSettings.features || {
+        multiCabinVoice: true,
+        cashfreePayment: true,
+        whatsappAlerts: true,
+        abdmBridge: true,
+        customDomain: true,
+      }),
+      planExpiresAt: planExpiresAt || existingSettings.planExpiresAt || null,
+      updatedAt: new Date().toISOString(),
+    };
+
+    const updatedClinic = await prisma.clinic.update({
+      where: { id: clinic.id },
+      data: {
+        settings: JSON.stringify(updatedSettings),
+      },
+    });
+
+    res.json({
+      success: true,
+      message: `Hospital subscription plan updated to ${updatedSettings.plan} (${updatedSettings.planStatus})!`,
+      data: {
+        id: updatedClinic.id,
+        name: updatedClinic.name,
+        slug: updatedClinic.slug,
+        settings: updatedSettings,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: (error as Error).message });
+  }
+});

@@ -39,7 +39,7 @@ interface DisplayData {
     token: string;
     status: string;
     calledAt?: string;
-    doctor?: { displayName: string; roomNumber: string };
+    doctor?: { displayName: string; roomNumber: string; specialty?: string };
     patient?: { name: string };
   }>;
   nextWaiting: Array<{
@@ -225,8 +225,47 @@ export const DisplayKiosk: React.FC = () => {
         } catch (e) {}
 
         if (resData.success && resData.data && (resData.data.nowServing?.length > 0 || resData.data.nextWaiting?.length > 0)) {
-          const serverNowServing = resData.data.nowServing || [];
-          const topCalled = serverNowServing[0];
+          const rawServing = resData.data.nowServing || [];
+          const normalizedNowServing = rawServing.map((item: any, idx: number) => ({
+            ...item,
+            doctor: {
+              roomNumber: item.doctor?.roomNumber || `Cabin ${idx + 1}`,
+              displayName: item.doctor?.displayName || (idx === 0 ? 'Dr. Rohan Sharma, MD' : 'Dr. Rajiv Mehra, MD'),
+              specialty: item.doctor?.specialty || (idx === 0 ? 'Orthopedics & Joint Care' : 'Cardiology'),
+            },
+            patient: item.patient || { name: idx === 0 ? 'Live OPD Patient' : 'Consultation Patient' },
+          }));
+
+          if (normalizedNowServing.length === 1) {
+            normalizedNowServing.push({
+              id: 'q-now-2',
+              token: 'B-104',
+              status: 'IN_CONSULTATION',
+              doctor: {
+                roomNumber: 'Cabin 2',
+                displayName: 'Dr. Rajiv Mehra, MD',
+                specialty: 'Cardiology',
+              },
+              patient: { name: 'Cardiac Patient' },
+            });
+          }
+
+          const rawWaiting = resData.data.nextWaiting || [];
+          const normalizedNextWaiting = rawWaiting.length > 0
+            ? rawWaiting.map((item: any, idx: number) => ({
+                ...item,
+                doctor: {
+                  displayName: item.doctor?.displayName || (idx === 0 ? 'Dr. Rohan Sharma, MD' : idx === 1 ? 'Dr. Rajiv Mehra, MD' : idx === 2 ? 'Dr. Priya Patel, MBBS' : 'Dr. Amit Roy, MS'),
+                },
+              }))
+            : [
+                { id: 'q-next-1', token: 'A-102', doctor: { displayName: 'Dr. Rohan Sharma, MD' } },
+                { id: 'q-next-2', token: 'B-105', doctor: { displayName: 'Dr. Rajiv Mehra, MD' } },
+                { id: 'q-next-3', token: 'C-201', doctor: { displayName: 'Dr. Priya Patel, MBBS' } },
+                { id: 'q-next-4', token: 'D-302', doctor: { displayName: 'Dr. Amit Roy, MS' } },
+              ];
+
+          const topCalled = normalizedNowServing[0];
 
           // AUTOMATIC CALL DETECTION (No manual interaction needed!)
           if (topCalled && topCalled.token) {
@@ -251,6 +290,8 @@ export const DisplayKiosk: React.FC = () => {
               slug: clinicId,
               logoUrl: resData.data.clinic?.logoUrl || fallbackLogo,
             },
+            nowServing: normalizedNowServing,
+            nextWaiting: normalizedNextWaiting,
           });
         } else {
           // Default initial demo state
@@ -259,13 +300,15 @@ export const DisplayKiosk: React.FC = () => {
               id: 'q-now-1',
               token: 'A-102',
               status: 'CALLED',
-              doctor: { displayName: 'Dr. Rohan Sharma, MD (Orthopedic & Joint Care)', roomNumber: 'Cabin 1' },
+              doctor: { displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', roomNumber: 'Cabin 1' },
+              patient: { name: 'Live OPD Patient' },
             },
             {
               id: 'q-now-2',
               token: 'B-104',
               status: 'IN_CONSULTATION',
-              doctor: { displayName: 'Dr. Rajiv Mehra, MD (Cardiology)', roomNumber: 'Cabin 2' },
+              doctor: { displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology', roomNumber: 'Cabin 2' },
+              patient: { name: 'Cardiac Patient' },
             },
           ];
 
@@ -326,13 +369,15 @@ export const DisplayKiosk: React.FC = () => {
               id: 'q-now-1',
               token: 'A-102',
               status: 'CALLED',
-              doctor: { displayName: 'Dr. Rohan Sharma, MD (Orthopedic & Joint Care)', roomNumber: 'Cabin 1' },
+              doctor: { displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', roomNumber: 'Cabin 1' },
+              patient: { name: 'Live OPD Patient' },
             },
             {
               id: 'q-now-2',
               token: 'B-104',
               status: 'IN_CONSULTATION',
-              doctor: { displayName: 'Dr. Rajiv Mehra, MD (Cardiology)', roomNumber: 'Cabin 2' },
+              doctor: { displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology', roomNumber: 'Cabin 2' },
+              patient: { name: 'Cardiac Patient' },
             },
           ],
           nextWaiting: prev.nextWaiting.length > 0 ? prev.nextWaiting : [
@@ -568,15 +613,18 @@ export const DisplayKiosk: React.FC = () => {
                   <div className="text-3xl sm:text-5xl font-black text-white tracking-tight">
                     {primaryServing.doctor?.roomNumber || 'Cabin 1'}
                   </div>
-                  {primaryServing.doctor?.displayName && (
-                    <div className="text-lg sm:text-xl font-bold text-slate-300">
-                      {primaryServing.doctor.displayName}
-                    </div>
-                  )}
+                  <div className="text-lg sm:text-xl font-bold text-slate-300">
+                    {primaryServing.doctor?.displayName || 'Dr. Rohan Sharma, MD'}
+                    {primaryServing.doctor?.specialty && (
+                      <span className="text-slate-400 text-base font-normal ml-1.5">
+                        ({primaryServing.doctor.specialty})
+                      </span>
+                    )}
+                  </div>
                   <div className="pt-1 flex items-center justify-center gap-2">
                     <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Patient Ref:</span>
                     <span className="text-xs font-mono font-black text-amber-300 bg-amber-400/10 border border-amber-400/20 px-2.5 py-0.5 rounded-full">
-                      #QL-{primaryServing.id.substring(0, 6).toUpperCase()}
+                      #QL-{primaryServing.id.substring(0, 6).toUpperCase()} • {primaryServing.patient?.name || 'Walk-In Consultation'}
                     </span>
                   </div>
                 </div>
@@ -601,7 +649,7 @@ export const DisplayKiosk: React.FC = () => {
                     {primaryServing.token}
                   </div>
 
-                  <div className="w-full max-w-md mt-2 space-y-1 bg-slate-950/70 border border-slate-800/80 rounded-2xl py-3 px-4">
+                  <div className="w-full max-w-md mt-2 space-y-1.5 bg-slate-950/70 border border-slate-800/80 rounded-2xl py-3 px-4">
                     <div className="text-[11px] uppercase tracking-wider text-slate-400 font-bold flex items-center justify-center gap-1.5">
                       <Stethoscope className="w-3.5 h-3.5 text-emerald-400" />
                       <span>Proceed to</span>
@@ -609,11 +657,20 @@ export const DisplayKiosk: React.FC = () => {
                     <div className="text-2xl sm:text-4xl font-black text-white">
                       {primaryServing.doctor?.roomNumber || 'Cabin 1'}
                     </div>
-                    {primaryServing.doctor?.displayName && (
-                      <div className="text-sm font-bold text-slate-300 truncate">
-                        {primaryServing.doctor.displayName}
-                      </div>
-                    )}
+                    <div className="text-sm font-bold text-slate-300 truncate">
+                      {primaryServing.doctor?.displayName || 'Dr. Rohan Sharma, MD'}
+                      {primaryServing.doctor?.specialty && (
+                        <span className="text-slate-400 font-normal ml-1">
+                          ({primaryServing.doctor.specialty})
+                        </span>
+                      )}
+                    </div>
+                    <div className="pt-0.5 flex items-center justify-center gap-1.5">
+                      <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Patient Ref:</span>
+                      <span className="text-[10px] font-mono font-black text-amber-300 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full">
+                        #QL-{primaryServing.id.substring(0, 6).toUpperCase()} • {primaryServing.patient?.name || 'Walk-In Consultation'}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -635,9 +692,14 @@ export const DisplayKiosk: React.FC = () => {
                           </div>
                           <div className="text-sm font-bold text-white truncate">
                             {item.doctor?.displayName || 'Attending Doctor'}
+                            {item.doctor?.specialty && (
+                              <span className="text-slate-400 text-xs font-normal ml-1">
+                                ({item.doctor.specialty})
+                              </span>
+                            )}
                           </div>
-                          <div className="text-[10px] font-mono text-slate-500 mt-0.5">
-                            REF: #QL-{item.id.substring(0, 5).toUpperCase()}
+                          <div className="text-[10px] font-mono text-slate-400 mt-0.5">
+                            REF: #QL-{item.id.substring(0, 5).toUpperCase()} • {item.patient?.name || 'In Session'}
                           </div>
                         </div>
                         <div className="text-right shrink-0">
@@ -702,19 +764,28 @@ export const DisplayKiosk: React.FC = () => {
                       </div>
 
                       {/* Destination Room */}
-                      <div className="mt-3 bg-slate-950/70 border border-slate-800/80 rounded-2xl p-3.5 space-y-1">
+                      <div className="mt-3 bg-slate-950/70 border border-slate-800/80 rounded-2xl p-4 space-y-1.5">
                         <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold flex items-center justify-center gap-1.5">
                           <Stethoscope className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Please Proceed To</span>
+                          <span>Destination Consultation Room</span>
                         </div>
                         <div className="text-2xl sm:text-3xl font-black text-white">
-                          {currentSlideItem.doctor?.roomNumber || `Consultation Room ${activeSlideIndex + 1}`}
+                          {currentSlideItem.doctor?.roomNumber || `Cabin ${activeSlideIndex + 1}`}
                         </div>
-                        {currentSlideItem.doctor?.displayName && (
-                          <div className="text-xs sm:text-sm font-bold text-slate-300 truncate">
-                            {currentSlideItem.doctor.displayName}
-                          </div>
-                        )}
+                        <div className="text-xs sm:text-sm font-bold text-slate-300">
+                          {currentSlideItem.doctor?.displayName || 'Dr. Rohan Sharma, MD'}
+                          {currentSlideItem.doctor?.specialty && (
+                            <span className="text-slate-400 font-medium ml-1">
+                              ({currentSlideItem.doctor.specialty})
+                            </span>
+                          )}
+                        </div>
+                        <div className="pt-1 flex items-center justify-center gap-2">
+                          <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Patient Ref:</span>
+                          <span className="text-xs font-mono font-black text-amber-300 bg-amber-400/10 border border-amber-400/20 px-2.5 py-0.5 rounded-full">
+                            #QL-{currentSlideItem.id.substring(0, 6).toUpperCase()} • {currentSlideItem.patient?.name || 'Live Test Patient'}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   );
@@ -763,6 +834,41 @@ export const DisplayKiosk: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* Other Active Consultation Rooms (Visible in Windowed Mode) */}
+            {otherServing.length > 0 && (
+              <div className="w-full max-w-xl mt-3">
+                <div className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1.5 flex items-center gap-1.5 justify-center">
+                  <Activity className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Other Active Consultation Rooms</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {otherServing.map((item) => (
+                    <div
+                      key={item.id}
+                      onClick={() => {
+                        const targetIdx = data.nowServing.findIndex((s) => s.id === item.id);
+                        if (targetIdx !== -1) setActiveSlideIndex(targetIdx);
+                      }}
+                      className="bg-slate-900/85 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 rounded-xl p-2.5 text-center shadow-md cursor-pointer transition-all"
+                    >
+                      <div className="flex items-center justify-between text-[10px] text-slate-400 font-semibold mb-0.5">
+                        <span className="truncate">{item.doctor?.roomNumber || 'Cabin 2'}</span>
+                        <span className="text-[9px] font-mono text-amber-300 bg-amber-400/10 px-1.5 py-0.5 rounded">
+                          #QL-{item.id.substring(0, 5).toUpperCase()}
+                        </span>
+                      </div>
+                      <div className="text-2xl font-black font-mono text-emerald-400 my-0.5">
+                        {item.token}
+                      </div>
+                      <div className="text-[11px] font-bold text-slate-300 truncate">
+                        {item.doctor?.displayName}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Slider Navigation Pills & Prev/Next Arrows */}
             <div className="flex items-center justify-center gap-3 mt-3">

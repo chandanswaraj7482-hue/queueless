@@ -19,11 +19,20 @@ import {
   Stethoscope,
   Globe,
   CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
   Layers,
   Tv,
+  Users,
+  ChevronRight,
+  UserCheck,
 } from 'lucide-react';
+
+interface DoctorInfo {
+  id?: string;
+  displayName: string;
+  specialty?: string;
+  roomNumber: string;
+  active?: boolean;
+}
 
 interface DisplayData {
   clinic?: {
@@ -33,25 +42,28 @@ interface DisplayData {
     address: string;
     logoUrl?: string;
     openingHours?: string;
+    doctors?: DoctorInfo[];
   };
   nowServing: Array<{
     id: string;
     token: string;
     status: string;
     calledAt?: string;
-    doctor?: { displayName: string; roomNumber: string; specialty?: string };
+    doctorId?: string;
+    doctor?: DoctorInfo;
     patient?: { name: string };
   }>;
   nextWaiting: Array<{
     id: string;
     token: string;
-    doctor?: { displayName: string };
+    doctorId?: string;
+    doctor?: DoctorInfo;
   }>;
 }
 
 const WORLDWIDE_LANGUAGES: { code: SpeechLanguageMode; flag: string; label: string; subhead: string }[] = [
-  { code: 'en', flag: '🌐', label: 'Global English', subhead: 'PLEASE PROCEED' },
   { code: 'hi', flag: '🇮🇳', label: 'English + Hindi (हिंदी)', subhead: 'कृपया ध्यान दें' },
+  { code: 'en', flag: '🌐', label: 'Global English', subhead: 'PLEASE PROCEED' },
   { code: 'bn', flag: '🇮🇳', label: 'English + Bengali (বাংলা)', subhead: 'দয়া করে এগিয়ে যান' },
   { code: 'ta', flag: '🇮🇳', label: 'English + Tamil (தமிழ்)', subhead: 'தயவுசெய்து வரவும்' },
   { code: 'te', flag: '🇮🇳', label: 'English + Telugu (తెలుగు)', subhead: 'దయచేసి రండి' },
@@ -70,14 +82,15 @@ const WORLDWIDE_LANGUAGES: { code: SpeechLanguageMode; flag: string; label: stri
 export const DisplayKiosk: React.FC = () => {
   const { clinicId: routeClinicId } = useParams<{ clinicId?: string }>();
   const clinicId = routeClinicId || 'city-health';
-  const initialClinicName = clinicId === 'caremax-opd'
-    ? 'Caremax OPD'
-    : clinicId === 'city-health'
-    ? 'City Health Multi-Specialty Hospital'
-    : clinicId
-        .split('-')
-        .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
-        .join(' ');
+  const initialClinicName =
+    clinicId === 'caremax-opd'
+      ? 'Caremax OPD'
+      : clinicId === 'city-health'
+      ? 'City Health Multi-Specialty Hospital'
+      : clinicId
+          .split('-')
+          .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+          .join(' ');
 
   const [data, setData] = useState<DisplayData>({
     clinic: {
@@ -85,12 +98,31 @@ export const DisplayKiosk: React.FC = () => {
       name: initialClinicName,
       slug: clinicId,
       address: 'Suite 402, Metro Healthcare Towers, MG Road',
+      doctors: [
+        { id: 'doc-1', roomNumber: 'Cabin 1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care' },
+        { id: 'doc-2', roomNumber: 'Cabin 2', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology' },
+        { id: 'doc-3', roomNumber: 'Cabin 3', displayName: 'Dr. Priya Patel, MBBS', specialty: 'Pediatrics' },
+        { id: 'doc-4', roomNumber: 'Cabin 4', displayName: 'Dr. Amit Roy, MS', specialty: 'General Medicine' },
+      ],
     },
     nowServing: [
       {
+        id: 'b10492',
+        token: 'B-104',
+        status: 'CALLED',
+        doctorId: 'doc-2',
+        doctor: {
+          displayName: 'Dr. Rajiv Mehra, MD',
+          specialty: 'Cardiology',
+          roomNumber: 'Cabin 2',
+        },
+        patient: { name: 'Amit Verma' },
+      },
+      {
         id: '75d040',
         token: 'A-101',
-        status: 'CALLED',
+        status: 'IN_CONSULTATION',
+        doctorId: 'doc-1',
         doctor: {
           displayName: 'Dr. Rohan Sharma, MD',
           specialty: 'Orthopedics & Joint Care',
@@ -98,34 +130,23 @@ export const DisplayKiosk: React.FC = () => {
         },
         patient: { name: 'Live Test Patient' },
       },
-      {
-        id: 'b10492',
-        token: 'B-104',
-        status: 'IN_CONSULTATION',
-        doctor: {
-          displayName: 'Dr. Rajiv Mehra, MD',
-          specialty: 'Cardiology',
-          roomNumber: 'Cabin 2',
-        },
-        patient: { name: 'Cardiac Patient' },
-      },
     ],
     nextWaiting: [
-      { id: 'q-next-1', token: 'A-102', doctor: { displayName: 'Dr. Rohan Sharma, MD' } },
-      { id: 'q-next-2', token: 'B-105', doctor: { displayName: 'Dr. Rajiv Mehra, MD' } },
-      { id: 'q-next-3', token: 'C-201', doctor: { displayName: 'Dr. Priya Patel, MBBS' } },
-      { id: 'q-next-4', token: 'D-302', doctor: { displayName: 'Dr. Amit Roy, MS' } },
+      { id: 'q-next-1', token: 'A-102', doctor: { displayName: 'Dr. Rohan Sharma, MD', roomNumber: 'Cabin 1', specialty: 'Orthopedics' } },
+      { id: 'q-next-2', token: 'B-105', doctor: { displayName: 'Dr. Rajiv Mehra, MD', roomNumber: 'Cabin 2', specialty: 'Cardiology' } },
+      { id: 'q-next-3', token: 'C-201', doctor: { displayName: 'Dr. Priya Patel, MBBS', roomNumber: 'Cabin 3', specialty: 'Pediatrics' } },
+      { id: 'q-next-4', token: 'D-302', doctor: { displayName: 'Dr. Amit Roy, MS', roomNumber: 'Cabin 4', specialty: 'General Medicine' } },
     ],
   });
+
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [speechLang, setSpeechLang] = useState<SpeechLanguageMode>('hi'); // Default to English + Hindi for natural Indian hospital context
+  const [speechLang, setSpeechLang] = useState<SpeechLanguageMode>('hi');
   const [lastCalledToken, setLastCalledToken] = useState<string | null>(null);
   const [isAnnouncing, setIsAnnouncing] = useState(false);
   const [currentTime, setCurrentTime] = useState<string>('');
   const [currentDate, setCurrentDate] = useState<string>('');
   const [timezoneStr, setTimezoneStr] = useState<string>('');
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [audioUnlocked, setAudioUnlocked] = useState(false);
 
   // References to track changes without resetting timers
@@ -200,7 +221,7 @@ export const DisplayKiosk: React.FC = () => {
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
         setTimezoneStr(tz.replace(/_/g, ' '));
       } catch {
-        setTimezoneStr('UTC');
+        setTimezoneStr('Asia/Calcutta');
       }
     };
     updateTime();
@@ -208,32 +229,15 @@ export const DisplayKiosk: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Slides array calculation for Windowed Mode (Slide between active rooms and queue overview)
-  const totalSlides = Math.max(1, (data.nowServing.length || 1) + (data.nextWaiting.length > 0 ? 1 : 0));
-
-  // Automatic slide rotation in non-fullscreen windowed mode
-  useEffect(() => {
-    if (isFullscreen) return; // In fullscreen, no sliding! (User requested: ek hi page me dekhenga slide nhi hoga)
-
-    const timer = setInterval(() => {
-      setActiveSlideIndex((prev) => (prev + 1) % totalSlides);
-    }, 5500); // Rotate every 5.5s
-
-    return () => clearInterval(timer);
-  }, [isFullscreen, totalSlides]);
-
   const triggerCallAnnouncement = (token: string, cabin: string, doctorName?: string) => {
     setLastCalledToken(token);
     setIsAnnouncing(true);
     setTimeout(() => setIsAnnouncing(false), 5500);
 
-    // In windowed mode, immediately snap slide to 0 so the called room is visible
-    setActiveSlideIndex(0);
-
     if (soundEnabledRef.current) {
       playClinicVoiceAnnouncement(
         token,
-        cabin || 'Consultation Room 1',
+        cabin || 'Cabin 1',
         doctorName,
         speechLangRef.current
       );
@@ -244,7 +248,7 @@ export const DisplayKiosk: React.FC = () => {
     fetch(`${API_BASE_URL}/api/v1/queue/clinics/${clinicId}/display`)
       .then((res) => res.json())
       .then((resData) => {
-        let fallbackName = 'City Health Multi-Specialty Hospital';
+        let fallbackName = initialClinicName;
         let fallbackAddress = 'Suite 402, Metro Healthcare Towers, MG Road';
         let fallbackLogo = '';
         try {
@@ -253,63 +257,52 @@ export const DisplayKiosk: React.FC = () => {
             fallbackName = storedHospitals[clinicId].name;
             fallbackAddress = storedHospitals[clinicId].address || fallbackAddress;
             fallbackLogo = storedHospitals[clinicId].logoUrl || '';
-          } else if (clinicId && clinicId !== 'city-health') {
-            const cleanWords = clinicId
-              .split('-')
-              .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
-              .join(' ');
-            fallbackName = cleanWords.toLowerCase().endsWith('opd') ||
-              cleanWords.toLowerCase().endsWith('clinic') ||
-              cleanWords.toLowerCase().endsWith('hospital') ||
-              cleanWords.toLowerCase().endsWith('center')
-              ? cleanWords
-              : cleanWords + ' OPD';
           }
           if (!fallbackLogo && clinicId) {
             fallbackLogo = localStorage.getItem('queueless_clinic_logo_' + clinicId) || '';
           }
         } catch (e) {}
 
-        if (resData.success && resData.data && (resData.data.nowServing?.length > 0 || resData.data.nextWaiting?.length > 0)) {
+        if (resData.success && resData.data) {
+          const clinicObj = resData.data.clinic || {};
           const rawServing = resData.data.nowServing || [];
           const normalizedNowServing = rawServing.map((item: any, idx: number) => ({
             ...item,
             doctor: {
               roomNumber: item.doctor?.roomNumber || `Cabin ${idx + 1}`,
-              displayName: item.doctor?.displayName || (idx === 0 ? 'Dr. Rohan Sharma, MD' : 'Dr. Rajiv Mehra, MD'),
-              specialty: item.doctor?.specialty || (idx === 0 ? 'Orthopedics & Joint Care' : 'Cardiology'),
+              displayName: item.doctor?.displayName || (idx === 0 ? 'Dr. Rajiv Mehra, MD' : 'Dr. Rohan Sharma, MD'),
+              specialty: item.doctor?.specialty || (idx === 0 ? 'Cardiology' : 'Orthopedics & Joint Care'),
             },
-            patient: item.patient || { name: idx === 0 ? 'Live OPD Patient' : 'Consultation Patient' },
+            patient: item.patient || { name: idx === 0 ? 'Cardiac Patient' : 'Live OPD Patient' },
           }));
 
-          if (normalizedNowServing.length === 1) {
-            normalizedNowServing.push({
-              id: 'q-now-2',
-              token: 'B-104',
-              status: 'IN_CONSULTATION',
-              doctor: {
-                roomNumber: 'Cabin 2',
-                displayName: 'Dr. Rajiv Mehra, MD',
-                specialty: 'Cardiology',
-              },
-              patient: { name: 'Cardiac Patient' },
-            });
-          }
-
           const rawWaiting = resData.data.nextWaiting || [];
-          const normalizedNextWaiting = rawWaiting.length > 0
-            ? rawWaiting.map((item: any, idx: number) => ({
-                ...item,
-                doctor: {
-                  displayName: item.doctor?.displayName || (idx === 0 ? 'Dr. Rohan Sharma, MD' : idx === 1 ? 'Dr. Rajiv Mehra, MD' : idx === 2 ? 'Dr. Priya Patel, MBBS' : 'Dr. Amit Roy, MS'),
-                },
-              }))
-            : [
-                { id: 'q-next-1', token: 'A-102', doctor: { displayName: 'Dr. Rohan Sharma, MD' } },
-                { id: 'q-next-2', token: 'B-105', doctor: { displayName: 'Dr. Rajiv Mehra, MD' } },
-                { id: 'q-next-3', token: 'C-201', doctor: { displayName: 'Dr. Priya Patel, MBBS' } },
-                { id: 'q-next-4', token: 'D-302', doctor: { displayName: 'Dr. Amit Roy, MS' } },
-              ];
+          const normalizedNextWaiting =
+            rawWaiting.length > 0
+              ? rawWaiting.map((item: any, idx: number) => ({
+                  ...item,
+                  doctor: {
+                    roomNumber: item.doctor?.roomNumber || `Cabin ${(idx % 4) + 1}`,
+                    displayName:
+                      item.doctor?.displayName ||
+                      (idx === 0
+                        ? 'Dr. Rohan Sharma, MD'
+                        : idx === 1
+                        ? 'Dr. Rajiv Mehra, MD'
+                        : idx === 2
+                        ? 'Dr. Priya Patel, MBBS'
+                        : 'Dr. Amit Roy, MS'),
+                    specialty:
+                      item.doctor?.specialty ||
+                      (idx === 0 ? 'Orthopedics' : idx === 1 ? 'Cardiology' : idx === 2 ? 'Pediatrics' : 'General Medicine'),
+                  },
+                }))
+              : [
+                  { id: 'q-next-1', token: 'A-102', doctor: { displayName: 'Dr. Rohan Sharma, MD', roomNumber: 'Cabin 1', specialty: 'Orthopedics' } },
+                  { id: 'q-next-2', token: 'B-105', doctor: { displayName: 'Dr. Rajiv Mehra, MD', roomNumber: 'Cabin 2', specialty: 'Cardiology' } },
+                  { id: 'q-next-3', token: 'C-201', doctor: { displayName: 'Dr. Priya Patel, MBBS', roomNumber: 'Cabin 3', specialty: 'Pediatrics' } },
+                  { id: 'q-next-4', token: 'D-302', doctor: { displayName: 'Dr. Amit Roy, MS', roomNumber: 'Cabin 4', specialty: 'General Medicine' } },
+                ];
 
           const topCalled = normalizedNowServing[0];
 
@@ -329,111 +322,27 @@ export const DisplayKiosk: React.FC = () => {
           }
 
           setData({
-            ...resData.data,
             clinic: {
-              ...resData.data.clinic,
-              name: resData.data.clinic?.name || fallbackName,
+              ...clinicObj,
+              name: clinicObj.name || fallbackName,
               slug: clinicId,
-              logoUrl: resData.data.clinic?.logoUrl || fallbackLogo,
+              logoUrl: clinicObj.logoUrl || fallbackLogo,
+              doctors:
+                clinicObj.doctors && clinicObj.doctors.length > 0
+                  ? clinicObj.doctors
+                  : [
+                      { id: 'doc-1', roomNumber: 'Cabin 1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care' },
+                      { id: 'doc-2', roomNumber: 'Cabin 2', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology' },
+                      { id: 'doc-3', roomNumber: 'Cabin 3', displayName: 'Dr. Priya Patel, MBBS', specialty: 'Pediatrics' },
+                      { id: 'doc-4', roomNumber: 'Cabin 4', displayName: 'Dr. Amit Roy, MS', specialty: 'General Medicine' },
+                    ],
             },
             nowServing: normalizedNowServing,
             nextWaiting: normalizedNextWaiting,
           });
-        } else {
-          // Default initial demo state
-          const defaultNowServing = [
-            {
-              id: 'q-now-1',
-              token: 'A-102',
-              status: 'CALLED',
-              doctor: { displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', roomNumber: 'Cabin 1' },
-              patient: { name: 'Live OPD Patient' },
-            },
-            {
-              id: 'q-now-2',
-              token: 'B-104',
-              status: 'IN_CONSULTATION',
-              doctor: { displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology', roomNumber: 'Cabin 2' },
-              patient: { name: 'Cardiac Patient' },
-            },
-          ];
-
-          if (!initialLoadDoneRef.current) {
-            lastAnnouncedTokenRef.current = 'A-102';
-            initialLoadDoneRef.current = true;
-          }
-
-          setData({
-            clinic: {
-              id: clinicId,
-              name: fallbackName,
-              slug: clinicId,
-              address: fallbackAddress,
-              logoUrl: fallbackLogo,
-            },
-            nowServing: defaultNowServing,
-            nextWaiting: [
-              { id: 'q-next-1', token: 'A-103', doctor: { displayName: 'Dr. Rohan Sharma, MD' } },
-              { id: 'q-next-2', token: 'B-105', doctor: { displayName: 'Dr. Rajiv Mehra, MD' } },
-              { id: 'q-next-3', token: 'C-201', doctor: { displayName: 'Dr. Priya Patel, MBBS' } },
-              { id: 'q-next-4', token: 'D-302', doctor: { displayName: 'Dr. Amit Roy, MS' } },
-            ],
-          });
         }
       })
-      .catch(() => {
-        let fallbackName = 'City Health Multi-Specialty Hospital';
-        let fallbackAddress = 'Suite 402, Metro Healthcare Towers, MG Road';
-        try {
-          const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
-          if (clinicId && storedHospitals[clinicId]) {
-            fallbackName = storedHospitals[clinicId].name;
-            fallbackAddress = storedHospitals[clinicId].address || fallbackAddress;
-          } else if (clinicId && clinicId !== 'city-health') {
-            const cleanWords = clinicId
-              .split('-')
-              .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
-              .join(' ');
-            fallbackName = cleanWords.toLowerCase().endsWith('opd') ||
-              cleanWords.toLowerCase().endsWith('clinic') ||
-              cleanWords.toLowerCase().endsWith('hospital') ||
-              cleanWords.toLowerCase().endsWith('center')
-              ? cleanWords
-              : cleanWords + ' OPD';
-          }
-        } catch (e) {}
-
-        setData((prev) => ({
-          clinic: {
-            id: clinicId,
-            name: fallbackName,
-            slug: clinicId,
-            address: fallbackAddress,
-          },
-          nowServing: prev.nowServing.length > 0 ? prev.nowServing : [
-            {
-              id: 'q-now-1',
-              token: 'A-102',
-              status: 'CALLED',
-              doctor: { displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', roomNumber: 'Cabin 1' },
-              patient: { name: 'Live OPD Patient' },
-            },
-            {
-              id: 'q-now-2',
-              token: 'B-104',
-              status: 'IN_CONSULTATION',
-              doctor: { displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology', roomNumber: 'Cabin 2' },
-              patient: { name: 'Cardiac Patient' },
-            },
-          ],
-          nextWaiting: prev.nextWaiting.length > 0 ? prev.nextWaiting : [
-            { id: 'q-next-1', token: 'A-103', doctor: { displayName: 'Dr. Rohan Sharma, MD' } },
-            { id: 'q-next-2', token: 'B-105', doctor: { displayName: 'Dr. Rajiv Mehra, MD' } },
-            { id: 'q-next-3', token: 'C-201', doctor: { displayName: 'Dr. Priya Patel, MBBS' } },
-            { id: 'q-next-4', token: 'D-302', doctor: { displayName: 'Dr. Amit Roy, MS' } },
-          ],
-        }));
-      });
+      .catch(() => {});
   };
 
   useEffect(() => {
@@ -471,81 +380,116 @@ export const DisplayKiosk: React.FC = () => {
   };
 
   const handleTestVoice = () => {
-    const testToken = primaryServing?.token || 'A-102';
-    const testCabin = primaryServing?.doctor?.roomNumber || 'Cabin 1';
+    const testToken = primaryServing?.token || 'B-104';
+    const testCabin = primaryServing?.doctor?.roomNumber || 'Cabin 2';
     triggerCallAnnouncement(testToken, testCabin, primaryServing?.doctor?.displayName);
   };
 
-  const primaryServing = data.nowServing[0];
-  const otherServing = data.nowServing.slice(1, 4);
+  const primaryServing = data.nowServing[0] || {
+    id: 'b10492',
+    token: 'B-104',
+    status: 'CALLED',
+    doctor: { displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology', roomNumber: 'Cabin 2' },
+    patient: { name: 'Amit Verma' },
+  };
 
   const activeLangConfig =
     WORLDWIDE_LANGUAGES.find((l) => l.code === speechLang) || WORLDWIDE_LANGUAGES[0];
 
-  return (
-    <div className="h-screen max-h-screen w-screen overflow-hidden bg-slate-950 text-white flex flex-col justify-between p-3 sm:p-4 lg:p-5 select-none relative font-sans">
-      {/* Background ambient lighting effects */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[140px] pointer-events-none"></div>
+  // All 4 Clinical Cabins Directory (Standard Hospital Floor Plan)
+  const allHospitalDoctors: DoctorInfo[] =
+    data.clinic?.doctors && data.clinic.doctors.length > 0
+      ? data.clinic.doctors
+      : [
+          { id: 'doc-1', roomNumber: 'Cabin 1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care' },
+          { id: 'doc-2', roomNumber: 'Cabin 2', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology' },
+          { id: 'doc-3', roomNumber: 'Cabin 3', displayName: 'Dr. Priya Patel, MBBS', specialty: 'Pediatrics' },
+          { id: 'doc-4', roomNumber: 'Cabin 4', displayName: 'Dr. Amit Roy, MS', specialty: 'General Medicine' },
+        ];
 
-      {/* 1. TOP TELEMETRY & HOSPITAL BRANDING HEADER (SHRINK-0) */}
-      <header className="relative z-10 flex items-center justify-between gap-3 border-b border-slate-800/80 pb-2.5 shrink-0">
+  // Map each doctor to their active serving token or next queue token
+  const cabinCards = allHospitalDoctors.map((doc, idx) => {
+    const serving = data.nowServing.find(
+      (s) =>
+        s.doctor?.roomNumber === doc.roomNumber ||
+        s.doctor?.displayName === doc.displayName ||
+        s.doctorId === doc.id
+    );
+
+    const waiting = data.nextWaiting.find(
+      (w) =>
+        w.doctor?.roomNumber === doc.roomNumber ||
+        w.doctor?.displayName === doc.displayName ||
+        w.doctorId === doc.id
+    );
+
+    const isPrimaryCalled = serving && serving.token === primaryServing.token;
+
+    return {
+      doctor: doc,
+      serving,
+      waiting,
+      isPrimaryCalled,
+      token: serving ? serving.token : waiting ? waiting.token : `Cabin ${idx + 1}`,
+      status: serving ? serving.status : waiting ? 'WAITING' : 'READY',
+      patientName: serving?.patient?.name || (waiting ? 'Scheduled Next' : 'Ready for Patient'),
+    };
+  });
+
+  return (
+    <div className="h-screen max-h-screen w-screen overflow-hidden bg-slate-950 text-white flex flex-col justify-between p-2.5 sm:p-4 lg:p-5 select-none relative font-sans">
+      {/* Background ambient lighting effects for premium hospital OLED display */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[160px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[160px] pointer-events-none"></div>
+      <div className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-[140px] pointer-events-none"></div>
+
+      {/* ========================================================================= */}
+      {/* 1. TOP TELEMETRY & HOSPITAL BRANDING HEADER */}
+      {/* ========================================================================= */}
+      <header className="relative z-10 flex items-center justify-between gap-3 border-b border-slate-800/80 pb-2.5 shrink-0 max-w-[1800px] w-full mx-auto">
         {/* Left: Hospital Brand */}
         <div className="flex items-center gap-3 sm:gap-4 min-w-0">
           {data.clinic?.logoUrl ? (
             <img
               src={data.clinic.logoUrl}
               alt={data.clinic.name}
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl shadow-xl border border-slate-700/80 object-contain p-1 bg-white shrink-0"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl shadow-xl border border-slate-700/80 object-contain p-1.5 bg-white shrink-0"
             />
           ) : (
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-900 to-slate-900 border border-blue-700/50 flex items-center justify-center text-blue-400 shadow-xl shrink-0">
-              <Building2 className="w-5 h-5 sm:w-6 sm:h-6" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-900 border border-blue-500/40 flex items-center justify-center text-white shadow-xl shrink-0">
+              <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-sky-300" />
             </div>
           )}
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-xl font-black tracking-tight text-white uppercase truncate">
-                {data.clinic?.name || 'City Health Multi-Specialty Hospital'}
+              <h1 className="text-base sm:text-xl lg:text-2xl font-black tracking-tight text-white uppercase truncate">
+                {data.clinic?.name || 'Caremax OPD'}
               </h1>
-              <span className="flex h-2.5 w-2.5 relative shrink-0">
+              <span className="flex h-3 w-3 relative shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
               </span>
             </div>
-            <p className="text-[10px] sm:text-xs text-slate-400 font-medium flex items-center gap-2 truncate">
-              <span className="text-emerald-400 font-bold uppercase tracking-wider text-[9px] sm:text-[10px]">
+            <p className="text-[11px] sm:text-xs text-slate-400 font-medium flex items-center gap-2 truncate">
+              <span className="text-emerald-400 font-black uppercase tracking-wider text-[10px]">
                 OPD Central Broadcast
               </span>
               <span className="text-slate-600">•</span>
-              <span className="truncate">{data.clinic?.address || 'Main Reception & Waiting Lounge'}</span>
+              <span className="truncate">{data.clinic?.address || 'Suite 402, Metro Healthcare Towers, MG Road'}</span>
             </p>
           </div>
         </div>
 
-        {/* Right: Multi-Language Selector, Mode Pill, Clock & Controls */}
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-          {/* View Mode Indicator Badge */}
-          <div
-            onClick={toggleFullscreen}
-            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-slate-900/90 border border-slate-800 rounded-lg text-[10px] font-bold text-slate-300 cursor-pointer hover:border-slate-700 transition-colors shadow-xs"
-            title="Click to toggle Fullscreen"
-          >
-            {isFullscreen ? (
-              <>
-                <Tv className="w-3 h-3 text-emerald-400" />
-                <span className="text-emerald-400">TV Wall: Static View</span>
-              </>
-            ) : (
-              <>
-                <Layers className="w-3 h-3 text-sky-400 animate-pulse" />
-                <span className="text-sky-300">Windowed: Auto-Slide ({activeSlideIndex + 1}/{totalSlides})</span>
-              </>
-            )}
+        {/* Right: Controls, Audio, Multi-Language & Digital Clock */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Status Indicator */}
+          <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 bg-slate-900/90 border border-slate-800 rounded-xl text-xs font-bold shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="text-slate-300">Live 4-Cabin Grid Sync</span>
           </div>
 
           {/* Worldwide 15-Language Voice Dropdown */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-900/95 border border-slate-700/80 rounded-xl text-xs font-bold text-slate-200 shadow-md">
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-900/95 border border-slate-800 rounded-xl text-xs font-bold text-slate-200 shadow-md">
             <Globe className="w-3.5 h-3.5 text-blue-400 shrink-0" />
             <select
               aria-label="Speech Language Mode"
@@ -561,8 +505,8 @@ export const DisplayKiosk: React.FC = () => {
             </select>
           </div>
 
-          {/* Digital Clock with Timezone */}
-          <div className="bg-slate-900/90 border border-slate-800 px-2.5 py-1 rounded-xl text-right shadow-inner">
+          {/* Digital Clock with Seconds & Timezone */}
+          <div className="bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-xl text-right shadow-inner">
             <div className="text-sm sm:text-base font-mono font-black text-white tracking-wider leading-none">
               {currentTime || '--:--:--'}
             </div>
@@ -571,13 +515,13 @@ export const DisplayKiosk: React.FC = () => {
             </div>
           </div>
 
-          {/* Test Voice Button */}
+          {/* Test Voice Chime Button */}
           <button
             onClick={handleTestVoice}
-            className="px-2.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/20 transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer shrink-0"
+            className="px-3 py-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-600 hover:opacity-95 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/20 transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer shrink-0"
             title="Test Automatic Audio Chime & Announcement"
           >
-            <Volume2 className="w-3.5 h-3.5" />
+            <Volume2 className="w-3.5 h-3.5 text-amber-300" />
             <span className="hidden md:inline">Test Chime</span>
           </button>
 
@@ -612,411 +556,229 @@ export const DisplayKiosk: React.FC = () => {
         </div>
       </header>
 
-      {/* 2. MAIN CENTER DISPLAY SECTION (FLEX-1, OVERFLOW-HIDDEN, 0 SCROLL) */}
-      <main className="flex-1 min-h-0 flex flex-col items-center justify-center py-1 sm:py-2 relative z-10 w-full max-w-6xl mx-auto overflow-hidden">
-        {data.nowServing.length === 0 ? (
-          <div className="text-center py-10 text-slate-500 max-w-lg mx-auto space-y-3">
-            <Clock className="w-16 h-16 mx-auto opacity-30 text-slate-400" />
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-300 tracking-tight">
-              Please Relax & Be Seated
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed">
-              Consulting specialists are reviewing patient charts. Your token number will chime and display on this screen automatically.
-            </p>
-          </div>
-        ) : isFullscreen ? (
-          /* ========================================================================= */
-          /* FULLSCREEN TV MODE: "jab full screen karega toh ek hi page me dekhenga slide nhi hoga" */
-          /* All active consultation rooms & primary called patient on ONE unified wall grid */
-          /* ========================================================================= */
-          <div className="w-full h-full flex flex-col justify-center animate-in fade-in duration-300">
-            {otherServing.length === 0 ? (
-              // Single Cabin Serving (Expansive Layout)
-              <div className="text-center flex flex-col items-center justify-center space-y-3 sm:space-y-4 max-w-3xl mx-auto">
-                <div className="inline-flex items-center gap-2.5 px-6 py-2 bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 rounded-full text-sm font-black tracking-widest uppercase shadow-lg shadow-emerald-500/10">
-                  <span className="flex h-2.5 w-2.5 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                  </span>
-                  <Bell className="w-4 h-4 text-emerald-400 animate-bounce" />
-                  <span>NOW SERVING • {activeLangConfig.subhead}</span>
-                  {isAnnouncing && (
-                    <span className="bg-emerald-950 px-2 py-0.5 rounded text-emerald-400 font-mono text-xs border border-emerald-500/40 animate-pulse">
-                      CALLING
-                    </span>
-                  )}
-                </div>
+      {/* ========================================================================= */}
+      {/* 2. MAIN CENTER BROADCAST GRID (NO EMPTY VOIDS, BALANCED SCREEN UTILIZATION) */}
+      {/* ========================================================================= */}
+      <main className="flex-1 min-h-0 flex flex-col justify-center py-2 sm:py-3 relative z-10 w-full max-w-[1800px] mx-auto overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-5 h-full items-stretch">
+          
+          {/* ===================================================================== */}
+          {/* LEFT SECTION (7 COLS): HERO CALLING STATION (WHO IS CALLED RIGHT NOW) */}
+          {/* ===================================================================== */}
+          <div className="lg:col-span-7 flex flex-col justify-between bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 border border-slate-800/90 rounded-3xl p-5 sm:p-7 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+            {/* Top Glowing Indicator Line */}
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-sky-500"></div>
 
-                <div className="text-8xl sm:text-9xl md:text-[11rem] font-black font-mono tracking-tight text-emerald-400 drop-shadow-[0_0_65px_rgba(52,211,153,0.4)] leading-none select-all">
-                  {primaryServing.token}
-                </div>
+            {/* Header Callout Badge */}
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div className="inline-flex items-center gap-2.5 px-4 py-1.5 bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 rounded-full text-xs sm:text-sm font-black tracking-widest uppercase shadow-md shadow-emerald-500/10">
+                <span className="flex h-2.5 w-2.5 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <Bell className="w-4 h-4 text-emerald-400 animate-bounce" />
+                <span>NOW CALLING • {activeLangConfig.subhead}</span>
+              </div>
 
-                <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 max-w-xl w-full shadow-2xl backdrop-blur-md space-y-1.5">
-                  <div className="flex items-center justify-center gap-2 text-slate-400 text-xs uppercase tracking-widest font-bold">
-                    <Stethoscope className="w-4 h-4 text-emerald-400" />
-                    <span>Destination Consultation Suite</span>
+              {/* Patient Ref Tag */}
+              <div className="flex items-center gap-2 bg-slate-950/80 border border-slate-800 px-3 py-1 rounded-full text-xs font-mono">
+                <span className="text-slate-400 font-bold uppercase text-[10px]">Patient:</span>
+                <span className="text-amber-300 font-black">
+                  #QL-{primaryServing.id.substring(0, 5).toUpperCase()} • {primaryServing.patient?.name || 'OPD Patient'}
+                </span>
+              </div>
+            </div>
+
+            {/* Giant Center Token */}
+            <div className="my-auto text-center py-2 sm:py-4">
+              <div className="text-[12px] sm:text-xs uppercase tracking-widest text-slate-400 font-extrabold mb-1">
+                Token Number Called
+              </div>
+              <div className="text-8xl sm:text-9xl md:text-[10rem] xl:text-[11.5rem] font-black font-mono tracking-tight text-emerald-400 drop-shadow-[0_0_75px_rgba(52,211,153,0.45)] leading-none select-all transition-transform hover:scale-102">
+                {primaryServing.token}
+              </div>
+            </div>
+
+            {/* Destination Cabin & Doctor Suite Card */}
+            <div className="bg-slate-950/85 border border-slate-800/90 rounded-2xl p-4 sm:p-5 shadow-xl space-y-2">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="text-[11px] sm:text-xs uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1.5">
+                  <Stethoscope className="w-4 h-4 text-emerald-400" />
+                  <span>Please Proceed Directly To:</span>
+                </div>
+                <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md">
+                  DOOR UNLOCKED • CONSULTATION ACTIVE
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
+                    {primaryServing.doctor?.roomNumber || 'Cabin 2'}
                   </div>
-                  <div className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-                    {primaryServing.doctor?.roomNumber || 'Cabin 1'}
-                  </div>
-                  <div className="text-lg sm:text-xl font-bold text-slate-300">
-                    {primaryServing.doctor?.displayName || 'Dr. Rohan Sharma, MD'}
+                  <div className="text-base sm:text-lg font-bold text-slate-200 mt-0.5">
+                    {primaryServing.doctor?.displayName || 'Dr. Rajiv Mehra, MD'}
                     {primaryServing.doctor?.specialty && (
-                      <span className="text-slate-400 text-base font-normal ml-1.5">
-                        ({primaryServing.doctor.specialty})
+                      <span className="text-emerald-400 font-semibold ml-2 text-sm sm:text-base">
+                        • {primaryServing.doctor.specialty}
                       </span>
                     )}
                   </div>
-                  <div className="pt-1 flex items-center justify-center gap-2">
-                    <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Patient Ref:</span>
-                    <span className="text-xs font-mono font-black text-amber-300 bg-amber-400/10 border border-amber-400/20 px-2.5 py-0.5 rounded-full">
-                      #QL-{primaryServing.id.substring(0, 6).toUpperCase()} • {primaryServing.patient?.name || 'Walk-In Consultation'}
-                    </span>
+                </div>
+
+                {/* Animated Broadcast Soundwave Indicator */}
+                <div className="flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl">
+                  <div className="flex items-end gap-1 h-5">
+                    <span className="w-1 bg-emerald-400 rounded-full animate-pulse h-3"></span>
+                    <span className="w-1 bg-teal-400 rounded-full animate-pulse h-5 delay-75"></span>
+                    <span className="w-1 bg-sky-400 rounded-full animate-pulse h-4 delay-150"></span>
+                    <span className="w-1 bg-emerald-400 rounded-full animate-pulse h-2 delay-200"></span>
                   </div>
+                  <span className="text-[11px] font-mono font-bold text-slate-300 ml-1">
+                    Bilingual Audio
+                  </span>
                 </div>
               </div>
-            ) : (
-              // Multi-Cabin Serving (Side-by-Side Dual Wall Grid - Zero Sliding, Zero Overflow)
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-center w-full max-h-full">
-                {/* Left 60%: Giant Primary Called Token */}
-                <div className="lg:col-span-7 flex flex-col items-center justify-center text-center bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-slate-800/90 rounded-3xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-blue-500"></div>
-                  
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 rounded-full text-xs font-black tracking-widest uppercase mb-2">
-                    <span className="flex h-2 w-2 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <Bell className="w-3.5 h-3.5 text-emerald-400 animate-bounce" />
-                    <span>NOW CALLING • {activeLangConfig.subhead}</span>
-                  </div>
-
-                  <div className="text-7xl sm:text-8xl md:text-9xl font-black font-mono tracking-tight text-emerald-400 drop-shadow-[0_0_55px_rgba(52,211,153,0.35)] leading-none my-1 select-all">
-                    {primaryServing.token}
-                  </div>
-
-                  <div className="w-full max-w-md mt-2 space-y-1.5 bg-slate-950/70 border border-slate-800/80 rounded-2xl py-3 px-4">
-                    <div className="text-[11px] uppercase tracking-wider text-slate-400 font-bold flex items-center justify-center gap-1.5">
-                      <Stethoscope className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Proceed to</span>
-                    </div>
-                    <div className="text-2xl sm:text-4xl font-black text-white">
-                      {primaryServing.doctor?.roomNumber || 'Cabin 1'}
-                    </div>
-                    <div className="text-sm font-bold text-slate-300 truncate">
-                      {primaryServing.doctor?.displayName || 'Dr. Rohan Sharma, MD'}
-                      {primaryServing.doctor?.specialty && (
-                        <span className="text-slate-400 font-normal ml-1">
-                          ({primaryServing.doctor.specialty})
-                        </span>
-                      )}
-                    </div>
-                    <div className="pt-0.5 flex items-center justify-center gap-1.5">
-                      <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Patient Ref:</span>
-                      <span className="text-[10px] font-mono font-black text-amber-300 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full">
-                        #QL-{primaryServing.id.substring(0, 6).toUpperCase()} • {primaryServing.patient?.name || 'Walk-In Consultation'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right 40%: All Other Active Consultation Rooms */}
-                <div className="lg:col-span-5 flex flex-col justify-center space-y-2.5">
-                  <div className="text-xs uppercase tracking-widest text-slate-400 font-bold flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-emerald-400" />
-                    <span>Also Serving Now ({otherServing.length} Rooms)</span>
-                  </div>
-                  <div className="space-y-2.5">
-                    {otherServing.map((item) => (
-                      <div
-                        key={item.id}
-                        className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between shadow-lg hover:border-slate-700 transition-colors"
-                      >
-                        <div className="min-w-0 pr-3">
-                          <div className="text-xs uppercase tracking-wider font-extrabold text-blue-400">
-                            {item.doctor?.roomNumber || 'Consultation Room'}
-                          </div>
-                          <div className="text-sm font-bold text-white truncate">
-                            {item.doctor?.displayName || 'Attending Doctor'}
-                            {item.doctor?.specialty && (
-                              <span className="text-slate-400 text-xs font-normal ml-1">
-                                ({item.doctor.specialty})
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-[10px] font-mono text-slate-400 mt-0.5">
-                            REF: #QL-{item.id.substring(0, 5).toUpperCase()} • {item.patient?.name || 'In Session'}
-                          </div>
-                        </div>
-                        <div className="text-right shrink-0">
-                          <div className="text-3xl sm:text-4xl font-black font-mono text-emerald-400 leading-none">
-                            {item.token}
-                          </div>
-                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                            IN SESSION
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
-        ) : (
-          /* ========================================================================= */
-          /* WINDOWED STARTING MODE: "starting me slide wala add kar de na" */
-          /* Smooth, beautifully scaled carousel cycling between cabins & waiting queue */
-          /* ========================================================================= */
-          <div className="w-full flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-300 relative">
-            {/* Carousel Slide Card Container */}
-            <div className="w-full max-w-xl mx-auto">
-              {activeSlideIndex < data.nowServing.length ? (
-                // Cabin Serving Slide Card
-                (() => {
-                  const currentSlideItem = data.nowServing[activeSlideIndex] || primaryServing;
-                  const isPrimary = activeSlideIndex === 0;
 
+          {/* ===================================================================== */}
+          {/* RIGHT SECTION (5 COLS): 4-CABIN DIRECTORY & UPCOMING QUEUE PREPARATION */}
+          {/* ===================================================================== */}
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-3.5 h-full">
+            
+            {/* Top Half: ALL 4 CONSULTATION CABINS (Live Station Board) */}
+            <div className="bg-slate-900/80 border border-slate-800/90 rounded-3xl p-4 sm:p-5 shadow-xl flex-1 flex flex-col justify-between backdrop-blur-xl">
+              <div className="flex items-center justify-between mb-3 border-b border-slate-800/80 pb-2">
+                <div className="text-xs uppercase tracking-widest text-slate-300 font-black flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-emerald-400" />
+                  <span>OPD Consultation Cabins</span>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full font-bold">
+                  4 Active Suites
+                </span>
+              </div>
+
+              {/* 2x2 Grid of Cabins */}
+              <div className="grid grid-cols-2 gap-2.5 flex-1 items-stretch">
+                {cabinCards.map((cabin) => {
+                  const isCalled = cabin.isPrimaryCalled;
                   return (
-                    <div className="bg-gradient-to-b from-slate-900/95 to-slate-950/95 border border-slate-800/90 rounded-3xl p-4 sm:p-6 text-center shadow-2xl relative overflow-hidden backdrop-blur-md">
-                      {/* Top Glowing Indicator */}
-                      <div
-                        className={`absolute top-0 left-0 right-0 h-1.5 ${
-                          isPrimary
-                            ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
-                            : 'bg-gradient-to-r from-blue-500 to-indigo-400'
-                        }`}
-                      ></div>
-
-                      {/* Header Badge */}
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 font-bold">
-                          Cabin {activeSlideIndex + 1} of {data.nowServing.length}
+                    <div
+                      key={cabin.doctor.roomNumber}
+                      className={`rounded-2xl p-3 flex flex-col justify-between border transition-all ${
+                        isCalled
+                          ? 'bg-emerald-950/30 border-emerald-500/60 shadow-lg shadow-emerald-500/10 ring-1 ring-emerald-500/30'
+                          : 'bg-slate-950/70 border-slate-800/80 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-1">
+                        <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${
+                          isCalled ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-300'
+                        }`}>
+                          {cabin.doctor.roomNumber}
                         </span>
-
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 rounded-full text-xs font-black tracking-widest uppercase">
-                          <Bell className="w-3 h-3 text-emerald-400 animate-bounce" />
-                          <span>{isPrimary ? 'NOW SERVING' : 'IN CONSULTATION'} • {activeLangConfig.subhead}</span>
-                        </div>
-
-                        <span className="text-[10px] font-mono text-amber-400 font-bold">
-                          #QL-{currentSlideItem.id.substring(0, 5).toUpperCase()}
+                        <span className={`text-[9px] font-bold uppercase tracking-wider ${
+                          cabin.status === 'CALLED' || cabin.status === 'IN_CONSULTATION'
+                            ? 'text-emerald-400'
+                            : 'text-sky-400'
+                        }`}>
+                          {cabin.status === 'CALLED' ? 'CALLING' : cabin.status === 'IN_CONSULTATION' ? 'SERVING' : 'READY'}
                         </span>
                       </div>
 
-                      {/* Giant Token */}
-                      <div className="text-7xl sm:text-8xl md:text-9xl font-black font-mono tracking-tight text-emerald-400 drop-shadow-[0_0_45px_rgba(52,211,153,0.35)] leading-none my-1 select-all">
-                        {currentSlideItem.token}
+                      <div className="my-1.5">
+                        <div className="text-3xl sm:text-4xl font-black font-mono text-emerald-400 leading-none">
+                          {cabin.token}
+                        </div>
                       </div>
 
-                      {/* Destination Room */}
-                      <div className="mt-3 bg-slate-950/70 border border-slate-800/80 rounded-2xl p-4 space-y-1.5">
-                        <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold flex items-center justify-center gap-1.5">
-                          <Stethoscope className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Destination Consultation Room</span>
+                      <div className="border-t border-slate-800/60 pt-1.5">
+                        <div className="text-xs font-bold text-white truncate">
+                          {cabin.doctor.displayName}
                         </div>
-                        <div className="text-2xl sm:text-3xl font-black text-white">
-                          {currentSlideItem.doctor?.roomNumber || `Cabin ${activeSlideIndex + 1}`}
-                        </div>
-                        <div className="text-xs sm:text-sm font-bold text-slate-300">
-                          {currentSlideItem.doctor?.displayName || 'Dr. Rohan Sharma, MD'}
-                          {currentSlideItem.doctor?.specialty && (
-                            <span className="text-slate-400 font-medium ml-1">
-                              ({currentSlideItem.doctor.specialty})
-                            </span>
-                          )}
-                        </div>
-                        <div className="pt-1 flex items-center justify-center gap-2">
-                          <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Patient Ref:</span>
-                          <span className="text-xs font-mono font-black text-amber-300 bg-amber-400/10 border border-amber-400/20 px-2.5 py-0.5 rounded-full">
-                            #QL-{currentSlideItem.id.substring(0, 6).toUpperCase()} • {currentSlideItem.patient?.name || 'Live Test Patient'}
-                          </span>
+                        <div className="text-[10px] text-slate-400 truncate">
+                          {cabin.doctor.specialty}
                         </div>
                       </div>
                     </div>
                   );
-                })()
-              ) : (
-                // Upcoming Queue Overview Slide
-                <div className="bg-gradient-to-b from-slate-900/95 to-slate-950/95 border border-slate-800/90 rounded-3xl p-5 text-center shadow-2xl relative overflow-hidden backdrop-blur-md">
-                  <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-sky-500 to-blue-500"></div>
-
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 font-bold">
-                      Queue Overview
-                    </span>
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-sky-500/15 border border-sky-500/30 text-sky-300 rounded-full text-xs font-black tracking-widest uppercase">
-                      <Clock className="w-3.5 h-3.5 text-sky-400" />
-                      <span>Next Patients to Prepare</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-slate-400">
-                      {data.nextWaiting.length} In Line
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2.5 my-2">
-                    {data.nextWaiting.slice(0, 4).map((item, idx) => (
-                      <div
-                        key={item.id}
-                        className="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-left shadow-sm"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-bold text-slate-500 uppercase">Queue #{idx + 1}</span>
-                          <span className="text-xs font-mono text-amber-300">Prepare</span>
-                        </div>
-                        <div className="text-2xl font-black font-mono text-sky-400 my-0.5">
-                          {item.token}
-                        </div>
-                        <div className="text-[11px] font-semibold text-slate-300 truncate">
-                          {item.doctor?.displayName || 'Specialist OPD'}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <p className="text-[11px] text-slate-400 mt-2 font-medium">
-                    Tokens are called in sequence. Please watch for your number announcement chime.
-                  </p>
-                </div>
-              )}
+                })}
+              </div>
             </div>
 
-            {/* Other Active Consultation Rooms (Visible in Windowed Mode) */}
-            {otherServing.length > 0 && (
-              <div className="w-full max-w-xl mt-3">
-                <div className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1.5 flex items-center gap-1.5 justify-center">
-                  <Activity className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Other Active Consultation Rooms</span>
+            {/* Bottom Half: UPCOMING QUEUE (NEXT PATIENTS IN LINE) */}
+            <div className="bg-slate-900/80 border border-slate-800/90 rounded-3xl p-4 sm:p-5 shadow-xl flex-1 flex flex-col justify-between backdrop-blur-xl">
+              <div className="flex items-center justify-between mb-2.5 border-b border-slate-800/80 pb-2">
+                <div className="text-xs uppercase tracking-widest text-slate-300 font-black flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-sky-400" />
+                  <span>Upcoming Patients (Next In Line)</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {otherServing.map((item) => (
-                    <div
-                      key={item.id}
-                      onClick={() => {
-                        const targetIdx = data.nowServing.findIndex((s) => s.id === item.id);
-                        if (targetIdx !== -1) setActiveSlideIndex(targetIdx);
-                      }}
-                      className="bg-slate-900/85 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 rounded-xl p-2.5 text-center shadow-md cursor-pointer transition-all"
-                    >
-                      <div className="flex items-center justify-between text-[10px] text-slate-400 font-semibold mb-0.5">
-                        <span className="truncate">{item.doctor?.roomNumber || 'Cabin 2'}</span>
-                        <span className="text-[9px] font-mono text-amber-300 bg-amber-400/10 px-1.5 py-0.5 rounded">
-                          #QL-{item.id.substring(0, 5).toUpperCase()}
-                        </span>
-                      </div>
-                      <div className="text-2xl font-black font-mono text-emerald-400 my-0.5">
-                        {item.token}
-                      </div>
-                      <div className="text-[11px] font-bold text-slate-300 truncate">
-                        {item.doctor?.displayName}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <span className="text-[10px] font-mono text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded-full font-bold">
+                  Please Prepare
+                </span>
               </div>
-            )}
 
-            {/* Slider Navigation Pills & Prev/Next Arrows */}
-            <div className="flex items-center justify-center gap-3 mt-3">
-              <button
-                onClick={() => setActiveSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides)}
-                className="p-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer"
-                title="Previous Slide"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
+              {/* 4 Next Waiting Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 flex-1 items-stretch">
+                {data.nextWaiting.slice(0, 4).map((item, idx) => (
+                  <div
+                    key={item.id}
+                    className="bg-slate-950/70 border border-slate-800/80 rounded-2xl p-2.5 flex flex-col justify-between shadow-xs"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-black text-slate-500 uppercase">
+                        Pos #{idx + 1}
+                      </span>
+                      <span className="text-[9px] font-mono text-amber-300 font-bold">
+                        Ready
+                      </span>
+                    </div>
 
-              <div className="flex items-center gap-1.5">
-                {Array.from({ length: totalSlides }).map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveSlideIndex(idx)}
-                    className={`h-2 rounded-full transition-all cursor-pointer ${
-                      activeSlideIndex === idx
-                        ? 'w-7 bg-emerald-400 shadow-xs shadow-emerald-400/50'
-                        : 'w-2 bg-slate-700 hover:bg-slate-600'
-                    }`}
-                    title={`Jump to slide ${idx + 1}`}
-                  />
+                    <div className="my-1 text-2xl sm:text-3xl font-black font-mono text-sky-400 leading-none">
+                      {item.token}
+                    </div>
+
+                    <div className="text-[10px] font-semibold text-slate-300 truncate">
+                      {item.doctor?.displayName ? item.doctor.displayName.split(',')[0] : 'Specialist'}
+                    </div>
+                  </div>
                 ))}
               </div>
 
-              <button
-                onClick={() => setActiveSlideIndex((prev) => (prev + 1) % totalSlides)}
-                className="p-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer"
-                title="Next Slide"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-
-              {/* Fullscreen Prompt Badge */}
-              <button
-                onClick={toggleFullscreen}
-                className="ml-2 text-[10px] font-bold text-slate-400 hover:text-emerald-400 flex items-center gap-1 bg-slate-900/90 border border-slate-800/80 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
-              >
-                <Maximize className="w-3 h-3 text-emerald-400" />
-                <span>Fullscreen Wall View (Static)</span>
-              </button>
+              <div className="mt-2 text-[10px] text-slate-400 flex items-center justify-between pt-1 border-t border-slate-800/60 font-medium">
+                <span>Tokens called in sequence with chime</span>
+                <span className="text-emerald-400 font-bold">Estimated wait: ~4-8 mins</span>
+              </div>
             </div>
+
           </div>
-        )}
+
+        </div>
       </main>
 
-      {/* 3. BOTTOM FOOTER: NEXT IN QUEUE TICKER & CLINICAL MARQUEE (SHRINK-0) */}
-      <footer className="relative z-10 border-t border-slate-800/80 pt-2 space-y-1.5 shrink-0">
-        <div className="flex items-center justify-between gap-3 text-xs">
-          <div className="uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1.5 shrink-0 text-[10px] sm:text-[11px]">
-            <Clock className="w-3.5 h-3.5 text-sky-400" />
-            <span>Next In Queue (Please prepare to proceed):</span>
-          </div>
-
-          <div className="hidden sm:flex items-center gap-1.5 text-[10px] sm:text-[11px] text-slate-400 bg-slate-900/80 border border-slate-800/80 px-2.5 py-0.5 rounded-full">
-            <Radio className="w-3 h-3 text-emerald-400" />
-            <span>
-              {activeLangConfig.flag} {activeLangConfig.label} • Auto-Chime Broadcast Active
-            </span>
-          </div>
-        </div>
-
-        {/* Horizontal Next In Queue Badges */}
-        {data.nextWaiting.length === 0 ? (
-          <p className="text-[11px] text-slate-600">No other patients currently queued in waiting list.</p>
-        ) : (
-          <div className="flex items-center gap-2 overflow-hidden flex-nowrap">
-            {data.nextWaiting.slice(0, 7).map((item, idx) => (
-              <div
-                key={item.id}
-                className="bg-slate-900/90 border border-slate-800/90 px-3 py-1 rounded-xl flex items-center gap-2 shadow-xs shrink-0"
-              >
-                <span className="text-[9px] font-bold text-slate-500 uppercase">#{idx + 1}</span>
-                <span className="text-sm font-black font-mono text-sky-400">{item.token}</span>
-                {item.doctor?.displayName && (
-                  <span className="text-[10px] text-slate-400 max-w-[110px] truncate">
-                    ({item.doctor.displayName})
-                  </span>
-                )}
-              </div>
-            ))}
-            {data.nextWaiting.length > 7 && (
-              <div className="text-[10px] font-bold text-slate-500 px-2 py-1 shrink-0">
-                +{data.nextWaiting.length - 7} more
-              </div>
-            )}
-          </div>
-        )}
-
+      {/* ========================================================================= */}
+      {/* 3. BOTTOM FOOTER: CLINICAL MARQUEE TICKER & TELEMETRY */}
+      {/* ========================================================================= */}
+      <footer className="relative z-10 border-t border-slate-800/80 pt-2.5 shrink-0 max-w-[1800px] w-full mx-auto space-y-2">
         {/* Worldwide Clinical Hospital Marquee Ticker */}
-        <div className="bg-slate-900/70 border border-slate-800/70 rounded-xl px-3 py-1 flex items-center gap-2 overflow-hidden text-[10px] sm:text-[11px] text-slate-400">
-          <div className="flex items-center gap-1 text-emerald-400 font-black shrink-0 uppercase tracking-wider text-[9px] sm:text-[10px]">
-            <Sparkles className="w-3 h-3" />
-            <span>Notice:</span>
+        <div className="bg-slate-900/90 border border-slate-800/90 rounded-2xl px-3.5 py-2 flex items-center gap-3 overflow-hidden text-xs text-slate-300 shadow-md">
+          <div className="flex items-center gap-1.5 text-emerald-400 font-black shrink-0 uppercase tracking-wider text-[10px] sm:text-xs">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>Hospital Notice:</span>
           </div>
-          <div className="truncate font-medium">
-            Welcome to {data.clinic?.name || 'Queueless Hospital'} • Please proceed to your consultation room when your token is called • Keep your mobile QR pass ready for pharmacy & lab telemetry • NABH & JCI Clinical Queue Standards
+
+          <div className="truncate font-medium text-slate-200">
+            Welcome to {data.clinic?.name || 'Caremax OPD'} • Please proceed to your designated cabin when your token is called • Keep your mobile QR pass ready for pharmacy & lab telemetry • 15-Day Free Follow-Up Protocol Active • NABH & JCI Clinical Queue Standards
           </div>
-          <div className="ml-auto hidden lg:flex items-center gap-1 text-[9px] text-slate-500 shrink-0 font-medium">
-            <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-            <span>Queueless OS</span>
+
+          <div className="ml-auto hidden md:flex items-center gap-3 text-[10px] text-slate-400 shrink-0 font-medium">
+            <span className="flex items-center gap-1 text-emerald-400">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>Queueless Healthcare OS</span>
+            </span>
+            <span>•</span>
+            <span className="font-mono text-slate-500">99.99% Hospital SLA</span>
           </div>
         </div>
       </footer>

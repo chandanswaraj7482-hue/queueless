@@ -115,13 +115,17 @@
       (function() {
         try {
           const savedTheme = localStorage.getItem('queueless_theme');
-          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+          if (savedTheme === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.classList.remove('light');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.style.colorScheme = 'dark';
           } else {
+            // Default to Light version
             document.documentElement.classList.remove('dark');
             document.documentElement.classList.add('light');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.colorScheme = 'light';
           }
         } catch (e) {}
       })();

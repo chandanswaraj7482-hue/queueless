@@ -33,17 +33,18 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [theme, setThemeState] = useState<Theme>(() => {
     try {
       const saved = localStorage.getItem('queueless_theme') as Theme | null;
-      if (saved === 'dark' || saved === 'light') {
-        applyThemeToDOM(saved);
-        return saved;
-      }
-      if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      if (saved === 'dark') {
         applyThemeToDOM('dark');
         return 'dark';
+      }
+      if (saved === 'light') {
+        applyThemeToDOM('light');
+        return 'light';
       }
     } catch {
       // Fallback
     }
+    // Default to LIGHT version per instruction
     applyThemeToDOM('light');
     return 'light';
   });

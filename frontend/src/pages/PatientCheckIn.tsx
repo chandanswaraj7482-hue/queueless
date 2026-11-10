@@ -179,13 +179,9 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
 };
 
   useEffect(() => {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2500);
-
-    fetch(`${API_BASE_URL}/api/v1/clinics/public/${clinicSlug}`, { signal: controller.signal })
+    fetch(`${API_BASE_URL}/api/v1/clinics/public/${clinicSlug}`)
       .then((res) => res.json())
       .then((data) => {
-        clearTimeout(timeoutId);
         if (data.success && data.data) {
           let customLogo = '';
           try {
@@ -432,7 +428,8 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
     setError(null);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/queue/public/clinics/${clinic?.id}/check-ins`, {
+      const targetClinicId = clinic?.id || clinic?.slug || clinicSlug || 'caremax-opd';
+      const res = await fetch(`${API_BASE_URL}/api/v1/queue/public/clinics/${targetClinicId}/check-ins`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -544,6 +541,12 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             }),
           });
           const orderJson = await orderRes.json();
+
+          if (orderJson.success && orderJson.data?.hostedCheckoutUrl) {
+            // Direct redirect to Cashfree Official Hosted Checkout for native PhonePe / GPay / Paytm & UPI QR
+            window.location.href = orderJson.data.hostedCheckoutUrl;
+            return;
+          }
 
           if (orderJson.success && orderJson.data?.paymentSessionId && window.Cashfree) {
             const cashfree = window.Cashfree({

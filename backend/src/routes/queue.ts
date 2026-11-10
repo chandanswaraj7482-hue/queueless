@@ -38,18 +38,63 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
       where: {
         OR: [{ id: clinicId }, { slug: clinicId }],
       },
-      include: { tenant: true },
+      include: {
+        tenant: true,
+        doctors: true,
+        services: true,
+      },
     });
 
     if (!clinic) {
       return res.status(404).json({ success: false, error: 'Clinic not found.' });
     }
 
-    // Determine consultation fee based on service or default
+    // Intelligently resolve valid doctorId to prevent foreign key violations
+    let validDoctorId: string | null = null;
+    if (doctorId && clinic.doctors && clinic.doctors.length > 0) {
+      // 1. Direct UUID match
+      const direct = clinic.doctors.find((d) => d.id === doctorId);
+      if (direct) {
+        validDoctorId = direct.id;
+      } else {
+        // 2. Match by cabin number or slug (e.g. "doc-1", "cabin-1", "1")
+        const cleanDocId = doctorId.toLowerCase();
+        const digitMatch = cleanDocId.match(/\d+/);
+        const digit = digitMatch ? digitMatch[0] : null;
+
+        const byCabin = clinic.doctors.find((d) => {
+          if (!d.roomNumber) return false;
+          const rn = d.roomNumber.toLowerCase();
+          if (rn.includes(cleanDocId) || cleanDocId.includes(rn.replace(/\s+/g, '-'))) return true;
+          if (digit && rn.includes(digit)) return true;
+          return false;
+        });
+
+        if (byCabin) {
+          validDoctorId = byCabin.id;
+        } else {
+          validDoctorId = clinic.doctors[0].id;
+        }
+      }
+    } else if (clinic.doctors && clinic.doctors.length > 0) {
+      validDoctorId = clinic.doctors[0].id;
+    }
+
+    // Intelligently resolve valid serviceId to prevent foreign key violations
+    let validServiceId: string | null = null;
     let feeAmount = 500;
-    if (serviceId) {
-      const srv = await prisma.service.findUnique({ where: { id: serviceId } });
-      if (srv) feeAmount = srv.fee;
+    if (serviceId && clinic.services && clinic.services.length > 0) {
+      const match = clinic.services.find((s) => s.id === serviceId);
+      if (match) {
+        validServiceId = match.id;
+        feeAmount = match.fee;
+      } else if (clinic.services.length > 0) {
+        validServiceId = clinic.services[0].id;
+        feeAmount = clinic.services[0].fee;
+      }
+    } else if (clinic.services && clinic.services.length > 0) {
+      validServiceId = clinic.services[0].id;
+      feeAmount = clinic.services[0].fee;
     }
 
     // Find or create patient under this tenant with full details
@@ -144,8 +189,8 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
       data: {
         clinicId: clinic.id,
         patientId: patient.id,
-        doctorId: doctorId || null,
-        serviceId: serviceId || null,
+        doctorId: validDoctorId,
+        serviceId: validServiceId,
         token,
         publicToken,
         queueDate: targetDate,

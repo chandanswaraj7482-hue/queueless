@@ -49,7 +49,7 @@ paymentRouter.post('/create-order', async (req, res) => {
             customer_name: entry.patient?.name || 'Verified Patient',
           },
           order_meta: {
-            return_url: 'https://queueless-os.vercel.app/token/' + entry.publicToken + '?order_id={order_id}',
+            return_url: `https://queueless-os.vercel.app/token/${entry.publicToken}?order_id={order_id}&entry_id=${entry.id}`,
           },
           order_note: `Queueless OPD Consultation - ${entry.clinic.name} - Entry ${entry.id}`,
         }),
@@ -57,12 +57,33 @@ paymentRouter.post('/create-order', async (req, res) => {
 
       const orderData = (await cfResponse.json()) as any;
       if (orderData && orderData.payment_session_id) {
+        const hostedCheckoutUrl = cfEnv === 'production'
+          ? `https://payments.cashfree.com/order/#${orderData.payment_session_id}`
+          : `https://payments-test.cashfree.com/order/#${orderData.payment_session_id}`;
+
+        try {
+          await prisma.payment.create({
+            data: {
+              clinicId: entry.clinicId,
+              queueEntryId: entry.id,
+              provider: 'CASHFREE',
+              providerOrderId: orderId,
+              amount: finalAmount,
+              currency: 'INR',
+              status: 'PENDING',
+            },
+          });
+        } catch (preErr) {
+          console.warn('Pre-record payment warning:', preErr);
+        }
+
         return res.json({
           success: true,
           data: {
             orderId,
             cfOrderId: orderData.cf_order_id,
             paymentSessionId: orderData.payment_session_id,
+            hostedCheckoutUrl,
             amount: finalAmount,
             currency: 'INR',
             clinicName: entry.clinic.name,
@@ -113,7 +134,7 @@ paymentRouter.get('/cashfree-verify/:orderId', async (req, res) => {
     const cfOrder = (await cfRes.json()) as any;
 
     if (cfOrder && cfOrder.order_status === 'PAID') {
-      // Find matching entry from order_note or recent entries
+      // Find matching entry from order_note, query params, or pending payment
       let entry = null;
       if (cfOrder.order_note && cfOrder.order_note.includes('Entry ')) {
         const entryId = cfOrder.order_note.split('Entry ')[1]?.trim();
@@ -122,24 +143,47 @@ paymentRouter.get('/cashfree-verify/:orderId', async (req, res) => {
         }
       }
 
+      if (!entry && req.query.entry_id) {
+        entry = await prisma.queueEntry.findUnique({ where: { id: String(req.query.entry_id) } });
+      }
+
+      const existingPayment = await prisma.payment.findFirst({
+        where: { providerOrderId: orderId },
+      });
+
+      if (!entry && existingPayment?.queueEntryId) {
+        entry = await prisma.queueEntry.findUnique({ where: { id: existingPayment.queueEntryId } });
+      }
+
       if (entry && entry.paymentStatus !== 'PAID') {
         let token = entry.token;
         if (!token || token === 'PENDING') {
           token = await generateNextToken(entry.clinicId);
         }
 
-        const paymentRecord = await prisma.payment.create({
-          data: {
-            clinicId: entry.clinicId,
-            queueEntryId: entry.id,
-            provider: 'CASHFREE',
-            providerOrderId: orderId,
-            providerPaymentId: cfOrder.cf_order_id ? String(cfOrder.cf_order_id) : 'cf_' + Date.now(),
-            amount: Number(cfOrder.order_amount) || entry.feeAmount || 500,
-            currency: cfOrder.order_currency || 'INR',
-            status: 'COMPLETED',
-          },
-        });
+        let paymentRecord;
+        if (existingPayment) {
+          paymentRecord = await prisma.payment.update({
+            where: { id: existingPayment.id },
+            data: {
+              status: 'COMPLETED',
+              providerPaymentId: cfOrder.cf_order_id ? String(cfOrder.cf_order_id) : existingPayment.providerPaymentId,
+            },
+          });
+        } else {
+          paymentRecord = await prisma.payment.create({
+            data: {
+              clinicId: entry.clinicId,
+              queueEntryId: entry.id,
+              provider: 'CASHFREE',
+              providerOrderId: orderId,
+              providerPaymentId: cfOrder.cf_order_id ? String(cfOrder.cf_order_id) : 'cf_' + Date.now(),
+              amount: Number(cfOrder.order_amount) || entry.feeAmount || 500,
+              currency: cfOrder.order_currency || 'INR',
+              status: 'COMPLETED',
+            },
+          });
+        }
 
         const updated = await prisma.queueEntry.update({
           where: { id: entry.id },

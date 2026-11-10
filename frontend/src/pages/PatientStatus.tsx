@@ -364,8 +364,9 @@ export const PatientStatus: React.FC = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const orderId = params.get('order_id');
+    const entryId = params.get('entry_id');
     if (orderId) {
-      fetch(`${API_BASE_URL}/api/v1/payments/cashfree-verify/${orderId}`)
+      fetch(`${API_BASE_URL}/api/v1/payments/cashfree-verify/${orderId}${entryId ? `?entry_id=${entryId}` : ''}`)
         .then((res) => res.json())
         .then((verifyData) => {
           if (verifyData.success) {
@@ -394,6 +395,12 @@ export const PatientStatus: React.FC = () => {
           }),
         });
         const orderJson = await orderRes.json();
+
+        if (orderJson.success && orderJson.data?.hostedCheckoutUrl) {
+          // Direct redirect to Cashfree Official Hosted Checkout for native PhonePe / GPay / Paytm & UPI QR
+          window.location.href = orderJson.data.hostedCheckoutUrl;
+          return;
+        }
 
         if (orderJson.success && orderJson.data?.paymentSessionId && window.Cashfree) {
           const cashfree = window.Cashfree({

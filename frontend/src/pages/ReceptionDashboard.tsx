@@ -698,22 +698,6 @@ export const ReceptionDashboard: React.FC = () => {
             </div>
           )}
 
-          {/* 1-Click Dev / Quick Autofill Button */}
-          <div className="mb-4">
-            <button
-              type="button"
-              onClick={() => {
-                setReceptionPasswordInput('reception123');
-                submitReceptionLogin('reception123');
-              }}
-              className="w-full py-2.5 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300/80 rounded-2xl text-xs font-black transition-all flex items-center justify-center gap-1.5 active:scale-98 shadow-xs"
-              title="1-Click Quick Autofill and Login"
-            >
-              <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-              <span>⚡ Quick Access: 1-Click Autofill & Login</span>
-            </button>
-          </div>
-
           <form onSubmit={handleReceptionLogin} className="space-y-4">
             <div className="text-left">
               <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5">

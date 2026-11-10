@@ -4,6 +4,7 @@ import { socket } from '../utils/socket';
 import {
   Stethoscope,
   CheckCircle,
+  CheckCircle2,
   Clock,
   Play,
   User,
@@ -293,20 +294,63 @@ export const DoctorView: React.FC = () => {
         setLoginError(data.error || 'Incorrect PIN or password.');
       }
     } catch (err) {
-      if (pinOrPwd.trim() === '1234' || pinOrPwd.trim() === 'admin123' || pinOrPwd.trim() === 'doctor123') {
-        setAuthSession('DOCTOR', {
-          clinicId: 'city-health',
-          doctorId: docId,
-          doctorName: 'Dr. Rohan Sharma, MD',
-        });
-        setSelectedDoctorId(docId);
-        setIsAuthenticated(true);
-        setDoctorPasswordInput('');
-      } else {
-        setLoginError('Incorrect PIN. Default: 1234');
-      }
+      setLoginError('Could not verify credentials with clinic server.');
     } finally {
       setLoggingIn(false);
+    }
+  };
+
+  // Doctor Change PIN / Password Modal State
+  const [showChangePinModal, setShowChangePinModal] = useState(false);
+  const [currentPinInput, setCurrentPinInput] = useState('');
+  const [newPinInput, setNewPinInput] = useState('');
+  const [confirmPinInput, setConfirmPinInput] = useState('');
+  const [changePinError, setChangePinError] = useState<string | null>(null);
+  const [changePinSuccess, setChangePinSuccess] = useState<string | null>(null);
+  const [savingPin, setSavingPin] = useState(false);
+
+  const handleChangePinSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setChangePinError(null);
+    setChangePinSuccess(null);
+
+    if (!newPinInput.trim()) {
+      setChangePinError('Please enter a new PIN or password.');
+      return;
+    }
+    if (newPinInput.trim() !== confirmPinInput.trim()) {
+      setChangePinError('New PINs do not match.');
+      return;
+    }
+
+    setSavingPin(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/clinics/${clinicData?.id || clinicId}/doctors/${selectedDoctorId}/password`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword: currentPinInput.trim(),
+          newPin: newPinInput.trim(),
+          newPassword: newPinInput.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setChangePinSuccess('Your Doctor PIN / Password was updated successfully!');
+        setTimeout(() => {
+          setShowChangePinModal(false);
+          setCurrentPinInput('');
+          setNewPinInput('');
+          setConfirmPinInput('');
+          setChangePinSuccess(null);
+        }, 1500);
+      } else {
+        setChangePinError(data.error || 'Failed to update PIN.');
+      }
+    } catch {
+      setChangePinError('Network error connecting to clinic server.');
+    } finally {
+      setSavingPin(false);
     }
   };
 
@@ -800,40 +844,6 @@ export const DoctorView: React.FC = () => {
             </div>
           )}
 
-          {/* 1-Click Quick Cabin Access */}
-          {doctors.length > 0 && (
-            <div className="mb-4 p-3 bg-sky-50 border border-sky-200/90 rounded-2xl text-left">
-              <span className="text-[10px] font-black uppercase tracking-wider text-sky-950 block mb-2 flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                <span>⚡ Quick Access: 1-Click Cabin Logins (PIN: 1234)</span>
-              </span>
-              <div className="space-y-1.5">
-                {doctors.map((d) => (
-                  <button
-                    key={d.id}
-                    type="button"
-                    onClick={() => {
-                      setLoginDoctorId(d.id);
-                      setSelectedDoctorId(d.id);
-                      setDoctorPasswordInput('1234');
-                      submitDoctorLogin(d.id, '1234');
-                    }}
-                    className="w-full text-left px-3 py-2 bg-white hover:bg-sky-600 hover:text-white text-slate-800 text-xs font-bold rounded-xl border border-sky-100 transition-all flex items-center justify-between group active:scale-98 shadow-2xs"
-                    title={`Click to login directly as ${d.displayName}`}
-                  >
-                    <div>
-                      <span className="font-extrabold">{d.displayName}</span>
-                      <span className="text-[10px] text-slate-400 group-hover:text-sky-100 ml-1">({d.specialty})</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-sky-700 group-hover:text-white bg-sky-100 group-hover:bg-sky-700 px-2 py-0.5 rounded-lg font-black">
-                      Unlock Cabin ➔
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           <form onSubmit={handleDoctorLogin} className="space-y-4">
             <div className="text-left">
               <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5">
@@ -956,8 +966,17 @@ export const DoctorView: React.FC = () => {
           </div>
 
           <button
+            onClick={() => setShowChangePinModal(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold rounded-xl transition-all border border-sky-200/80 cursor-pointer"
+            title="Change My Doctor PIN / Password"
+          >
+            <KeyRound className="w-3.5 h-3.5 text-sky-600" />
+            <span>Change PIN</span>
+          </button>
+
+          <button
             onClick={handleDoctorLogout}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all cursor-pointer"
             title="Switch Cabin / Logout"
           >
             <LogOut className="w-3.5 h-3.5" />
@@ -1781,6 +1800,96 @@ export const DoctorView: React.FC = () => {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+      {/* Doctor Change PIN / Password Modal */}
+      {showChangePinModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-200">
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="p-2 bg-sky-100 text-sky-700 rounded-xl">
+                <KeyRound className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-black text-slate-900">Change Cabin PIN</h3>
+                <p className="text-xs text-slate-500">Update your individual secret PIN / password</p>
+              </div>
+            </div>
+
+            {changePinError && (
+              <div className="my-3 p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-semibold flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                <span>{changePinError}</span>
+              </div>
+            )}
+
+            {changePinSuccess && (
+              <div className="my-3 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-semibold flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{changePinSuccess}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleChangePinSubmit} className="mt-3 space-y-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Current PIN / Password (Optional)
+                </label>
+                <input
+                  type="password"
+                  value={currentPinInput}
+                  onChange={(e) => setCurrentPinInput(e.target.value)}
+                  placeholder="Enter current PIN"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-sky-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  New 4-Digit PIN or Password *
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={newPinInput}
+                  onChange={(e) => setNewPinInput(e.target.value)}
+                  placeholder="e.g. 5821"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Confirm New PIN *
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={confirmPinInput}
+                  onChange={(e) => setConfirmPinInput(e.target.value)}
+                  placeholder="Re-enter new PIN"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
+                />
+              </div>
+
+              <div className="pt-2 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowChangePinModal(false)}
+                  className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={savingPin}
+                  className="px-5 py-2 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 rounded-xl shadow-md disabled:opacity-50"
+                >
+                  {savingPin ? 'Saving...' : 'Update PIN'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

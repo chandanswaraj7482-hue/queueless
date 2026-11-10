@@ -404,7 +404,14 @@ clinicRouter.put('/:clinicId', async (req, res) => {
 clinicRouter.post('/:clinicId/doctors', async (req, res) => {
   try {
     const { clinicId } = req.params;
-    const { displayName, specialty, roomNumber, active } = req.body;
+    const {
+      displayName,
+      specialty,
+      roomNumber,
+      active,
+      pin,
+      password,
+    } = req.body;
 
     if (!displayName || !specialty) {
       return res.status(400).json({ success: false, error: 'Doctor name and specialty are required' });
@@ -417,6 +424,8 @@ clinicRouter.post('/:clinicId/doctors', async (req, res) => {
         specialty,
         roomNumber: roomNumber || 'OPD Cabin',
         active: active !== undefined ? active : true,
+        pin: pin ? String(pin).trim() : '1234',
+        password: password ? String(password).trim() : (pin ? String(pin).trim() : 'doctor123'),
       },
     });
 
@@ -428,25 +437,91 @@ clinicRouter.post('/:clinicId/doctors', async (req, res) => {
   }
 });
 
-// 5. Update Doctor (Cabin, Specialty, Active status)
+// 5. Update Doctor (Cabin, Specialty, Active status, PIN/Password)
 clinicRouter.put('/:clinicId/doctors/:doctorId', async (req, res) => {
   try {
     const { doctorId, clinicId } = req.params;
-    const { displayName, specialty, roomNumber, active } = req.body;
+    const { displayName, specialty, roomNumber, active, pin, password } = req.body;
+
+    const updatePayload: any = {};
+    if (displayName !== undefined) updatePayload.displayName = displayName;
+    if (specialty !== undefined) updatePayload.specialty = specialty;
+    if (roomNumber !== undefined) updatePayload.roomNumber = roomNumber;
+    if (active !== undefined) updatePayload.active = active;
+    if (pin !== undefined && pin !== null && String(pin).trim()) {
+      updatePayload.pin = String(pin).trim();
+    }
+    if (password !== undefined && password !== null && String(password).trim()) {
+      updatePayload.password = String(password).trim();
+    }
 
     const updated = await prisma.doctor.update({
       where: { id: doctorId },
-      data: {
-        displayName,
-        specialty,
-        roomNumber,
-        active,
-      },
+      data: updatePayload,
     });
 
     broadcastQueueUpdate(clinicId, 'clinic_profile_updated');
 
     res.json({ success: true, data: updated });
+  } catch (error) {
+    res.status(500).json({ success: false, error: (error as Error).message });
+  }
+});
+
+// 5b. Doctor Direct Change Password / PIN
+clinicRouter.patch('/:clinicId/doctors/:doctorId/password', async (req, res) => {
+  try {
+    const { doctorId, clinicId } = req.params;
+    const { currentPassword, newPassword, newPin } = req.body;
+
+    if (!newPassword && !newPin) {
+      return res.status(400).json({ success: false, error: 'New password or 4-digit PIN is required.' });
+    }
+
+    const doctor = await prisma.doctor.findUnique({
+      where: { id: doctorId },
+      include: { clinic: true },
+    });
+
+    if (!doctor) {
+      return res.status(404).json({ success: false, error: 'Doctor not found.' });
+    }
+
+    // Verify current password if provided
+    if (currentPassword) {
+      const cleanCurrent = String(currentPassword).trim();
+      const isValid =
+        cleanCurrent === doctor.password ||
+        cleanCurrent === doctor.pin ||
+        cleanCurrent === doctor.clinic.adminPassword;
+      if (!isValid) {
+        return res.status(401).json({ success: false, error: 'Current password is incorrect.' });
+      }
+    }
+
+    const updateData: any = {};
+    if (newPassword) {
+      updateData.password = String(newPassword).trim();
+    }
+    if (newPin) {
+      updateData.pin = String(newPin).trim();
+    }
+
+    const updated = await prisma.doctor.update({
+      where: { id: doctorId },
+      data: updateData,
+    });
+
+    broadcastQueueUpdate(clinicId, 'clinic_profile_updated');
+
+    res.json({
+      success: true,
+      message: 'Password / PIN updated successfully.',
+      data: {
+        id: updated.id,
+        displayName: updated.displayName,
+      },
+    });
   } catch (error) {
     res.status(500).json({ success: false, error: (error as Error).message });
   }

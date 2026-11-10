@@ -292,6 +292,8 @@ export const ClinicAdmin: React.FC = () => {
   const [docSpecialty, setDocSpecialty] = useState('');
   const [docRoom, setDocRoom] = useState('');
   const [docActive, setDocActive] = useState(true);
+  const [docPin, setDocPin] = useState('');
+  const [docPassword, setDocPassword] = useState('');
 
   // Service Modal States
   const [showServiceModal, setShowServiceModal] = useState(false);
@@ -516,6 +518,8 @@ export const ClinicAdmin: React.FC = () => {
             specialty: docSpecialty,
             roomNumber: docRoom,
             active: docActive,
+            pin: docPin ? docPin.trim() : undefined,
+            password: docPassword ? docPassword.trim() : undefined,
           }),
         });
         showToast('Doctor details updated!');
@@ -528,6 +532,8 @@ export const ClinicAdmin: React.FC = () => {
             specialty: docSpecialty,
             roomNumber: docRoom,
             active: docActive,
+            pin: docPin ? docPin.trim() : '1234',
+            password: docPassword ? docPassword.trim() : (docPin ? docPin.trim() : 'doctor123'),
           }),
         });
         showToast('New doctor added to OPD roster!');
@@ -559,14 +565,18 @@ export const ClinicAdmin: React.FC = () => {
     setDocSpecialty('');
     setDocRoom('');
     setDocActive(true);
+    setDocPin('');
+    setDocPassword('');
   };
 
-  const openEditDoctor = (doc: Doctor) => {
+  const openEditDoctor = (doc: any) => {
     setEditingDoctorId(doc.id);
     setDocName(doc.displayName);
     setDocSpecialty(doc.specialty);
-    setDocRoom(doc.roomNumber);
+    setDocRoom(doc.roomNumber || '');
     setDocActive(doc.active);
+    setDocPin(doc.pin || '');
+    setDocPassword(doc.password || '');
     setShowDoctorModal(true);
   };
 
@@ -813,22 +823,6 @@ export const ClinicAdmin: React.FC = () => {
               <span>{loginError}</span>
             </div>
           )}
-
-          {/* 1-Click Dev / Quick Autofill Button */}
-          <div className="mb-4">
-            <button
-              type="button"
-              onClick={() => {
-                setAdminPasswordInput('admin123');
-                submitAdminLogin('admin123');
-              }}
-              className="w-full py-2.5 px-3 bg-sky-50 hover:bg-sky-100 text-sky-950 border border-sky-300/80 rounded-2xl text-xs font-black transition-all flex items-center justify-center gap-1.5 active:scale-98 shadow-xs"
-              title="1-Click Quick Autofill and Login"
-            >
-              <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-              <span>⚡ Quick Access: 1-Click Autofill & Login</span>
-            </button>
-          </div>
 
           <form onSubmit={handleAdminLogin} className="space-y-4">
             <div className="text-left">
@@ -2404,6 +2398,30 @@ export const ClinicAdmin: React.FC = () => {
                   onChange={(e) => setDocRoom(e.target.value)}
                   className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Doctor 4-Digit PIN</label>
+                  <input
+                    type="password"
+                    maxLength={8}
+                    placeholder={editingDoctorId ? 'Leave blank to keep' : 'e.g. 5821'}
+                    value={docPin}
+                    onChange={(e) => setDocPin(e.target.value)}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Doctor Password</label>
+                  <input
+                    type="password"
+                    placeholder={editingDoctorId ? 'Leave blank to keep' : 'Secret password'}
+                    value={docPassword}
+                    onChange={(e) => setDocPassword(e.target.value)}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
               </div>
 
               <div className="flex items-center gap-2 pt-1">

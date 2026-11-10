@@ -48,7 +48,7 @@ function Navigation() {
   const [trackError, setTrackError] = useState<string | null>(null);
   const [trackingLoading, setTrackingLoading] = useState(false);
 
-  // Hide standard navbar on patient-facing flows, TV kiosk displays, dedicated corporate marketing site, and root commercial landing
+  // Hide standard navbar on patient-facing flows, TV kiosk displays, doctor consoles, reception desks, and admin panels
   if (
     location.pathname === '/' ||
     location.pathname === '/display' ||
@@ -57,6 +57,12 @@ function Navigation() {
     location.pathname.startsWith('/check-in') ||
     location.pathname.startsWith('/token') ||
     location.pathname.startsWith('/status') ||
+    location.pathname === '/doctor' ||
+    location.pathname.startsWith('/doctor') ||
+    location.pathname === '/reception' ||
+    location.pathname.startsWith('/reception') ||
+    location.pathname === '/admin' ||
+    location.pathname.startsWith('/admin') ||
     location.pathname === '/features' ||
     location.pathname === '/pricing' ||
     location.pathname === '/roi-calculator' ||

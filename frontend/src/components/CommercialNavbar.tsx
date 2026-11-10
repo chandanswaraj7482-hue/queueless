@@ -52,7 +52,6 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
 
   const navLinks = [
     { label: 'Features', href: '/features' },
-    { label: 'Live Simulator', href: '/#interactive-demo' },
     { label: 'ROI Calculator', href: '/roi-calculator' },
     { label: 'Pricing', href: '/pricing' },
     { label: 'About', href: '/about' },
@@ -115,7 +114,16 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+          <Link
+            to="/"
+            onClick={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
+            }}
+            className="flex items-center gap-2.5 sm:gap-3 group shrink-0 cursor-pointer"
+            title="Queueless Healthcare OS - Home"
+          >
             <div className="relative">
               <img
                 src="/logo.png"
@@ -140,7 +148,6 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             {navLinks.map((item, idx) => {
               const isActive =
                 location.pathname === item.href ||
-                (item.href === '/#interactive-demo' && location.pathname === '/' && location.hash === '#interactive-demo') ||
                 (item.href === '/#about-founder' && location.pathname === '/' && location.hash === '#about-founder');
               const isLast = idx === navLinks.length - 1;
               return (

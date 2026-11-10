@@ -2128,15 +2128,43 @@ export const FounderDashboard: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-slate-200/80 flex items-center justify-between text-[11px] text-slate-500">
-                      <span>Doctor PIN: <strong className="text-slate-800 font-mono">1234</strong></span>
-                      <Link
-                        to="/doctor"
-                        className="text-xs font-bold text-purple-700 hover:underline"
-                      >
-                        Open Cabin ➔
-                      </Link>
-                    </div>
+                    {(() => {
+                      const cabinSlug = doc.roomNumber
+                        ? doc.roomNumber.toLowerCase().replace(/\s+/g, '-')
+                        : `cabin-1`;
+                      const directUrl = `/doctor/${c.slug}/${cabinSlug}`;
+                      return (
+                        <div className="mt-4 pt-3 border-t border-slate-200/80 flex items-center justify-between text-[11px]">
+                          <span className="text-slate-500 font-mono text-[10px]">
+                            PIN: <strong className="text-slate-800">1234</strong>
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const full = `${window.location.origin}${directUrl}`;
+                                navigator.clipboard.writeText(full);
+                                showToast(`📋 Copied dedicated link for ${doc.displayName}`);
+                              }}
+                              className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-[10px] flex items-center gap-1 cursor-pointer"
+                              title="Copy individual cabin link"
+                            >
+                              <Copy className="w-3 h-3" />
+                              <span>Copy Link</span>
+                            </button>
+                            <Link
+                              to={directUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs font-bold text-purple-700 hover:underline flex items-center gap-0.5"
+                            >
+                              <span>Open Cabin</span>
+                              <ExternalLink className="w-3 h-3" />
+                            </Link>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 ))
               )}

@@ -353,6 +353,8 @@ export function App() {
             <Route path="/reception/:slug" element={<ReceptionDashboard />} />
             <Route path="/doctor" element={<DoctorView />} />
             <Route path="/doctor/:slug" element={<DoctorView />} />
+            <Route path="/doctor/:slug/:doctorId" element={<DoctorView />} />
+            <Route path="/doctor/:slug/cabin/:doctorId" element={<DoctorView />} />
             <Route path="/display" element={<DisplayKiosk />} />
             <Route path="/display/:clinicId" element={<DisplayKiosk />} />
             <Route path="/admin" element={<FounderDashboard />} />

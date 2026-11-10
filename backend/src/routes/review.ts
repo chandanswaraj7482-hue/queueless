@@ -112,6 +112,82 @@ reviewRouter.get('/founder-overview', async (req, res) => {
       totalEntries: c._count.queueEntries,
     }));
 
+    // Active Patients Status Breakdown
+    const [waitingPatients, inConsultationPatients, completedPatients] = await Promise.all([
+      prisma.queueEntry.count({
+        where: { status: { in: ['WAITING', 'BOOKED', 'CHECKED_IN'] } },
+      }),
+      prisma.queueEntry.count({
+        where: { status: { in: ['CALLED', 'IN_CONSULTATION'] } },
+      }),
+      prisma.queueEntry.count({
+        where: { status: 'COMPLETED' },
+      }),
+    ]);
+
+    // Live Recent Patients (Across All Hospitals)
+    const recentPatientEntries = await prisma.queueEntry.findMany({
+      take: 60,
+      orderBy: { joinedAt: 'desc' },
+      include: {
+        clinic: { select: { id: true, name: true, slug: true } },
+        patient: { select: { id: true, name: true, mobile: true, age: true, gender: true } },
+        doctor: { select: { id: true, displayName: true, specialty: true, roomNumber: true } },
+        payment: { select: { id: true, amount: true, provider: true, status: true } },
+      },
+    });
+
+    const recentPatients = recentPatientEntries.map((pe) => ({
+      id: pe.id,
+      token: pe.token,
+      publicToken: pe.publicToken,
+      patientName: pe.patient?.name || 'Anonymous Patient',
+      patientMobile: pe.patient?.mobile || '—',
+      age: pe.patient?.age,
+      gender: pe.patient?.gender,
+      clinicName: pe.clinic?.name || 'Clinic',
+      clinicSlug: pe.clinic?.slug || 'caremax-opd',
+      doctorName: pe.doctor?.displayName || 'Consultant',
+      specialty: pe.doctor?.specialty || 'General',
+      roomNumber: pe.doctor?.roomNumber || 'Cabin 1',
+      status: pe.status,
+      paymentStatus: pe.paymentStatus,
+      feeAmount: pe.feeAmount || 500,
+      joinedAt: pe.joinedAt,
+      calledAt: pe.calledAt,
+      completedAt: pe.completedAt,
+    }));
+
+    // Live Staff & Director Logins Audit (Across All Hospitals)
+    const loginAuditRows = await prisma.auditLog.findMany({
+      where: { action: { in: ['STAFF_LOGIN', 'USER_LOGIN', 'DIRECTOR_LOGIN', 'LOGIN'] } },
+      take: 60,
+      orderBy: { timestamp: 'desc' },
+    });
+
+    const parsedLogins = loginAuditRows.map((log) => {
+      let meta: any = {};
+      try {
+        meta = typeof log.metadata === 'string' ? JSON.parse(log.metadata) : (log.metadata || {});
+      } catch (e) {}
+      return {
+        id: log.id,
+        timestamp: log.timestamp,
+        role: meta.role || 'DIRECTOR',
+        clinicName: meta.clinicName || 'Caremax OPD',
+        clinicSlug: meta.clinicSlug || 'caremax-opd',
+        identifier: meta.identifier || 'staff',
+        ip: meta.ip || '127.0.0.1',
+        userAgent: meta.userAgent || 'Desktop Chrome',
+      };
+    });
+
+    // Count logins by clinic
+    const loginCountsByClinic: Record<string, number> = {};
+    parsedLogins.forEach((l) => {
+      loginCountsByClinic[l.clinicName] = (loginCountsByClinic[l.clinicName] || 0) + 1;
+    });
+
     res.json({
       success: true,
       data: {
@@ -129,7 +205,13 @@ reviewRouter.get('/founder-overview', async (req, res) => {
           todayTokens,
           totalGmv,
           totalHoursSaved,
+          waitingPatients,
+          inConsultationPatients,
+          completedPatients,
           clinics: clinicsOverview,
+          recentPatients,
+          recentLogins: parsedLogins,
+          loginCountsByClinic,
         },
       },
     });

@@ -281,6 +281,29 @@ clinicRouter.post('/login', async (req, res) => {
       }
     }
 
+    // Record Login Activity in AuditLog for Founder Dashboard
+    try {
+      await prisma.auditLog.create({
+        data: {
+          tenantId: clinic.tenantId,
+          action: 'STAFF_LOGIN',
+          entityType: 'Clinic',
+          entityId: clinic.id,
+          metadata: JSON.stringify({
+            role: role || 'ADMIN',
+            clinicName: clinic.name,
+            clinicSlug: clinic.slug,
+            identifier: cleanId,
+            ip: (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1',
+            userAgent: req.headers['user-agent'] || 'Browser Client',
+            timestamp: new Date().toISOString(),
+          }),
+        },
+      });
+    } catch (auditErr) {
+      console.warn('[LOGIN AUDIT WARN]', auditErr);
+    }
+
     const redirectUrl =
       role === 'DOCTOR'
         ? `/doctor/${clinic.slug}`

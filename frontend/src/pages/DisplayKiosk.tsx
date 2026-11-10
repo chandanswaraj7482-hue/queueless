@@ -70,7 +70,53 @@ const WORLDWIDE_LANGUAGES: { code: SpeechLanguageMode; flag: string; label: stri
 export const DisplayKiosk: React.FC = () => {
   const { clinicId: routeClinicId } = useParams<{ clinicId?: string }>();
   const clinicId = routeClinicId || 'city-health';
-  const [data, setData] = useState<DisplayData>({ nowServing: [], nextWaiting: [] });
+  const initialClinicName = clinicId === 'caremax-opd'
+    ? 'Caremax OPD'
+    : clinicId === 'city-health'
+    ? 'City Health Multi-Specialty Hospital'
+    : clinicId
+        .split('-')
+        .map((w: string) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+        .join(' ');
+
+  const [data, setData] = useState<DisplayData>({
+    clinic: {
+      id: clinicId,
+      name: initialClinicName,
+      slug: clinicId,
+      address: 'Suite 402, Metro Healthcare Towers, MG Road',
+    },
+    nowServing: [
+      {
+        id: '75d040',
+        token: 'A-101',
+        status: 'CALLED',
+        doctor: {
+          displayName: 'Dr. Rohan Sharma, MD',
+          specialty: 'Orthopedics & Joint Care',
+          roomNumber: 'Cabin 1',
+        },
+        patient: { name: 'Live Test Patient' },
+      },
+      {
+        id: 'b10492',
+        token: 'B-104',
+        status: 'IN_CONSULTATION',
+        doctor: {
+          displayName: 'Dr. Rajiv Mehra, MD',
+          specialty: 'Cardiology',
+          roomNumber: 'Cabin 2',
+        },
+        patient: { name: 'Cardiac Patient' },
+      },
+    ],
+    nextWaiting: [
+      { id: 'q-next-1', token: 'A-102', doctor: { displayName: 'Dr. Rohan Sharma, MD' } },
+      { id: 'q-next-2', token: 'B-105', doctor: { displayName: 'Dr. Rajiv Mehra, MD' } },
+      { id: 'q-next-3', token: 'C-201', doctor: { displayName: 'Dr. Priya Patel, MBBS' } },
+      { id: 'q-next-4', token: 'D-302', doctor: { displayName: 'Dr. Amit Roy, MS' } },
+    ],
+  });
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [speechLang, setSpeechLang] = useState<SpeechLanguageMode>('hi'); // Default to English + Hindi for natural Indian hospital context
   const [lastCalledToken, setLastCalledToken] = useState<string | null>(null);

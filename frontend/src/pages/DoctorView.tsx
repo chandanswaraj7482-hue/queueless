@@ -39,6 +39,8 @@ import {
   Volume2,
   Activity,
   FileDown,
+  Star,
+  BookmarkPlus,
 } from 'lucide-react';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
@@ -80,14 +82,45 @@ const COMMON_LAB_TESTS = [
   'Vitamin D3 & Vitamin B12',
 ];
 
+const COMMON_DIAGNOSES = [
+  'Viral Fever & Bodyache (Acute Pyrexia)',
+  'Acute URTI (Cold, Cough & Throat Infection)',
+  'Acid Peptic Disease / GERD / Hyperacidity',
+  'Primary Essential Hypertension',
+  'Type 2 Diabetes Mellitus',
+  'Acute Gastroenteritis / Diarrhea',
+  'Tension Headache / Migraine',
+  'Lumbar Spondylosis / Low Back Pain',
+  'Allergic Rhinitis / Bronchial Asthma',
+  'Enteric / Typhoid Fever',
+  'Urinary Tract Infection (UTI)',
+  'Osteoarthritis Knee Joint',
+];
+
+const COMMON_ADVICE_CHIPS = [
+  '💧 Drink plenty of warm water & stay hydrated (3L/day)',
+  '🌶️ Avoid spicy, oily, fried & street junk food',
+  '🛌 Strict bed rest for 48 hours',
+  '🍬 Strictly avoid sugar, sweets, potatoes & refined carbs (Diabetic Diet)',
+  '🧂 Low salt (Namak kam) & low oil heart-healthy diet',
+  '🥛 Take all medicines after meals with warm water',
+  '📋 Review in OPD with fresh lab investigation reports',
+  '🚨 Visit Emergency immediately if severe breathlessness or chest pain occurs',
+];
+
 const QUICK_DRUG_PRESETS = [
-  { name: '+ Paracetamol 650mg', row: { medicineName: 'Tab. Paracetamol 650mg', dosage: '1 Tab', frequency: '1-0-1 (After Food)', duration: '3 Days', instructions: 'Take SOS for fever / pain' } },
-  { name: '+ Pan-D 40mg', row: { medicineName: 'Cap. Pan-D (Pantoprazole + Domperidone)', dosage: '1 Cap', frequency: '1-0-0 (Morning)', duration: '5 Days', instructions: 'Empty stomach 30 mins before breakfast' } },
-  { name: '+ Azithromycin 500mg', row: { medicineName: 'Tab. Azithromycin 500mg (Azee)', dosage: '1 Tab', frequency: '1-0-0 (After Lunch)', duration: '3 Days', instructions: 'Complete full 3-day course' } },
-  { name: '+ Cetirizine 10mg', row: { medicineName: 'Tab. Cetirizine 10mg', dosage: '1 Tab', frequency: '0-0-1 (Bedtime)', duration: '5 Days', instructions: 'Take at night' } },
-  { name: '+ Augmentin 625mg', row: { medicineName: 'Tab. Augmentin 625mg (Amoxyclav)', dosage: '1 Tab', frequency: '1-0-1 (After Food)', duration: '5 Days', instructions: 'Take after meals' } },
-  { name: '+ Cough Syrup 10ml', row: { medicineName: 'Syp. Ascoril-D / Cough Linctus', dosage: '10 ml', frequency: '1-1-1 (TDS)', duration: '5 Days', instructions: 'Take after food' } },
-  { name: '+ Electral ORS', row: { medicineName: 'Sachet Electral ORS', dosage: '1 Sachet', frequency: 'Twice Daily', duration: '3 Days', instructions: 'Dissolve in 1L boiled and cooled water' } },
+  { name: '+ Paracetamol 650mg', row: { medicineName: 'Tab. Paracetamol 650mg (Dolo)', dosage: '1 Tab', frequency: '1-0-1', duration: '3 Days', instructions: 'After Food (खाने के बाद - SOS for fever/pain)' } },
+  { name: '+ Pan-D 40mg (Acidity)', row: { medicineName: 'Cap. Pan-D (Pantoprazole + Domperidone)', dosage: '1 Cap', frequency: '1-0-0', duration: '5 Days', instructions: 'Before Food (सुबह खाली पेट 30 mins पहले)' } },
+  { name: '+ Azithromycin 500mg', row: { medicineName: 'Tab. Azithromycin 500mg (Azee)', dosage: '1 Tab', frequency: '1-0-0', duration: '3 Days', instructions: 'After Food (खाने के बाद)' } },
+  { name: '+ Cetirizine 10mg', row: { medicineName: 'Tab. Cetirizine 10mg (Okacet)', dosage: '1 Tab', frequency: '0-0-1', duration: '5 Days', instructions: 'At Bedtime (रात को सोते समय)' } },
+  { name: '+ Augmentin 625mg', row: { medicineName: 'Tab. Augmentin 625mg (Amoxyclav)', dosage: '1 Tab', frequency: '1-0-1', duration: '5 Days', instructions: 'After Food (खाने के बाद)' } },
+  { name: '+ Cough Syrup 10ml', row: { medicineName: 'Syp. Ascoril-D / Grilinctus', dosage: '10 ml', frequency: '1-1-1', duration: '5 Days', instructions: 'After Food (गुनगुने पानी से)' } },
+  { name: '+ Electral ORS', row: { medicineName: 'Sachet Electral ORS', dosage: '1 Sachet', frequency: 'Twice Daily', duration: '3 Days', instructions: 'In 1L boiled and cooled water' } },
+  { name: '+ Telma 40mg (BP)', row: { medicineName: 'Tab. Telmisartan 40mg (Telma)', dosage: '1 Tab', frequency: '1-0-0', duration: '30 Days', instructions: 'Morning after breakfast (नाश्ते के बाद)' } },
+  { name: '+ Metformin 500mg', row: { medicineName: 'Tab. Metformin 500mg (Glycomet)', dosage: '1 Tab', frequency: '1-0-1', duration: '30 Days', instructions: 'After Food (खाने के बाद)' } },
+  { name: '+ Ondansetron 4mg', row: { medicineName: 'Tab. Ondansetron 4mg (Emeset)', dosage: '1 Tab', frequency: 'SOS', duration: '3 Days', instructions: 'Before Food (उल्टी महसूस होने पर)' } },
+  { name: '+ Montair-LC', row: { medicineName: 'Tab. Montair-LC (Montelukast + Levo)', dosage: '1 Tab', frequency: '0-0-1', duration: '7 Days', instructions: 'At Bedtime (रात को सोते समय)' } },
+  { name: '+ Neurobion Forte', row: { medicineName: 'Tab. Neurobion Forte (B-Complex)', dosage: '1 Tab', frequency: '1-0-0', duration: '15 Days', instructions: 'After Food (रोज सुबह नाश्ते के बाद)' } },
 ];
 
 const generateWhatsAppRxUrl = (data: any) => {
@@ -387,14 +420,23 @@ export const DoctorView: React.FC = () => {
   const [diagnosis, setDiagnosis] = useState('');
   const [vitals, setVitals] = useState<Vitals>({ bp: '120/80', pulse: '76', temp: '98.6', spo2: '99', weight: '' });
   const [medicines, setMedicines] = useState<MedicineRow[]>([
-    { medicineName: 'Tab. Paracetamol 650mg', dosage: '1 Tab', frequency: '1-0-1 (Morning-Night)', duration: '5 Days', instructions: 'After Food' },
+    { medicineName: 'Tab. Paracetamol 650mg', dosage: '1 Tab', frequency: '1-0-1', duration: '5 Days', instructions: 'After Food (खाने के बाद)' },
   ]);
   const [labTests, setLabTests] = useState<string[]>([]);
   const [customLabInput, setCustomLabInput] = useState('');
   const [followUpDays, setFollowUpDays] = useState<number>(7);
+  const [customFollowUpDaysInput, setCustomFollowUpDaysInput] = useState('');
   const [clinicalNotes, setClinicalNotes] = useState('Maintain good hydration. Follow up after 5 days if fever persists.');
   const [savingConsultation, setSavingConsultation] = useState(false);
   const [dispatchSuccessBanner, setDispatchSuccessBanner] = useState<string | null>(null);
+  const [customDoctorPresets, setCustomDoctorPresets] = useState<ClinicalPreset[]>(() => {
+    try {
+      const saved = localStorage.getItem('queueless_doctor_custom_presets');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const { slug, doctorId: routeDoctorId } = useParams<{ slug?: string; doctorId?: string }>();
   const location = useLocation();
@@ -833,6 +875,62 @@ export const DoctorView: React.FC = () => {
     setMedicines([...preset.medicines]);
     if (preset.labTests) setLabTests([...preset.labTests]);
     setClinicalNotes(preset.clinicalNotes);
+  };
+
+  const handleSaveCurrentAsCustomPreset = () => {
+    const presetName = window.prompt('Enter a custom name for this clinical template (e.g. "My Dengue Care Protocol" or "Post-Op Knee Care"):');
+    if (!presetName || !presetName.trim()) return;
+
+    const validMeds = medicines.filter((m) => m.medicineName.trim().length > 0);
+    if (validMeds.length === 0 && !diagnosis.trim()) {
+      alert('Please enter at least a diagnosis or one medicine before saving.');
+      return;
+    }
+
+    const newPreset: ClinicalPreset = {
+      id: `CUSTOM_${Date.now()}`,
+      name: `⭐ ${presetName.trim()}`,
+      diagnosis: diagnosis || 'General Clinical Treatment Protocol',
+      medicines: validMeds.length > 0 ? [...validMeds] : [{ medicineName: 'Tab. Paracetamol 650mg', dosage: '1 Tab', frequency: '1-0-1', duration: '5 Days', instructions: 'After Food (खाने के बाद)' }],
+      labTests: [...labTests],
+      clinicalNotes: clinicalNotes || 'Follow dietary advice and take medicines on time.',
+    };
+
+    const updated = [...customDoctorPresets, newPreset];
+    setCustomDoctorPresets(updated);
+    try {
+      localStorage.setItem('queueless_doctor_custom_presets', JSON.stringify(updated));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeleteCustomPreset = (presetId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!window.confirm('Delete this custom preset?')) return;
+    const updated = customDoctorPresets.filter((p) => p.id !== presetId);
+    setCustomDoctorPresets(updated);
+    try {
+      localStorage.setItem('queueless_doctor_custom_presets', JSON.stringify(updated));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleAddAdviceChip = (chipText: string) => {
+    if (!clinicalNotes.trim()) {
+      setClinicalNotes(chipText);
+    } else if (!clinicalNotes.includes(chipText)) {
+      setClinicalNotes(`${clinicalNotes.trim()}\n• ${chipText}`);
+    }
+  };
+
+  const handleSetDiagnosisChip = (diagText: string) => {
+    if (!diagnosis.trim()) {
+      setDiagnosis(diagText);
+    } else if (!diagnosis.includes(diagText)) {
+      setDiagnosis(`${diagnosis.trim()}, ${diagText}`);
+    }
   };
 
   const handleSaveAndCompleteConsultation = async (complete: boolean) => {
@@ -1334,45 +1432,100 @@ export const DoctorView: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* 1-Click Clinical Rx Presets */}
+                    {/* 1-Click Clinical Rx Presets & Custom Templates */}
                     <div className="bg-gradient-to-r from-sky-50 via-indigo-50/60 to-blue-50 border border-sky-200/80 rounded-2xl p-3.5 shadow-xs">
-                      <div className="flex items-center justify-between mb-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                         <span className="text-[11px] font-black uppercase tracking-wider text-sky-950 flex items-center gap-1.5">
                           <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                          <span>1-Click Clinical Rx Presets (Instant Auto-Fill)</span>
+                          <span>Clinical Rx Presets & Custom Templates</span>
                         </span>
-                        <span className="text-[10px] text-sky-700 font-bold bg-white/90 px-2.5 py-0.5 rounded-full border border-sky-200 shadow-2xs">
-                          ⚡ Saves 3-5 mins per patient
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={handleSaveCurrentAsCustomPreset}
+                            className="px-2.5 py-1 bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-xl text-[10px] font-extrabold shadow-2xs transition-all active:scale-95 flex items-center gap-1 cursor-pointer"
+                            title="Save current diagnosis, medicines & advice as your own reusable clinical template"
+                          >
+                            <BookmarkPlus className="w-3 h-3 text-emerald-600" />
+                            <span>Save Current as My Preset</span>
+                          </button>
+                          <span className="text-[10px] text-sky-700 font-bold bg-white/90 px-2.5 py-0.5 rounded-full border border-sky-200 shadow-2xs">
+                            ⚡ 1-Tap Auto-Fill
+                          </span>
+                        </div>
                       </div>
+
                       <div className="flex items-center gap-1.5 flex-wrap">
+                        {/* Built-in clinical presets */}
                         {CLINICAL_PRESETS.map((preset) => (
                           <button
                             key={preset.id}
                             type="button"
                             onClick={() => applyClinicalPreset(preset)}
-                            className="px-2.5 py-1.5 bg-white hover:bg-sky-600 hover:text-white text-slate-800 text-[11px] font-bold rounded-xl border border-slate-200/90 hover:border-sky-600 shadow-2xs transition-all active:scale-95 flex items-center gap-1"
+                            className="px-2.5 py-1.5 bg-white hover:bg-sky-600 hover:text-white text-slate-800 text-[11px] font-bold rounded-xl border border-slate-200/90 hover:border-sky-600 shadow-2xs transition-all active:scale-95 flex items-center gap-1 cursor-pointer"
                             title={`Auto-fill diagnosis, medicines, and advice for ${preset.name}`}
                           >
                             <span>{preset.name}</span>
                           </button>
                         ))}
+
+                        {/* Doctor's saved custom presets */}
+                        {customDoctorPresets.map((preset) => (
+                          <div
+                            key={preset.id}
+                            className="inline-flex items-center bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 rounded-xl text-[11px] font-extrabold shadow-2xs overflow-hidden"
+                          >
+                            <button
+                              type="button"
+                              onClick={() => applyClinicalPreset(preset)}
+                              className="px-2.5 py-1.5 text-left cursor-pointer flex items-center gap-1"
+                              title="Click to apply your custom template"
+                            >
+                              <span>{preset.name}</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => handleDeleteCustomPreset(preset.id, e)}
+                              className="px-1.5 py-1.5 text-amber-600 hover:text-rose-600 hover:bg-rose-50 border-l border-amber-200 cursor-pointer"
+                              title="Delete custom preset"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
-                    {/* 2. Doctor Diagnosis */}
+                    {/* 2. Doctor Diagnosis (Custom typing + 1-Tap suggestions) */}
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                        <FileText className="w-3.5 h-3.5 text-sky-600" />
-                        <span>Doctor Clinical Diagnosis / Provisional Findings</span>
-                      </label>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                          <FileText className="w-3.5 h-3.5 text-sky-600" />
+                          <span>Doctor Clinical Diagnosis / Provisional Findings</span>
+                        </label>
+                        <span className="text-[10px] text-slate-400 font-medium">Type custom diagnosis or tap suggestions below</span>
+                      </div>
                       <input
                         type="text"
-                        placeholder="e.g. Acute Upper Respiratory Tract Infection (URTI) with dry cough"
+                        placeholder="Type custom diagnosis (e.g. Acute URTI with dry cough, Bronchial Asthma, etc.)..."
                         value={diagnosis}
                         onChange={(e) => setDiagnosis(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-300 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                        className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-300 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white shadow-2xs"
                       />
+
+                      {/* 1-Tap Diagnosis Suggestion Chips */}
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {COMMON_DIAGNOSES.map((diag) => (
+                          <button
+                            key={diag}
+                            type="button"
+                            onClick={() => handleSetDiagnosisChip(diag)}
+                            className="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-800 border border-slate-200/90 hover:border-sky-300 rounded-lg text-[10px] font-semibold transition-all cursor-pointer"
+                          >
+                            + {diag}
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
                     {/* 3. Prescription Rx Table & Quick Drug Presets */}
@@ -1385,18 +1538,18 @@ export const DoctorView: React.FC = () => {
                         <button
                           type="button"
                           onClick={handleAddMedicine}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-black transition-all cursor-pointer shadow-2xs border border-indigo-200/80 active:scale-95"
                         >
                           <Plus className="w-3.5 h-3.5" />
-                          <span>Add Medicine</span>
+                          <span>+ Add Custom Medicine</span>
                         </button>
                       </div>
 
                       {/* 1-Tap Quick Drug Add Pills */}
-                      <div className="mb-2.5 p-2 bg-slate-50/80 rounded-2xl border border-slate-200/80">
+                      <div className="mb-2.5 p-2.5 bg-slate-50/80 rounded-2xl border border-slate-200/80">
                         <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                           <Sparkles className="w-3 h-3 text-amber-500" />
-                          <span>Quick Add Common Drugs:</span>
+                          <span>Quick 1-Tap Add Common Drugs:</span>
                         </div>
                         <div className="flex flex-wrap gap-1.5">
                           {QUICK_DRUG_PRESETS.map((preset) => (
@@ -1412,63 +1565,148 @@ export const DoctorView: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="space-y-2">
+                      {/* Medicine Cards with Custom Inputs & Food Timing Selector */}
+                      <div className="space-y-2.5">
                         {medicines.map((med, index) => (
                           <div
                             key={index}
-                            className="grid grid-cols-12 gap-2 bg-slate-50 p-2.5 rounded-2xl border border-slate-200 items-center"
+                            className="p-3 bg-white rounded-2xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition-all space-y-2"
                           >
-                            <div className="col-span-12 sm:col-span-4">
+                            {/* Row 1: Name, Dose, Frequency, Duration, Remove */}
+                            <div className="grid grid-cols-12 gap-2 items-center">
+                              <div className="col-span-12 sm:col-span-5">
+                                <input
+                                  type="text"
+                                  placeholder="Medicine name (e.g. Tab. Dolo 650mg, Syp. Ascoril)..."
+                                  value={med.medicineName}
+                                  onChange={(e) => handleMedicineChange(index, 'medicineName', e.target.value)}
+                                  className="w-full text-xs font-bold text-slate-900 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                />
+                              </div>
+
+                              <div className="col-span-4 sm:col-span-2">
+                                <input
+                                  type="text"
+                                  placeholder="Dose (1 Tab)"
+                                  value={med.dosage}
+                                  onChange={(e) => handleMedicineChange(index, 'dosage', e.target.value)}
+                                  className="w-full text-xs font-semibold text-slate-800 bg-slate-50 px-2.5 py-2 rounded-xl border border-slate-200 focus:outline-none"
+                                  list={`dosage-options-${index}`}
+                                />
+                                <datalist id={`dosage-options-${index}`}>
+                                  <option value="1 Tab" />
+                                  <option value="2 Tabs" />
+                                  <option value="1 Cap" />
+                                  <option value="5 ml" />
+                                  <option value="10 ml" />
+                                  <option value="1 Sachet" />
+                                  <option value="1 Puff" />
+                                  <option value="2 Drops" />
+                                  <option value="1 Inj" />
+                                </datalist>
+                              </div>
+
+                              <div className="col-span-4 sm:col-span-2">
+                                <input
+                                  type="text"
+                                  placeholder="Freq (1-0-1)"
+                                  value={med.frequency}
+                                  onChange={(e) => handleMedicineChange(index, 'frequency', e.target.value)}
+                                  className="w-full text-xs font-semibold text-slate-800 bg-slate-50 px-2.5 py-2 rounded-xl border border-slate-200 focus:outline-none"
+                                  list={`freq-options-${index}`}
+                                />
+                                <datalist id={`freq-options-${index}`}>
+                                  <option value="1-0-1 (सुबह-शाम)" />
+                                  <option value="1-1-1 (सुबह-दोपहर-रात)" />
+                                  <option value="1-0-0 (सुबह)" />
+                                  <option value="0-0-1 (रात को)" />
+                                  <option value="0-1-0 (दोपहर)" />
+                                  <option value="SOS (ज़रूरत पर)" />
+                                </datalist>
+                              </div>
+
+                              <div className="col-span-3 sm:col-span-2">
+                                <input
+                                  type="text"
+                                  placeholder="Duration (5d)"
+                                  value={med.duration}
+                                  onChange={(e) => handleMedicineChange(index, 'duration', e.target.value)}
+                                  className="w-full text-xs font-semibold text-slate-800 bg-slate-50 px-2.5 py-2 rounded-xl border border-slate-200 focus:outline-none"
+                                  list={`duration-options-${index}`}
+                                />
+                                <datalist id={`duration-options-${index}`}>
+                                  <option value="3 Days" />
+                                  <option value="5 Days" />
+                                  <option value="7 Days" />
+                                  <option value="10 Days" />
+                                  <option value="15 Days" />
+                                  <option value="1 Month" />
+                                  <option value="Continue" />
+                                </datalist>
+                              </div>
+
+                              <div className="col-span-1 text-right">
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveMedicine(index)}
+                                  className="p-2 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 transition-colors cursor-pointer"
+                                  title="Remove Medicine"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Row 2: Food / Timing Instructions (खाना खाने से पहले/बाद) */}
+                            <div className="flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-slate-100 text-[11px]">
+                              <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mr-1">
+                                🍽️ निर्देश:
+                              </span>
+                              {[
+                                'After Food (खाने के बाद)',
+                                'Before Food (खाने से पहले)',
+                                'Empty Stomach (खाली पेट)',
+                                'At Bedtime (रात को सोते समय)',
+                                'With Milk (दूध के साथ)',
+                                'SOS (ज़रूरत पड़ने पर)',
+                              ].map((instructionOption) => (
+                                <button
+                                  key={instructionOption}
+                                  type="button"
+                                  onClick={() => handleMedicineChange(index, 'instructions', instructionOption)}
+                                  className={`px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                                    med.instructions === instructionOption
+                                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
+                                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                                  }`}
+                                >
+                                  {instructionOption}
+                                </button>
+                              ))}
                               <input
                                 type="text"
-                                placeholder="Medicine name (e.g. Paracetamol 650mg)"
-                                value={med.medicineName}
-                                onChange={(e) => handleMedicineChange(index, 'medicineName', e.target.value)}
-                                className="w-full text-xs font-bold text-slate-900 bg-white px-2.5 py-1.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                                placeholder="या कस्टम निर्देश लिखें (जैसे: गुनगुने पानी के साथ)..."
+                                value={med.instructions}
+                                onChange={(e) => handleMedicineChange(index, 'instructions', e.target.value)}
+                                className="flex-1 min-w-[170px] text-[10px] font-medium text-slate-700 bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-200 focus:outline-none"
                               />
-                            </div>
-                            <div className="col-span-4 sm:col-span-2">
-                              <input
-                                type="text"
-                                placeholder="Dosage (1 Tab)"
-                                value={med.dosage}
-                                onChange={(e) => handleMedicineChange(index, 'dosage', e.target.value)}
-                                className="w-full text-xs font-medium text-slate-800 bg-white px-2.5 py-1.5 rounded-xl border border-slate-200 focus:outline-none"
-                              />
-                            </div>
-                            <div className="col-span-4 sm:col-span-3">
-                              <input
-                                type="text"
-                                placeholder="Freq (1-0-1)"
-                                value={med.frequency}
-                                onChange={(e) => handleMedicineChange(index, 'frequency', e.target.value)}
-                                className="w-full text-xs font-medium text-slate-800 bg-white px-2.5 py-1.5 rounded-xl border border-slate-200 focus:outline-none"
-                              />
-                            </div>
-                            <div className="col-span-3 sm:col-span-2">
-                              <input
-                                type="text"
-                                placeholder="Duration (5d)"
-                                value={med.duration}
-                                onChange={(e) => handleMedicineChange(index, 'duration', e.target.value)}
-                                className="w-full text-xs font-medium text-slate-800 bg-white px-2.5 py-1.5 rounded-xl border border-slate-200 focus:outline-none"
-                              />
-                            </div>
-                            <div className="col-span-1 text-right">
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveMedicine(index)}
-                                className="p-1 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
                             </div>
                           </div>
                         ))}
+
+                        {/* Add Medicine Button at bottom */}
+                        <button
+                          type="button"
+                          onClick={handleAddMedicine}
+                          className="w-full py-2 bg-slate-50 hover:bg-indigo-50/60 text-slate-700 hover:text-indigo-700 border border-dashed border-slate-300 hover:border-indigo-300 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                        >
+                          <Plus className="w-4 h-4" />
+                          <span>+ Add Another Custom Medicine Row</span>
+                        </button>
                       </div>
                     </div>
 
-                    {/* 4. Diagnostic Lab Tests / Investigations ("Kya Dekhna Ha Kya Nahi") */}
+                    {/* 4. Diagnostic Lab Tests / Investigations */}
                     <div className="bg-gradient-to-r from-teal-50/60 via-emerald-50/40 to-sky-50/60 p-3.5 rounded-2xl border border-teal-200/80">
                       <div className="flex items-center justify-between mb-2">
                         <label className="text-xs font-extrabold text-teal-950 uppercase tracking-wider flex items-center gap-1.5">
@@ -1527,7 +1765,7 @@ export const DoctorView: React.FC = () => {
                       <form onSubmit={handleAddCustomLabTest} className="flex gap-2">
                         <input
                           type="text"
-                          placeholder="Add other investigation (e.g. MRI Brain, Serum Uric Acid)..."
+                          placeholder="Add custom investigation (e.g. MRI Spine, Serum Ferritin, USG KUB)..."
                           value={customLabInput}
                           onChange={(e) => setCustomLabInput(e.target.value)}
                           className="flex-1 px-3 py-1.5 bg-white rounded-xl border border-slate-200 text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-teal-500"
@@ -1543,22 +1781,39 @@ export const DoctorView: React.FC = () => {
                       </form>
                     </div>
 
-                    {/* 5. Doctor Advice & Instructions */}
+                    {/* 5. Doctor Advice & Instructions (Custom text + 1-Tap chips) */}
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                        <FileText className="w-3.5 h-3.5 text-amber-600" />
-                        <span>Clinical Advice / Dietary Instructions:</span>
-                      </label>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                          <FileText className="w-3.5 h-3.5 text-amber-600" />
+                          <span>Clinical Advice / Dietary Instructions:</span>
+                        </label>
+                        <span className="text-[10px] text-slate-400 font-medium">Type custom advice or tap chips below</span>
+                      </div>
                       <textarea
                         rows={2}
                         value={clinicalNotes}
                         onChange={(e) => setClinicalNotes(e.target.value)}
                         placeholder="e.g. Plenty of oral fluids. Avoid cold food. Strictly bed rest for 48 hours."
-                        className="w-full px-3.5 py-2 rounded-2xl border border-slate-300 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                        className="w-full px-3.5 py-2 rounded-2xl border border-slate-300 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white shadow-2xs"
                       />
+
+                      {/* 1-Tap Advice Chips */}
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {COMMON_ADVICE_CHIPS.map((chip) => (
+                          <button
+                            key={chip}
+                            type="button"
+                            onClick={() => handleAddAdviceChip(chip)}
+                            className="px-2 py-0.5 bg-amber-50/80 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-lg text-[10px] font-semibold transition-all cursor-pointer"
+                          >
+                            + {chip}
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
-                    {/* 6. Follow-up Review Timeline */}
+                    {/* 6. Follow-up Review Timeline (Quick chips + Custom days) */}
                     <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200">
                       <div className="flex items-center justify-between mb-2">
                         <label className="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
@@ -1566,7 +1821,7 @@ export const DoctorView: React.FC = () => {
                           <span>Follow-up Review Schedule</span>
                         </label>
                         <span className="text-xs font-black text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
-                          After {followUpDays} Days
+                          After {followUpDays} Days (15-Day Free OPD Policy)
                         </span>
                       </div>
                       <div className="flex items-center gap-1.5 flex-wrap">
@@ -1574,9 +1829,12 @@ export const DoctorView: React.FC = () => {
                           <button
                             key={days}
                             type="button"
-                            onClick={() => setFollowUpDays(days)}
+                            onClick={() => {
+                              setFollowUpDays(days);
+                              setCustomFollowUpDaysInput('');
+                            }}
                             className={`px-3 py-1 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                              followUpDays === days
+                              followUpDays === days && !customFollowUpDaysInput
                                 ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
                                 : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
                             }`}
@@ -1584,6 +1842,28 @@ export const DoctorView: React.FC = () => {
                             {days} Days
                           </button>
                         ))}
+
+                        {/* Custom Days Input */}
+                        <div className="inline-flex items-center gap-1 bg-white px-2.5 py-1 rounded-xl border border-slate-200 text-xs font-bold text-slate-700">
+                          <span>Custom:</span>
+                          <input
+                            type="number"
+                            min="1"
+                            max="365"
+                            placeholder="e.g. 21"
+                            value={customFollowUpDaysInput}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setCustomFollowUpDaysInput(val);
+                              const parsed = parseInt(val, 10);
+                              if (!isNaN(parsed) && parsed > 0) {
+                                setFollowUpDays(parsed);
+                              }
+                            }}
+                            className="w-12 text-xs font-black text-blue-700 bg-slate-50 px-1 py-0.5 rounded border border-slate-200 text-center focus:outline-none"
+                          />
+                          <span>Days</span>
+                        </div>
                       </div>
                     </div>
 

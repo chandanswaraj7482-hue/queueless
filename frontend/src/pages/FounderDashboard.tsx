@@ -167,13 +167,10 @@ const SAMPLE_PRESETS = [
 export const FounderDashboard: React.FC = () => {
   const [data, setData] = useState<FounderData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'CLINICS' | 'PATIENTS' | 'LOGINS' | 'REVIEWS' | 'MAP' | 'DOCTORS' | 'PITCH' | 'SECURITY'>('CLINICS');
+  const [activeTab, setActiveTab] = useState<'CLINICS' | 'LOGINS' | 'REVIEWS' | 'MAP' | 'DOCTORS' | 'PITCH' | 'SECURITY'>('CLINICS');
   const [clinicsWithDoctors, setClinicsWithDoctors] = useState<any[]>([]);
   const [selectedStarFilter, setSelectedStarFilter] = useState<number | 'ALL'>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
-  const [patientSearch, setPatientSearch] = useState('');
-  const [patientClinicFilter, setPatientClinicFilter] = useState('ALL');
-  const [patientStatusFilter, setPatientStatusFilter] = useState('ALL');
   const [loginClinicFilter, setLoginClinicFilter] = useState('ALL');
   const [loginRoleFilter, setLoginRoleFilter] = useState('ALL');
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
@@ -252,7 +249,7 @@ export const FounderDashboard: React.FC = () => {
     setSelectedClinicForPlan(clinic);
     setPlanForm({
       plan: clinic.plan || settingsObj.plan || (clinic.slug === 'caremax-opd' ? 'ENTERPRISE' : clinic.slug === 'city-health' ? 'PRO' : 'FREE_TRIAL'),
-      planStatus: clinic.planStatus || settingsObj.planStatus || 'ACTIVE',
+      planStatus: clinic.planStatus || settingsObj.planStatus || (clinic.slug === 'caremax-opd' || clinic.slug === 'city-health' ? 'ACTIVE' : 'PENDING_APPROVAL'),
       monthlyFee: clinic.monthlyFee !== undefined ? clinic.monthlyFee : (settingsObj.monthlyFee !== undefined ? settingsObj.monthlyFee : (clinic.slug === 'caremax-opd' ? 9999 : clinic.slug === 'city-health' ? 4999 : 0)),
       commissionPercent: settingsObj.commissionPercent !== undefined ? settingsObj.commissionPercent : 2.5,
       features: {
@@ -794,18 +791,6 @@ export const FounderDashboard: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setActiveTab('PATIENTS')}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
-            activeTab === 'PATIENTS'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-          }`}
-        >
-          <Users className={`w-4 h-4 ${activeTab === 'PATIENTS' ? 'text-sky-400' : 'text-slate-400'}`} />
-          <span>👥 Live Patients Inflow ({data?.platform?.totalTokensIssued || 0})</span>
-        </button>
-
-        <button
           onClick={() => setActiveTab('REVIEWS')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             activeTab === 'REVIEWS'
@@ -877,357 +862,6 @@ export const FounderDashboard: React.FC = () => {
           <span>Platform Passkeys & Health</span>
         </button>
       </div>
-
-      {/* ============================================================== */}
-      {/* TAB: LIVE PATIENTS FOOTFALL (FOUNDER MULTI-HOSPITAL INFLOW)    */}
-      {/* ============================================================== */}
-      {activeTab === 'PATIENTS' && (
-        <div className="space-y-6">
-          {/* Header & Filter Controls */}
-          <div className="p-4 sm:p-5 bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="p-2 bg-sky-500/10 text-sky-600 rounded-xl">
-                  <Users className="w-5 h-5" />
-                </span>
-                <div>
-                  <h3 className="text-base font-black text-slate-900 tracking-tight">
-                    Real-Time Patient Inflow & Footfall Across Hospitals
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Live telemetry of all digital patient tokens issued across Caremax OPD, City Health & partner clinics.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2.5">
-              {/* Hospital Filter */}
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-bold text-slate-700">
-                <Building2 className="w-3.5 h-3.5 text-slate-500" />
-                <select
-                  aria-label="Filter by hospital"
-                  value={patientClinicFilter}
-                  onChange={(e) => setPatientClinicFilter(e.target.value)}
-                  className="bg-transparent text-slate-800 font-bold focus:outline-none cursor-pointer"
-                >
-                  <option value="ALL">All Hospitals ({data?.platform?.clinics?.length || 1})</option>
-                  {data?.platform?.clinics?.map((c) => (
-                    <option key={c.id} value={c.slug}>
-                      {c.name} ({c.totalEntries} tokens)
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Status Filter */}
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-bold text-slate-700">
-                <Filter className="w-3.5 h-3.5 text-slate-500" />
-                <select
-                  aria-label="Filter by queue status"
-                  value={patientStatusFilter}
-                  onChange={(e) => setPatientStatusFilter(e.target.value)}
-                  className="bg-transparent text-slate-800 font-bold focus:outline-none cursor-pointer"
-                >
-                  <option value="ALL">All Queue Statuses</option>
-                  <option value="WAITING">Waiting in Lobby</option>
-                  <option value="IN_CONSULTATION">In Consultation</option>
-                  <option value="COMPLETED">Completed</option>
-                </select>
-              </div>
-
-              {/* Patient Search */}
-              <div className="relative">
-                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
-                <input
-                  type="text"
-                  placeholder="Search token, name, mobile..."
-                  value={patientSearch}
-                  onChange={(e) => setPatientSearch(e.target.value)}
-                  className="pl-8 pr-3 py-1.5 text-xs bg-slate-100 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 w-48 sm:w-56 font-medium"
-                />
-              </div>
-
-              {/* Refresh button */}
-              <button
-                type="button"
-                onClick={() => fetchFounderData(false)}
-                className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-all active:scale-95 cursor-pointer"
-                title="Refresh Live Telemetry"
-              >
-                <RefreshCw className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* 4 Telemetry Metrics Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-              <div className="text-[11px] font-bold text-slate-400 uppercase">Total Registered</div>
-              <div className="text-2xl font-black text-slate-900 mt-1">
-                {data?.platform?.totalTokensIssued || 0}
-              </div>
-              <span className="text-[10px] text-sky-600 font-bold block mt-0.5">
-                Across all clinical suites
-              </span>
-            </div>
-
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-              <div className="text-[11px] font-bold text-slate-400 uppercase">Today's Footfall</div>
-              <div className="text-2xl font-black text-emerald-600 mt-1">
-                +{data?.platform?.todayTokens || 0}
-              </div>
-              <span className="text-[10px] text-emerald-600 font-bold block mt-0.5">
-                Active clinical traffic today
-              </span>
-            </div>
-
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-              <div className="text-[11px] font-bold text-slate-400 uppercase">In Lobby / Waiting</div>
-              <div className="text-2xl font-black text-amber-500 mt-1">
-                {data?.platform?.waitingPatients ?? (data?.platform?.todayTokens || 0)}
-              </div>
-              <span className="text-[10px] text-amber-600 font-bold block mt-0.5">
-                Zero-wait sequence active
-              </span>
-            </div>
-
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-              <div className="text-[11px] font-bold text-slate-400 uppercase">In Cabin / Done</div>
-              <div className="text-2xl font-black text-indigo-600 mt-1">
-                {(data?.platform?.inConsultationPatients || 0) + (data?.platform?.completedPatients || 0)}
-              </div>
-              <span className="text-[10px] text-indigo-600 font-bold block mt-0.5">
-                {data?.platform?.completedPatients || 0} consultations finished
-              </span>
-            </div>
-          </div>
-
-          {/* Hospital Revenue & Footfall Breakdown (Founder SaaS Tracking) */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
-              <div>
-                <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-sky-500" />
-                  <span>Hospital Telemetry: Volume & Revenue Generated</span>
-                </h4>
-                <p className="text-[11px] text-slate-500">
-                  Track how much patient volume and consultation fees each partner hospital brings to Queueless.
-                </p>
-              </div>
-              <button
-                onClick={() => setActiveTab('CLINICS')}
-                className="text-xs font-bold text-sky-600 hover:text-sky-700 flex items-center gap-1 cursor-pointer self-start sm:self-auto"
-              >
-                <span>Full Hospitals Hub</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
-              {data?.platform?.clinics?.map((c) => {
-                const isSelected = patientClinicFilter === c.slug;
-                return (
-                  <div
-                    key={c.id}
-                    className={`p-3.5 rounded-2xl border transition-all ${
-                      isSelected
-                        ? 'bg-sky-50/70 border-sky-400 ring-2 ring-sky-300 shadow-xs'
-                        : 'bg-slate-50/70 border-slate-200 hover:bg-white hover:border-slate-300'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-1 mb-2">
-                      <div className="truncate">
-                        <span className="font-black text-xs text-slate-900 block truncate" title={c.name}>
-                          {c.name}
-                        </span>
-                        <span className="text-[10px] font-mono text-slate-400">/{c.slug}</span>
-                      </div>
-                      <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-md shrink-0 ${
-                        c.plan === 'ENTERPRISE' ? 'bg-amber-100 text-amber-800' : c.plan === 'PRO' ? 'bg-indigo-100 text-indigo-800' : 'bg-slate-200 text-slate-700'
-                      }`}>
-                        {c.plan || 'TRIAL'}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2 my-2 text-center">
-                      <div className="bg-white p-2 rounded-xl border border-slate-100">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase block">Patients</span>
-                        <strong className="text-xs font-black text-slate-800">{c.totalEntries}</strong>
-                      </div>
-                      <div className="bg-white p-2 rounded-xl border border-slate-100">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase block">Fees (₹)</span>
-                        <strong className="text-xs font-black text-emerald-600">
-                          ₹{c.totalRevenue?.toLocaleString('en-IN') || 0}
-                        </strong>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 mt-2.5">
-                      <button
-                        onClick={() => handleOpenPlanModal(c)}
-                        className="flex-1 py-1.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black rounded-lg text-[10px] transition-all flex items-center justify-center gap-1 cursor-pointer active:scale-95 shadow-xs"
-                        title="Manage Subscription Plan & Premium Features"
-                      >
-                        <Crown className="w-3 h-3" />
-                        <span>Manage Plan</span>
-                      </button>
-
-                      <button
-                        onClick={() => setPatientClinicFilter(isSelected ? 'ALL' : c.slug)}
-                        className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
-                          isSelected
-                            ? 'bg-sky-600 text-white border-sky-600'
-                            : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
-                        }`}
-                        title={isSelected ? 'Clear hospital filter' : 'Filter patient list by this hospital'}
-                      >
-                        {isSelected ? 'Filtered ✓' : 'Filter Feed'}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Patients Live Table */}
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <h4 className="text-sm font-black text-slate-900">
-                  Live Patient Consultations Feed
-                </h4>
-                {patientClinicFilter !== 'ALL' && (
-                  <span className="text-xs text-sky-700 font-bold block mt-0.5">
-                    Showing {data?.platform?.clinics?.find(c => c.slug === patientClinicFilter)?.name || patientClinicFilter} • Total Fees Brought: ₹{data?.platform?.clinics?.find(c => c.slug === patientClinicFilter)?.totalRevenue?.toLocaleString('en-IN') || 0}
-                  </span>
-                )}
-              </div>
-              <span className="text-xs text-slate-400 font-medium">
-                Auto-synced via Supabase Telemetry
-              </span>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50/80 text-slate-500 text-[10px] font-black uppercase tracking-wider border-b border-slate-100">
-                  <tr>
-                    <th className="py-3.5 px-4">Live Token</th>
-                    <th className="py-3.5 px-4">Patient Name & Info</th>
-                    <th className="py-3.5 px-4">Hospital / OPD</th>
-                    <th className="py-3.5 px-4">Attending Cabin</th>
-                    <th className="py-3.5 px-4">Queue Status</th>
-                    <th className="py-3.5 px-4">Consultation Fee</th>
-                    <th className="py-3.5 px-4">Checked In At</th>
-                    <th className="py-3.5 px-4 text-right">Patient Pass</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {(() => {
-                    const patients = data?.platform?.recentPatients || [];
-                    const filtered = patients.filter((p) => {
-                      if (patientClinicFilter !== 'ALL' && p.clinicSlug !== patientClinicFilter) return false;
-                      if (patientStatusFilter !== 'ALL' && p.status !== patientStatusFilter) return false;
-                      if (patientSearch.trim()) {
-                        const q = patientSearch.toLowerCase();
-                        return (
-                          p.patientName.toLowerCase().includes(q) ||
-                          p.token.toLowerCase().includes(q) ||
-                          p.patientMobile.includes(q) ||
-                          p.clinicName.toLowerCase().includes(q)
-                        );
-                      }
-                      return true;
-                    });
-
-                    if (filtered.length === 0) {
-                      return (
-                        <tr>
-                          <td colSpan={8} className="py-12 text-center text-slate-400">
-                            <Users className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-                            <p className="font-bold text-sm">No patient entries match your search criteria.</p>
-                            <p className="text-xs text-slate-400 mt-1">Try resetting the hospital or status filters.</p>
-                          </td>
-                        </tr>
-                      );
-                    }
-
-                    return filtered.map((p) => (
-                      <tr key={p.id} className="hover:bg-slate-50/60 transition-colors">
-                        <td className="py-3 px-4 font-mono font-black text-sky-600 text-sm">
-                          <span className="px-2.5 py-1 bg-sky-50 border border-sky-200/80 rounded-lg">
-                            {p.token}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4">
-                          <div className="font-bold text-slate-900">{p.patientName}</div>
-                          <div className="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
-                            {p.age && <span>{p.age} yrs • {p.gender || 'Patient'}</span>}
-                            <span>{p.patientMobile}</span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4">
-                          <div className="font-semibold text-slate-800">{p.clinicName}</div>
-                          <span className="text-[10px] text-slate-400 font-mono">/{p.clinicSlug}</span>
-                        </td>
-                        <td className="py-3 px-4">
-                          <div className="font-medium text-slate-800">{p.doctorName}</div>
-                          <div className="text-[11px] text-slate-500">{p.roomNumber} • {p.specialty}</div>
-                        </td>
-                        <td className="py-3 px-4">
-                          {p.status === 'WAITING' || p.status === 'BOOKED' || p.status === 'CHECKED_IN' ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 border border-amber-300 font-bold text-[10px]">
-                              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                              Waiting in Lobby
-                            </span>
-                          ) : p.status === 'CALLED' || p.status === 'IN_CONSULTATION' ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-300 font-bold text-[10px]">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                              In Cabin Consultation
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-700 border border-sky-300 font-bold text-[10px]">
-                              <CheckCircle2 className="w-3 h-3 text-sky-600" />
-                              Completed
-                            </span>
-                          )}
-                        </td>
-                        <td className="py-3 px-4">
-                          <div className="font-black text-slate-900">₹{p.feeAmount}</div>
-                          <span className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded ${
-                            p.paymentStatus === 'PAID'
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : p.paymentStatus === 'FREE_FOLLOW_UP'
-                              ? 'bg-purple-100 text-purple-800'
-                              : 'bg-amber-100 text-amber-800'
-                          }`}>
-                            {p.paymentStatus || 'CASH_DESK'}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-slate-500 font-mono text-[11px]">
-                          {p.joinedAt ? new Date(p.joinedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) : 'Today'}
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <Link
-                            to={`/token/${p.publicToken}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold text-[11px] transition-all"
-                          >
-                            <Eye className="w-3 h-3 text-sky-600" />
-                            <span>Track Pass</span>
-                          </Link>
-                        </td>
-                      </tr>
-                    ));
-                  })()}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ============================================================== */}
       {/* TAB: STAFF & CLINIC LOGINS AUDIT (FOUNDER LOGINS TRACKER)       */}
@@ -1949,9 +1583,15 @@ export const FounderDashboard: React.FC = () => {
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                           c.planStatus === 'ACTIVE'
                             ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                            : c.planStatus === 'PENDING_APPROVAL'
+                            ? 'bg-amber-50 text-amber-700 border border-amber-200'
                             : 'bg-rose-50 text-rose-700 border border-rose-200'
                         }`}>
-                          {c.planStatus === 'ACTIVE' ? '🟢 Active Access' : '🔴 Suspended'}
+                          {c.planStatus === 'ACTIVE'
+                            ? '🟢 Active Access'
+                            : c.planStatus === 'PENDING_APPROVAL'
+                            ? '🟡 Pending Founder Approval'
+                            : '🔴 Suspended'}
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">
                           slug: /{c.slug}
@@ -2023,18 +1663,16 @@ export const FounderDashboard: React.FC = () => {
                         <span>Manage Plan</span>
                       </button>
 
-                      {/* View Inflow in Feed */}
-                      <button
-                        onClick={() => {
-                          setPatientClinicFilter(c.slug);
-                          setActiveTab('PATIENTS');
-                        }}
+                      {/* Hospital Desk Link */}
+                      <Link
+                        to={`/admin/${c.slug}`}
+                        target="_blank"
                         className="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 rounded-xl text-xs font-bold border border-sky-200/80 transition-all flex items-center gap-1 cursor-pointer"
-                        title="Filter Live Patient Feed for this hospital"
+                        title="Open scoped Hospital Desk"
                       >
-                        <Users className="w-3.5 h-3.5" />
-                        <span>View Inflow</span>
-                      </button>
+                        <ExternalLink className="w-3.5 h-3.5 text-sky-600" />
+                        <span>Hospital Desk</span>
+                      </Link>
 
                       {/* Setup Links Package Button */}
                       <button
@@ -3172,9 +2810,9 @@ export const FounderDashboard: React.FC = () => {
               {/* 2. Access Status Kill-Switch */}
               <div>
                 <label className="font-black text-slate-800 uppercase tracking-wider text-[11px] block mb-2">
-                  2. Platform Access Status (Founder Switch)
+                  2. Platform Access Status (Founder Approval Gate)
                 </label>
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   <button
                     type="button"
                     onClick={() => setPlanForm({ ...planForm, planStatus: 'ACTIVE' })}
@@ -3184,10 +2822,26 @@ export const FounderDashboard: React.FC = () => {
                         : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-white'
                     }`}
                   >
-                    <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
                     <div>
-                      <strong className="block text-xs font-black">🟢 Active Operational</strong>
-                      <span className="text-[10px] text-slate-500">Normal check-ins, TV display & doctor calls</span>
+                      <strong className="block text-xs font-black">🟢 Active (Approved)</strong>
+                      <span className="text-[10px] text-slate-500 block">Live access granted by founder</span>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPlanForm({ ...planForm, planStatus: 'PENDING_APPROVAL' })}
+                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                      planForm.planStatus === 'PENDING_APPROVAL'
+                        ? 'bg-amber-50 border-amber-300 text-amber-900 ring-2 ring-amber-500'
+                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-white'
+                    }`}
+                  >
+                    <span className="w-3 h-3 rounded-full bg-amber-500 shrink-0"></span>
+                    <div>
+                      <strong className="block text-xs font-black">🟡 Pending Approval</strong>
+                      <span className="text-[10px] text-slate-500 block">Trial locked until grant</span>
                     </div>
                   </button>
 
@@ -3200,12 +2854,19 @@ export const FounderDashboard: React.FC = () => {
                         : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-white'
                     }`}
                   >
-                    <span className="w-3 h-3 rounded-full bg-rose-500"></span>
+                    <span className="w-3 h-3 rounded-full bg-rose-500 shrink-0"></span>
                     <div>
-                      <strong className="block text-xs font-black">🔴 Suspended / Overdue</strong>
-                      <span className="text-[10px] text-slate-500">Temporarily freeze desk (payment pending)</span>
+                      <strong className="block text-xs font-black">🔴 Suspended / Locked</strong>
+                      <span className="text-[10px] text-slate-500 block">Desk access frozen</span>
                     </div>
                   </button>
+                </div>
+
+                <div className="mt-2.5 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>
+                    <strong>Founder Gatekeeper:</strong> Hospitals do not automatically receive a 14-day free trial or operational access on signup. Access is strictly granted by you (the Founder) using this panel.
+                  </span>
                 </div>
               </div>
 

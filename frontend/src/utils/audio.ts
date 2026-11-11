@@ -278,11 +278,14 @@ export type SpeechLanguageMode =
  * 3. Clear, dignified, broadcast-grade announcement (pitch 1.0, cadence 0.96)
  * 4. Localized polite secondary announcement (e.g. Hindi, Spanish, etc.)
  */
+let activeUtterances: SpeechSynthesisUtterance[] = [];
+
 export function playClinicVoiceAnnouncement(
   token: string,
   cabin: string = 'Cabin 1',
   doctorName?: string,
-  bilingual: boolean | SpeechLanguageMode = false
+  bilingual: boolean | SpeechLanguageMode = false,
+  repeatTimes: number = 2
 ) {
   // First play the authentic hospital 3-tone chime
   playClinicChime();
@@ -293,105 +296,111 @@ export function playClinicVoiceAnnouncement(
 
   try {
     window.speechSynthesis.cancel(); // Cancel any lingering speech
+    activeUtterances = [];
 
     const spokenToken = formatTokenForHumanSpeech(token);
     const cleanCabin = cabin.replace(/\(.*\)/, '').trim() || 'Cabin 1';
     const cleanDoctor = doctorName ? `with ${doctorName.replace(/,.*$/, '').trim()}` : '';
+    const langMode = typeof bilingual === 'string' ? bilingual : (bilingual ? 'hi' : 'en');
 
-    // Broadcast hospital phrasing: Natural, dignified, pleasant
-    const enText = `Attention please. Token ${spokenToken}. Please proceed to ${cleanCabin}${cleanDoctor ? ', ' + cleanDoctor : ''}.`;
-    const utteranceEn = new SpeechSynthesisUtterance(enText);
+    const englishText = `Attention please. Token number ${spokenToken}. Please proceed to ${cleanCabin}${cleanDoctor ? `, ${cleanDoctor}` : ''}.`;
 
-    // Natural human broadcast tuning
-    utteranceEn.rate = 0.96;
-    utteranceEn.pitch = 1.0;
-    utteranceEn.volume = 1.0;
+    // Secondary translation
+    let secondaryText = '';
+    let secondaryLang = 'hi-IN';
+    const hindiCabin = cleanCabin
+      .replace(/cabin\s*(\d+)/i, 'केबिन नंबर $1')
+      .replace(/room\s*(\d+)/i, 'कमरा नंबर $1')
+      .replace(/consultation\s*room\s*(\d+)/i, 'केबिन $1');
 
-    const enVoice = getBestNaturalVoice('en');
-    if (enVoice) {
-      utteranceEn.voice = enVoice;
+    if (langMode === 'hi') {
+      secondaryText = `कृपया ध्यान दें। टोकन नंबर ${spokenToken}। कृपया ${hindiCabin} में जाएं।`;
+      secondaryLang = 'hi-IN';
+    } else if (langMode === 'bn') {
+      secondaryText = `দয়া করে লক্ষ্য করুন। টোকেন নম্বর ${spokenToken}। অনুগ্রহ করে ${cleanCabin} এ যান।`;
+      secondaryLang = 'bn-IN';
+    } else if (langMode === 'ta') {
+      secondaryText = `தயவுசெய்து கவனிக்கவும். டோக்கன் எண் ${spokenToken}. தயவுசெய்து ${cleanCabin}க்கு செல்லவும்.`;
+      secondaryLang = 'ta-IN';
+    } else if (langMode === 'te') {
+      secondaryText = `దయచేసి వినండి. టੋకెన్ ನಂಬರ್ ${spokenToken}. దయచేసి ${cleanCabin}కు వెళ్లండి.`;
+      secondaryLang = 'te-IN';
+    } else if (langMode === 'kn') {
+      secondaryText = `ದಯವಿಟ್ಟು ಗಮನಿಸಿ. ಟೋಕನ್ ಸಂಖ್ಯೆ ${spokenToken}. ದಯವಿಟ್ಟು ${cleanCabin}ಗೆ ಬನ್ನಿ.`;
+      secondaryLang = 'kn-IN';
+    } else if (langMode === 'mr') {
+      secondaryText = `कृपया लक्ष द्या. टोकन क्रमांक ${spokenToken}. कृपया ${cleanCabin} मध्ये यावे.`;
+      secondaryLang = 'mr-IN';
+    } else if (langMode === 'gu') {
+      secondaryText = `કૃપા કરીને ध्यान આપો. ટોકન નંબર ${spokenToken}. કૃપા કરીને ${cleanCabin}માં પધારો.`;
+      secondaryLang = 'gu-IN';
+    } else if (langMode === 'pa') {
+      secondaryText = `ਕਿਰਪਾ ਕਰਕੇ ਧਿਆਨ ਦਿਓ। ਟੋਕਨ ਨੰਬਰ ${spokenToken}। ਕਿਰਪਾ ਕਰਕੇ ${cleanCabin} ਵਿੱਚ ਆਓ।`;
+      secondaryLang = 'pa-IN';
+    } else if (langMode === 'ml') {
+      secondaryText = `ദയവായി ശ്രദ്ധിക്കുക. ടോക്കൺ നമ്പർ ${spokenToken}. ദയവായി ${cleanCabin}ലേക്ക് പോകുക.`;
+      secondaryLang = 'ml-IN';
+    } else if (langMode === 'es') {
+      secondaryText = `Atención por favor. Turno ${spokenToken}. Por favor pasar al ${cleanCabin}.`;
+      secondaryLang = 'es-ES';
+    } else if (langMode === 'ar') {
+      secondaryText = `يرجى الانتباه. التذكرة رقم ${spokenToken}. يرجى التوجه إلى ${cleanCabin}.`;
+      secondaryLang = 'ar-SA';
+    } else if (langMode === 'fr') {
+      secondaryText = `Votre attention s'il vous plaît. Ticket ${spokenToken}. Veuillez vous présenter au ${cleanCabin}.`;
+      secondaryLang = 'fr-FR';
+    } else if (langMode === 'de') {
+      secondaryText = `Achtung bitte. Nummer ${spokenToken}. Bitte begeben Sie sich in ${cleanCabin}.`;
+      secondaryLang = 'de-DE';
+    } else if (langMode === 'ru') {
+      secondaryText = `Внимание пожалуйста. Талон ${spokenToken}. Пожалуйста пройдите в ${cleanCabin}.`;
+      secondaryLang = 'ru-RU';
     }
 
-    const langMode = typeof bilingual === 'string' ? bilingual : (bilingual ? 'hi' : 'en');
+    const playRound = (roundNum: number) => {
+      const uttEn = new SpeechSynthesisUtterance(englishText);
+      uttEn.lang = 'en-IN';
+      uttEn.rate = 0.94;
+      uttEn.pitch = 1.0;
+      uttEn.volume = 1.0;
+      const enVoice = getBestNaturalVoice('en');
+      if (enVoice) uttEn.voice = enVoice;
+
+      uttEn.onend = () => {
+        if (langMode !== 'en' && secondaryText) {
+          const uttSec = new SpeechSynthesisUtterance(secondaryText);
+          uttSec.lang = secondaryLang;
+          uttSec.rate = 0.94;
+          uttSec.pitch = 1.0;
+          uttSec.volume = 1.0;
+          const secVoice = getBestNaturalVoice(langMode);
+          if (secVoice) uttSec.voice = secVoice;
+
+          uttSec.onend = () => {
+            if (roundNum < repeatTimes) {
+              setTimeout(() => {
+                playClinicChime();
+                setTimeout(() => playRound(roundNum + 1), 750);
+              }, 1200);
+            }
+          };
+          window.speechSynthesis.speak(uttSec);
+        } else {
+          if (roundNum < repeatTimes) {
+            setTimeout(() => {
+              playClinicChime();
+              setTimeout(() => playRound(roundNum + 1), 750);
+            }, 1200);
+          }
+        }
+      };
+
+      window.speechSynthesis.speak(uttEn);
+    };
 
     // Wait for the hospital chime to ring cleanly before speaking (~850ms)
     setTimeout(() => {
-      window.speechSynthesis.speak(utteranceEn);
-
-      if (langMode !== 'en') {
-        utteranceEn.onend = () => {
-          try {
-            let secondaryText = '';
-            let secondaryLang = 'hi-IN';
-
-            // Natural regional translations
-            const hindiCabin = cleanCabin
-              .replace(/cabin\s*(\d+)/i, 'केबिन नंबर $1')
-              .replace(/room\s*(\d+)/i, 'कमरा नंबर $1')
-              .replace(/consultation\s*room\s*(\d+)/i, 'केबिन $1');
-
-            if (langMode === 'hi') {
-              secondaryText = `कृपया ध्यान दें। टोकन नंबर ${spokenToken}। कृपया ${hindiCabin} में जाएं।`;
-              secondaryLang = 'hi-IN';
-            } else if (langMode === 'bn') {
-              secondaryText = `দয়া করে লক্ষ্য করুন। টোকেন নম্বর ${spokenToken}। অনুগ্রহ করে ${cleanCabin} এ যান।`;
-              secondaryLang = 'bn-IN';
-            } else if (langMode === 'ta') {
-              secondaryText = `தயவுசெய்து கவனிக்கவும். டோக்கன் எண் ${spokenToken}. தயவுசெய்து ${cleanCabin}க்கு செல்லவும்.`;
-              secondaryLang = 'ta-IN';
-            } else if (langMode === 'te') {
-              secondaryText = `దయచేసి వినండి. టోకెన్ నంబర్ ${spokenToken}. దయచేసి ${cleanCabin}కు వెళ్లండి.`;
-              secondaryLang = 'te-IN';
-            } else if (langMode === 'kn') {
-              secondaryText = `ದಯವಿಟ್ಟು ಗಮನಿಸಿ. ಟೋಕನ್ ಸಂಖ್ಯೆ ${spokenToken}. ದಯವಿಟ್ಟು ${cleanCabin}ಗೆ ಬನ್ನಿ.`;
-              secondaryLang = 'kn-IN';
-            } else if (langMode === 'mr') {
-              secondaryText = `कृपया लक्ष द्या. टोकन क्रमांक ${spokenToken}. कृपया ${cleanCabin} मध्ये यावे.`;
-              secondaryLang = 'mr-IN';
-            } else if (langMode === 'gu') {
-              secondaryText = `કૃપા કરીને ધ્યાન આપો. ટોકન નંબર ${spokenToken}. કૃપા કરીને ${cleanCabin}માં પધારો.`;
-              secondaryLang = 'gu-IN';
-            } else if (langMode === 'pa') {
-              secondaryText = `ਕਿਰਪਾ ਕਰਕੇ ਧਿਆਨ ਦਿਓ। ਟੋਕਨ ਨੰਬਰ ${spokenToken}। ਕਿਰਪਾ ਕਰਕੇ ${cleanCabin} ਵਿੱਚ ਆਓ।`;
-              secondaryLang = 'pa-IN';
-            } else if (langMode === 'ml') {
-              secondaryText = `ദയവായി ശ്രദ്ധിക്കുക. ടോക്കൺ നമ്പർ ${spokenToken}. ദയവായി ${cleanCabin}ലേക്ക് പോകുക.`;
-              secondaryLang = 'ml-IN';
-            } else if (langMode === 'es') {
-              secondaryText = `Atención por favor. Turno ${spokenToken}. Por favor pasar al ${cleanCabin}.`;
-              secondaryLang = 'es-ES';
-            } else if (langMode === 'ar') {
-              secondaryText = `يرجى الانتباه. التذكرة رقم ${spokenToken}. يرجى التوجه إلى ${cleanCabin}.`;
-              secondaryLang = 'ar-SA';
-            } else if (langMode === 'fr') {
-              secondaryText = `Votre attention s'il vous plaît. Ticket ${spokenToken}. Veuillez vous présenter au ${cleanCabin}.`;
-              secondaryLang = 'fr-FR';
-            } else if (langMode === 'de') {
-              secondaryText = `Achtung bitte. Nummer ${spokenToken}. Bitte begeben Sie sich in ${cleanCabin}.`;
-              secondaryLang = 'de-DE';
-            } else if (langMode === 'ru') {
-              secondaryText = `Внимание пожалуйста. Талон ${spokenToken}. Пожалуйста пройдите в ${cleanCabin}.`;
-              secondaryLang = 'ru-RU';
-            }
-
-            if (secondaryText) {
-              const utteranceSec = new SpeechSynthesisUtterance(secondaryText);
-              utteranceSec.lang = secondaryLang;
-              utteranceSec.rate = 0.95;
-              utteranceSec.pitch = 1.0;
-              utteranceSec.volume = 1.0;
-
-              const secVoice = getBestNaturalVoice(langMode);
-              if (secVoice) {
-                utteranceSec.voice = secVoice;
-              }
-              window.speechSynthesis.speak(utteranceSec);
-            }
-          } catch {
-            // Ignore if secondary speech fails
-          }
-        };
-      }
+      playRound(1);
     }, 850);
   } catch (err) {
     console.warn('Speech synthesis unavailable or blocked by browser', err);

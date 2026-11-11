@@ -156,16 +156,17 @@ clinicRouter.post('/subscribe', async (req, res) => {
       : (address?.trim() || 'Central Health Campus');
 
     const subscriptionData = {
-      planId: planId || 'GROWTH_OPD',
-      planName: planName || 'Growth Super OPD Plan',
+      planId: planId || 'PENDING_GRANT',
+      planName: planName || 'Awaiting Founder Approval',
       billingCycle: billingCycle || 'MONTHLY',
-      currency: currency || 'USD',
+      currency: currency || 'INR',
       hardwareAddon: !!hardwareAddon,
-      totalAmount: totalAmount || 5999,
-      paymentMethod: paymentMethod || 'UPI_SIMULATED',
-      paymentStatus: 'PAID',
+      totalAmount: totalAmount || 0,
+      paymentMethod: paymentMethod || 'FOUNDER_GATEWAY',
+      paymentStatus: 'PENDING_APPROVAL',
       subscribedAt: new Date().toISOString(),
-      status: 'ACTIVE',
+      status: 'PENDING_APPROVAL',
+      planStatus: 'PENDING_APPROVAL',
       adminEmail: adminEmail || null,
     };
 

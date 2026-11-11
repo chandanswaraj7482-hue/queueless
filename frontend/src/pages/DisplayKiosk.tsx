@@ -200,14 +200,15 @@ export const DisplayKiosk: React.FC = () => {
   const triggerCallAnnouncement = (token: string, cabin: string, doctorName?: string) => {
     setLastCalledToken(token);
     setIsAnnouncing(true);
-    setTimeout(() => setIsAnnouncing(false), 5500);
+    setTimeout(() => setIsAnnouncing(false), 14000); // 14 seconds for 2 voice announcement rounds
 
     if (soundEnabledRef.current) {
       playClinicVoiceAnnouncement(
         token,
         cabin || 'Cabin 1',
         doctorName,
-        speechLangRef.current
+        speechLangRef.current,
+        2
       );
     }
   };
@@ -274,17 +275,20 @@ export const DisplayKiosk: React.FC = () => {
 
           const topCalled = normalizedNowServing[0];
 
-          // Automatic Call Announcement
+          // Automatic Call Announcement and Cabin Switching
           if (topCalled && topCalled.token) {
+            const calledCabin = topCalled.doctor?.roomNumber || 'Cabin 1';
             if (initialLoadDoneRef.current && topCalled.token !== lastAnnouncedTokenRef.current) {
               lastAnnouncedTokenRef.current = topCalled.token;
+              setSelectedHeroCabin(calledCabin);
               triggerCallAnnouncement(
                 topCalled.token,
-                topCalled.doctor?.roomNumber || 'Cabin 1',
+                calledCabin,
                 topCalled.doctor?.displayName
               );
             } else if (!initialLoadDoneRef.current) {
               lastAnnouncedTokenRef.current = topCalled.token;
+              setSelectedHeroCabin(calledCabin);
               initialLoadDoneRef.current = true;
             }
           }
@@ -384,10 +388,9 @@ export const DisplayKiosk: React.FC = () => {
     });
 
     const token = matchingServing?.token || cab.defaultToken;
-    const isCalling =
-      matchingServing?.status === 'CALLED' ||
-      selectedHeroCabin === cab.cabinNumber ||
-      (!selectedHeroCabin && idx === 1);
+    const isCalling = selectedHeroCabin
+      ? selectedHeroCabin.toLowerCase() === cab.cabinNumber.toLowerCase()
+      : matchingServing?.status === 'CALLED' || idx === 0;
     const doctorName = clinicDoc?.displayName || matchingServing?.doctor?.displayName || cab.displayName;
     const specialty = clinicDoc?.specialty || matchingServing?.doctor?.specialty || cab.specialty;
 
@@ -403,9 +406,9 @@ export const DisplayKiosk: React.FC = () => {
   });
 
   const heroCabin =
-    activeCabinsList.find((c) => c.cabinNumber === selectedHeroCabin) ||
+    activeCabinsList.find((c) => selectedHeroCabin && c.cabinNumber.toLowerCase() === selectedHeroCabin.toLowerCase()) ||
     activeCabinsList.find((c) => c.status === 'CALLING') ||
-    activeCabinsList[1]; // Default to Cabin 2
+    activeCabinsList[0];
 
   const handleTestVoice = (targetCabinNumber?: string) => {
     const target = targetCabinNumber

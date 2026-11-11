@@ -611,4 +611,22 @@ body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+
+  body:has(#opd-receipt-print) > *:not(.fixed) {
+    display: none !important;
+  }
+
+  body:has(#opd-receipt-print) .fixed {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    backdrop-filter: none !important;
+  }
+
+  body:has(#opd-receipt-print) .fixed > div {
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+  }
 }

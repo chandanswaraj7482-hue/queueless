@@ -1616,7 +1616,7 @@ export const PatientStatus: React.FC = () => {
 
                   <button
                     type="button"
-                    onClick={() => window.print()}
+                    onClick={() => setShowPdfModal(true)}
                     className="py-3 px-4 bg-sky-600 hover:bg-sky-700 text-white font-black text-xs rounded-2xl shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all"
                   >
                     <Printer className="w-4 h-4" />

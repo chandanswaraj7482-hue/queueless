@@ -129,8 +129,8 @@ reviewRouter.get('/founder-overview', async (req, res) => {
         doctorCount: c.doctors.length,
         totalEntries: c._count.queueEntries,
         totalRevenue: revenue > 0 ? revenue : (c.slug === 'caremax-opd' ? 2750 : c.slug === 'city-health' ? 1000 : 0),
-        plan: settingsObj.plan || (c.slug === 'caremax-opd' ? 'ENTERPRISE' : c.slug === 'city-health' ? 'PRO' : 'FREE_TRIAL'),
-        planStatus: settingsObj.planStatus || 'ACTIVE',
+        plan: settingsObj.plan || (c.slug === 'caremax-opd' ? 'ENTERPRISE' : c.slug === 'city-health' ? 'PRO' : 'PENDING_GRANT'),
+        planStatus: settingsObj.planStatus || (c.slug === 'caremax-opd' || c.slug === 'city-health' ? 'ACTIVE' : 'PENDING_APPROVAL'),
         monthlyFee: settingsObj.monthlyFee !== undefined ? settingsObj.monthlyFee : (c.slug === 'caremax-opd' ? 9999 : c.slug === 'city-health' ? 4999 : 0),
         features: settingsObj.features || {
           multiCabinVoice: true,

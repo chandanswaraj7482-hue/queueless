@@ -151,15 +151,15 @@ export const PrivacyPolicy: React.FC = () => {
             <section className="space-y-3">
               <h2 className="text-lg font-black text-slate-950 dark:text-white flex items-center gap-2">
                 <span className="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs flex items-center justify-center font-mono">6</span>
-                <span>Payment Gateways (Dodo Payments & PayPal)</span>
+                <span>Direct Hospital Bank Settlement & Zero Fund Custody</span>
               </h2>
               <p>
-                Subscription transactions and digital consultation fee collections are executed via authorized payment partners: <strong>Dodo Payments</strong> and <strong>PayPal</strong>.
+                Patient consultation fee transactions (whether paid via Direct Merchant UPI, Cashfree, Razorpay, or cash at counter) are governed under a strict <strong>Zero Fund Custody Policy</strong>:
               </p>
               <ul className="space-y-1.5 list-disc pl-5 text-slate-600 dark:text-slate-400">
-                <li>Queueless does NOT receive, store, or process raw credit card numbers or CVV codes on its servers.</li>
-                <li>Payment details are transmitted directly to Dodo Payments or PayPal through PCI-DSS Level 1 compliant tokenization.</li>
-                <li>Transaction receipts and invoice IDs are securely archived for hospital accounting and tax audits.</li>
+                <li><strong>100% Direct Route to Hospital Bank:</strong> All patient OPD consultation fees paid via UPI (Google Pay, PhonePe, Paytm) or payment gateways route directly through the subscribing hospital's own configured merchant credentials into the hospital's bank account.</li>
+                <li><strong>Zero Platform Custody:</strong> Queueless does NOT hold, pool, or custody patient consultation funds. Queueless is strictly an operating system and software infrastructure provider.</li>
+                <li><strong>Separate SaaS Licensing:</strong> Payments made by hospitals to Queueless represent software licensing subscriptions (SaaS MRR) processed via PCI-DSS Level 1 compliant processors.</li>
               </ul>
             </section>
 
@@ -167,6 +167,21 @@ export const PrivacyPolicy: React.FC = () => {
             <section className="space-y-3">
               <h2 className="text-lg font-black text-slate-950 dark:text-white flex items-center gap-2">
                 <span className="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs flex items-center justify-center font-mono">7</span>
+                <span>Multi-Tenant Partitioning & Founder Privacy Wall</span>
+              </h2>
+              <p>
+                To maintain compliance with HIPAA, NABH, and GDPR data segregation mandates, Queueless implements an impenetrable data boundary between healthcare facilities and the platform founder:
+              </p>
+              <ul className="space-y-1.5 list-disc pl-5 text-slate-600 dark:text-slate-400">
+                <li><strong>Hospital Workspace Isolation:</strong> Every subscribing clinic operates in an isolated tenant container. Staff at Hospital A have zero technical ability to access queues, doctors, or patient records of Hospital B.</li>
+                <li><strong>Founder Privacy Wall:</strong> The top-level Founder Command Center operates strictly on anonymized, high-level B2B SaaS metrics (Daily footfall volume, MRR, doctor counts, access approval status). Individual patient medical details, chief complaints, and contact records are excluded from the founder dashboard.</li>
+              </ul>
+            </section>
+
+            {/* Section 8 */}
+            <section className="space-y-3">
+              <h2 className="text-lg font-black text-slate-950 dark:text-white flex items-center gap-2">
+                <span className="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs flex items-center justify-center font-mono">8</span>
                 <span>Data Retention and Anonymization</span>
               </h2>
               <p>
@@ -174,10 +189,10 @@ export const PrivacyPolicy: React.FC = () => {
               </p>
             </section>
 
-            {/* Section 8 */}
+            {/* Section 9 */}
             <section className="space-y-3 border-t border-slate-100 dark:border-slate-800 pt-6">
               <h2 className="text-lg font-black text-slate-950 dark:text-white flex items-center gap-2">
-                <span className="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs flex items-center justify-center font-mono">8</span>
+                <span className="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs flex items-center justify-center font-mono">9</span>
                 <span>Contacting Our Data Protection Officer (DPO)</span>
               </h2>
               <p>

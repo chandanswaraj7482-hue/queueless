@@ -734,49 +734,49 @@ export const QueuelessWebsite: React.FC = () => {
       {/* ============================================================== */}
       {/* 2. WORLD-CLASS ENTERPRISE HEALTHCARE SAAS HERO                */}
       {/* ============================================================== */}
-      <section className="relative pt-12 sm:pt-20 pb-12 sm:pb-20 px-4 sm:px-6 z-10 overflow-hidden text-center">
+      <section className="relative pt-24 sm:pt-36 pb-12 sm:pb-20 px-3 sm:px-6 z-10 overflow-hidden text-center">
         {/* Soft Radial Ambient Lighting */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(56,189,248,0.18),rgba(99,102,241,0.08),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(14,165,233,0.18),rgba(99,102,241,0.08),rgba(0,0,0,0))] pointer-events-none -z-10" />
 
-        <div className="max-w-5xl mx-auto space-y-6 sm:space-y-8">
+        <div className="max-w-5xl mx-auto space-y-5 sm:space-y-8">
           
           {/* Eyebrow Trust Badge */}
           <motion.div
             initial={{ opacity: 0, y: -14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50/80 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800/80 text-xs font-bold text-blue-700 dark:text-blue-300 shadow-sm backdrop-blur-md"
+            className="inline-flex items-center gap-1.5 sm:gap-2.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-blue-50/90 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800/80 text-[11px] sm:text-xs font-bold text-blue-700 dark:text-blue-300 shadow-sm backdrop-blur-md max-w-full overflow-hidden text-ellipsis whitespace-nowrap"
           >
             <span className="relative flex h-2 w-2 shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
             </span>
-            <span>ABDM M1/M2 Certified Clinical Operating System</span>
+            <span className="truncate">ABDM M1/M2 Certified Clinical Operating System</span>
             <span className="text-blue-300 dark:text-blue-700">•</span>
-            <span className="font-semibold text-slate-600 dark:text-slate-400">{selectedCurrency.flag} 450+ Hospitals</span>
+            <span className="font-semibold text-slate-600 dark:text-slate-400 shrink-0">{selectedCurrency.flag} 450+ Hospitals</span>
           </motion.div>
 
-          {/* Master Headline: Clean 2-line structure without awkward hyphenation */}
+          {/* Master Headline: 5-Second Mobile-First Value Proposition */}
           <motion.h1
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-            className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-slate-950 dark:text-white tracking-tight leading-[1.1]"
+            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-950 dark:text-white tracking-tight leading-[1.15] break-words px-1"
           >
-            Autonomous Zero-Wait <br />
+            Autonomous Zero-Wait <br className="hidden sm:inline" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
               Clinical Operating System
             </span>
           </motion.h1>
 
-          {/* Subtitle with generous line height and optimal reading measure */}
+          {/* Subtitle: 5-Second Immediate Clarity for Doctors & Hospital Admins */}
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-            className="text-sm sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 font-normal max-w-3xl mx-auto leading-relaxed"
+            className="text-xs sm:text-base md:text-lg text-slate-600 dark:text-slate-300 font-normal max-w-2xl mx-auto leading-relaxed px-2"
           >
-            Transform crowded reception counters into quiet, serene executive lounges. Patients scan a vector QR pass, receive live queue updates on their phone in 20 seconds, and walk directly into consulting cabins.
+            Dismantle crowded reception waiting halls with zero hardware capex. 95% of patients scan a QR pass on mobile, track their live waiting position in real-time, and walk directly into the doctor's cabin when called.
           </motion.p>
 
           {/* Doctor Social Proof Avatar Stack */}
@@ -889,22 +889,22 @@ export const QueuelessWebsite: React.FC = () => {
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.48, ease: 'easeOut' }}
-          className="mt-10 sm:mt-12 max-w-5xl mx-auto"
+          className="mt-8 sm:mt-12 max-w-5xl mx-auto"
         >
-          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl p-6 sm:p-9 rounded-[36px] border border-slate-200/90 dark:border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.06)] relative ring-1 ring-slate-900/[0.04]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
+          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl p-4 sm:p-9 rounded-[28px] sm:rounded-[36px] border border-slate-200/90 dark:border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.06)] relative ring-1 ring-slate-900/[0.04]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
-                <div>
+                <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse shrink-0"></div>
+                <div className="text-left">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                    <h3 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
                       Interactive Live OPD Synchronizer
                     </h3>
                     <span className="text-[10px] bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 font-bold px-2 py-0.5 rounded-full border border-blue-200/60 dark:border-blue-800/80 font-mono">
                       0.2s Latency
                     </span>
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     See how doctor cabin calls update patient phones & lobby TV simultaneously in real-time.
                   </p>
                 </div>
@@ -925,9 +925,9 @@ export const QueuelessWebsite: React.FC = () => {
                   setTimeout(() => setSimulatedCallFlash(false), 3500);
                   playClinicVoiceAnnouncement(tokenStr, nextCabin, 'Dr. Rohan Sharma', true);
                 }}
-                className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/25 transition-all flex items-center gap-2 cursor-pointer self-start sm:self-auto ring-2 ring-emerald-500/20"
+                className="w-full sm:w-auto px-4 py-3 sm:px-5 sm:py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer ring-2 ring-emerald-500/20"
               >
-                <Volume2 className="w-3.5 h-3.5 fill-white" />
+                <Volume2 className="w-3.5 h-3.5 fill-white shrink-0" />
                 <span>Simulate Doctor "Call Next" (Chime & Dual Voice 📢)</span>
               </motion.button>
             </div>

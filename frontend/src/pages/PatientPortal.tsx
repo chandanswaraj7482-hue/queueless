@@ -323,8 +323,8 @@ export const PatientPortal: React.FC = () => {
               Securely access your complete OPD history, doctor prescriptions, and follow-up passes across all Queueless-enabled hospitals with your ID and password.
             </p>
 
-            {/* Mode Switcher Pills */}
-            <div className="grid grid-cols-3 p-1 bg-slate-100 rounded-2xl mb-5 text-xs font-bold">
+            {/* Mode Switcher Pills (Login vs Track Token) */}
+            <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-2xl mb-5 text-xs font-bold">
               <button
                 type="button"
                 onClick={() => {
@@ -332,9 +332,9 @@ export const PatientPortal: React.FC = () => {
                   setError(null);
                   setSignupSuccessMsg(null);
                 }}
-                className={`py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
-                  authMode === 'LOGIN'
-                    ? 'bg-white text-sky-900 shadow-sm'
+                className={`py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  authMode === 'LOGIN' || authMode === 'SIGNUP'
+                    ? 'bg-white text-sky-900 shadow-sm font-extrabold'
                     : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
@@ -345,30 +345,13 @@ export const PatientPortal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => {
-                  setAuthMode('SIGNUP');
-                  setError(null);
-                  setSignupSuccessMsg(null);
-                }}
-                className={`py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
-                  authMode === 'SIGNUP'
-                    ? 'bg-white text-indigo-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-                <span>Create Account</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
                   setAuthMode('TRACK');
                   setError(null);
                   setSignupSuccessMsg(null);
                 }}
-                className={`py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                className={`py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   authMode === 'TRACK'
-                    ? 'bg-white text-emerald-900 shadow-sm'
+                    ? 'bg-white text-emerald-900 shadow-sm font-extrabold'
                     : 'text-slate-500 hover:text-slate-900'
                 }`}
               >

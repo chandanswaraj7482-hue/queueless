@@ -40,6 +40,9 @@ import {
   Calendar,
   MessageCircle,
   ExternalLink,
+  Eye,
+  EyeOff,
+  KeyRound,
 } from 'lucide-react';
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
 
@@ -110,6 +113,7 @@ interface PatientQueueData {
   };
   clinicalNotes?: string;
   publicToken?: string;
+  hasVaultPassword?: boolean;
 }
 
 const generateWhatsAppRxUrl = (data: any) => {
@@ -193,6 +197,71 @@ export const PatientStatus: React.FC = () => {
   const [comment, setComment] = useState('');
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [reviewSuccess, setReviewSuccess] = useState(false);
+
+  // Patient Vault Password State
+  const [dismissVaultPrompt, setDismissVaultPrompt] = useState(false);
+  const [showVaultPasswordModal, setShowVaultPasswordModal] = useState(false);
+  const [vaultPasswordInput, setVaultPasswordInput] = useState('');
+  const [vaultPasswordConfirm, setVaultPasswordConfirm] = useState('');
+  const [showVaultPasswordEye, setShowVaultPasswordEye] = useState(false);
+  const [vaultPasswordSaving, setVaultPasswordSaving] = useState(false);
+  const [vaultPasswordSuccess, setVaultPasswordSuccess] = useState(false);
+  const [vaultPasswordError, setVaultPasswordError] = useState<string | null>(null);
+
+  const handleSaveVaultPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const patientIdentifier = data?.patientMobile || (data as any)?.patientEmail;
+    if (!patientIdentifier) {
+      setVaultPasswordError('Patient identifier not found.');
+      return;
+    }
+    if (vaultPasswordInput.length < 4) {
+      setVaultPasswordError('Password must be at least 4 characters long.');
+      return;
+    }
+    if (vaultPasswordInput !== vaultPasswordConfirm) {
+      setVaultPasswordError('Passwords do not match. Please re-enter matching passwords.');
+      return;
+    }
+
+    setVaultPasswordSaving(true);
+    setVaultPasswordError(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/patient/set-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mobile: patientIdentifier,
+          password: vaultPasswordInput.trim(),
+          name: data?.patientName || 'Patient',
+        }),
+      });
+      const resJson = await res.json();
+      if (resJson.success) {
+        setVaultPasswordSuccess(true);
+        setData((prev: any) => ({ ...prev, hasVaultPassword: true }));
+        try {
+          localStorage.setItem(
+            'queueless_patient_session',
+            JSON.stringify({
+              mobile: patientIdentifier,
+              password: vaultPasswordInput.trim(),
+            })
+          );
+        } catch (e) {}
+        setTimeout(() => {
+          setShowVaultPasswordModal(false);
+          setVaultPasswordSuccess(false);
+        }, 1800);
+      } else {
+        setVaultPasswordError(resJson.error || 'Failed to set password.');
+      }
+    } catch (err) {
+      setVaultPasswordError('Network error. Please try again.');
+    } finally {
+      setVaultPasswordSaving(false);
+    }
+  };
 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
@@ -861,6 +930,130 @@ export const PatientStatus: React.FC = () => {
           </div>
         </div>
       )}
+      {/* ============================================================== */}
+      {/* SET PATIENT HEALTH VAULT PASSWORD MODAL (विकल्प A)              */}
+      {/* ============================================================== */}
+      {showVaultPasswordModal && data && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 p-6 sm:p-7 relative my-6">
+            <button
+              type="button"
+              onClick={() => setShowVaultPasswordModal(false)}
+              className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="text-left space-y-4">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2.5 bg-emerald-100 rounded-2xl text-emerald-700">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900">Create Vault Password</h3>
+                  <p className="text-xs text-slate-500">Protect your medical records & digital prescriptions</p>
+                </div>
+              </div>
+
+              {vaultPasswordSuccess ? (
+                <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-2xl text-center space-y-2">
+                  <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
+                  <h4 className="text-sm font-black text-emerald-900">🎉 Health Vault Password Saved!</h4>
+                  <p className="text-xs text-emerald-700">
+                    Your account is now securely activated. You can log into <span className="font-mono font-bold">queueless-os.vercel.app/portal</span> anytime from home or other hospitals.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSaveVaultPassword} className="space-y-3.5">
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Patient:</span>
+                      <strong className="text-slate-900">{data.patientName}</strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">ID / Mobile:</span>
+                      <strong className="font-mono text-slate-900">{data.patientMobile || 'Registered Patient'}</strong>
+                    </div>
+                  </div>
+
+                  {vaultPasswordError && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 font-medium flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 shrink-0 text-red-600" />
+                      <span>{vaultPasswordError}</span>
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      New Account Password *
+                    </label>
+                    <div className="relative">
+                      <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                      <input
+                        type={showVaultPasswordEye ? 'text' : 'password'}
+                        required
+                        placeholder="Create password (min 4 characters)"
+                        value={vaultPasswordInput}
+                        onChange={(e) => setVaultPasswordInput(e.target.value)}
+                        className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowVaultPasswordEye(!showVaultPasswordEye)}
+                        className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                      >
+                        {showVaultPasswordEye ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Confirm Account Password *
+                    </label>
+                    <div className="relative">
+                      <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                      <input
+                        type={showVaultPasswordEye ? 'text' : 'password'}
+                        required
+                        placeholder="Re-enter same password"
+                        value={vaultPasswordConfirm}
+                        onChange={(e) => setVaultPasswordConfirm(e.target.value)}
+                        className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex items-center gap-2">
+                    <button
+                      type="submit"
+                      disabled={vaultPasswordSaving}
+                      className="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
+                    >
+                      {vaultPasswordSaving ? (
+                        <span>Saving Password...</span>
+                      ) : (
+                        <>
+                          <Lock className="w-4 h-4" />
+                          <span>Save & Secure Health Vault</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowVaultPasswordModal(false)}
+                      className="py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ============================================================== */}
       {/* OFFICIAL OPD REGISTRATION & PAYMENT INVOICE PDF MODAL          */}
       {/* ============================================================== */}
@@ -1736,6 +1929,53 @@ export const PatientStatus: React.FC = () => {
                 <span>{savingPass ? 'Generating Pass...' : 'Save Pass to Phone (PNG)'}</span>
               </button>
             </div>
+
+            {/* VAULT ACCOUNT CREATION BANNER (विकल्प A: Set Password / विकल्प B: Not Now) */}
+            {!data.hasVaultPassword && !dismissVaultPrompt && (
+              <div className="mt-3 p-4 bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 rounded-2xl border border-emerald-200 text-xs shadow-xs space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-start gap-2.5">
+                    <div className="p-2 bg-emerald-600 text-white rounded-xl shadow-xs shrink-0 mt-0.5">
+                      <Lock className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-black text-slate-900 text-xs">
+                        Save Prescriptions & Records Forever?
+                      </h4>
+                      <p className="text-[11px] text-slate-600 mt-0.5 leading-snug">
+                        Create an account password to view and download all prescriptions & OPD history from home anytime.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setDismissVaultPrompt(true)}
+                    className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer shrink-0"
+                    title="Dismiss / Not Now"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setShowVaultPasswordModal(true)}
+                    className="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer transition-all active:scale-[0.99]"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>विकल्प A: Set Account Password</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDismissVaultPrompt(true)}
+                    className="py-2 px-3 bg-white hover:bg-slate-50 text-slate-600 font-bold rounded-xl text-xs border border-slate-200 cursor-pointer transition-all"
+                  >
+                    Not Now (बाद में)
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* QUEUELESS REVIEW PROMPT BANNER */}
             <div className="mt-3 p-3 bg-gradient-to-r from-sky-50 via-indigo-50/60 to-emerald-50 rounded-2xl border border-sky-100 flex items-center justify-between gap-3 shadow-2xs">

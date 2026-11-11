@@ -881,18 +881,6 @@ export const QueuelessWebsite: React.FC = () => {
             </span>
           </motion.div>
 
-          {/* Patient Health Vault Quick Access Banner */}
-          <div className="pt-4 flex justify-center">
-            <Link
-              to="/portal"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-50 via-teal-50 to-sky-50 dark:from-emerald-950/40 dark:via-teal-950/40 dark:to-sky-950/40 border border-emerald-300 dark:border-emerald-700/60 rounded-full shadow-xs hover:scale-105 active:scale-95 transition-all text-xs font-bold text-slate-800 dark:text-slate-100 group cursor-pointer"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-emerald-700 dark:text-emerald-300 font-extrabold">Are you a Patient?</span>
-              <span className="text-slate-600 dark:text-slate-300">Access Your Multi-Hospital Health Vault (Rx & Passes) ➔</span>
-            </Link>
-          </div>
-
           {/* ============================================================== */}
         {/* INTERACTIVE DUAL-DEVICE HARDWARE MOCKUP (PHONE + LOBBY TV)     */}
         {/* ============================================================== */}

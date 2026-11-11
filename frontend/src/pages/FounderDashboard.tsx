@@ -623,7 +623,18 @@ export const FounderDashboard: React.FC = () => {
             <span>🛡️ 7-Layer WAF Active • Anti-Brute-Force & AES-256 Enforced</span>
           </div>
 
-
+          {/* Master Demo Credentials PDF Download */}
+          <div className="mt-4 pt-3.5 border-t border-slate-800 flex flex-col items-center gap-2">
+            <a
+              href="/QUEUOUS_CREDENTIALS.pdf"
+              download="QUEUOUS_CREDENTIALS.pdf"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-bold rounded-xl border border-amber-400/30 transition-all active:scale-95 shadow-2xs"
+              title="Download Master Passwords & Demo Links PDF"
+            >
+              <FileDown className="w-3.5 h-3.5 text-amber-300" />
+              <span>Download Master Credentials (PDF)</span>
+            </a>
+          </div>
 
           <div className="mt-4 text-[11px] text-slate-400">
             <span>Hospital staff should use their dedicated portal: </span>
@@ -701,6 +712,17 @@ export const FounderDashboard: React.FC = () => {
 
           {/* Quick Launch & Control Bar */}
           <div className="flex flex-wrap items-center gap-2 shrink-0">
+            {/* Master Credentials PDF Download */}
+            <a
+              href="/QUEUOUS_CREDENTIALS.pdf"
+              download="QUEUOUS_CREDENTIALS.pdf"
+              className="px-3.5 py-2 bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 rounded-xl text-xs font-black border border-amber-400/40 transition-all flex items-center gap-1.5 backdrop-blur-xs cursor-pointer shadow-xs active:scale-95"
+              title="Download Master Credentials & Direct Demo Links PDF"
+            >
+              <FileDown className="w-3.5 h-3.5 text-amber-300" />
+              <span>Credentials (PDF)</span>
+            </a>
+
             <button
               onClick={() => fetchFounderData(false)}
               disabled={loading}

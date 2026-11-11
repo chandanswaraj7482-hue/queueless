@@ -444,6 +444,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
           address: address.trim() || null,
           emergencyContact: emergencyContact.trim() || null,
           vaultPin: createVaultAccount && vaultPin.trim() ? vaultPin.trim() : undefined,
+          vaultPassword: createVaultAccount && vaultPin.trim() ? vaultPin.trim() : undefined,
           doctorId,
           serviceId,
           visitReason: visitReason.trim() || null,
@@ -1082,7 +1083,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                       <span className="text-[9px] font-black uppercase text-indigo-700 bg-indigo-100 px-1.5 py-0.5 rounded">Optional</span>
                     </p>
                     <p className="text-[10px] text-slate-500">
-                      Access all your prescriptions & OPD reports across any hospital in the future.
+                      Save all your prescriptions & OPD reports permanently to access from home.
                     </p>
                   </div>
                 </div>
@@ -1096,23 +1097,22 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                       : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
-                  {createVaultAccount ? '✓ Set PIN' : '+ Create PIN'}
+                  {createVaultAccount ? '✓ Password Enabled' : '+ Create Password'}
                 </button>
               </div>
 
               {createVaultAccount ? (
                 <div className="pt-2 border-t border-sky-200/80 space-y-2 animate-fade-in">
                   <label className="block text-[11px] font-bold text-slate-700">
-                    Set Your 4-Digit Vault Security PIN:
+                    Set Your Health Vault Account Password:
                   </label>
                   <div className="flex items-center gap-2">
                     <input
                       type="password"
-                      maxLength={6}
-                      placeholder="e.g. 1234 or 5678"
+                      placeholder="e.g. Health#2026 or secret password"
                       value={vaultPin}
-                      onChange={(e) => setVaultPin(e.target.value.replace(/\D/g, ''))}
-                      className="w-36 px-3 py-1.5 rounded-xl border border-indigo-300 bg-white text-xs font-black tracking-widest text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      onChange={(e) => setVaultPin(e.target.value)}
+                      className="w-56 px-3 py-1.5 rounded-xl border border-indigo-300 bg-white text-xs font-bold text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                     <button
                       type="button"
@@ -1126,7 +1126,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                     </button>
                   </div>
                   <p className="text-[10px] text-emerald-700 font-medium">
-                    ✓ With this PIN, you can log in at <strong>queueless-os.vercel.app/portal</strong> to download all doctor reports!
+                    ✓ With this password, you can log into <strong>queueless-os.vercel.app/portal</strong> anytime to download all doctor reports!
                   </p>
                 </div>
               ) : (

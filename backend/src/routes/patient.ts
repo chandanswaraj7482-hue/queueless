@@ -163,39 +163,40 @@ patientRouter.post('/login', async (req, res) => {
       });
     }
 
-    // Find if patient has a user-created PIN stored
-    let storedPin: string | null = null;
+    // Find if patient has a user-created Password/PIN stored
+    let storedSecret: string | null = null;
     for (const p of matchingPatients) {
-      if (p.emergencyContact && p.emergencyContact.startsWith('PIN:')) {
-        storedPin = p.emergencyContact.replace('PIN:', '').trim();
+      if (p.emergencyContact && (p.emergencyContact.startsWith('PWD:') || p.emergencyContact.startsWith('PIN:'))) {
+        storedSecret = p.emergencyContact.replace(/^PWD:|^PIN:/, '').trim();
         break;
       }
     }
-    if (!storedPin) {
+    if (!storedSecret) {
       for (const qe of allQueueEntries) {
-        if (qe.patient?.emergencyContact && qe.patient.emergencyContact.startsWith('PIN:')) {
-          storedPin = qe.patient.emergencyContact.replace('PIN:', '').trim();
+        if (qe.patient?.emergencyContact && (qe.patient.emergencyContact.startsWith('PWD:') || qe.patient.emergencyContact.startsWith('PIN:'))) {
+          storedSecret = qe.patient.emergencyContact.replace(/^PWD:|^PIN:/, '').trim();
           break;
         }
       }
     }
 
-    const enteredPin = String(pin || '').trim();
+    const { password } = req.body;
+    const enteredSecret = String(password || pin || '').trim();
 
-    if (storedPin) {
-      // User has created a custom PIN! Verify strictly against user's custom PIN
-      if (enteredPin !== storedPin) {
+    if (storedSecret) {
+      // User has created a custom password: verify strictly
+      if (enteredSecret !== storedSecret) {
         return res.status(401).json({
           success: false,
-          error: 'Incorrect 4-digit Security PIN. Please enter the PIN you created.',
+          error: 'Incorrect Password. Please enter the password you created for your Health Vault.',
         });
       }
     } else {
-      // No custom PIN set yet: allow initial default 1234 or 0000, or invite user to set their PIN
-      if (enteredPin !== '1234' && enteredPin !== '0000') {
+      // No custom password set yet: allow initial default 1234 or 0000, or invite user to create their password
+      if (enteredSecret !== '1234' && enteredSecret !== '0000') {
         return res.status(401).json({
           success: false,
-          error: 'Incorrect Security PIN. If this is your first time, click "Create PIN" above to set your custom 4-digit password.',
+          error: 'No account password set yet for this mobile/email. Please click "Create Account / Set Password" to set your password and access your records.',
         });
       }
     }
@@ -270,6 +271,7 @@ patientRouter.post('/login', async (req, res) => {
               isFollowUp: activeToday.isFollowUp,
             }
           : null,
+        hasVaultPassword: !!storedSecret,
         followUpPasses,
         totalVisits: allQueueEntries.length,
         totalHospitals: Array.from(new Set(allQueueEntries.map((e) => e.clinic.name))).length,
@@ -302,26 +304,25 @@ patientRouter.post('/login', async (req, res) => {
   }
 });
 
-// 2b. Set or Create Patient Vault Security PIN / Account Password
-patientRouter.post('/set-pin', async (req, res) => {
+// 2b. Set or Create Patient Vault Security Password / Account Credentials
+patientRouter.post(['/set-pin', '/set-password'], async (req, res) => {
   try {
-    const { mobile, pin, name } = req.body;
+    const { mobile, pin, password, name } = req.body;
     const inputStr = String(mobile || '').trim();
-    if (!inputStr || !pin) {
-      return res.status(400).json({ success: false, error: 'Mobile number/Email and Security PIN are required.' });
+    const rawSecret = String(password || pin || '').trim();
+    if (!inputStr || !rawSecret) {
+      return res.status(400).json({ success: false, error: 'Mobile number or Email and Password are required.' });
     }
 
-    const cleanPin = String(pin).trim();
-
-    if (!/^\d{4}$/.test(cleanPin)) {
-      return res.status(400).json({ success: false, error: 'Security PIN must be exactly 4 numeric digits.' });
+    if (rawSecret.length < 4) {
+      return res.status(400).json({ success: false, error: 'Password must be at least 4 characters long.' });
     }
 
-    const weakPins = ['1234', '0000', '1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888', '9999', '1212', '4321', '2580', '0123'];
-    if (weakPins.includes(cleanPin)) {
+    const weakSecrets = ['1234', '0000', '1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888', '9999', '1212', '4321', '2580', '0123', 'password', '123456'];
+    if (weakSecrets.includes(rawSecret.toLowerCase())) {
       return res.status(400).json({
         success: false,
-        error: `Security Rule: "${cleanPin}" is too simple and easily guessed. Please select a secure 4-digit PIN (e.g. 7482, 9153).`,
+        error: `Security Rule: "${rawSecret}" is too simple and easily guessed. Please select a secure password or custom code.`,
       });
     }
 
@@ -340,7 +341,7 @@ patientRouter.post('/set-pin', async (req, res) => {
         await prisma.patient.update({
           where: { id: p.id },
           data: {
-            emergencyContact: `PIN:${cleanPin}`,
+            emergencyContact: `PWD:${rawSecret}`,
             name: name && name.trim() ? name.trim() : p.name,
           },
         });
@@ -354,7 +355,7 @@ patientRouter.post('/set-pin', async (req, res) => {
             name: name && name.trim() ? name.trim() : 'Patient',
             mobile: isEmail ? '' : cleanMobile,
             email: isEmail ? inputStr : null,
-            emergencyContact: `PIN:${cleanPin}`,
+            emergencyContact: `PWD:${rawSecret}`,
           },
         });
       }
@@ -362,7 +363,7 @@ patientRouter.post('/set-pin', async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Universal Health Vault PIN successfully created! You can now log in anytime to access your medical records.',
+      message: 'Universal Health Vault Password successfully created! You can now log in anytime to access and download your medical records.',
     });
   } catch (error) {
     res.status(500).json({ success: false, error: (error as Error).message });

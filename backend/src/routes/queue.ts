@@ -25,6 +25,8 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
       address,
       emergencyContact,
       vaultPin,
+      vaultPassword,
+      password,
       doctorId,
       serviceId,
       visitReason,
@@ -106,6 +108,8 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
       },
     });
 
+    const effectiveVaultSecret = vaultPassword || password || vaultPin;
+
     if (!patient) {
       patient = await prisma.patient.create({
         data: {
@@ -117,7 +121,7 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
           gender: gender || null,
           bloodGroup: bloodGroup || null,
           address: address || null,
-          emergencyContact: vaultPin ? `PIN:${String(vaultPin).trim()}` : (emergencyContact || null),
+          emergencyContact: effectiveVaultSecret ? `PWD:${String(effectiveVaultSecret).trim()}` : (emergencyContact || null),
         },
       });
     } else {
@@ -131,7 +135,7 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
           gender: gender || patient.gender,
           bloodGroup: bloodGroup || patient.bloodGroup,
           address: address || patient.address,
-          emergencyContact: vaultPin ? `PIN:${String(vaultPin).trim()}` : (emergencyContact || patient.emergencyContact),
+          emergencyContact: effectiveVaultSecret ? `PWD:${String(effectiveVaultSecret).trim()}` : (emergencyContact || patient.emergencyContact),
         },
       });
     }
@@ -489,6 +493,8 @@ queueRouter.get('/patient/:publicToken', async (req, res) => {
         prescription: entry.prescriptionJson ? JSON.parse(entry.prescriptionJson) : null,
         clinicalNotes: entry.clinicalNotes,
         publicToken: entry.publicToken,
+        hasVaultPassword: !!(entry.patient?.emergencyContact && (entry.patient.emergencyContact.startsWith('PWD:') || entry.patient.emergencyContact.startsWith('PIN:'))),
+        patientEmail: entry.patient?.email,
       },
     });
   } catch (error) {

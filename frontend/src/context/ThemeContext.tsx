@@ -25,6 +25,7 @@ const applyThemeToDOM = (next: Theme) => {
     root.style.colorScheme = 'light';
   }
   try {
+    localStorage.setItem('queueless_theme_v2', next);
     localStorage.setItem('queueless_theme', next);
   } catch {}
 };
@@ -32,7 +33,7 @@ const applyThemeToDOM = (next: Theme) => {
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     try {
-      const saved = localStorage.getItem('queueless_theme') as Theme | null;
+      const saved = localStorage.getItem('queueless_theme_v2') as Theme | null;
       if (saved === 'dark') {
         applyThemeToDOM('dark');
         return 'dark';
@@ -44,7 +45,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     } catch {
       // Fallback
     }
-    // Default to LIGHT version per instruction
+    // Strict Default to LIGHT theme per user request
     applyThemeToDOM('light');
     return 'light';
   });
@@ -56,7 +57,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Sync across browser tabs
   useEffect(() => {
     const handleStorage = (e: StorageEvent) => {
-      if (e.key === 'queueless_theme' && (e.newValue === 'dark' || e.newValue === 'light')) {
+      if ((e.key === 'queueless_theme_v2' || e.key === 'queueless_theme') && (e.newValue === 'dark' || e.newValue === 'light')) {
         const next = e.newValue as Theme;
         applyThemeToDOM(next);
         setThemeState(next);

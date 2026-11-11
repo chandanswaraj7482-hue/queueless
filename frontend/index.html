@@ -114,14 +114,20 @@
     <script>
       (function() {
         try {
-          const savedTheme = localStorage.getItem('queueless_theme');
+          // Strict Default to Light theme per instruction
+          let savedTheme = localStorage.getItem('queueless_theme_v2');
+          if (!savedTheme) {
+            // First time or previous legacy session: enforce crisp light theme
+            savedTheme = 'light';
+            localStorage.setItem('queueless_theme_v2', 'light');
+            localStorage.setItem('queueless_theme', 'light');
+          }
           if (savedTheme === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.classList.remove('light');
             document.documentElement.setAttribute('data-theme', 'dark');
             document.documentElement.style.colorScheme = 'dark';
           } else {
-            // Default to Light version
             document.documentElement.classList.remove('dark');
             document.documentElement.classList.add('light');
             document.documentElement.setAttribute('data-theme', 'light');

@@ -21,8 +21,54 @@ import {
   Bell,
   ArrowRight,
   ExternalLink,
+  Youtube,
+  Video,
 } from 'lucide-react';
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
+
+export interface HospitalYouTubeVideo {
+  id: string;
+  title: string;
+  subtitle: string;
+  hospital: string;
+  badge: string;
+  badgeColor: string;
+  duration: string;
+  source: string;
+}
+
+export const HOSPITAL_YOUTUBE_VIDEOS: HospitalYouTubeVideo[] = [
+  {
+    id: 'pQrAqhoeWf8',
+    title: 'Live Hospital OPD QR Scan & Token Issue — Patient Review & Flow',
+    subtitle: 'Real hospital walkthrough: Patients scan entrance QR code on mobile, get instant digital token, and walk straight into quiet consulting lounges without standing in queues.',
+    hospital: 'AIIMS & Civil Hospital Network • OPD Central',
+    badge: 'Real OPD Walkthrough',
+    badgeColor: 'bg-rose-600',
+    duration: '2:15 mins',
+    source: 'National Health Authority (NHA ABDM)',
+  },
+  {
+    id: 'HLBvlg64rOk',
+    title: 'Hospital OPD Queue Management System & Doctor Cabin Call',
+    subtitle: 'How smart multi-specialty clinics manage high-volume patient influx with synchronized doctor cabin calling and lobby TV chime screens.',
+    hospital: 'Metro Multi-Specialty Clinic • 450+ Beds',
+    badge: 'Clinical Doctor Review',
+    badgeColor: 'bg-blue-600',
+    duration: '3:40 mins',
+    source: 'Clinical Systems Case Study',
+  },
+  {
+    id: 't-X3NQPuTX8',
+    title: 'Instant 20-Second Digital Token Pass Registration',
+    subtitle: 'Step-by-step patient demonstration of paperless OPD admission, automated token slip dispatch, and live queue tracking on phone.',
+    hospital: 'Smart Care Superspecialty OPD',
+    badge: 'Patient Experience',
+    badgeColor: 'bg-emerald-600',
+    duration: '1:50 mins',
+    source: 'Digital Health India',
+  },
+];
 
 export interface ClinicalReelData {
   id: number;
@@ -81,6 +127,8 @@ export const CLINICAL_REELS_DATA: ClinicalReelData[] = [
 export const AnimatedClinicalReels: React.FC = () => {
   const [unmutedReelId, setUnmutedReelId] = useState<number | null>(null);
   const [activeModalReel, setActiveModalReel] = useState<ClinicalReelData | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<HospitalYouTubeVideo>(HOSPITAL_YOUTUBE_VIDEOS[0]);
+  const [isPlayingVideo, setIsPlayingVideo] = useState<boolean>(true);
 
   // Animation ticks for each reel
   const [cabinStep, setCabinStep] = useState<number>(0);
@@ -145,7 +193,7 @@ export const AnimatedClinicalReels: React.FC = () => {
       <div className="text-center space-y-3 max-w-2xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-full text-xs font-black uppercase tracking-wider">
           <Sparkles className="w-3.5 h-3.5 text-emerald-500 animate-spin" style={{ animationDuration: '6s' }} />
-          <span>Live OPD Workflow Simulation</span>
+          <span>Live OPD Workflow Simulation & Ground Videos</span>
         </div>
         <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
           Watch Queueless Come Alive
@@ -153,6 +201,123 @@ export const AnimatedClinicalReels: React.FC = () => {
         <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-normal leading-relaxed">
           Real-world clinical workflows captured in active OPDs. Zero waiting hall crowding, instant phone QR passes, and silent 1-tap doctor calls.
         </p>
+      </div>
+
+      {/* ============================================================== */}
+      {/* FEATURED REAL HOSPITAL YOUTUBE VIDEO & CASE STUDY SHOWCASE     */}
+      {/* ============================================================== */}
+      <div className="bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-4 sm:p-7 shadow-xl dark:shadow-2xl relative overflow-hidden transition-colors">
+        {/* Top Header of the Player */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-4 border-b border-slate-200/80 dark:border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20 flex items-center justify-center shrink-0 shadow-2xs">
+              <Youtube className="w-5 h-5 fill-rose-600 dark:fill-rose-500" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-black uppercase tracking-wider text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                  Ground Clinical Reality • Hospital Review
+                </span>
+                <span className="text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-extrabold px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">
+                  {selectedVideo.badge}
+                </span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white mt-0.5 leading-snug">
+                {selectedVideo.title}
+              </h3>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80 rounded-full text-xs font-bold shadow-2xs">
+              ✓ ABDM M1/M2 Certified Flow
+            </span>
+          </div>
+        </div>
+
+        {/* 16:9 Cinema Frame Embed */}
+        <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-slate-200/60 dark:border-slate-800">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${selectedVideo.id}?autoplay=1&rel=0&modestbranding=1`}
+            title={selectedVideo.title}
+            className="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </div>
+
+        {/* Subtitle / Description Bar */}
+        <div className="mt-3.5 p-3 sm:p-4 bg-slate-50 dark:bg-slate-950/60 rounded-2xl border border-slate-200/70 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <p className="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+            {selectedVideo.subtitle}
+          </p>
+          <div className="shrink-0 text-right text-[11px] text-slate-400 font-mono">
+            Source: <strong className="text-slate-700 dark:text-slate-300">{selectedVideo.source}</strong>
+          </div>
+        </div>
+
+        {/* Playlist Selector Buttons */}
+        <div className="mt-4 pt-4 border-t border-slate-200/70 dark:border-slate-800">
+          <div className="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+            <Play className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />
+            <span>Select Hospital Video Review & Walkthrough:</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            {HOSPITAL_YOUTUBE_VIDEOS.map((vid) => {
+              const isCurrent = vid.id === selectedVideo.id;
+              return (
+                <button
+                  key={vid.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedVideo(vid);
+                    setIsPlayingVideo(true);
+                  }}
+                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-3 ${
+                    isCurrent
+                      ? 'bg-blue-50/80 dark:bg-blue-950/40 border-blue-500 text-slate-900 dark:text-white shadow-md ring-2 ring-blue-500/20'
+                      : 'bg-white dark:bg-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                  }`}
+                >
+                  <div className="relative w-16 h-12 rounded-xl overflow-hidden shrink-0 bg-slate-900 border border-slate-200 dark:border-slate-700">
+                    <img
+                      src={`https://i.ytimg.com/vi/${vid.id}/mqdefault.jpg`}
+                      alt={vid.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                      <Play className="w-4 h-4 text-white fill-white" />
+                    </div>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 text-[9px] font-black uppercase text-slate-400">
+                      <span className={isCurrent ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500'}>
+                        {vid.badge}
+                      </span>
+                      <span>• {vid.duration}</span>
+                    </div>
+                    <p className="text-xs font-bold text-slate-900 dark:text-white truncate mt-0.5">
+                      {vid.title}
+                    </p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                      {vid.hospital}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Subheader for 4 Interactive Simulators */}
+      <div className="text-center pt-4">
+        <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 flex items-center justify-center gap-2">
+          <span className="h-px w-12 bg-slate-300 dark:bg-slate-700"></span>
+          <span>Or Explore Interactive 9:16 Clinical Studio Simulators Below</span>
+          <span className="h-px w-12 bg-slate-300 dark:bg-slate-700"></span>
+        </span>
       </div>
 
       {/* 4 Vertical (9:16) Animated Reel Cards */}

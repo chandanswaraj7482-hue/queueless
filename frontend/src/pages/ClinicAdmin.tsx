@@ -99,6 +99,18 @@ interface ClinicSettings {
   followUpFeeAmount?: number;
   autoRouteSameDoctor?: boolean;
   priorityFollowUp?: boolean;
+  // Hospital Direct Bank & Payment Gateway Settings
+  paymentGatewayProvider?: 'CASHFREE' | 'RAZORPAY' | 'DIRECT_UPI' | 'STRIPE';
+  cashfreeAppId?: string;
+  cashfreeSecretKey?: string;
+  razorpayKeyId?: string;
+  razorpayKeySecret?: string;
+  directUpiId?: string;
+  bankAccountHolderName?: string;
+  bankAccountNumber?: string;
+  bankIfscCode?: string;
+  bankName?: string;
+  autoDirectSettlement?: boolean;
 }
 
 export const ClinicAdmin: React.FC = () => {
@@ -107,7 +119,7 @@ export const ClinicAdmin: React.FC = () => {
   const [clinic, setClinic] = useState<any>(null);
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'ANALYTICS' | 'DOCTORS' | 'SERVICES' | 'PROFILE' | 'RULES' | 'SECURITY' | 'STANDEE'>('OVERVIEW');
+  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'ANALYTICS' | 'DOCTORS' | 'SERVICES' | 'PAYMENTS' | 'PROFILE' | 'RULES' | 'SECURITY' | 'STANDEE'>('OVERVIEW');
   const [downloading, setDownloading] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -1071,6 +1083,18 @@ export const ClinicAdmin: React.FC = () => {
         </button>
 
         <button
+          onClick={() => setActiveTab('PAYMENTS')}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+            activeTab === 'PAYMENTS'
+              ? 'bg-emerald-50 text-emerald-800 shadow-sm font-black'
+              : 'text-slate-600 hover:bg-slate-100/70'
+          }`}
+        >
+          <CreditCard className="w-4 h-4 text-emerald-600" />
+          <span>💳 Bank & UPI Gateway</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('PROFILE')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
             activeTab === 'PROFILE'
@@ -1724,6 +1748,312 @@ export const ClinicAdmin: React.FC = () => {
                   <>
                     <Check className="w-3.5 h-3.5" />
                     <span>Save Profile & Logo</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* TAB: BANK & UPI GATEWAY (DIRECT HOSPITAL SETTLEMENT) */}
+      {activeTab === 'PAYMENTS' && (
+        <div className="max-w-3xl bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm print:hidden space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="p-2 bg-emerald-500/10 text-emerald-600 rounded-xl">
+                  <CreditCard className="w-5 h-5" />
+                </span>
+                <div>
+                  <h2 className="text-lg font-black text-slate-900">Hospital Bank & Payment Gateway</h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Connect your hospital's own UPI / Gateway so patient fees transfer directly to your bank account.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <span className="text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1.5 shrink-0">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Direct Bank Settlement</span>
+            </span>
+          </div>
+
+          <form onSubmit={handleSaveSettings} className="space-y-6">
+            {/* Direct Settlement Explanation Banner */}
+            <div className="p-4 bg-emerald-50/70 rounded-2xl border border-emerald-200/80 text-xs text-emerald-950 flex items-start gap-3">
+              <ShieldAlert className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
+              <div className="leading-relaxed">
+                <strong>100% Direct To Hospital Bank:</strong> When patients scan the OPD QR code and pay their consultation fee via Google Pay, PhonePe, Paytm, or Cards, 100% of the funds route directly through your selected payment credentials into your hospital bank account. Queueless charges zero commission on patient fees.
+              </div>
+            </div>
+
+            {/* Provider Selection */}
+            <div>
+              <label className="block text-xs font-black text-slate-800 uppercase tracking-wider mb-2">
+                1. Select Hospital Payment Gateway Provider
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {[
+                  {
+                    id: 'DIRECT_UPI',
+                    name: 'Direct Hospital UPI',
+                    badge: '⚡ 0% Fee / Instant',
+                    desc: 'Direct PhonePe / GPay Merchant VPA into your bank',
+                  },
+                  {
+                    id: 'CASHFREE',
+                    name: 'Cashfree Payments',
+                    badge: '💳 UPI + Cards + Netbanking',
+                    desc: 'Instant auto-settlement with automated webhooks',
+                  },
+                  {
+                    id: 'RAZORPAY',
+                    name: 'Razorpay Gateway',
+                    badge: '🏦 Corporate Gateway',
+                    desc: 'Automated settlement to registered hospital current a/c',
+                  },
+                ].map((p) => {
+                  const isSelected = (settings.paymentGatewayProvider || 'DIRECT_UPI') === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setSettings({ ...settings, paymentGatewayProvider: p.id as any })}
+                      className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-emerald-500'
+                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-white hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-xs">{p.name}</span>
+                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md ${isSelected ? 'bg-emerald-400 text-slate-950' : 'bg-slate-200 text-slate-700'}`}>
+                          {p.badge}
+                        </span>
+                      </div>
+                      <p className={`text-[10px] mt-1 line-clamp-2 ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>
+                        {p.desc}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Provider Specific Credentials */}
+            {(settings.paymentGatewayProvider === 'DIRECT_UPI' || !settings.paymentGatewayProvider) && (
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+                  Direct Merchant UPI Details
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      Hospital UPI VPA ID *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. caremaxhospital@hdfcbank"
+                      value={settings.directUpiId || ''}
+                      onChange={(e) => setSettings({ ...settings, directUpiId: e.target.value })}
+                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                    <span className="text-[10px] text-slate-400 mt-0.5 block">
+                      Patients scanning token pass will pay directly to this UPI address.
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      Hospital Registered Business Name *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Caremax Healthcare Private Limited"
+                      value={settings.bankAccountHolderName || ''}
+                      onChange={(e) => setSettings({ ...settings, bankAccountHolderName: e.target.value })}
+                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                    <span className="text-[10px] text-slate-400 mt-0.5 block">
+                      Name shown on patient's UPI app (GPay / PhonePe / Paytm).
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {settings.paymentGatewayProvider === 'CASHFREE' && (
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+                  Cashfree Merchant API Credentials
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      Cashfree App ID (Client ID) *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="CF_APP_xxxxxxxxxxxxxxxx"
+                      value={settings.cashfreeAppId || ''}
+                      onChange={(e) => setSettings({ ...settings, cashfreeAppId: e.target.value })}
+                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      Cashfree Secret Key *
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="cfsk_ma_prod_xxxxxxxxxxxxxxxx"
+                      value={settings.cashfreeSecretKey || ''}
+                      onChange={(e) => setSettings({ ...settings, cashfreeSecretKey: e.target.value })}
+                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {settings.paymentGatewayProvider === 'RAZORPAY' && (
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+                  Razorpay Key & Secret
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      Razorpay Key ID *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="rzp_live_xxxxxxxxxxxxxxxx"
+                      value={settings.razorpayKeyId || ''}
+                      onChange={(e) => setSettings({ ...settings, razorpayKeyId: e.target.value })}
+                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      Razorpay Key Secret *
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="xxxxxxxxxxxxxxxxxxxxxxxx"
+                      value={settings.razorpayKeySecret || ''}
+                      onChange={(e) => setSettings({ ...settings, razorpayKeySecret: e.target.value })}
+                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Bank Settlement Account Details */}
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+              <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+                Hospital Bank Account (For Automated Daily Settlements)
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                    Bank Account Number
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 50200012345678"
+                    value={settings.bankAccountNumber || ''}
+                    onChange={(e) => setSettings({ ...settings, bankAccountNumber: e.target.value })}
+                    className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                    Bank IFSC Code
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. HDFC0001234"
+                    value={settings.bankIfscCode || ''}
+                    onChange={(e) => setSettings({ ...settings, bankIfscCode: e.target.value.toUpperCase() })}
+                    className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                    Bank Name & Branch
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. HDFC Bank, MG Road Branch"
+                    value={settings.bankName || ''}
+                    onChange={(e) => setSettings({ ...settings, bankName: e.target.value })}
+                    className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Feature Switches */}
+            <div className="space-y-3 pt-1">
+              <div className="flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                <div>
+                  <strong className="block text-xs font-bold text-slate-900">
+                    Accept Direct Online UPI on Patient Pass
+                  </strong>
+                  <span className="text-[11px] text-slate-500">
+                    Allow patients to pay their consultation fee via GPay/PhonePe directly from their mobile pass.
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={settings.allowOnlineUPI ?? true}
+                  onChange={(e) => setSettings({ ...settings, allowOnlineUPI: e.target.checked })}
+                  className="w-4 h-4 text-emerald-600 rounded cursor-pointer"
+                />
+              </div>
+
+              <div className="flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                <div>
+                  <strong className="block text-xs font-bold text-slate-900">
+                    Accept Cash at Reception Counter
+                  </strong>
+                  <span className="text-[11px] text-slate-500">
+                    Allow walk-in patients to pay in cash to the receptionist before being admitted to doctor cabin.
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={settings.allowCashAtCounter ?? true}
+                  onChange={(e) => setSettings({ ...settings, allowCashAtCounter: e.target.checked })}
+                  className="w-4 h-4 text-emerald-600 rounded cursor-pointer"
+                />
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <div className="pt-2 flex items-center justify-between">
+              <span className="text-[11px] text-emerald-700 font-bold flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-emerald-600" />
+                <span>Credentials Encrypted & Stored in PostgreSQL</span>
+              </span>
+
+              <button
+                type="submit"
+                disabled={savingSettings}
+                className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                {savingSettings ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Connecting & Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="w-3.5 h-3.5" />
+                    <span>Save Hospital Gateway Settings</span>
                   </>
                 )}
               </button>

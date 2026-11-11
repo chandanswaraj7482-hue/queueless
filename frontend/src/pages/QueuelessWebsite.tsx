@@ -761,9 +761,9 @@ export const QueuelessWebsite: React.FC = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-950 dark:text-white tracking-tight leading-[1.15] break-words px-1"
+            className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-950 dark:text-white tracking-tight leading-tight px-1"
           >
-            Autonomous Zero-Wait <br className="hidden sm:inline" />
+            Autonomous Zero-Wait <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
               Clinical Operating System
             </span>

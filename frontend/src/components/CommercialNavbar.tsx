@@ -170,111 +170,144 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             })}
           </nav>
 
-          {/* Right Action Bar */}
+          {/* Right Action Bar (On Mobile: ONLY the Hamburger Menu Button appears here; all actions slide into drawer) */}
           <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Currency Selector Pill */}
-            <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/70 hover:bg-slate-200/80 dark:bg-slate-900/60 dark:hover:bg-slate-800/80 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 dark:text-slate-300 transition-all shadow-2xs">
-              <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
+            {/* Currency Selector Pill (Desktop only) */}
+            <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/70 hover:bg-slate-200/80 border border-slate-200/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 transition-all shadow-2xs">
+              <Globe className="w-3.5 h-3.5 text-blue-600 shrink-0" />
               <select
                 aria-label="Currency"
                 value={currentCurrencyCode}
                 onChange={(e) => handleCurrencySelect(e.target.value)}
-                className="bg-transparent text-slate-800 dark:text-slate-200 font-bold cursor-pointer focus:outline-none pr-0.5 text-xs"
+                className="bg-transparent text-slate-800 font-bold cursor-pointer focus:outline-none pr-0.5 text-xs"
               >
                 {Object.values(WORLDWIDE_CURRENCIES).map((curr) => (
-                  <option key={curr.code} value={curr.code} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-medium">
+                  <option key={curr.code} value={curr.code} className="bg-white text-slate-900 font-medium">
                     {curr.flag} {curr.code}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Dark / Light Mode Toggle Button (Icon Only, Sleek Circular Tactile Design) */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-100/70 hover:bg-slate-200/80 dark:bg-slate-900/60 dark:hover:bg-slate-800/80 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-md rounded-full text-slate-700 dark:text-amber-400 transition-all shadow-2xs cursor-pointer flex items-center justify-center active:scale-95 shrink-0"
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              aria-label="Toggle Theme"
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400 fill-amber-400/25 transition-transform hover:rotate-45" />
-              ) : (
-                <Moon className="w-4 h-4 text-slate-700 fill-slate-700/20 transition-transform hover:-rotate-12" />
-              )}
-            </button>
-
-            {/* Book a Demo Button (Exact match to reference design: Solid High-Contrast Pill) */}
+            {/* Book a Demo Button (Desktop only: md:inline-flex; on phone it slides into drawer) */}
             {onOpenAuditModal ? (
               <button
                 type="button"
                 onClick={onOpenAuditModal}
-                className="px-2.5 py-1 sm:px-4 sm:py-2 bg-slate-950 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                className="hidden md:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-950 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <span>Book a Demo</span>
               </button>
             ) : (
               <Link
                 to="/signup"
-                className="px-2.5 py-1 sm:px-4 sm:py-2 bg-slate-950 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                className="hidden md:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-950 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <span>Book a Demo</span>
               </Link>
             )}
 
-            {/* Patient Portal Quick Link */}
+            {/* Patient Portal Quick Link (Desktop only: md:inline-flex; on phone it slides into drawer) */}
             <Link
               to="/portal"
-              className="hidden md:inline-flex px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/80 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/70 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              className="hidden md:inline-flex px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               title="Universal Patient Health Vault — View Prescriptions & Visits"
             >
               <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
               <span>Patient Vault</span>
             </Link>
 
-            {/* Log In Button (Shown on desktop & tablet; available in mobile drawer on small screens) */}
+            {/* Log In Button (Desktop only: md:inline-flex; on phone it slides into drawer) */}
             <Link
               to="/login"
-              className="hidden sm:inline-flex px-3.5 py-1.5 sm:px-4 sm:py-2 bg-white/70 dark:bg-slate-900/70 hover:bg-white/95 dark:hover:bg-slate-800/90 text-slate-900 dark:text-slate-100 border border-slate-300/70 dark:border-slate-700/70 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              className="hidden md:inline-flex px-3.5 py-1.5 sm:px-4 sm:py-2 bg-white/70 hover:bg-white/95 text-slate-900 border border-slate-300/70 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               title="Hospital Director, Doctor & Receptionist Login"
             >
               <span>Log In</span>
             </Link>
 
-            {/* Mobile Hamburger Toggle */}
+            {/* Mobile Hamburger Toggle (The ONLY button visible on phone/mobile screens!) */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-1.5 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full cursor-pointer"
-              aria-label="Toggle Menu"
+              className="md:hidden p-2 text-slate-800 hover:text-slate-950 hover:bg-slate-100 rounded-2xl cursor-pointer transition-all border border-slate-200/80 shadow-2xs shrink-0"
+              aria-label="Toggle Navigation Menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-6 h-6 stroke-[2.5]" /> : <Menu className="w-6 h-6 stroke-[2.5]" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Dropdown */}
+        {/* Mobile Navigation Dropdown Slider Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden pt-4 pb-3 border-t border-slate-200/60 dark:border-slate-800/60 mt-3 space-y-2.5 bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl rounded-2xl p-3 border shadow-xl animate-in fade-in slide-in-from-top-2 duration-150">
-            {navLinks.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-3 py-2 rounded-xl text-xs font-bold ${
-                  location.pathname === item.href
-                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+          <div className="md:hidden pt-4 pb-4 border-t border-slate-200/80 mt-3 space-y-3 bg-white/95 backdrop-blur-2xl rounded-3xl p-4 border border-slate-200 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
+            {/* 1. Prominent Patient Vault Mobile Button */}
+            <Link
+              to="/portal"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-2xl shadow-md flex items-center justify-between transition-all"
+            >
+              <span className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-emerald-200" />
+                <span>✨ Universal Patient Health Vault (Rx & Records)</span>
+              </span>
+              <ArrowRight className="w-4 h-4 text-emerald-200" />
+            </Link>
 
-            {/* Mobile Currency Picker in Drawer */}
-            <div className="p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
+            {/* 2. Navigation Links */}
+            <div className="space-y-1 py-1">
+              {navLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
+                    location.pathname === item.href
+                      ? 'bg-blue-50 text-blue-700 font-extrabold'
+                      : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* 3. Action Buttons */}
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              {onOpenAuditModal ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenAuditModal();
+                  }}
+                  className="w-full py-3 px-4 bg-slate-950 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-sm text-center flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span>Book a Demo (60s OPD Audit) ➔</span>
+                </button>
+              ) : (
+                <Link
+                  to="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-3 px-4 bg-slate-950 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-sm block"
+                >
+                  Book a Demo ➔
+                </Link>
+              )}
+
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-2.5 px-3 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold text-xs rounded-xl block"
+              >
+                Hospital Staff Sign In (Director / Doctor / Desk) ➔
+              </Link>
+            </div>
+
+            {/* 4. Mobile Currency Picker in Drawer */}
+            <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl flex items-center justify-between text-xs font-bold text-slate-700">
               <span className="flex items-center gap-1.5">
-                <Globe className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <Globe className="w-4 h-4 text-blue-600" />
                 <span>Select Currency:</span>
               </span>
               <select
@@ -284,7 +317,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   handleCurrencySelect(e.target.value);
                   setMobileMenuOpen(false);
                 }}
-                className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-bold px-2 py-1 rounded-lg focus:outline-none text-xs"
+                className="bg-white border border-slate-200 text-slate-900 font-bold px-2 py-1 rounded-lg focus:outline-none text-xs"
               >
                 {Object.values(WORLDWIDE_CURRENCIES).map((curr) => (
                   <option key={curr.code} value={curr.code}>
@@ -292,31 +325,6 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   </option>
                 ))}
               </select>
-            </div>
-
-            <div className="pt-2 flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="w-full text-center py-2 px-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl flex items-center justify-center gap-2 cursor-pointer"
-              >
-                {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
-                <span>{theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}</span>
-              </button>
-              <Link
-                to="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-2 px-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl"
-              >
-                Hospital Staff Log In
-              </Link>
-              <Link
-                to="/signup"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs rounded-xl shadow-sm"
-              >
-                Activate Hospital OS ➔
-              </Link>
             </div>
           </div>
         )}

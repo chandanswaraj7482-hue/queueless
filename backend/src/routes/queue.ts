@@ -918,6 +918,7 @@ queueRouter.put('/:entryId/consultation', async (req, res) => {
       advice,
       followUpDays,
       completeConsultation,
+      customSections,
     } = req.body;
 
     const existing = await prisma.queueEntry.findUnique({
@@ -936,6 +937,7 @@ queueRouter.put('/:entryId/consultation', async (req, res) => {
       labTests: Array.isArray(labTests) ? labTests : [],
       advice: advice || clinicalNotes || existing.clinicalNotes || '',
       followUpDays: followUpDays || 7,
+      customSections: Array.isArray(customSections) ? customSections : [],
       rxNumber,
       issuedAt: new Date().toISOString(),
       patientPhone: existing.patient.mobile,
@@ -1029,6 +1031,7 @@ queueRouter.get('/:entryId/prescription', async (req, res) => {
 
     let medicines: any[] = [];
     let labTests: string[] = [];
+    let customSections: any[] = [];
     let advice = entry.clinicalNotes || 'Follow medication schedule as prescribed.';
     let followUpDays = 7;
     let rxNumber = `RX-${entry.queueDate.replace(/-/g, '')}-${entry.token.replace(/[^A-Z0-9]/gi, '')}`;
@@ -1041,6 +1044,7 @@ queueRouter.get('/:entryId/prescription', async (req, res) => {
         } else if (parsed && typeof parsed === 'object') {
           medicines = parsed.medicines || [];
           labTests = parsed.labTests || [];
+          if (parsed.customSections) customSections = parsed.customSections;
           if (parsed.advice) advice = parsed.advice;
           if (parsed.followUpDays) followUpDays = parsed.followUpDays;
           if (parsed.rxNumber) rxNumber = parsed.rxNumber;
@@ -1091,6 +1095,7 @@ queueRouter.get('/:entryId/prescription', async (req, res) => {
         prescriptions: medicines,
         medicines,
         labTests,
+        customSections,
         whatsappSent: true,
         emailSent: !!entry.patient.email,
       },

@@ -33,6 +33,7 @@ import {
   Receipt,
   CreditCard,
   Mail,
+  Sliders,
 } from 'lucide-react';
 
 const generateWhatsAppRxUrl = (data: any) => {
@@ -1059,9 +1060,26 @@ export const PatientPortal: React.FC = () => {
                   <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block mb-0.5">
                     Doctor Advice & Dietary Instructions:
                   </span>
-                  <p className="text-slate-800 font-medium leading-relaxed">
+                  <p className="text-slate-800 font-medium leading-relaxed whitespace-pre-line">
                     {viewingRx.advice || viewingRx.clinicalNotes}
                   </p>
+                </div>
+              )}
+
+              {/* Custom Clinical Sections (Allergies, Wound Care, Dietary Rules, Referral) */}
+              {viewingRx.customSections && Array.isArray(viewingRx.customSections) && viewingRx.customSections.length > 0 && (
+                <div className="space-y-3 mb-4">
+                  {viewingRx.customSections.map((sec: any, idx: number) => (
+                    <div key={sec.id || idx} className="p-3.5 bg-indigo-50/50 rounded-2xl border border-indigo-200/80 text-xs">
+                      <span className="text-[10px] font-black text-indigo-900 uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                        <Sliders className="w-3 h-3 text-indigo-600" />
+                        <span>{sec.title}</span>
+                      </span>
+                      <p className="text-slate-800 font-medium whitespace-pre-line leading-relaxed">
+                        {sec.content}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               )}
 

@@ -612,18 +612,37 @@ body {
     print-color-adjust: exact !important;
   }
 
-  body:has(#opd-receipt-print) > *:not(.fixed) {
+  /* Digital Rx Letterhead Print Area */
+  #printable-rx, #printable-rx-area {
+    max-width: 760px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body:has(#opd-receipt-print) > *:not(.fixed),
+  body:has(#printable-rx) > *:not(.fixed),
+  body:has(#printable-rx-area) > *:not(.fixed) {
     display: none !important;
   }
 
-  body:has(#opd-receipt-print) .fixed {
+  body:has(#opd-receipt-print) .fixed,
+  body:has(#printable-rx) .fixed,
+  body:has(#printable-rx-area) .fixed {
     position: static !important;
     background: transparent !important;
     padding: 0 !important;
     backdrop-filter: none !important;
   }
 
-  body:has(#opd-receipt-print) .fixed > div {
+  body:has(#opd-receipt-print) .fixed > div,
+  body:has(#printable-rx) .fixed > div,
+  body:has(#printable-rx-area) .fixed > div {
     max-width: 100% !important;
     box-shadow: none !important;
     border: none !important;

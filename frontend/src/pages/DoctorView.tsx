@@ -41,11 +41,19 @@ import {
   FileDown,
   Star,
   BookmarkPlus,
+  Sliders,
 } from 'lucide-react';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
 
 import { API_BASE_URL } from '../config/api';
+
+export interface RxCustomSection {
+  id: string;
+  title: string;
+  content: string;
+}
+
 interface MedicineRow {
   medicineName: string;
   dosage: string;
@@ -161,6 +169,13 @@ const generateWhatsAppRxUrl = (data: any) => {
   const adv = data.advice || data.clinicalNotes;
   if (adv) {
     text += `📝 *DOCTOR ADVICE:* ${adv}\n\n`;
+  }
+
+  const customs = data.customSections || [];
+  if (Array.isArray(customs) && customs.length > 0) {
+    customs.forEach((cs: any) => {
+      text += `📌 *${(cs.title || 'SPECIAL NOTE').toUpperCase()}:*\n${cs.content}\n\n`;
+    });
   }
 
   if (data.followUpDays) {
@@ -437,6 +452,74 @@ export const DoctorView: React.FC = () => {
       return [];
     }
   });
+
+  // Custom Clinical Sections in Consultation Desk (User: "kuch ko remove v kar skta ha and kuch ka custom add v kar skt ha")
+  const [customSections, setCustomSections] = useState<RxCustomSection[]>([]);
+  const [showAddSectionDrawer, setShowAddSectionDrawer] = useState(false);
+  const [newSectionTitle, setNewSectionTitle] = useState('');
+  const [newSectionContent, setNewSectionContent] = useState('');
+
+  // Rx Letterhead Section Visibility Controls (Doctor can toggle any on/off)
+  const [rxVisibility, setRxVisibility] = useState({
+    showHospitalHeader: true,
+    showDoctorInfo: true,
+    showPatientInfo: true,
+    showVitals: true,
+    showDiagnosis: true,
+    showMedicines: true,
+    showLabTests: true,
+    showAdvice: true,
+    showFollowUp: true,
+    showSignature: true,
+    showQueuelessBottom: true,
+  });
+  const [showRxCustomizer, setShowRxCustomizer] = useState(false);
+  const [modalCustomSections, setModalCustomSections] = useState<RxCustomSection[]>([]);
+
+  const handleAddPresetSection = (title: string, defaultContent: string) => {
+    const newSec: RxCustomSection = {
+      id: `sec-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      title,
+      content: defaultContent,
+    };
+    setCustomSections((prev) => [...prev, newSec]);
+  };
+
+  const handleCreateCustomSection = () => {
+    if (!newSectionTitle.trim()) return;
+    const newSec: RxCustomSection = {
+      id: `sec-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      title: newSectionTitle.trim(),
+      content: newSectionContent.trim(),
+    };
+    setCustomSections((prev) => [...prev, newSec]);
+    setNewSectionTitle('');
+    setNewSectionContent('');
+    setShowAddSectionDrawer(false);
+  };
+
+  const handleRemoveSection = (id: string) => {
+    setCustomSections((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  const handleUpdateSection = (id: string, field: 'title' | 'content', value: string) => {
+    setCustomSections((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, [field]: value } : s))
+    );
+  };
+
+  const handleAddModalSection = (title: string, defaultContent: string) => {
+    const newSec: RxCustomSection = {
+      id: `sec-mod-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      title,
+      content: defaultContent,
+    };
+    setModalCustomSections((prev) => [...prev, newSec]);
+  };
+
+  const handleRemoveModalSection = (id: string) => {
+    setModalCustomSections((prev) => prev.filter((s) => s.id !== id));
+  };
 
   const { slug, doctorId: routeDoctorId } = useParams<{ slug?: string; doctorId?: string }>();
   const location = useLocation();
@@ -947,6 +1030,7 @@ export const DoctorView: React.FC = () => {
           labTests,
           advice: clinicalNotes,
           followUpDays,
+          customSections,
           completeConsultation: complete,
         }),
       });
@@ -973,6 +1057,11 @@ export const DoctorView: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setViewingPrescription(data.data);
+        if (data.data?.customSections && Array.isArray(data.data.customSections) && data.data.customSections.length > 0) {
+          setModalCustomSections(data.data.customSections);
+        } else {
+          setModalCustomSections([...customSections]);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -1867,6 +1956,128 @@ export const DoctorView: React.FC = () => {
                       </div>
                     </div>
 
+                    {/* 7. Custom Rx Sections & Additions (User: "kuch ko remove kv kar skta ha and kuch ka custom add v kar skt ha") */}
+                    <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                          <Sliders className="w-3.5 h-3.5 text-indigo-600" />
+                          <span>Custom Rx Sections & Notes (कस्टम सेक्शन)</span>
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setShowAddSectionDrawer(!showAddSectionDrawer)}
+                          className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 px-2.5 py-1 rounded-xl border border-indigo-200 cursor-pointer transition-all"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>+ Add Custom Field</span>
+                        </button>
+                      </div>
+
+                      {/* Quick 1-Click Common Section Presets */}
+                      <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick Presets:</span>
+                        <button
+                          type="button"
+                          onClick={() => handleAddPresetSection('Allergies & Drug Warnings', 'Known allergy to Penicillin / Sulfa drugs. Avoid NSAIDs.')}
+                          className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[10px] font-bold cursor-pointer transition-all flex items-center gap-1"
+                        >
+                          <span>⚠️ Allergies Warning</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleAddPresetSection('Surgical & Wound Care', 'Keep dressing clean and dry. Sterile saline wash twice daily.')}
+                          className="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg text-[10px] font-bold cursor-pointer transition-all flex items-center gap-1"
+                        >
+                          <span>🩹 Wound Dressing</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleAddPresetSection('Dietary Restrictions', 'Low sodium / low salt diet. Strict avoidance of oily and spicy foods.')}
+                          className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-[10px] font-bold cursor-pointer transition-all flex items-center gap-1"
+                        >
+                          <span>🥗 Dietary Rules</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleAddPresetSection('Specialist Referral', 'Referred to Cardiology / Orthopedic specialist for secondary evaluation.')}
+                          className="px-2.5 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-lg text-[10px] font-bold cursor-pointer transition-all flex items-center gap-1"
+                        >
+                          <span>🩺 Specialist Referral</span>
+                        </button>
+                      </div>
+
+                      {/* Render Active Custom Sections in Form */}
+                      {customSections.length > 0 && (
+                        <div className="space-y-2 mb-2.5">
+                          {customSections.map((sec) => (
+                            <div key={sec.id} className="p-3 bg-white border border-slate-200 rounded-xl relative group shadow-2xs">
+                              <div className="flex items-center justify-between gap-2 mb-1.5">
+                                <input
+                                  type="text"
+                                  value={sec.title}
+                                  onChange={(e) => handleUpdateSection(sec.id, 'title', e.target.value)}
+                                  className="font-bold text-xs text-indigo-900 bg-transparent border-b border-dashed border-slate-300 focus:border-indigo-500 focus:outline-none w-full"
+                                  placeholder="Section Heading"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveSection(sec.id)}
+                                  className="p-1 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 cursor-pointer transition-all shrink-0"
+                                  title="Remove this section"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                              <textarea
+                                rows={2}
+                                value={sec.content}
+                                onChange={(e) => handleUpdateSection(sec.id, 'content', e.target.value)}
+                                className="w-full text-xs text-slate-700 bg-slate-50 p-2 rounded-lg border border-slate-200 focus:ring-1 focus:ring-indigo-500 focus:outline-none leading-relaxed"
+                                placeholder="Enter custom instructions or findings..."
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Add Custom Blank Section Drawer */}
+                      {showAddSectionDrawer && (
+                        <div className="p-3 bg-indigo-50/80 border border-indigo-200 rounded-xl mb-2 space-y-2 animate-in fade-in">
+                          <div className="text-[11px] font-bold text-indigo-950">Add New Custom Rx Section:</div>
+                          <input
+                            type="text"
+                            value={newSectionTitle}
+                            onChange={(e) => setNewSectionTitle(e.target.value)}
+                            placeholder="Section Title (e.g. Pre-Op Instructions, Emergency Warning)"
+                            className="w-full px-3 py-1.5 text-xs bg-white border border-indigo-200 rounded-lg focus:outline-none font-bold"
+                          />
+                          <textarea
+                            rows={2}
+                            value={newSectionContent}
+                            onChange={(e) => setNewSectionContent(e.target.value)}
+                            placeholder="Section Content / Instructions..."
+                            className="w-full px-3 py-1.5 text-xs bg-white border border-indigo-200 rounded-lg focus:outline-none"
+                          />
+                          <div className="flex justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setShowAddSectionDrawer(false)}
+                              className="px-3 py-1 text-xs font-semibold text-slate-500 hover:text-slate-700 cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleCreateCustomSection}
+                              className="px-3 py-1 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700 cursor-pointer shadow-2xs"
+                            >
+                              Add to Rx
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
                     {/* Action Bar */}
                     <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
                       <button
@@ -2042,73 +2253,264 @@ export const DoctorView: React.FC = () => {
               <X className="w-5 h-5" />
             </button>
 
+            {/* Letterhead & Sections Customization Bar (User: "kuch ko remove kv kar skta ha and kuch ka custom add v kar skt ha") */}
+            <div className="mb-4 bg-slate-50 border border-slate-200 rounded-2xl p-3 print:hidden">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="p-1.5 rounded-xl bg-indigo-100 text-indigo-700">
+                    <Sliders className="w-4 h-4" />
+                  </span>
+                  <div>
+                    <div className="font-black text-xs text-slate-800">
+                      Customize Letterhead & Sections (हटाएं या नया जोड़ें)
+                    </div>
+                    <div className="text-[10px] text-slate-500">
+                      Toggle sections on/off or add custom fields before printing or sharing
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowRxCustomizer(!showRxCustomizer)}
+                  className="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>{showRxCustomizer ? 'Close Customizer ✕' : '⚙️ Toggle / Add Sections'}</span>
+                </button>
+              </div>
+
+              {/* Expandable Customizer Controls */}
+              {showRxCustomizer && (
+                <div className="mt-3 pt-3 border-t border-slate-200 space-y-3">
+                  <div>
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">
+                      1. Show / Hide Standard Sections (हटाएं / छुपाएं):
+                    </span>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showHospitalHeader}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showHospitalHeader: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">Hospital Letterhead</span>
+                      </label>
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showDoctorInfo}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showDoctorInfo: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">Doctor Info & Reg No</span>
+                      </label>
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showPatientInfo}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showPatientInfo: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">Patient Details</span>
+                      </label>
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showVitals}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showVitals: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">Vitals (BP, Pulse...)</span>
+                      </label>
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showDiagnosis}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showDiagnosis: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">Clinical Diagnosis</span>
+                      </label>
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showMedicines}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showMedicines: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">Medicines Table</span>
+                      </label>
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showLabTests}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showLabTests: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">Lab Tests</span>
+                      </label>
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showAdvice}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showAdvice: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">Doctor Advice</span>
+                      </label>
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showFollowUp}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showFollowUp: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">15-Day Free Follow-up</span>
+                      </label>
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showSignature}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showSignature: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">Doctor Signature Stamp</span>
+                      </label>
+                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                        <input
+                          type="checkbox"
+                          checked={rxVisibility.showQueuelessBottom}
+                          onChange={(e) => setRxVisibility({ ...rxVisibility, showQueuelessBottom: e.target.checked })}
+                          className="rounded text-indigo-600"
+                        />
+                        <span className="text-[11px] font-bold text-slate-700">Queueless Bottom Logo</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* 2. Add Custom Section Directly to Modal */}
+                  <div className="pt-2 border-t border-slate-200">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">
+                      2. Add Custom Section to Letterhead (कस्टम जोड़ें):
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => handleAddModalSection('Allergies / Drug Warning', 'Known allergy to Penicillin / Sulfa. Avoid NSAIDs.')}
+                        className="px-2.5 py-1 bg-rose-50 text-rose-700 border border-rose-200 rounded-lg text-[10px] font-bold hover:bg-rose-100 cursor-pointer"
+                      >
+                        + ⚠️ Allergies Warning
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleAddModalSection('Surgical & Wound Care', 'Keep dressing clean and dry. Sterile saline wash twice daily.')}
+                        className="px-2.5 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg text-[10px] font-bold hover:bg-amber-100 cursor-pointer"
+                      >
+                        + 🩹 Wound Dressing
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleAddModalSection('Dietary Restrictions', 'Low sodium / low salt diet. Strict avoidance of oily and spicy foods.')}
+                        className="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-[10px] font-bold hover:bg-emerald-100 cursor-pointer"
+                      >
+                        + 🥗 Dietary Rules
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleAddModalSection('Specialist Referral', 'Referred to Cardiology / Specialist for secondary evaluation.')}
+                        className="px-2.5 py-1 bg-purple-50 text-purple-700 border border-purple-200 rounded-lg text-[10px] font-bold hover:bg-purple-100 cursor-pointer"
+                      >
+                        + 🩺 Specialist Referral
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleAddModalSection('Custom Clinical Note', 'Special medical precautions recorded by attending consultant.')}
+                        className="px-2.5 py-1 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg text-[10px] font-bold hover:bg-indigo-100 cursor-pointer"
+                      >
+                        + 📝 Custom Note
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Print Friendly Prescription Content */}
             <div id="printable-rx" className="p-2">
               {/* Hospital Header Letterhead (Top - Hospital Data & Logo) */}
-              <div className="border-b-2 border-slate-900 pb-4 mb-4 flex items-start justify-between gap-4">
-                <div className="flex items-start gap-3">
-                  {viewingPrescription.clinic?.logoUrl ? (
-                    <img
-                      src={viewingPrescription.clinic.logoUrl}
-                      alt={viewingPrescription.clinic.name}
-                      className="w-12 h-12 rounded-xl object-contain border border-slate-200 p-1 bg-white shrink-0 shadow-2xs"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xl shrink-0 shadow-xs">
-                      🏥
+              {rxVisibility.showHospitalHeader && (
+                <div className="border-b-2 border-slate-900 pb-4 mb-4 flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-3">
+                    {viewingPrescription.clinic?.logoUrl ? (
+                      <img
+                        src={viewingPrescription.clinic.logoUrl}
+                        alt={viewingPrescription.clinic.name}
+                        className="w-12 h-12 rounded-xl object-contain border border-slate-200 p-1 bg-white shrink-0 shadow-2xs"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xl shrink-0 shadow-xs">
+                        🏥
+                      </div>
+                    )}
+                    <div>
+                      <h1 className="text-xl font-black text-slate-900 tracking-tight leading-snug">
+                        {viewingPrescription.clinic?.name || 'Caremax Multi-Specialty Hospital'}
+                      </h1>
+                      <p className="text-xs text-slate-600 max-w-sm mt-0.5 font-medium">
+                        {viewingPrescription.clinic?.address || 'Suite 402, Metro Healthcare Towers, Bengaluru'}
+                      </p>
+                      <p className="text-[11px] text-slate-400 mt-0.5">
+                        Phone / Desk: {viewingPrescription.clinic?.phone || '+91 80 4920 1100'} • Ayushman Bharat (ABDM) & NABH Aligned OPD
+                      </p>
                     </div>
-                  )}
-                  <div>
-                    <h1 className="text-xl font-black text-slate-900 tracking-tight leading-snug">
-                      {viewingPrescription.clinic?.name || 'City Health Multi-Specialty Hospital'}
-                    </h1>
-                    <p className="text-xs text-slate-600 max-w-sm mt-0.5 font-medium">
-                      {viewingPrescription.clinic?.address || 'Suite 402, Metro Healthcare Towers, Bengaluru'}
-                    </p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
-                      Phone / Desk: {viewingPrescription.clinic?.phone || '+91 80 4920 1100'} • Ayushman Bharat (ABDM) & NABH Aligned OPD
-                    </p>
                   </div>
-                </div>
 
-                <div className="text-right shrink-0">
-                  <div className="text-xs font-black uppercase text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 inline-block mb-1 shadow-2xs">
-                    Official OPD Rx
+                  <div className="text-right shrink-0">
+                    <div className="text-xs font-black uppercase text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 inline-block mb-1 shadow-2xs">
+                      Official OPD Rx
+                    </div>
+                    <div className="text-xs font-bold text-slate-700">
+                      Token: <span className="font-mono font-black text-slate-900">{viewingPrescription.token}</span>
+                      <span className="mx-1 text-slate-300">•</span>
+                      Ref: <span className="font-mono font-bold text-slate-600">#QL-{(viewingPrescription.id || '').substring(0, 6).toUpperCase()}</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400 font-mono">Date: {viewingPrescription.date}</div>
                   </div>
-                  <div className="text-xs font-bold text-slate-700">
-                    Token: <span className="font-mono font-black text-slate-900">{viewingPrescription.token}</span>
-                    <span className="mx-1 text-slate-300">•</span>
-                    Ref: <span className="font-mono font-bold text-slate-600">#QL-{(viewingPrescription.id || '').substring(0, 6).toUpperCase()}</span>
-                  </div>
-                  <div className="text-[11px] text-slate-400 font-mono">Date: {viewingPrescription.date}</div>
                 </div>
-              </div>
+              )}
 
               {/* Doctor & Patient Info Bar */}
-              <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs mb-4">
-                <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Consulting Doctor</span>
-                  <div className="font-extrabold text-slate-900 text-sm">{viewingPrescription.doctor?.name}</div>
-                  <div className="text-[11px] text-slate-600 font-medium">{viewingPrescription.doctor?.specialty} • {viewingPrescription.doctor?.roomNumber}</div>
-                  <div className="text-[10px] text-slate-400 font-mono mt-0.5">
-                    Reg No: {viewingPrescription.doctor?.regNumber || `MCI-${(viewingPrescription.doctor?.id || '84920').substring(0, 6).toUpperCase()}`}
-                  </div>
+              {(rxVisibility.showDoctorInfo || rxVisibility.showPatientInfo) && (
+                <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs mb-4">
+                  {rxVisibility.showDoctorInfo && (
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Consulting Doctor</span>
+                      <div className="font-extrabold text-slate-900 text-sm">{viewingPrescription.doctor?.name}</div>
+                      <div className="text-[11px] text-slate-600 font-medium">{viewingPrescription.doctor?.specialty} • {viewingPrescription.doctor?.roomNumber}</div>
+                      <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                        Reg No: {viewingPrescription.doctor?.regNumber || `MCI-${(viewingPrescription.doctor?.id || '84920').substring(0, 6).toUpperCase()}`}
+                      </div>
+                    </div>
+                  )}
+                  {rxVisibility.showPatientInfo && (
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Patient Details</span>
+                      <div className="font-extrabold text-slate-900 text-sm">{viewingPrescription.patient?.name}</div>
+                      <div className="text-[11px] text-slate-600 font-medium">
+                        {viewingPrescription.patient?.age ? `${viewingPrescription.patient?.age} yrs` : 'Age N/A'} • {viewingPrescription.patient?.gender || 'Patient'}
+                        {viewingPrescription.patient?.bloodGroup && ` • Blood Group: ${viewingPrescription.patient?.bloodGroup}`}
+                      </div>
+                      <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                        Mobile: +91 {viewingPrescription.patient?.mobile || 'Registered'}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Patient Details</span>
-                  <div className="font-extrabold text-slate-900 text-sm">{viewingPrescription.patient?.name}</div>
-                  <div className="text-[11px] text-slate-600 font-medium">
-                    {viewingPrescription.patient?.age ? `${viewingPrescription.patient?.age} yrs` : 'Age N/A'} • {viewingPrescription.patient?.gender || 'Patient'}
-                    {viewingPrescription.patient?.bloodGroup && ` • Blood Group: ${viewingPrescription.patient?.bloodGroup}`}
-                  </div>
-                  <div className="text-[10px] text-slate-400 font-mono mt-0.5">
-                    Mobile: +91 {viewingPrescription.patient?.mobile || 'Registered'}
-                  </div>
-                </div>
-              </div>
+              )}
 
               {/* Vitals Examination */}
-              {viewingPrescription.vitals && (
+              {rxVisibility.showVitals && viewingPrescription.vitals && (
                 <div className="flex flex-wrap items-center gap-2 mb-4 text-xs font-semibold p-2.5 bg-slate-50/70 rounded-xl border border-slate-100">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Vitals:</span>
                   {viewingPrescription.vitals.bp && (
@@ -2130,53 +2532,57 @@ export const DoctorView: React.FC = () => {
               )}
 
               {/* Diagnosis */}
-              <div className="mb-4 pb-3 border-b border-slate-100">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Clinical Diagnosis</span>
-                <p className="text-sm font-black text-slate-900 mt-0.5">
-                  {viewingPrescription.diagnosis || 'General OPD Examination'}
-                </p>
-              </div>
+              {rxVisibility.showDiagnosis && (
+                <div className="mb-4 pb-3 border-b border-slate-100">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Clinical Diagnosis</span>
+                  <p className="text-sm font-black text-slate-900 mt-0.5">
+                    {viewingPrescription.diagnosis || 'General OPD Examination'}
+                  </p>
+                </div>
+              )}
 
               {/* Rx Medicines Table with Instructions */}
-              <div className="mb-5">
-                <div className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5 mb-2">
-                  <span className="text-lg font-serif italic text-emerald-700">℞</span>
-                  <span>Prescribed Medicines & Schedule</span>
-                </div>
-                <table className="w-full text-left text-xs border border-slate-200 rounded-2xl overflow-hidden">
-                  <thead className="bg-slate-100 text-slate-600 font-bold uppercase text-[10px]">
-                    <tr>
-                      <th className="p-2.5">Medicine</th>
-                      <th className="p-2.5">Dosage</th>
-                      <th className="p-2.5">Frequency</th>
-                      <th className="p-2.5">Duration</th>
-                      <th className="p-2.5">Instructions (Timing / Food)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {((viewingPrescription.medicines || viewingPrescription.prescriptions || []).length > 0) ? (
-                      (viewingPrescription.medicines || viewingPrescription.prescriptions).map((m: any, idx: number) => (
-                        <tr key={idx} className="hover:bg-slate-50/50">
-                          <td className="p-2.5 font-bold text-slate-900">{m.medicineName}</td>
-                          <td className="p-2.5 text-slate-700 font-medium">{m.dosage}</td>
-                          <td className="p-2.5 text-slate-700 font-mono font-bold text-blue-700">{m.frequency}</td>
-                          <td className="p-2.5 text-slate-700 font-medium">{m.duration}</td>
-                          <td className="p-2.5 text-slate-600 italic font-medium">{m.instructions || 'After Food (खाने के बाद)'}</td>
-                        </tr>
-                      ))
-                    ) : (
+              {rxVisibility.showMedicines && (
+                <div className="mb-5">
+                  <div className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5 mb-2">
+                    <span className="text-lg font-serif italic text-emerald-700">℞</span>
+                    <span>Prescribed Medicines & Schedule</span>
+                  </div>
+                  <table className="w-full text-left text-xs border border-slate-200 rounded-2xl overflow-hidden">
+                    <thead className="bg-slate-100 text-slate-600 font-bold uppercase text-[10px]">
                       <tr>
-                        <td colSpan={5} className="p-4 text-center text-slate-400">
-                          No specific medicines prescribed. General clinical advice provided.
-                        </td>
+                        <th className="p-2.5">Medicine</th>
+                        <th className="p-2.5">Dosage</th>
+                        <th className="p-2.5">Frequency</th>
+                        <th className="p-2.5">Duration</th>
+                        <th className="p-2.5">Instructions (Timing / Food)</th>
                       </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {((viewingPrescription.medicines || viewingPrescription.prescriptions || []).length > 0) ? (
+                        (viewingPrescription.medicines || viewingPrescription.prescriptions).map((m: any, idx: number) => (
+                          <tr key={idx} className="hover:bg-slate-50/50">
+                            <td className="p-2.5 font-bold text-slate-900">{m.medicineName}</td>
+                            <td className="p-2.5 text-slate-700 font-medium">{m.dosage}</td>
+                            <td className="p-2.5 text-slate-700 font-mono font-bold text-blue-700">{m.frequency}</td>
+                            <td className="p-2.5 text-slate-700 font-medium">{m.duration}</td>
+                            <td className="p-2.5 text-slate-600 italic font-medium">{m.instructions || 'After Food (खाने के बाद)'}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={5} className="p-4 text-center text-slate-400">
+                            No specific medicines prescribed. General clinical advice provided.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
 
               {/* Diagnostic Lab Tests / Investigations */}
-              {viewingPrescription.labTests && viewingPrescription.labTests.length > 0 && (
+              {rxVisibility.showLabTests && viewingPrescription.labTests && viewingPrescription.labTests.length > 0 && (
                 <div className="mb-5">
                   <div className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5 mb-2">
                     <FlaskConical className="w-3.5 h-3.5 text-teal-600" />
@@ -2194,52 +2600,85 @@ export const DoctorView: React.FC = () => {
               )}
 
               {/* Clinical Advice */}
-              {(viewingPrescription.advice || viewingPrescription.clinicalNotes) && (
+              {rxVisibility.showAdvice && (viewingPrescription.advice || viewingPrescription.clinicalNotes) && (
                 <div className="mb-4 p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200/80 text-xs">
                   <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block mb-0.5">
                     Doctor Advice & Dietary Instructions:
                   </span>
-                  <p className="text-slate-800 font-medium leading-relaxed">
+                  <p className="text-slate-800 font-medium leading-relaxed whitespace-pre-line">
                     {viewingPrescription.advice || viewingPrescription.clinicalNotes}
                   </p>
                 </div>
               )}
 
+              {/* Custom Clinical Sections Rendered on Letterhead */}
+              {modalCustomSections.length > 0 && (
+                <div className="space-y-3 mb-4">
+                  {modalCustomSections.map((sec) => (
+                    <div key={sec.id} className="p-3.5 bg-indigo-50/50 rounded-2xl border border-indigo-200/80 text-xs relative group">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[10px] font-black text-indigo-900 uppercase tracking-wider flex items-center gap-1.5">
+                          <Sliders className="w-3 h-3 text-indigo-600" />
+                          <span>{sec.title}</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveModalSection(sec.id)}
+                          className="p-1 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 print:hidden cursor-pointer transition-all"
+                          title="Remove this section from print"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <p className="text-slate-800 font-medium whitespace-pre-line leading-relaxed">
+                        {sec.content}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {/* 15-Day Free Follow-up Review Notice */}
-              <div className="mb-4 p-3 bg-blue-50/70 rounded-2xl border border-blue-200 text-xs flex items-center justify-between">
-                <span className="font-bold text-blue-950 flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-blue-600" />
-                  <span>15-Day Free Follow-Up Review:</span>
-                </span>
-                <span className="font-black text-blue-800 bg-white px-2.5 py-1 rounded-xl border border-blue-200 font-mono text-[11px]">
-                  Valid for {viewingPrescription.followUpDays || 15} Days (₹0 Consultation Fee in OPD)
-                </span>
-              </div>
+              {rxVisibility.showFollowUp && (
+                <div className="mb-4 p-3 bg-blue-50/70 rounded-2xl border border-blue-200 text-xs flex items-center justify-between">
+                  <span className="font-bold text-blue-950 flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <span>15-Day Free Follow-Up Review:</span>
+                  </span>
+                  <span className="font-black text-blue-800 bg-white px-2.5 py-1 rounded-xl border border-blue-200 font-mono text-[11px]">
+                    Valid for {viewingPrescription.followUpDays || 15} Days (₹0 Consultation Fee in OPD)
+                  </span>
+                </div>
+              )}
 
               {/* Doctor Sign-off (Bottom Right) */}
-              <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
-                <div>
-                  <div className="text-[10px] text-slate-400">Valid Digital Prescription generated via Hospital EMR</div>
-                  <div className="font-semibold text-slate-700 mt-0.5">Official Digital OPD Record • Signed electronically</div>
-                </div>
-                <div className="text-right">
-                  <div className="font-serif italic font-bold text-slate-900 text-base">
-                    {viewingPrescription.doctor?.name}
+              {rxVisibility.showSignature && (
+                <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+                  <div>
+                    <div className="text-[10px] text-slate-400">Valid Digital Prescription generated via Hospital EMR</div>
+                    <div className="font-semibold text-slate-700 mt-0.5">Official Digital OPD Record • Signed electronically</div>
                   </div>
-                  <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Authorized Doctor Sign-off</div>
+                  <div className="text-right">
+                    <div className="font-serif italic font-bold text-slate-900 text-base">
+                      {viewingPrescription.doctor?.name}
+                    </div>
+                    <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Authorized Doctor Sign-off</div>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Bottom Footer: Powered by Queueless Healthcare OS (User: "mera bottom me rahega") */}
-              <div className="mt-4 pt-3 border-t border-dashed border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-slate-400">
-                <div className="flex items-center gap-1.5 font-bold text-slate-600">
-                  <span className="px-1 py-0.2 bg-blue-600 text-white rounded text-[8px] font-black">Q</span>
-                  <span>Powered by Queueless Healthcare OS • Ayushman Bharat (ABDM M1/M2) & HIPAA Aligned</span>
+              {rxVisibility.showQueuelessBottom && (
+                <div className="mt-4 pt-3 border-t border-dashed border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-slate-400">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-600">
+                    <span className="px-1 py-0.2 bg-blue-600 text-white rounded text-[8px] font-black">Q</span>
+                    <span>Powered by Queueless Healthcare OS • Ayushman Bharat (ABDM M1/M2) & HIPAA Aligned</span>
+                  </div>
+                  <div className="font-mono text-[9px] text-slate-400">
+                    Universal Health Vault Sync: https://queueless-os.vercel.app/portal
+                  </div>
                 </div>
-                <div className="font-mono text-[9px] text-slate-400">
-                  Universal Health Vault Sync: https://queueless-os.vercel.app/portal
-                </div>
-              </div>
+              )}
             </div>
 
             {/* Modal Actions */}
@@ -2257,7 +2696,7 @@ export const DoctorView: React.FC = () => {
                   Close
                 </button>
                 <a
-                  href={generateWhatsAppRxUrl(viewingPrescription)}
+                  href={generateWhatsAppRxUrl({ ...viewingPrescription, customSections: modalCustomSections })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer"

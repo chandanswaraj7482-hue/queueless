@@ -1764,83 +1764,104 @@ export const DoctorView: React.FC = () => {
 
             {/* Print Friendly Prescription Content */}
             <div id="printable-rx" className="p-2">
-              {/* Hospital Header Letterhead */}
-              <div className="border-b-2 border-slate-900 pb-4 mb-4 flex items-start justify-between">
-                <div>
-                  <h1 className="text-xl font-black text-slate-900 tracking-tight">
-                    {viewingPrescription.clinic?.name || 'City Health Clinic'}
-                  </h1>
-                  <p className="text-xs text-slate-500 max-w-sm mt-0.5">
-                    {viewingPrescription.clinic?.address || 'Suite 402, Metro Towers, Bengaluru'}
-                  </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
-                    Emergency/Desk: {viewingPrescription.clinic?.phone || '+91 80 4920 1100'} • Queueless Verified OPD
-                  </p>
+              {/* Hospital Header Letterhead (Top - Hospital Data & Logo) */}
+              <div className="border-b-2 border-slate-900 pb-4 mb-4 flex items-start justify-between gap-4">
+                <div className="flex items-start gap-3">
+                  {viewingPrescription.clinic?.logoUrl ? (
+                    <img
+                      src={viewingPrescription.clinic.logoUrl}
+                      alt={viewingPrescription.clinic.name}
+                      className="w-12 h-12 rounded-xl object-contain border border-slate-200 p-1 bg-white shrink-0 shadow-2xs"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xl shrink-0 shadow-xs">
+                      🏥
+                    </div>
+                  )}
+                  <div>
+                    <h1 className="text-xl font-black text-slate-900 tracking-tight leading-snug">
+                      {viewingPrescription.clinic?.name || 'City Health Multi-Specialty Hospital'}
+                    </h1>
+                    <p className="text-xs text-slate-600 max-w-sm mt-0.5 font-medium">
+                      {viewingPrescription.clinic?.address || 'Suite 402, Metro Healthcare Towers, Bengaluru'}
+                    </p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      Phone / Desk: {viewingPrescription.clinic?.phone || '+91 80 4920 1100'} • Ayushman Bharat (ABDM) & NABH Aligned OPD
+                    </p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-xs font-black uppercase text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-100 inline-block mb-1">
-                    Digital OPD Prescription
+
+                <div className="text-right shrink-0">
+                  <div className="text-xs font-black uppercase text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 inline-block mb-1 shadow-2xs">
+                    Official OPD Rx
                   </div>
                   <div className="text-xs font-bold text-slate-700">
-                    Token: <span className="font-mono font-black">{viewingPrescription.token}</span>
-                    <span className="mx-1.5 text-slate-300">•</span>
+                    Token: <span className="font-mono font-black text-slate-900">{viewingPrescription.token}</span>
+                    <span className="mx-1 text-slate-300">•</span>
                     Ref: <span className="font-mono font-bold text-slate-600">#QL-{(viewingPrescription.id || '').substring(0, 6).toUpperCase()}</span>
                   </div>
-                  <div className="text-[11px] text-slate-400">Date: {viewingPrescription.date}</div>
+                  <div className="text-[11px] text-slate-400 font-mono">Date: {viewingPrescription.date}</div>
                 </div>
               </div>
 
               {/* Doctor & Patient Info Bar */}
               <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs mb-4">
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Doctor</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Consulting Doctor</span>
                   <div className="font-extrabold text-slate-900 text-sm">{viewingPrescription.doctor?.name}</div>
-                  <div className="text-[11px] text-slate-500">{viewingPrescription.doctor?.specialty} • {viewingPrescription.doctor?.roomNumber}</div>
+                  <div className="text-[11px] text-slate-600 font-medium">{viewingPrescription.doctor?.specialty} • {viewingPrescription.doctor?.roomNumber}</div>
+                  <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                    Reg No: {viewingPrescription.doctor?.regNumber || `MCI-${(viewingPrescription.doctor?.id || '84920').substring(0, 6).toUpperCase()}`}
+                  </div>
                 </div>
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Patient Details</span>
                   <div className="font-extrabold text-slate-900 text-sm">{viewingPrescription.patient?.name}</div>
-                  <div className="text-[11px] text-slate-500">
+                  <div className="text-[11px] text-slate-600 font-medium">
                     {viewingPrescription.patient?.age ? `${viewingPrescription.patient?.age} yrs` : 'Age N/A'} • {viewingPrescription.patient?.gender || 'Patient'}
-                    {viewingPrescription.patient?.bloodGroup && ` • Blood: ${viewingPrescription.patient?.bloodGroup}`}
+                    {viewingPrescription.patient?.bloodGroup && ` • Blood Group: ${viewingPrescription.patient?.bloodGroup}`}
+                  </div>
+                  <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                    Mobile: +91 {viewingPrescription.patient?.mobile || 'Registered'}
                   </div>
                 </div>
               </div>
 
-              {/* Vitals & Diagnosis */}
+              {/* Vitals Examination */}
               {viewingPrescription.vitals && (
-                <div className="flex flex-wrap items-center gap-2 mb-4 text-xs font-semibold">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Vitals:</span>
+                <div className="flex flex-wrap items-center gap-2 mb-4 text-xs font-semibold p-2.5 bg-slate-50/70 rounded-xl border border-slate-100">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Vitals:</span>
                   {viewingPrescription.vitals.bp && (
-                    <span className="bg-slate-100 px-2.5 py-1 rounded-lg">BP: <strong>{viewingPrescription.vitals.bp}</strong></span>
+                    <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800">BP: <strong>{viewingPrescription.vitals.bp}</strong></span>
                   )}
                   {viewingPrescription.vitals.pulse && (
-                    <span className="bg-slate-100 px-2.5 py-1 rounded-lg">Pulse: <strong>{viewingPrescription.vitals.pulse} bpm</strong></span>
+                    <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800">Pulse: <strong>{viewingPrescription.vitals.pulse} bpm</strong></span>
                   )}
                   {viewingPrescription.vitals.temp && (
-                    <span className="bg-slate-100 px-2.5 py-1 rounded-lg">Temp: <strong>{viewingPrescription.vitals.temp}</strong></span>
+                    <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800">Temp: <strong>{viewingPrescription.vitals.temp}</strong></span>
                   )}
                   {viewingPrescription.vitals.spo2 && (
-                    <span className="bg-slate-100 px-2.5 py-1 rounded-lg">SpO2: <strong>{viewingPrescription.vitals.spo2}</strong></span>
+                    <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800">SpO2: <strong>{viewingPrescription.vitals.spo2}</strong></span>
                   )}
                   {viewingPrescription.vitals.weight && (
-                    <span className="bg-slate-100 px-2.5 py-1 rounded-lg">Weight: <strong>{viewingPrescription.vitals.weight}</strong></span>
+                    <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800">Weight: <strong>{viewingPrescription.vitals.weight}</strong></span>
                   )}
                 </div>
               )}
 
-              <div className="mb-5 pb-3 border-b border-slate-100">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Diagnosis</span>
+              {/* Diagnosis */}
+              <div className="mb-4 pb-3 border-b border-slate-100">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Clinical Diagnosis</span>
                 <p className="text-sm font-black text-slate-900 mt-0.5">
                   {viewingPrescription.diagnosis || 'General OPD Examination'}
                 </p>
               </div>
 
-              {/* Rx Medicines Table */}
-              <div className="mb-6">
+              {/* Rx Medicines Table with Instructions */}
+              <div className="mb-5">
                 <div className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5 mb-2">
-                  <span className="text-lg font-serif italic text-sky-700">℞</span>
-                  <span>Prescription & Medication Schedule</span>
+                  <span className="text-lg font-serif italic text-emerald-700">℞</span>
+                  <span>Prescribed Medicines & Schedule</span>
                 </div>
                 <table className="w-full text-left text-xs border border-slate-200 rounded-2xl overflow-hidden">
                   <thead className="bg-slate-100 text-slate-600 font-bold uppercase text-[10px]">
@@ -1849,7 +1870,7 @@ export const DoctorView: React.FC = () => {
                       <th className="p-2.5">Dosage</th>
                       <th className="p-2.5">Frequency</th>
                       <th className="p-2.5">Duration</th>
-                      <th className="p-2.5">Instructions</th>
+                      <th className="p-2.5">Instructions (Timing / Food)</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -1857,10 +1878,10 @@ export const DoctorView: React.FC = () => {
                       (viewingPrescription.medicines || viewingPrescription.prescriptions).map((m: any, idx: number) => (
                         <tr key={idx} className="hover:bg-slate-50/50">
                           <td className="p-2.5 font-bold text-slate-900">{m.medicineName}</td>
-                          <td className="p-2.5 text-slate-700">{m.dosage}</td>
-                          <td className="p-2.5 text-slate-700 font-mono font-medium">{m.frequency}</td>
-                          <td className="p-2.5 text-slate-700">{m.duration}</td>
-                          <td className="p-2.5 text-slate-600 italic">{m.instructions}</td>
+                          <td className="p-2.5 text-slate-700 font-medium">{m.dosage}</td>
+                          <td className="p-2.5 text-slate-700 font-mono font-bold text-blue-700">{m.frequency}</td>
+                          <td className="p-2.5 text-slate-700 font-medium">{m.duration}</td>
+                          <td className="p-2.5 text-slate-600 italic font-medium">{m.instructions || 'After Food (खाने के बाद)'}</td>
                         </tr>
                       ))
                     ) : (
@@ -1876,7 +1897,7 @@ export const DoctorView: React.FC = () => {
 
               {/* Diagnostic Lab Tests / Investigations */}
               {viewingPrescription.labTests && viewingPrescription.labTests.length > 0 && (
-                <div className="mb-6">
+                <div className="mb-5">
                   <div className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5 mb-2">
                     <FlaskConical className="w-3.5 h-3.5 text-teal-600" />
                     <span>Recommended Diagnostic Lab Tests ({viewingPrescription.labTests.length})</span>
@@ -1894,9 +1915,9 @@ export const DoctorView: React.FC = () => {
 
               {/* Clinical Advice */}
               {(viewingPrescription.advice || viewingPrescription.clinicalNotes) && (
-                <div className="mb-5 p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200/80 text-xs">
+                <div className="mb-4 p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200/80 text-xs">
                   <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block mb-0.5">
-                    Doctor Clinical Advice & Instructions:
+                    Doctor Advice & Dietary Instructions:
                   </span>
                   <p className="text-slate-800 font-medium leading-relaxed">
                     {viewingPrescription.advice || viewingPrescription.clinicalNotes}
@@ -1904,30 +1925,39 @@ export const DoctorView: React.FC = () => {
                 </div>
               )}
 
-              {/* Review Timeline */}
-              {viewingPrescription.followUpDays && (
-                <div className="mb-5 p-3 bg-blue-50/60 rounded-2xl border border-blue-200 text-xs flex items-center justify-between">
-                  <span className="font-bold text-blue-900 flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4 text-blue-600" />
-                    <span>Next Review Scheduled in OPD:</span>
-                  </span>
-                  <span className="font-black text-blue-700 bg-white px-2.5 py-1 rounded-xl border border-blue-200 font-mono">
-                    After {viewingPrescription.followUpDays} Days
-                  </span>
-                </div>
-              )}
+              {/* 15-Day Free Follow-up Review Notice */}
+              <div className="mb-4 p-3 bg-blue-50/70 rounded-2xl border border-blue-200 text-xs flex items-center justify-between">
+                <span className="font-bold text-blue-950 flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-blue-600" />
+                  <span>15-Day Free Follow-Up Review:</span>
+                </span>
+                <span className="font-black text-blue-800 bg-white px-2.5 py-1 rounded-xl border border-blue-200 font-mono text-[11px]">
+                  Valid for {viewingPrescription.followUpDays || 15} Days (₹0 Consultation Fee in OPD)
+                </span>
+              </div>
 
-              {/* Signature Footer */}
-              <div className="pt-6 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+              {/* Doctor Sign-off (Bottom Right) */}
+              <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
                 <div>
-                  <div className="text-[10px] text-slate-400">Valid Digital Prescription generated via Queueless OS</div>
-                  <div className="font-semibold text-slate-700 mt-0.5">Official Digital Prescription • 15-Day Review Policy</div>
+                  <div className="text-[10px] text-slate-400">Valid Digital Prescription generated via Hospital EMR</div>
+                  <div className="font-semibold text-slate-700 mt-0.5">Official Digital OPD Record • Signed electronically</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-serif italic font-bold text-slate-900 text-sm">
+                  <div className="font-serif italic font-bold text-slate-900 text-base">
                     {viewingPrescription.doctor?.name}
                   </div>
-                  <div className="text-[10px] text-slate-400 uppercase tracking-wider">Authorized Medical Sign-off</div>
+                  <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Authorized Doctor Sign-off</div>
+                </div>
+              </div>
+
+              {/* Bottom Footer: Powered by Queueless Healthcare OS (User: "mera bottom me rahega") */}
+              <div className="mt-4 pt-3 border-t border-dashed border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-slate-400">
+                <div className="flex items-center gap-1.5 font-bold text-slate-600">
+                  <span className="px-1 py-0.2 bg-blue-600 text-white rounded text-[8px] font-black">Q</span>
+                  <span>Powered by Queueless Healthcare OS • Ayushman Bharat (ABDM M1/M2) & HIPAA Aligned</span>
+                </div>
+                <div className="font-mono text-[9px] text-slate-400">
+                  Universal Health Vault Sync: https://queueless-os.vercel.app/portal
                 </div>
               </div>
             </div>

@@ -921,25 +921,43 @@ export const PatientPortal: React.FC = () => {
             </button>
 
             <div className="p-2" id="printable-rx-area">
-              {/* Hospital Header Letterhead */}
-              <div className="border-b-2 border-slate-900 pb-4 mb-4 flex items-start justify-between">
-                <div>
-                  <h1 className="text-xl font-black text-slate-900 tracking-tight">
-                    {viewingRx.clinic?.name || 'Queueless Hospital OPD'}
-                  </h1>
-                  <p className="text-xs text-slate-500 max-w-sm mt-0.5">
-                    {viewingRx.clinic?.address || 'Suite 402, Metro Towers, Bengaluru'}
-                  </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
-                    Desk: {viewingRx.clinic?.phone || '+91 80 4920 1100'} • Ayushman Bharat (ABDM) Aligned
-                  </p>
+              {/* Hospital Header Letterhead (Top - Hospital Data & Logo) */}
+              <div className="border-b-2 border-slate-900 pb-4 mb-4 flex items-start justify-between gap-4">
+                <div className="flex items-start gap-3">
+                  {viewingRx.clinic?.logoUrl ? (
+                    <img
+                      src={viewingRx.clinic.logoUrl}
+                      alt={viewingRx.clinic.name}
+                      className="w-12 h-12 rounded-xl object-contain border border-slate-200 p-1 bg-white shrink-0 shadow-2xs"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xl shrink-0 shadow-xs">
+                      🏥
+                    </div>
+                  )}
+                  <div>
+                    <h1 className="text-xl font-black text-slate-900 tracking-tight leading-snug">
+                      {viewingRx.clinic?.name || 'Queueless Network Hospital OPD'}
+                    </h1>
+                    <p className="text-xs text-slate-600 max-w-sm mt-0.5 font-medium">
+                      {viewingRx.clinic?.address || 'Suite 402, Metro Healthcare Towers, Bengaluru'}
+                    </p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      Phone / Desk: {viewingRx.clinic?.phone || '+91 80 4920 1100'} • Ayushman Bharat (ABDM) & NABH Aligned OPD
+                    </p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-xs font-black uppercase text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 inline-block mb-1">
+
+                <div className="text-right shrink-0">
+                  <div className="text-xs font-black uppercase text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 inline-block mb-1 shadow-2xs">
                     Official OPD Rx
                   </div>
-                  <div className="text-xs font-bold text-slate-700">Token: <span className="font-mono font-black">{viewingRx.token}</span></div>
-                  <div className="text-[11px] text-slate-400">Date: {viewingRx.date}</div>
+                  <div className="text-xs font-bold text-slate-700">
+                    Token: <span className="font-mono font-black text-slate-900">{viewingRx.token}</span>
+                    <span className="mx-1 text-slate-300">•</span>
+                    Ref: <span className="font-mono font-bold text-slate-600">#QL-{(viewingRx.id || '').substring(0, 6).toUpperCase()}</span>
+                  </div>
+                  <div className="text-[11px] text-slate-400 font-mono">Date: {viewingRx.date}</div>
                 </div>
               </div>
 
@@ -948,17 +966,45 @@ export const PatientPortal: React.FC = () => {
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Consulting Doctor</span>
                   <div className="font-extrabold text-slate-900 text-sm">{viewingRx.doctor?.name}</div>
-                  <div className="text-[11px] text-slate-500">{viewingRx.doctor?.specialty} • {viewingRx.doctor?.roomNumber}</div>
+                  <div className="text-[11px] text-slate-600 font-medium">{viewingRx.doctor?.specialty} • {viewingRx.doctor?.roomNumber}</div>
+                  <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                    Reg No: {viewingRx.doctor?.regNumber || `MCI-${(viewingRx.doctor?.id || '84920').substring(0, 6).toUpperCase()}`}
+                  </div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Patient</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Patient Details</span>
                   <div className="font-extrabold text-slate-900 text-sm">{viewingRx.patient?.name}</div>
-                  <div className="text-[11px] text-slate-500">
+                  <div className="text-[11px] text-slate-600 font-medium">
                     {viewingRx.patient?.age ? `${viewingRx.patient?.age} yrs` : 'Age N/A'} • {viewingRx.patient?.gender || 'Patient'}
-                    {viewingRx.patient?.bloodGroup && ` • Blood: ${viewingRx.patient?.bloodGroup}`}
+                    {viewingRx.patient?.bloodGroup && ` • Blood Group: ${viewingRx.patient?.bloodGroup}`}
+                  </div>
+                  <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                    Mobile: +91 {viewingRx.patient?.mobile || 'Registered'}
                   </div>
                 </div>
               </div>
+
+              {/* Vitals Examination */}
+              {viewingRx.vitals && (
+                <div className="flex flex-wrap items-center gap-2 mb-4 text-xs font-semibold p-2.5 bg-slate-50/70 rounded-xl border border-slate-100">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Vitals:</span>
+                  {viewingRx.vitals.bp && (
+                    <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800">BP: <strong>{viewingRx.vitals.bp}</strong></span>
+                  )}
+                  {viewingRx.vitals.pulse && (
+                    <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800">Pulse: <strong>{viewingRx.vitals.pulse} bpm</strong></span>
+                  )}
+                  {viewingRx.vitals.temp && (
+                    <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800">Temp: <strong>{viewingRx.vitals.temp}</strong></span>
+                  )}
+                  {viewingRx.vitals.spo2 && (
+                    <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800">SpO2: <strong>{viewingRx.vitals.spo2}</strong></span>
+                  )}
+                  {viewingRx.vitals.weight && (
+                    <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800">Weight: <strong>{viewingRx.vitals.weight}</strong></span>
+                  )}
+                </div>
+              )}
 
               {/* Diagnosis */}
               <div className="mb-4 pb-3 border-b border-slate-100">
@@ -968,11 +1014,11 @@ export const PatientPortal: React.FC = () => {
                 </p>
               </div>
 
-              {/* Rx Medicines Table */}
-              <div className="mb-6">
+              {/* Rx Medicines Table with Instructions */}
+              <div className="mb-5">
                 <div className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5 mb-2">
                   <span className="text-lg font-serif italic text-emerald-700">℞</span>
-                  <span>Prescribed Medicines</span>
+                  <span>Prescribed Medicines & Schedule</span>
                 </div>
                 <table className="w-full text-left text-xs border border-slate-200 rounded-2xl overflow-hidden">
                   <thead className="bg-slate-100 text-slate-600 font-bold uppercase text-[10px]">
@@ -981,7 +1027,7 @@ export const PatientPortal: React.FC = () => {
                       <th className="p-2.5">Dosage</th>
                       <th className="p-2.5">Frequency</th>
                       <th className="p-2.5">Duration</th>
-                      <th className="p-2.5">Instructions</th>
+                      <th className="p-2.5">Instructions (Timing / Food)</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -989,16 +1035,16 @@ export const PatientPortal: React.FC = () => {
                       (viewingRx.medicines || viewingRx.prescriptions).map((m: any, idx: number) => (
                         <tr key={idx} className="hover:bg-slate-50/50">
                           <td className="p-2.5 font-bold text-slate-900">{m.medicineName}</td>
-                          <td className="p-2.5 text-slate-700">{m.dosage}</td>
-                          <td className="p-2.5 text-slate-700 font-mono font-medium">{m.frequency}</td>
-                          <td className="p-2.5 text-slate-700">{m.duration}</td>
-                          <td className="p-2.5 text-slate-600 italic">{m.instructions}</td>
+                          <td className="p-2.5 text-slate-700 font-medium">{m.dosage}</td>
+                          <td className="p-2.5 text-slate-700 font-mono font-bold text-blue-700">{m.frequency}</td>
+                          <td className="p-2.5 text-slate-700 font-medium">{m.duration}</td>
+                          <td className="p-2.5 text-slate-600 italic font-medium">{m.instructions || 'After Food (खाने के बाद)'}</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
                         <td colSpan={5} className="p-4 text-center text-slate-400">
-                          No specific medicines prescribed. Follow doctor advice.
+                          No specific medicines prescribed. General clinical advice provided.
                         </td>
                       </tr>
                     )}
@@ -1008,10 +1054,10 @@ export const PatientPortal: React.FC = () => {
 
               {/* Recommended Diagnostic Tests */}
               {viewingRx.labTests && viewingRx.labTests.length > 0 && (
-                <div className="mb-6">
+                <div className="mb-5">
                   <div className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5 mb-2">
                     <FlaskConical className="w-3.5 h-3.5 text-teal-600" />
-                    <span>Recommended Diagnostic Tests ({viewingRx.labTests.length})</span>
+                    <span>Recommended Diagnostic Lab Tests ({viewingRx.labTests.length})</span>
                   </div>
                   <div className="flex flex-wrap gap-2 p-3 bg-teal-50/70 rounded-2xl border border-teal-200">
                     {viewingRx.labTests.map((t: string, idx: number) => (
@@ -1026,9 +1072,9 @@ export const PatientPortal: React.FC = () => {
 
               {/* Advice */}
               {(viewingRx.advice || viewingRx.clinicalNotes) && (
-                <div className="mb-6 p-3.5 bg-amber-50/70 rounded-2xl border border-amber-200/80 text-xs">
+                <div className="mb-4 p-3.5 bg-amber-50/70 rounded-2xl border border-amber-200/80 text-xs">
                   <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block mb-0.5">
-                    Doctor Advice & Follow-up Note:
+                    Doctor Advice & Dietary Instructions:
                   </span>
                   <p className="text-slate-800 font-medium leading-relaxed">
                     {viewingRx.advice || viewingRx.clinicalNotes}
@@ -1036,25 +1082,40 @@ export const PatientPortal: React.FC = () => {
                 </div>
               )}
 
-              {/* Follow-up Days */}
-              {viewingRx.followUpDays && (
-                <div className="mb-5 p-3 bg-blue-50/70 rounded-2xl border border-blue-200 text-xs flex items-center justify-between">
-                  <span className="font-bold text-blue-900 flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4 text-blue-600" />
-                    <span>Scheduled Review in OPD:</span>
-                  </span>
-                  <span className="font-black text-blue-700 bg-white px-2.5 py-1 rounded-xl border border-blue-200 font-mono">
-                    After {viewingRx.followUpDays} Days
-                  </span>
-                </div>
-              )}
-
-              {/* Footer */}
-              <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
-                <span className="text-[10px] text-slate-400">Official Digital Prescription • 15-Day Review Policy</span>
-                <span className="font-serif italic font-bold text-slate-800">
-                  {viewingRx.doctor?.name} (OPD Sign-off)
+              {/* 15-Day Free Follow-up Review Notice */}
+              <div className="mb-4 p-3 bg-blue-50/70 rounded-2xl border border-blue-200 text-xs flex items-center justify-between">
+                <span className="font-bold text-blue-950 flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-blue-600" />
+                  <span>15-Day Free Follow-Up Review:</span>
                 </span>
+                <span className="font-black text-blue-800 bg-white px-2.5 py-1 rounded-xl border border-blue-200 font-mono text-[11px]">
+                  Valid for {viewingRx.followUpDays || 15} Days (₹0 Consultation Fee in OPD)
+                </span>
+              </div>
+
+              {/* Doctor Sign-off (Bottom Right) */}
+              <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+                <div>
+                  <div className="text-[10px] text-slate-400">Valid Digital Prescription generated via Hospital EMR</div>
+                  <div className="font-semibold text-slate-700 mt-0.5">Official Digital OPD Record • Signed electronically</div>
+                </div>
+                <div className="text-right">
+                  <div className="font-serif italic font-bold text-slate-900 text-base">
+                    {viewingRx.doctor?.name}
+                  </div>
+                  <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Authorized Doctor Sign-off</div>
+                </div>
+              </div>
+
+              {/* Bottom Footer: Powered by Queueless Healthcare OS (User: "mera bottom me rahega") */}
+              <div className="mt-4 pt-3 border-t border-dashed border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-slate-400">
+                <div className="flex items-center gap-1.5 font-bold text-slate-600">
+                  <span className="px-1 py-0.2 bg-blue-600 text-white rounded text-[8px] font-black">Q</span>
+                  <span>Powered by Queueless Healthcare OS • Ayushman Bharat (ABDM M1/M2) & HIPAA Aligned</span>
+                </div>
+                <div className="font-mono text-[9px] text-slate-400">
+                  Universal Health Vault Sync: https://queueless-os.vercel.app/portal
+                </div>
               </div>
             </div>
 

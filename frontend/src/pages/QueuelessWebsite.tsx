@@ -65,6 +65,7 @@ import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
 import { ClinicalReviewsCarousel } from '../components/ClinicalReviewsCarousel';
+import { AnimatedClinicalReels } from '../components/AnimatedClinicalReels';
 import {
   WORLDWIDE_CURRENCIES,
   PLAN_TEMPLATES,
@@ -2555,96 +2556,8 @@ export const QueuelessWebsite: React.FC = () => {
       <section id="case-studies" className="py-20 px-4 sm:px-6 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 relative z-10 transition-colors duration-200">
         <div className="max-w-6xl mx-auto space-y-16">
           
-          {/* Vertical Video Reels - SanatanStories Reel Benchmark */}
-          <div className="space-y-8">
-            <div className="text-center space-y-3 max-w-2xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-full text-xs font-black uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Live OPD Walkthrough Reels</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-                Watch Queueless Come Alive
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-normal leading-relaxed">
-                Real-world clinical workflows captured in active OPDs. Zero waiting hall crowding, instant phone QR passes, and silent 1-tap doctor calls.
-              </p>
-            </div>
-
-            {/* 4 Vertical (9:16) Video Cards Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              {CLINICAL_REELS.map((reel) => {
-                const isUnmuted = unmutedReelId === reel.id;
-                return (
-                  <div
-                    key={reel.id}
-                    className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-xl group border border-slate-200/60 dark:border-slate-800 hover:border-blue-500/50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
-                  >
-                    {/* Active Local Video */}
-                    <video
-                      ref={(el) => {
-                        videoRefs.current[reel.id] = el;
-                      }}
-                      src={reel.videoSrc}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="absolute inset-0 w-full h-full object-cover scale-[1.02] transition-transform duration-500 group-hover:scale-105"
-                    />
-
-                    {/* Top Gradient Overlay & Badge */}
-                    <div className="relative z-10 p-3 sm:p-4 bg-gradient-to-b from-black/80 via-black/35 to-transparent flex items-start justify-between">
-                      <span
-                        className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider text-white shadow-md backdrop-blur-md ${reel.badgeColor}/85 border border-white/20`}
-                      >
-                        {reel.badge}
-                      </span>
-                    </div>
-
-                    {/* Bottom Gradient Overlay, Subtitle & Audio Toggle */}
-                    <div className="relative z-10 p-3 sm:p-4 bg-gradient-to-t from-black/90 via-black/60 to-transparent flex flex-col gap-2">
-                      <div className="pr-10">
-                        <p className="text-white text-[11px] sm:text-xs font-semibold leading-snug drop-shadow bg-black/40 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-white/10">
-                          "{reel.subtitle}"
-                        </p>
-                        <div className="mt-2 text-[10px] text-white/90 font-bold drop-shadow flex items-center gap-1.5 truncate">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 animate-pulse"></span>
-                          <span className="truncate">{reel.doctor}</span>
-                        </div>
-                        <span className="text-[9px] text-white/70 block truncate font-medium">
-                          {reel.hospital}
-                        </span>
-                      </div>
-
-                      {/* Interactive Mute / Unmute Circular Toggle (SanatanStories style) */}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleMute(reel.id);
-                        }}
-                        className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 w-8 h-8 rounded-full bg-black/70 hover:bg-black/90 text-white backdrop-blur-md flex items-center justify-center transition-all border border-white/25 shadow-lg active:scale-90"
-                        title={isUnmuted ? 'Mute Audio' : 'Play Sound'}
-                      >
-                        {isUnmuted ? (
-                          <Volume2 className="w-4 h-4 text-emerald-400" />
-                        ) : (
-                          <VolumeX className="w-4 h-4 text-white/80" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* SanatanStories Style Bottom Caption Underneath Grid */}
-            <div className="text-center pt-2 max-w-xl mx-auto">
-              <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed">
-                Every counter has an instant vector QR pass. Patients scan it, receive live queue updates, and doctors call with one tap.
-              </p>
-            </div>
-          </div>
+          {/* Dynamic Living Animated OPD Clinical Workflow Reels */}
+          <AnimatedClinicalReels />
 
           {/* Interactive Clinical Reviews Carousel with Category Filters & Working Animations */}
           <ClinicalReviewsCarousel />

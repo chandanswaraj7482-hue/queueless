@@ -55,6 +55,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
     { label: 'ROI Calculator', href: '/roi-calculator' },
     { label: 'Pricing', href: '/pricing' },
     { label: 'About', href: '/about' },
+    { label: 'Patient Vault', href: '/portal' },
   ];
 
   return (
@@ -221,6 +222,16 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                 <span>Book a Demo</span>
               </Link>
             )}
+
+            {/* Patient Portal Quick Link */}
+            <Link
+              to="/portal"
+              className="hidden md:inline-flex px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/80 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/70 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              title="Universal Patient Health Vault — View Prescriptions & Visits"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Patient Vault</span>
+            </Link>
 
             {/* Log In Button (Shown on desktop & tablet; available in mobile drawer on small screens) */}
             <Link

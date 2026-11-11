@@ -1772,21 +1772,28 @@ export const PatientStatus: React.FC = () => {
         </div>
       )}
 
-      {/* Quick Navigation: Fresh Registration or Refresh */}
+      {/* Quick Navigation: Fresh Registration, Health Vault, or Refresh */}
       <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-2">
+        <Link
+          to="/portal"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 text-xs font-bold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-4 py-2.5 rounded-2xl transition-all shadow-2xs cursor-pointer"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+          <span>My Health Vault (Past Visits & Rx) ➔</span>
+        </Link>
         <Link
           to="/"
           className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 text-xs font-bold text-sky-800 bg-sky-50 hover:bg-sky-100 border border-sky-200/80 px-4 py-2.5 rounded-2xl transition-all shadow-2xs"
         >
           <UserPlus className="w-3.5 h-3.5 text-sky-600" />
-          <span>Need Another Token? Fresh Registration ➔</span>
+          <span>Fresh Token</span>
         </Link>
         <button
           onClick={fetchStatus}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-2xl transition-all shadow-2xs"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-2xl transition-all shadow-2xs cursor-pointer"
         >
           <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
-          <span>Refresh Live Queue</span>
+          <span>Refresh</span>
         </button>
       </div>
 

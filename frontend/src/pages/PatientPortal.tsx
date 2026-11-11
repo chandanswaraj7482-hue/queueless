@@ -89,13 +89,14 @@ export const PatientPortal: React.FC = () => {
   const navigate = useNavigate();
   const [authMode, setAuthMode] = useState<'LOGIN' | 'SIGNUP' | 'TRACK'>('LOGIN');
   const [mobile, setMobile] = useState('');
-  const [pin, setPin] = useState('1234');
+  const [pin, setPin] = useState('');
   const [showPin, setShowPin] = useState(false);
   const [tokenId, setTokenId] = useState('');
   const [patientName, setPatientName] = useState('');
   const [signupName, setSignupName] = useState('');
   const [signupMobile, setSignupMobile] = useState('');
   const [signupPin, setSignupPin] = useState('');
+  const [signupConfirmPin, setSignupConfirmPin] = useState('');
   const [signupSuccessMsg, setSignupSuccessMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -220,6 +221,10 @@ export const PatientPortal: React.FC = () => {
     }
     if (!signupPin || signupPin.trim().length < 4) {
       setError('Please set a 4-digit Security PIN.');
+      return;
+    }
+    if (signupPin.trim() !== signupConfirmPin.trim()) {
+      setError('PINs do not match. Please re-enter matching 4-digit PINs.');
       return;
     }
 
@@ -386,29 +391,19 @@ export const PatientPortal: React.FC = () => {
                     />
                   </div>
                   <p className="text-[11px] text-slate-400 mt-1">
-                    Enter the mobile number used during hospital check-in.
+                    Enter the mobile number registered during your hospital check-in.
                   </p>
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="block text-xs font-bold text-slate-700">4-Digit Security PIN</label>
-                    <button
-                      type="button"
-                      onClick={() => setPin('1234')}
-                      className="text-[10px] font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md hover:bg-sky-100 flex items-center gap-1 border border-sky-100"
-                    >
-                      <Zap className="w-3 h-3 text-amber-500 fill-amber-500" />
-                      <span>Autofill PIN (1234)</span>
-                    </button>
-                  </div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">4-Digit Security PIN</label>
                   <div className="relative">
                     <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
                       type={showPin ? 'text' : 'password'}
                       required
                       maxLength={4}
-                      placeholder="Enter 4-digit PIN (default 1234)"
+                      placeholder="Enter your 4-digit PIN"
                       value={pin}
                       onChange={(e) => setPin(e.target.value)}
                       className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold tracking-widest focus:ring-2 focus:ring-sky-500 focus:outline-none"
@@ -416,7 +411,7 @@ export const PatientPortal: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setShowPin(!showPin)}
-                      className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
+                      className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 cursor-pointer"
                     >
                       {showPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -426,7 +421,7 @@ export const PatientPortal: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-black py-3 px-4 rounded-xl text-xs transition-all shadow-md shadow-sky-600/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-black py-3.5 px-4 rounded-xl text-xs transition-all shadow-md shadow-sky-600/20 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer active:scale-[0.99]"
                 >
                   {loading ? (
                     <span>Unlocking Medical Vault...</span>
@@ -438,6 +433,22 @@ export const PatientPortal: React.FC = () => {
                     </>
                   )}
                 </button>
+
+                {/* Quick Switch to Create PIN */}
+                <div className="pt-2 text-center text-xs">
+                  <span className="text-slate-400">First time or don't have a PIN? </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAuthMode('SIGNUP');
+                      setError(null);
+                      setSignupSuccessMsg(null);
+                    }}
+                    className="font-bold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer"
+                  >
+                    Create Your PIN Here →
+                  </button>
+                </div>
               </form>
             )}
 
@@ -474,37 +485,69 @@ export const PatientPortal: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Set 4-Digit Security PIN *</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Choose 4-Digit Security PIN *</label>
                   <div className="relative">
                     <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
                       type="password"
                       required
-                      maxLength={6}
-                      placeholder="e.g. 4589"
+                      maxLength={4}
+                      placeholder="Enter 4 digits (e.g. 4589)"
                       value={signupPin}
                       onChange={(e) => setSignupPin(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-black tracking-widest text-indigo-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold tracking-widest text-indigo-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                     />
                   </div>
-                  <p className="text-[10px] text-slate-400 mt-1">Remember this PIN to download all your hospital reports in the future.</p>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Confirm 4-Digit Security PIN *</label>
+                  <div className="relative">
+                    <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                    <input
+                      type="password"
+                      required
+                      maxLength={4}
+                      placeholder="Re-enter the same 4 digits"
+                      value={signupConfirmPin}
+                      onChange={(e) => setSignupConfirmPin(e.target.value)}
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold tracking-widest text-indigo-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    />
+                  </div>
+                  <p className="text-[10px] text-slate-400 mt-1">Remember this PIN. It protects your lifetime medical records across all hospitals.</p>
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-700 hover:to-sky-700 text-white font-black py-3 px-4 rounded-xl text-xs transition-all shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                  className="w-full bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-700 hover:to-sky-700 text-white font-black py-3.5 px-4 rounded-xl text-xs transition-all shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer active:scale-[0.99]"
                 >
                   {loading ? (
                     <span>Creating Health Vault...</span>
                   ) : (
                     <>
                       <Sparkles className="w-4 h-4" />
-                      <span>Create Universal Health Vault</span>
+                      <span>Set PIN & Create Health Vault</span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}
                 </button>
+
+                {/* Quick Switch to Login */}
+                <div className="pt-2 text-center text-xs">
+                  <span className="text-slate-400">Already set your PIN before? </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAuthMode('LOGIN');
+                      setError(null);
+                      setSignupSuccessMsg(null);
+                    }}
+                    className="font-bold text-sky-600 hover:text-sky-800 hover:underline cursor-pointer"
+                  >
+                    Login with PIN Here →
+                  </button>
+                </div>
               </form>
             )}
 

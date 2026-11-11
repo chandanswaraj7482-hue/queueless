@@ -165,12 +165,41 @@ patientRouter.post('/login', async (req, res) => {
       });
     }
 
-    // Default Quick Access Demo PIN is 1234 or 0000
-    if (pin && String(pin).trim() !== '1234' && String(pin).trim() !== '0000') {
-      return res.status(401).json({
-        success: false,
-        error: 'Incorrect 4-digit Security PIN. (Quick demo access PIN is 1234)',
-      });
+    // Find if patient has a user-created PIN stored
+    let storedPin: string | null = null;
+    for (const p of matchingPatients) {
+      if (p.emergencyContact && p.emergencyContact.startsWith('PIN:')) {
+        storedPin = p.emergencyContact.replace('PIN:', '').trim();
+        break;
+      }
+    }
+    if (!storedPin) {
+      for (const qe of allQueueEntries) {
+        if (qe.patient?.emergencyContact && qe.patient.emergencyContact.startsWith('PIN:')) {
+          storedPin = qe.patient.emergencyContact.replace('PIN:', '').trim();
+          break;
+        }
+      }
+    }
+
+    const enteredPin = String(pin || '').trim();
+
+    if (storedPin) {
+      // User has created a custom PIN! Verify strictly against user's custom PIN
+      if (enteredPin !== storedPin) {
+        return res.status(401).json({
+          success: false,
+          error: 'Incorrect 4-digit Security PIN. Please enter the PIN you created.',
+        });
+      }
+    } else {
+      // No custom PIN set yet: allow initial default 1234 or 0000, or invite user to set their PIN
+      if (enteredPin !== '1234' && enteredPin !== '0000') {
+        return res.status(401).json({
+          success: false,
+          error: 'Incorrect Security PIN. If this is your first time, click "Create PIN" above to set your custom 4-digit password.',
+        });
+      }
     }
 
     const primaryPatient = matchingPatients[0] || allQueueEntries[0]?.patient || {

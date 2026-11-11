@@ -184,13 +184,9 @@ export const FounderDashboard: React.FC = () => {
   // Interactive ROI Simulator State
   const [sliderPatients, setSliderPatients] = useState<number>(120);
 
-  // Authentication: Founder Quick Access & Firewall Protection
+  // Authentication: Founder Quick Access & Firewall Protection (Strict Password Required - No URL bypass)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    const isAuthed = localStorage.getItem('queueless_founder_auth') === 'true' || window.location.search.includes('auth=true');
-    if (isAuthed) {
-      localStorage.setItem('queueless_founder_auth', 'true');
-    }
-    return isAuthed;
+    return localStorage.getItem('queueless_founder_auth') === 'true';
   });
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
@@ -408,14 +404,10 @@ export const FounderDashboard: React.FC = () => {
     const cleanPwd = passwordInput.trim();
     const cleanLower = cleanPwd.toLowerCase();
 
-    // High-Entropy Hard Enterprise Master Passkey or Quick Passkey
+    // High-Entropy Hard Enterprise Master Passkey (Strict - No weak passwords allowed)
     const isValid =
       cleanPwd === 'Queueless#Founder2026!' ||
-      cleanPwd === 'Founder#AlphaSecure2026!' ||
-      cleanLower === 'founder123' ||
-      cleanLower === 'admin123' ||
-      cleanLower === '0000' ||
-      cleanLower === 'admin';
+      cleanPwd === 'Founder#AlphaSecure2026!';
 
     if (isValid) {
       localStorage.setItem('queueless_founder_auth', 'true');

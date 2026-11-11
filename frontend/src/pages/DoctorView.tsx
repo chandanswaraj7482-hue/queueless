@@ -258,13 +258,11 @@ export const DoctorView: React.FC = () => {
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Doctor Authentication & PIN Gate
+  // Doctor Authentication & PIN Gate (Strict Session or PIN verification - No URL bypass)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return (
       !!getAuthSession('DOCTOR') ||
-      !!getAuthSession('ADMIN') ||
-      window.location.search.includes('auth=true') ||
-      window.location.search.includes('pin=1234')
+      !!getAuthSession('ADMIN')
     );
   });
   const [loginDoctorId, setLoginDoctorId] = useState<string>('');

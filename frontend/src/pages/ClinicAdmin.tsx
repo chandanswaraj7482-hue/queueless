@@ -226,9 +226,28 @@ export const ClinicAdmin: React.FC = () => {
     }
   };
 
+  const generateHardPassword = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%&*';
+    let res = 'Qless#';
+    for (let i = 0; i < 6; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return res;
+  };
+
   const handleSaveSecuritySettings = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!clinic?.id) return;
+
+    if (secAdminPassword && secAdminPassword.trim().length < 8) {
+      alert('⚠️ Security Policy: Hospital Admin Password must be at least 8 characters long.');
+      return;
+    }
+    if (secReceptionPassword && secReceptionPassword.trim().length < 6) {
+      alert('⚠️ Security Policy: Reception Desk Password must be at least 6 characters long.');
+      return;
+    }
+
     setSavingSecurity(true);
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/clinics/${clinic.id}/security`, {
@@ -2467,12 +2486,22 @@ export const ClinicAdmin: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="relative max-w-md mt-3">
+                <div className="flex items-center justify-between mt-3 max-w-md">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Admin Master Key</span>
+                  <button
+                    type="button"
+                    onClick={() => setSecAdminPassword(generateHardPassword())}
+                    className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2 py-0.5 rounded cursor-pointer transition-colors"
+                  >
+                    🎲 Generate Hard Password
+                  </button>
+                </div>
+                <div className="relative max-w-md mt-1">
                   <input
                     type={showSecPasswords['ADMIN'] ? 'text' : 'password'}
                     value={secAdminPassword}
                     onChange={(e) => setSecAdminPassword(e.target.value)}
-                    placeholder="Enter Admin Master Password"
+                    placeholder="Enter Admin Master Password (min 8 chars)"
                     className="w-full px-4 py-2.5 text-xs font-mono font-bold rounded-xl border border-indigo-200 bg-white pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     required
                   />
@@ -2498,12 +2527,22 @@ export const ClinicAdmin: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="relative max-w-md mt-3">
+                <div className="flex items-center justify-between mt-3 max-w-md">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Reception Counter Key</span>
+                  <button
+                    type="button"
+                    onClick={() => setSecReceptionPassword(generateHardPassword())}
+                    className="text-[10px] font-bold text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded cursor-pointer transition-colors"
+                  >
+                    🎲 Generate Hard Password
+                  </button>
+                </div>
+                <div className="relative max-w-md mt-1">
                   <input
                     type={showSecPasswords['RECEPTION'] ? 'text' : 'password'}
                     value={secReceptionPassword}
                     onChange={(e) => setSecReceptionPassword(e.target.value)}
-                    placeholder="Enter Reception Password"
+                    placeholder="Enter Reception Password (min 6 chars)"
                     className="w-full px-4 py-2.5 text-xs font-mono font-bold rounded-xl border border-emerald-200 bg-white pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     required
                   />

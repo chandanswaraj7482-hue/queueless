@@ -219,8 +219,14 @@ export const PatientPortal: React.FC = () => {
       setError('Please provide a valid 10-digit mobile number.');
       return;
     }
-    if (!signupPin || signupPin.trim().length < 4) {
-      setError('Please set a 4-digit Security PIN.');
+    if (!signupPin || signupPin.trim().length !== 4 || !/^\d{4}$/.test(signupPin.trim())) {
+      setError('Please choose exactly 4 numeric digits for your PIN.');
+      return;
+    }
+    const cleanPin = signupPin.trim();
+    const weakPins = ['1234', '0000', '1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888', '9999', '1212', '4321', '2580', '0123'];
+    if (weakPins.includes(cleanPin)) {
+      setError(`⚠️ Security Rule: "${cleanPin}" is too easy to guess. Choose a safer 4-digit PIN (e.g. 7482, 9153) to protect your health reports.`);
       return;
     }
     if (signupPin.trim() !== signupConfirmPin.trim()) {
@@ -485,16 +491,29 @@ export const PatientPortal: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Choose 4-Digit Security PIN *</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-bold text-slate-700">Choose 4-Digit Security PIN *</label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const randomPin = String(Math.floor(1000 + Math.random() * 9000));
+                        setSignupPin(randomPin);
+                        setSignupConfirmPin(randomPin);
+                      }}
+                      className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2 py-0.5 rounded-md cursor-pointer transition-colors"
+                    >
+                      🎲 Suggest Safe PIN
+                    </button>
+                  </div>
                   <div className="relative">
                     <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
                       type="password"
                       required
                       maxLength={4}
-                      placeholder="Enter 4 digits (e.g. 4589)"
+                      placeholder="Enter 4 digits (e.g. 7482)"
                       value={signupPin}
-                      onChange={(e) => setSignupPin(e.target.value)}
+                      onChange={(e) => setSignupPin(e.target.value.replace(/\D/g, ''))}
                       className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold tracking-widest text-indigo-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                     />
                   </div>
@@ -510,11 +529,14 @@ export const PatientPortal: React.FC = () => {
                       maxLength={4}
                       placeholder="Re-enter the same 4 digits"
                       value={signupConfirmPin}
-                      onChange={(e) => setSignupConfirmPin(e.target.value)}
+                      onChange={(e) => setSignupConfirmPin(e.target.value.replace(/\D/g, ''))}
                       className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold tracking-widest text-indigo-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                     />
                   </div>
-                  <p className="text-[10px] text-slate-400 mt-1">Remember this PIN. It protects your lifetime medical records across all hospitals.</p>
+                  <div className="mt-1.5 p-2 bg-slate-50 border border-slate-200 rounded-lg text-[10px] text-slate-500 space-y-0.5">
+                    <p className="font-semibold text-slate-700">🔒 Vault Security Rule:</p>
+                    <p>Common sequential PINs (like 1234, 0000, 1111) are blocked to protect your confidential health reports.</p>
+                  </div>
                 </div>
 
                 <button

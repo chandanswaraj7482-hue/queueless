@@ -314,6 +314,19 @@ patientRouter.post('/set-pin', async (req, res) => {
 
     const cleanMobile = String(mobile).replace(/\D/g, '');
     const cleanPin = String(pin).trim();
+
+    if (!/^\d{4}$/.test(cleanPin)) {
+      return res.status(400).json({ success: false, error: 'Security PIN must be exactly 4 numeric digits.' });
+    }
+
+    const weakPins = ['1234', '0000', '1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888', '9999', '1212', '4321', '2580', '0123'];
+    if (weakPins.includes(cleanPin)) {
+      return res.status(400).json({
+        success: false,
+        error: `Security Rule: "${cleanPin}" is too simple and easily guessed. Please select a secure 4-digit PIN (e.g. 7482, 9153).`,
+      });
+    }
+
     const searchSuffix = cleanMobile.length >= 10 ? cleanMobile.slice(-10) : cleanMobile;
 
     const patients = await prisma.patient.findMany({

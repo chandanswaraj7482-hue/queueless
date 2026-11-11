@@ -449,7 +449,32 @@ export const QueuelessWebsite: React.FC = () => {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
-  const [adminPassword, setAdminPassword] = useState('admin123');
+  const [adminPassword, setAdminPassword] = useState('Qless#2026!Sec');
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
+
+  const calculatePasswordStrength = (pwd: string) => {
+    if (!pwd) return { score: 0, label: 'Enter password', color: 'bg-slate-200 text-slate-500' };
+    let score = 0;
+    if (pwd.length >= 8) score++;
+    if (pwd.length >= 12) score++;
+    if (/[A-Z]/.test(pwd)) score++;
+    if (/[0-9]/.test(pwd)) score++;
+    if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+    if (score <= 2) return { score: 1, label: 'Weak (min 8 chars)', color: 'bg-rose-500 text-rose-700' };
+    if (score <= 3) return { score: 2, label: 'Good (add special chars)', color: 'bg-amber-500 text-amber-700' };
+    if (score === 4) return { score: 3, label: 'Strong Password', color: 'bg-sky-500 text-sky-700' };
+    return { score: 4, label: 'Ultra-Hard (Military Vault 🔒)', color: 'bg-emerald-500 text-emerald-700' };
+  };
+
+  const generateStrongPassword = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%&*';
+    let res = 'Qless#';
+    for (let i = 0; i < 6; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return res;
+  };
   const [doctorName, setDoctorName] = useState('');
   const [doctorSpecialty, setDoctorSpecialty] = useState('');
   const [doctorRoom, setDoctorRoom] = useState('');
@@ -608,6 +633,10 @@ export const QueuelessWebsite: React.FC = () => {
     e.preventDefault();
     if (!hospitalName.trim() || !slug.trim()) {
       setCheckoutError('Please enter Hospital Name and URL Slug.');
+      return;
+    }
+    if (!adminPassword || adminPassword.trim().length < 8) {
+      setCheckoutError('⚠️ Security Policy: Admin Password must be at least 8 characters long with numbers and letters to protect patient clinical records.');
       return;
     }
     setCheckoutError(null);
@@ -3656,14 +3685,60 @@ export const QueuelessWebsite: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Set Hospital Admin Password</label>
-                      <input
-                        type="password"
-                        placeholder="••••••••"
-                        value={adminPassword}
-                        onChange={(e) => setAdminPassword(e.target.value)}
-                        className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white dark:focus:bg-slate-900"
-                      />
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                          Set Hospital Admin Master Password *
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setAdminPassword(generateStrongPassword())}
+                          className="text-[10px] font-bold text-amber-600 dark:text-amber-400 hover:text-amber-700 bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 px-2 py-0.5 rounded-md cursor-pointer transition-colors"
+                        >
+                          🎲 Generate Hard Password
+                        </button>
+                      </div>
+                      <div className="relative">
+                        <input
+                          type={showAdminPassword ? 'text' : 'password'}
+                          placeholder="Min 8 characters (letters, numbers, symbols)"
+                          value={adminPassword}
+                          onChange={(e) => setAdminPassword(e.target.value)}
+                          className="w-full pl-3 pr-10 py-2 text-xs font-mono font-bold rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white dark:focus:bg-slate-900"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowAdminPassword(!showAdminPassword)}
+                          className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-[10px] font-bold"
+                        >
+                          {showAdminPassword ? 'Hide' : 'Show'}
+                        </button>
+                      </div>
+
+                      {/* Password Strength Indicator */}
+                      {adminPassword && (
+                        <div className="mt-1.5 space-y-1">
+                          <div className="flex items-center gap-1.5">
+                            {[1, 2, 3, 4].map((level) => {
+                              const strength = calculatePasswordStrength(adminPassword);
+                              const active = strength.score >= level;
+                              return (
+                                <div
+                                  key={level}
+                                  className={`h-1.5 flex-1 rounded-full transition-all ${
+                                    active ? strength.color.split(' ')[0] : 'bg-slate-200 dark:bg-slate-700'
+                                  }`}
+                                />
+                              );
+                            })}
+                          </div>
+                          <div className="flex items-center justify-between text-[10px]">
+                            <span className="font-semibold text-slate-500 dark:text-slate-400">
+                              Strength: <strong className={calculatePasswordStrength(adminPassword).color.split(' ')[1]}>{calculatePasswordStrength(adminPassword).label}</strong>
+                            </span>
+                            <span className="text-slate-400 font-mono">{adminPassword.length} chars</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 

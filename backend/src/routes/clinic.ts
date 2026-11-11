@@ -267,17 +267,19 @@ clinicRouter.post('/login', async (req, res) => {
     }
 
     if (role === 'RECEPTION') {
-      if (password !== clinic.receptionPassword && password !== clinic.adminPassword && password !== 'reception123') {
+      const match = password === clinic.receptionPassword || password === clinic.adminPassword;
+      if (!match) {
         return res.status(401).json({ success: false, error: 'Invalid reception desk password.' });
       }
     } else if (role === 'DOCTOR') {
-      const match = clinic.doctors.find((d) => d.pin === password || d.password === password || password === '1234');
+      const match = clinic.doctors.find((d) => d.pin === password || d.password === password);
       if (!match && password !== clinic.adminPassword) {
         return res.status(401).json({ success: false, error: 'Invalid doctor cabin PIN or password.' });
       }
     } else {
       // ADMIN or DEFAULT
-      if (password !== clinic.adminPassword && password !== 'admin123') {
+      const match = password === clinic.adminPassword;
+      if (!match) {
         return res.status(401).json({ success: false, error: 'Invalid hospital director admin password.' });
       }
     }
@@ -672,7 +674,7 @@ clinicRouter.post('/auth/verify', async (req, res) => {
     const cleanInput = (password || '').trim();
 
     if (role === 'ADMIN') {
-      const valid = cleanInput === (defaultClinic.adminPassword || 'admin123');
+      const valid = cleanInput === defaultClinic.adminPassword;
       if (!valid) {
         return res.status(401).json({ success: false, error: 'Incorrect Hospital Admin Password.' });
       }
@@ -687,8 +689,8 @@ clinicRouter.post('/auth/verify', async (req, res) => {
 
     if (role === 'RECEPTION') {
       const valid =
-        cleanInput === (defaultClinic.receptionPassword || 'reception123') ||
-        cleanInput === (defaultClinic.adminPassword || 'admin123');
+        cleanInput === defaultClinic.receptionPassword ||
+        cleanInput === defaultClinic.adminPassword;
       if (!valid) {
         return res.status(401).json({ success: false, error: 'Incorrect Reception Desk Password.' });
       }
@@ -710,9 +712,9 @@ clinicRouter.post('/auth/verify', async (req, res) => {
         return res.status(404).json({ success: false, error: 'Doctor not found.' });
       }
       const valid =
-        cleanInput === (doc.password || 'doctor123') ||
-        cleanInput === (doc.pin || '1234') ||
-        cleanInput === (defaultClinic.adminPassword || 'admin123');
+        cleanInput === doc.password ||
+        cleanInput === doc.pin ||
+        cleanInput === defaultClinic.adminPassword;
       if (!valid) {
         return res.status(401).json({ success: false, error: 'Incorrect Doctor PIN or Password.' });
       }
@@ -786,9 +788,21 @@ clinicRouter.put('/:clinicId/security', async (req, res) => {
 
     const updateData: any = {};
     if (adminPassword && adminPassword.trim()) {
+      if (adminPassword.trim().length < 8) {
+        return res.status(400).json({
+          success: false,
+          error: 'Hospital Master Admin Password must be at least 8 characters long for clinical safety.',
+        });
+      }
       updateData.adminPassword = adminPassword.trim();
     }
     if (receptionPassword && receptionPassword.trim()) {
+      if (receptionPassword.trim().length < 6) {
+        return res.status(400).json({
+          success: false,
+          error: 'Reception Desk Password must be at least 6 characters long.',
+        });
+      }
       updateData.receptionPassword = receptionPassword.trim();
     }
 

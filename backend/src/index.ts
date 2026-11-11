@@ -47,7 +47,9 @@ app.use('/api', generalApiLimiter);
 
 // Layer 5b: Anti-Brute Force Protection on Authentication Endpoints (10 attempts / 15 min lockout)
 app.use('/api/v1/clinics/login', authLimiter);
+app.use('/api/v1/clinics/auth/verify', authLimiter);
 app.use('/api/v1/patient/login', authLimiter);
+app.use('/api/v1/patient/set-pin', authLimiter);
 app.use('/api/v1/payments/create-order', paymentLimiter);
 
 // Routes

@@ -84,6 +84,15 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Direct Patient Vault Top-Ribbon Shortcut */}
+            <Link
+              to="/portal"
+              className="text-emerald-300 hover:text-white font-extrabold text-[10px] sm:text-[11px] inline-flex items-center gap-1 bg-emerald-500/20 hover:bg-emerald-500/30 px-2.5 py-0.5 rounded-full border border-emerald-400/40 shadow-2xs transition-all shrink-0"
+              title="Open Universal Patient Health Vault"
+            >
+              <span>🏥 Patient Vault ➔</span>
+            </Link>
+
             {onOpenAuditModal && (
               <button
                 type="button"
@@ -223,13 +232,13 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               </Link>
             )}
 
-            {/* Patient Portal Quick Link */}
+            {/* Patient Portal Highlight Action (Prominent & Clickable) */}
             <Link
               to="/portal"
-              className="hidden md:inline-flex px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/80 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/70 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-full shadow-md shadow-emerald-600/25 hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               title="Universal Patient Health Vault — View Prescriptions & Visits"
             >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <span>🏥</span>
               <span>Patient Vault</span>
             </Link>
 
@@ -257,6 +266,15 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
         {/* Mobile Navigation Dropdown */}
         {mobileMenuOpen && (
           <div className="md:hidden pt-4 pb-3 border-t border-slate-200/60 dark:border-slate-800/60 mt-3 space-y-2.5 bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl rounded-2xl p-3 border shadow-xl animate-in fade-in slide-in-from-top-2 duration-150">
+            {/* Prominent Patient Vault Mobile Banner */}
+            <Link
+              to="/portal"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full py-2.5 px-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-2"
+            >
+              <span>🏥 Open Patient Health Vault (Rx & Records) ➔</span>
+            </Link>
+
             {navLinks.map((item) => (
               <Link
                 key={item.href}

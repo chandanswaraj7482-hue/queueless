@@ -22,8 +22,14 @@ paymentRouter.post('/create-order', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Queue entry not found' });
     }
 
-    const cfAppId = process.env.CASHFREE_APP_ID || '133552174c102e641875b3c58081255331';
-    const cfSecret = process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_2f2dfec6d9bee0b9de4e2e5c5748224a_3e69c5ff';
+    let clinicSettings: any = {};
+    try {
+      clinicSettings = entry.clinic?.settings ? JSON.parse(entry.clinic.settings) : {};
+    } catch (e) {}
+
+    // Priority: Hospital's own configured Cashfree App ID / Secret, fallback to platform gateway
+    const cfAppId = clinicSettings.cashfreeAppId || process.env.CASHFREE_APP_ID || '133552174c102e641875b3c58081255331';
+    const cfSecret = clinicSettings.cashfreeSecretKey || process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_2f2dfec6d9bee0b9de4e2e5c5748224a_3e69c5ff';
     const cfEnv = process.env.CASHFREE_ENVIRONMENT || 'production';
     const baseUrl = cfEnv === 'production' ? 'https://api.cashfree.com/pg/orders' : 'https://sandbox.cashfree.com/pg/orders';
 

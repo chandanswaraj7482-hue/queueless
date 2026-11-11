@@ -27,6 +27,8 @@ import {
   AlertCircle,
   FlaskConical,
   RefreshCw,
+  MessageSquare,
+  Share2,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
@@ -1134,6 +1136,63 @@ export const HospitalOnboarding: React.FC = () => {
                   <span>Official Receipt ID: <strong>{provisionedData.invoiceId}</strong></span>
                   <span>•</span>
                   <span>Slug: <strong>{provisionedData.clinic.slug}</strong></span>
+                </div>
+              </div>
+
+              {/* Automated Email & Activation Package Banner */}
+              <div className="p-4 sm:p-5 bg-gradient-to-r from-emerald-50 via-teal-50 to-sky-50 dark:from-emerald-950/40 dark:via-teal-950/40 dark:to-sky-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="font-black text-slate-900 dark:text-white text-sm flex items-center gap-2">
+                      <span>Activation Package Dispatched to Email</span>
+                      <span className="text-[10px] bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full">
+                        Instant Delivery
+                      </span>
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-300 mt-0.5">
+                      All 5 operational portal links, official GST receipt, and login passkeys have been dispatched directly to <strong className="text-slate-900 dark:text-white font-mono">{adminEmail || 'your admin email'}</strong>.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  <a
+                    href={`https://wa.me/?text=${encodeURIComponent(
+                      `🏥 *${provisionedData.clinic.name} - Queueless Zero-Wait OPD Setup*\n\n` +
+                      `1. TV Waiting Lounge Display:\nhttps://queueless-os.vercel.app/display/${provisionedData.clinic.slug}\n\n` +
+                      `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/doctor/${provisionedData.clinic.slug}\n\n` +
+                      `3. Reception Desk:\nhttps://queueless-os.vercel.app/reception/${provisionedData.clinic.slug}\n\n` +
+                      `4. Patient QR Check-in:\nhttps://queueless-os.vercel.app/check-in/${provisionedData.clinic.slug}\n\n` +
+                      `5. Director Admin:\nhttps://queueless-os.vercel.app/admin/${provisionedData.clinic.slug}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>Send to WhatsApp</span>
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const text =
+                        `🏥 ${provisionedData.clinic.name} - Queueless Zero-Wait OPD Setup\n\n` +
+                        `1. TV Waiting Lounge Display:\nhttps://queueless-os.vercel.app/display/${provisionedData.clinic.slug}\n\n` +
+                        `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/doctor/${provisionedData.clinic.slug}\n\n` +
+                        `3. Reception Desk:\nhttps://queueless-os.vercel.app/reception/${provisionedData.clinic.slug}\n\n` +
+                        `4. Patient QR Check-in:\nhttps://queueless-os.vercel.app/check-in/${provisionedData.clinic.slug}\n\n` +
+                        `5. Director Admin:\nhttps://queueless-os.vercel.app/admin/${provisionedData.clinic.slug}`;
+                      navigator.clipboard.writeText(text);
+                      copyToClipboard(text, 'all-bundle');
+                    }}
+                    className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>{copiedLink === 'all-bundle' ? 'Copied Bundle!' : 'Copy All Links'}</span>
+                  </button>
                 </div>
               </div>
 

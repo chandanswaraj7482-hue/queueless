@@ -230,19 +230,23 @@ export const AnimatedClinicalReels: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
-            <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80 rounded-full text-xs font-bold shadow-2xs">
+            <span className="px-2.5 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-full text-xs font-bold shadow-2xs flex items-center gap-1">
+              <VolumeX className="w-3.5 h-3.5 text-slate-500" />
+              <span>Sound Muted (सुरक्षित शांत मोड)</span>
+            </span>
+            <span className="px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-xs font-bold shadow-2xs">
               ✓ ABDM M1/M2 Certified Flow
             </span>
           </div>
         </div>
 
-        {/* 16:9 Cinema Frame Embed */}
+        {/* 16:9 Cinema Frame Embed (User: "bro sound off hi rakhna user expericne kharb ho jata ha suru me phple se sound band hota mute rheag") */}
         <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-slate-200/60 dark:border-slate-800">
           <iframe
-            src={`https://www.youtube-nocookie.com/embed/${selectedVideo.id}?autoplay=1&rel=0&modestbranding=1`}
+            src={`https://www.youtube-nocookie.com/embed/${selectedVideo.id}?autoplay=0&mute=1&rel=0&modestbranding=1`}
             title={selectedVideo.title}
             className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
         </div>

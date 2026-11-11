@@ -581,22 +581,9 @@ export const FounderDashboard: React.FC = () => {
               <div className="flex items-center justify-between text-xs font-bold text-slate-300 mb-1">
                 <span>Enter Owner Passkey</span>
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setPasswordInput('Queueless#Founder2026!')}
-                    className="text-[10px] text-amber-300 hover:text-amber-200 font-extrabold hover:underline"
-                    title="Enterprise High-Entropy Master Key"
-                  >
-                    🔐 Master Key
-                  </button>
-                  <span className="text-slate-600">•</span>
-                  <button
-                    type="button"
-                    onClick={() => setPasswordInput('admin')}
-                    className="text-[10px] text-slate-400 hover:text-slate-200 font-semibold hover:underline"
-                  >
-                    Quick "admin"
-                  </button>
+                  <span className="text-[10px] text-amber-300 font-extrabold flex items-center gap-1">
+                    🔐 Master Key Required
+                  </span>
                 </div>
               </div>
               <div className="relative">
@@ -605,7 +592,7 @@ export const FounderDashboard: React.FC = () => {
                   type="password"
                   required
                   disabled={lockoutSeconds > 0}
-                  placeholder="e.g. Queueless#Founder2026! or admin"
+                  placeholder="Enter Master Passkey"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
                   className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700 text-xs font-bold text-white focus:ring-2 focus:ring-amber-400 focus:outline-none disabled:opacity-50"

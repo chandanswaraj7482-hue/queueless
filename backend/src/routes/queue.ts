@@ -24,6 +24,7 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
       bloodGroup,
       address,
       emergencyContact,
+      vaultPin,
       doctorId,
       serviceId,
       visitReason,
@@ -116,7 +117,7 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
           gender: gender || null,
           bloodGroup: bloodGroup || null,
           address: address || null,
-          emergencyContact: emergencyContact || null,
+          emergencyContact: vaultPin ? `PIN:${String(vaultPin).trim()}` : (emergencyContact || null),
         },
       });
     } else {
@@ -130,7 +131,7 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
           gender: gender || patient.gender,
           bloodGroup: bloodGroup || patient.bloodGroup,
           address: address || patient.address,
-          emergencyContact: emergencyContact || patient.emergencyContact,
+          emergencyContact: vaultPin ? `PIN:${String(vaultPin).trim()}` : (emergencyContact || patient.emergencyContact),
         },
       });
     }

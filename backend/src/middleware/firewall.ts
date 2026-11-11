@@ -169,3 +169,4 @@ export const corsPolicy = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Clinic-Tenant', 'X-Founder-Key'],
 };
+

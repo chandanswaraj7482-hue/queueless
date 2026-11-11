@@ -275,6 +275,59 @@ patientRouter.post('/login', async (req, res) => {
   }
 });
 
+// 2b. Set or Create Patient Vault Security PIN / Account Password
+patientRouter.post('/set-pin', async (req, res) => {
+  try {
+    const { mobile, pin, name } = req.body;
+    if (!mobile || !pin) {
+      return res.status(400).json({ success: false, error: 'Mobile number and Security PIN are required.' });
+    }
+
+    const cleanMobile = String(mobile).replace(/\D/g, '');
+    const cleanPin = String(pin).trim();
+    const searchSuffix = cleanMobile.length >= 10 ? cleanMobile.slice(-10) : cleanMobile;
+
+    const patients = await prisma.patient.findMany({
+      where: {
+        mobile: {
+          contains: searchSuffix,
+        },
+      },
+    });
+
+    if (patients.length > 0) {
+      for (const p of patients) {
+        await prisma.patient.update({
+          where: { id: p.id },
+          data: {
+            emergencyContact: `PIN:${cleanPin}`,
+            name: name && name.trim() ? name.trim() : p.name,
+          },
+        });
+      }
+    } else {
+      const defaultTenant = await prisma.tenant.findFirst();
+      if (defaultTenant) {
+        await prisma.patient.create({
+          data: {
+            tenantId: defaultTenant.id,
+            name: name && name.trim() ? name.trim() : 'Patient',
+            mobile: cleanMobile,
+            emergencyContact: `PIN:${cleanPin}`,
+          },
+        });
+      }
+    }
+
+    res.json({
+      success: true,
+      message: 'Universal Health Vault PIN successfully created! You can now log in anytime to access your medical records.',
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: (error as Error).message });
+  }
+});
+
 // 3. Patient History by Mobile (Safe GET)
 patientRouter.get('/history/:mobile', async (req, res) => {
   try {

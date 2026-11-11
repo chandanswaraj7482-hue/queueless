@@ -100,6 +100,8 @@ export const PatientCheckIn: React.FC = () => {
   const [consent, setConsent] = useState(true);
   const [appointmentDate, setAppointmentDate] = useState(new Date().toISOString().split('T')[0]);
   const [showOptionalDetails, setShowOptionalDetails] = useState(false);
+  const [createVaultAccount, setCreateVaultAccount] = useState<boolean>(false);
+  const [vaultPin, setVaultPin] = useState<string>('');
 
   // 15-Day Follow-up State
   const [followUpData, setFollowUpData] = useState<any>(null);
@@ -441,6 +443,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
           bloodGroup,
           address: address.trim() || null,
           emergencyContact: emergencyContact.trim() || null,
+          vaultPin: createVaultAccount && vaultPin.trim() ? vaultPin.trim() : undefined,
           doctorId,
           serviceId,
           visitReason: visitReason.trim() || null,
@@ -1062,6 +1065,74 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                       className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 bg-white"
                     />
                   </div>
+                </div>
+              )}
+            </div>
+
+            {/* 🔐 Save to Universal Health Vault (Optional Account Creation) */}
+            <div className="p-4 bg-gradient-to-r from-sky-50 via-indigo-50 to-emerald-50 rounded-2xl border border-sky-200 text-left space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
+                    <Lock className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                      <span>Save Account to Universal Health Vault</span>
+                      <span className="text-[9px] font-black uppercase text-indigo-700 bg-indigo-100 px-1.5 py-0.5 rounded">Optional</span>
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Access all your prescriptions & OPD reports across any hospital in the future.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setCreateVaultAccount(!createVaultAccount)}
+                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                    createVaultAccount
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-100'
+                  }`}
+                >
+                  {createVaultAccount ? '✓ Set PIN' : '+ Create PIN'}
+                </button>
+              </div>
+
+              {createVaultAccount ? (
+                <div className="pt-2 border-t border-sky-200/80 space-y-2 animate-fade-in">
+                  <label className="block text-[11px] font-bold text-slate-700">
+                    Set Your 4-Digit Vault Security PIN:
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="password"
+                      maxLength={6}
+                      placeholder="e.g. 1234 or 5678"
+                      value={vaultPin}
+                      onChange={(e) => setVaultPin(e.target.value.replace(/\D/g, ''))}
+                      className="w-36 px-3 py-1.5 rounded-xl border border-indigo-300 bg-white text-xs font-black tracking-widest text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCreateVaultAccount(false);
+                        setVaultPin('');
+                      }}
+                      className="text-[11px] font-bold text-slate-500 hover:text-slate-800 underline cursor-pointer"
+                    >
+                      Not Now (Skip)
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-emerald-700 font-medium">
+                    ✓ With this PIN, you can log in at <strong>queueless-os.vercel.app/portal</strong> to download all doctor reports!
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
+                  <span>Want to check in as guest without password?</span>
+                  <span className="text-slate-400 font-semibold">Not Now (Default)</span>
                 </div>
               )}
             </div>

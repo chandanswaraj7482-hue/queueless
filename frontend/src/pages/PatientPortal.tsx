@@ -87,12 +87,16 @@ const generateWhatsAppRxUrl = (data: any) => {
 
 export const PatientPortal: React.FC = () => {
   const navigate = useNavigate();
-  const [authMode, setAuthMode] = useState<'LOGIN' | 'TRACK'>('LOGIN');
+  const [authMode, setAuthMode] = useState<'LOGIN' | 'SIGNUP' | 'TRACK'>('LOGIN');
   const [mobile, setMobile] = useState('');
   const [pin, setPin] = useState('1234');
   const [showPin, setShowPin] = useState(false);
   const [tokenId, setTokenId] = useState('');
   const [patientName, setPatientName] = useState('');
+  const [signupName, setSignupName] = useState('');
+  const [signupMobile, setSignupMobile] = useState('');
+  const [signupPin, setSignupPin] = useState('');
+  const [signupSuccessMsg, setSignupSuccessMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [portalData, setPortalData] = useState<any>(null);
@@ -207,6 +211,62 @@ export const PatientPortal: React.FC = () => {
     }
   };
 
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanPhone = signupMobile.replace(/\D/g, '');
+    if (cleanPhone.length !== 10) {
+      setError('Please provide a valid 10-digit mobile number.');
+      return;
+    }
+    if (!signupPin || signupPin.trim().length < 4) {
+      setError('Please set a 4-digit Security PIN.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/patient/set-pin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mobile: cleanPhone,
+          pin: signupPin.trim(),
+          name: signupName.trim() || 'Patient',
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSignupSuccessMsg('🎉 Account & Vault PIN created! Accessing your Universal Health Vault...');
+        setMobile(cleanPhone);
+        setPin(signupPin.trim());
+        setTimeout(() => {
+          fetch(`${API_BASE_URL}/api/v1/patient/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mobile: cleanPhone, pin: signupPin.trim() }),
+          })
+            .then((r) => r.json())
+            .then((logData) => {
+              if (logData.success) {
+                setPortalData(logData.data);
+                localStorage.setItem(
+                  'queueless_patient_session',
+                  JSON.stringify({ mobile: cleanPhone, pin: signupPin.trim() })
+                );
+              }
+            });
+        }, 1000);
+      } else {
+        setError(data.error || 'Failed to create PIN');
+      }
+    } catch (err) {
+      setError('Could not connect to server. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleLogout = () => {
     setPortalData(null);
     localStorage.removeItem('queueless_patient_session');
@@ -242,21 +302,39 @@ export const PatientPortal: React.FC = () => {
             </p>
 
             {/* Mode Switcher Pills */}
-            <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-2xl mb-5 text-xs font-bold">
+            <div className="grid grid-cols-3 p-1 bg-slate-100 rounded-2xl mb-5 text-xs font-bold">
               <button
                 type="button"
                 onClick={() => {
                   setAuthMode('LOGIN');
                   setError(null);
+                  setSignupSuccessMsg(null);
                 }}
-                className={`py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                className={`py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
                   authMode === 'LOGIN'
                     ? 'bg-white text-sky-900 shadow-sm'
                     : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
                 <Lock className="w-3.5 h-3.5 text-sky-600" />
-                <span>Patient Login</span>
+                <span>Login</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode('SIGNUP');
+                  setError(null);
+                  setSignupSuccessMsg(null);
+                }}
+                className={`py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                  authMode === 'SIGNUP'
+                    ? 'bg-white text-indigo-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Create PIN</span>
               </button>
 
               <button
@@ -264,17 +342,25 @@ export const PatientPortal: React.FC = () => {
                 onClick={() => {
                   setAuthMode('TRACK');
                   setError(null);
+                  setSignupSuccessMsg(null);
                 }}
-                className={`py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                className={`py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
                   authMode === 'TRACK'
-                    ? 'bg-white text-sky-900 shadow-sm'
+                    ? 'bg-white text-emerald-900 shadow-sm'
                     : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
-                <Ticket className="w-3.5 h-3.5 text-indigo-600" />
-                <span>Track Token ID</span>
+                <Ticket className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Track Token</span>
               </button>
             </div>
+
+            {signupSuccessMsg && (
+              <div className="mb-4 p-3.5 bg-emerald-50 border border-emerald-300 rounded-2xl flex items-center gap-2 text-xs text-emerald-800 text-left font-bold animate-in fade-in">
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+                <span>{signupSuccessMsg}</span>
+              </div>
+            )}
 
             {error && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-2xl flex items-center gap-2 text-xs text-red-700 text-left font-medium">
@@ -284,7 +370,7 @@ export const PatientPortal: React.FC = () => {
             )}
 
             {/* Tab 1: Full History Login by Mobile & PIN */}
-            {authMode === 'LOGIN' ? (
+            {authMode === 'LOGIN' && (
               <form onSubmit={handleLogin} className="space-y-4 text-left">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">Registered Mobile Number</label>
@@ -353,8 +439,77 @@ export const PatientPortal: React.FC = () => {
                   )}
                 </button>
               </form>
-            ) : (
-              /* Tab 2: Secure Track by Token ID + Patient Name Verification */
+            )}
+
+            {/* Tab 2: Create Account / Set Vault PIN */}
+            {authMode === 'SIGNUP' && (
+              <form onSubmit={handleSignup} className="space-y-4 text-left">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Patient Full Name</label>
+                  <div className="relative">
+                    <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                    <input
+                      type="text"
+                      placeholder="e.g. Rahul Sharma"
+                      value={signupName}
+                      onChange={(e) => setSignupName(e.target.value)}
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Mobile Number (10 Digits) *</label>
+                  <div className="relative">
+                    <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                    <input
+                      type="tel"
+                      required
+                      placeholder="e.g. 9876543210"
+                      value={signupMobile}
+                      onChange={(e) => setSignupMobile(e.target.value)}
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Set 4-Digit Security PIN *</label>
+                  <div className="relative">
+                    <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                    <input
+                      type="password"
+                      required
+                      maxLength={6}
+                      placeholder="e.g. 4589"
+                      value={signupPin}
+                      onChange={(e) => setSignupPin(e.target.value)}
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-black tracking-widest text-indigo-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    />
+                  </div>
+                  <p className="text-[10px] text-slate-400 mt-1">Remember this PIN to download all your hospital reports in the future.</p>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-700 hover:to-sky-700 text-white font-black py-3 px-4 rounded-xl text-xs transition-all shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                >
+                  {loading ? (
+                    <span>Creating Health Vault...</span>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4" />
+                      <span>Create Universal Health Vault</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* Tab 3: Secure Track by Token ID + Patient Name Verification */}
+            {authMode === 'TRACK' && (
               <form onSubmit={handleTrackByToken} className="space-y-4 text-left">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
@@ -550,16 +705,27 @@ export const PatientPortal: React.FC = () => {
 
           {/* Complete Visit History Table */}
           <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
-            <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+            <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h2 className="text-base font-black text-slate-900">OPD Consultation History</h2>
+                <h2 className="text-base font-black text-slate-900">OPD Consultation & Medical History</h2>
                 <p className="text-xs text-slate-500">
-                  Complete record of all your visits, fees paid, and issued tokens.
+                  Complete record of all your visits, fees paid, and issued digital prescriptions across all hospitals.
                 </p>
               </div>
-              <span className="text-xs font-bold px-3 py-1 bg-slate-100 text-slate-700 rounded-full">
-                Total Visits: {portalData.totalVisits}
-              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-xl border border-indigo-200 transition-all cursor-pointer shadow-2xs"
+                  title="Download and print complete health history as PDF"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Download Records (PDF)</span>
+                </button>
+                <span className="text-xs font-bold px-3 py-1 bg-slate-100 text-slate-700 rounded-full">
+                  Total Visits: {portalData.totalVisits}
+                </span>
+              </div>
             </div>
 
             <div className="overflow-x-auto">

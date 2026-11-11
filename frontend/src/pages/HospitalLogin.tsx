@@ -11,6 +11,7 @@ import {
   ArrowRight,
   ShieldCheck,
   Zap,
+  Mail,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
@@ -173,14 +174,14 @@ export const HospitalLogin: React.FC = () => {
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  Hospital Identifier (Slug, Name, or Phone)
+                  Hospital Registered Email, Slug, or Phone *
                 </label>
                 <div className="relative">
-                  <Building2 className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                   <input
                     type="text"
                     required
-                    placeholder="e.g. city-health or 9876543210"
+                    placeholder="e.g. admin@hospital.com, caremax, or 9876543210"
                     value={identifier}
                     onChange={(e) => {
                       setIdentifier(e.target.value);
@@ -189,6 +190,9 @@ export const HospitalLogin: React.FC = () => {
                     className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">
+                  ✉️ Sign in directly with your registered Director/Admin Email, hospital slug, or phone.
+                </p>
               </div>
 
               <div>

@@ -384,20 +384,20 @@ export const PatientPortal: React.FC = () => {
             {authMode === 'LOGIN' && (
               <form onSubmit={handleLogin} className="space-y-4 text-left">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Registered Mobile Number</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Registered Mobile Number or Email</label>
                   <div className="relative">
                     <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
-                      type="tel"
+                      type="text"
                       required
-                      placeholder="Enter 10-digit mobile number"
+                      placeholder="Enter 10-digit mobile or email address"
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
                       className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:ring-2 focus:ring-sky-500 focus:outline-none"
                     />
                   </div>
                   <p className="text-[11px] text-slate-400 mt-1">
-                    Enter the mobile number registered during your hospital check-in.
+                    Enter the mobile number or email used during your hospital check-in.
                   </p>
                 </div>
 
@@ -476,13 +476,13 @@ export const PatientPortal: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Mobile Number (10 Digits) *</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Mobile Number or Email *</label>
                   <div className="relative">
                     <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
-                      type="tel"
+                      type="text"
                       required
-                      placeholder="e.g. 9876543210"
+                      placeholder="e.g. 9876543210 or patient@gmail.com"
                       value={signupMobile}
                       onChange={(e) => setSignupMobile(e.target.value)}
                       className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none"

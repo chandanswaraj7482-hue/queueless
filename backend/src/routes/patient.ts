@@ -123,30 +123,28 @@ patientRouter.post('/login', async (req, res) => {
   try {
     const { mobile, pin } = req.body;
 
-    if (!mobile || !String(mobile).trim()) {
-      return res.status(400).json({ success: false, error: 'Mobile number is required' });
+    const inputStr = String(mobile || '').trim();
+    if (!inputStr) {
+      return res.status(400).json({ success: false, error: 'Mobile number or Registered Email is required' });
     }
 
-    const cleanMobile = String(mobile).replace(/\D/g, '');
+    const isEmail = inputStr.includes('@');
+    const cleanMobile = inputStr.replace(/\D/g, '');
     const searchSuffix = cleanMobile.length >= 10 ? cleanMobile.slice(-10) : cleanMobile;
 
-    // Find all patient profiles with this mobile number across all clinics/tenants
+    // Find all patient profiles with this mobile or email across all clinics/tenants
     const matchingPatients = await prisma.patient.findMany({
-      where: {
-        mobile: {
-          contains: searchSuffix,
-        },
-      },
+      where: isEmail
+        ? { email: { equals: inputStr, mode: 'insensitive' } }
+        : { mobile: { contains: searchSuffix } },
     });
 
     // Query all queue entries across all hospitals where this patient visited
     const allQueueEntries = await prisma.queueEntry.findMany({
       where: {
-        patient: {
-          mobile: {
-            contains: searchSuffix,
-          },
-        },
+        patient: isEmail
+          ? { email: { equals: inputStr, mode: 'insensitive' } }
+          : { mobile: { contains: searchSuffix } },
       },
       orderBy: { joinedAt: 'desc' },
       include: {
@@ -308,11 +306,11 @@ patientRouter.post('/login', async (req, res) => {
 patientRouter.post('/set-pin', async (req, res) => {
   try {
     const { mobile, pin, name } = req.body;
-    if (!mobile || !pin) {
-      return res.status(400).json({ success: false, error: 'Mobile number and Security PIN are required.' });
+    const inputStr = String(mobile || '').trim();
+    if (!inputStr || !pin) {
+      return res.status(400).json({ success: false, error: 'Mobile number/Email and Security PIN are required.' });
     }
 
-    const cleanMobile = String(mobile).replace(/\D/g, '');
     const cleanPin = String(pin).trim();
 
     if (!/^\d{4}$/.test(cleanPin)) {
@@ -327,14 +325,14 @@ patientRouter.post('/set-pin', async (req, res) => {
       });
     }
 
+    const isEmail = inputStr.includes('@');
+    const cleanMobile = inputStr.replace(/\D/g, '');
     const searchSuffix = cleanMobile.length >= 10 ? cleanMobile.slice(-10) : cleanMobile;
 
     const patients = await prisma.patient.findMany({
-      where: {
-        mobile: {
-          contains: searchSuffix,
-        },
-      },
+      where: isEmail
+        ? { email: { equals: inputStr, mode: 'insensitive' } }
+        : { mobile: { contains: searchSuffix } },
     });
 
     if (patients.length > 0) {
@@ -354,7 +352,8 @@ patientRouter.post('/set-pin', async (req, res) => {
           data: {
             tenantId: defaultTenant.id,
             name: name && name.trim() ? name.trim() : 'Patient',
-            mobile: cleanMobile,
+            mobile: isEmail ? '' : cleanMobile,
+            email: isEmail ? inputStr : null,
             emergencyContact: `PIN:${cleanPin}`,
           },
         });

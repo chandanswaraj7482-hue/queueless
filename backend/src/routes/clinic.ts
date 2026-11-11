@@ -240,29 +240,77 @@ clinicRouter.post('/subscribe', async (req, res) => {
   }
 });
 
-// 1c2. Universal Hospital Staff & Director Authentication
+// 1c2. Universal Hospital Staff & Director Authentication (Supports Email, Slug, Phone, or Name)
 clinicRouter.post('/login', async (req, res) => {
   try {
     const { identifier, password, role } = req.body;
     if (!identifier || !password) {
-      return res.status(400).json({ success: false, error: 'Hospital identifier and password are required' });
+      return res.status(400).json({ success: false, error: 'Hospital identifier (Email, Slug, or Phone) and password are required' });
     }
     const cleanId = identifier.trim().toLowerCase();
-    const clinic = await prisma.clinic.findFirst({
-      where: {
-        OR: [
-          { slug: cleanId },
-          { id: identifier.trim() },
-          { contactPhone: identifier.trim() },
-        ],
-      },
-      include: { doctors: true },
-    });
+    const isEmail = cleanId.includes('@');
+
+    let clinic: any = null;
+
+    if (isEmail) {
+      // 1. Search in User accounts
+      const user = await prisma.user.findFirst({
+        where: { email: { equals: cleanId, mode: 'insensitive' } },
+        include: {
+          roles: {
+            include: {
+              clinic: { include: { doctors: true } },
+            },
+          },
+          tenant: {
+            include: {
+              clinics: { include: { doctors: true } },
+            },
+          },
+        },
+      });
+
+      if (user?.roles?.[0]?.clinic) {
+        clinic = user.roles[0].clinic;
+      } else if (user?.tenant?.clinics?.[0]) {
+        clinic = user.tenant.clinics[0];
+      }
+
+      // 2. Search in clinic settings JSON for adminEmail
+      if (!clinic) {
+        const matchedClinics = await prisma.clinic.findMany({
+          where: {
+            settings: {
+              contains: cleanId,
+            },
+          },
+          include: { doctors: true },
+        });
+        if (matchedClinics.length > 0) {
+          clinic = matchedClinics[0];
+        }
+      }
+    }
+
+    if (!clinic) {
+      clinic = await prisma.clinic.findFirst({
+        where: {
+          OR: [
+            { slug: cleanId },
+            { id: identifier.trim() },
+            { contactPhone: identifier.trim() },
+            { name: { equals: identifier.trim(), mode: 'insensitive' } },
+            { settings: { contains: cleanId } },
+          ],
+        },
+        include: { doctors: true },
+      });
+    }
 
     if (!clinic) {
       return res.status(404).json({
         success: false,
-        error: `Hospital not found with ID/Slug "${identifier}". If you are a new clinic, please sign up and purchase a plan.`,
+        error: `Hospital not found with Email / ID "${identifier}". If you are a new clinic, please sign up and purchase a plan.`,
       });
     }
 
@@ -272,7 +320,7 @@ clinicRouter.post('/login', async (req, res) => {
         return res.status(401).json({ success: false, error: 'Invalid reception desk password.' });
       }
     } else if (role === 'DOCTOR') {
-      const match = clinic.doctors.find((d) => d.pin === password || d.password === password);
+      const match = (clinic.doctors || []).find((d: any) => d.pin === password || d.password === password);
       if (!match && password !== clinic.adminPassword) {
         return res.status(401).json({ success: false, error: 'Invalid doctor cabin PIN or password.' });
       }

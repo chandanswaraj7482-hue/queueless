@@ -36,6 +36,9 @@ import {
   Copy,
   ExternalLink,
   QrCode,
+  Volume2,
+  Activity,
+  FileDown,
 } from 'lucide-react';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
@@ -912,18 +915,24 @@ export const DoctorView: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="max-w-md mx-auto p-4 sm:p-6 mt-12 pb-24">
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl text-center">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-sky-600/25">
-            <Stethoscope className="w-7 h-7" />
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] text-center relative overflow-hidden">
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-sky-600 via-indigo-600 to-cyan-500 text-white flex items-center justify-center mx-auto mb-4 shadow-xl shadow-sky-600/30 ring-4 ring-sky-50">
+            <Stethoscope className="w-8 h-8" />
           </div>
 
-          <h1 className="text-xl font-black text-slate-900 tracking-tight">Doctor OPD Cabin Login</h1>
-          <p className="text-xs text-slate-500 mt-1 mb-6">
-            Select your assigned doctor cabin and enter your 4-digit PIN or password to unlock your clinical OPD console.
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-sky-50 text-sky-800 text-[11px] font-black uppercase tracking-wider rounded-full border border-sky-200/80 mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+            <span>Clinical OPD Operating System</span>
+          </div>
+
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Doctor Cabin Console</h1>
+          <p className="text-xs text-slate-500 mt-1 mb-6 leading-relaxed">
+            Select your assigned consultation cabin and enter your 4-digit PIN or password to unlock your clinical OPD workbench.
           </p>
 
           {loginError && (
-            <div className="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-semibold flex items-center gap-2 text-left">
+            <div className="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-2xl text-xs font-semibold flex items-center gap-2 text-left animate-shake">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
               <span>{loginError}</span>
             </div>
@@ -937,7 +946,7 @@ export const DoctorView: React.FC = () => {
               <select
                 value={loginDoctorId || selectedDoctorId}
                 onChange={(e) => setLoginDoctorId(e.target.value)}
-                className="w-full px-3.5 py-3 rounded-2xl border border-slate-300 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 shadow-xs cursor-pointer"
               >
                 {doctors.map((d) => (
                   <option key={d.id} value={d.id}>
@@ -956,14 +965,14 @@ export const DoctorView: React.FC = () => {
                   type={showLoginPassword ? 'text' : 'password'}
                   value={doctorPasswordInput}
                   onChange={(e) => setDoctorPasswordInput(e.target.value)}
-                  placeholder="Enter your 4-digit PIN or password"
+                  placeholder="Enter your 4-digit PIN (e.g. 1234)"
                   autoFocus
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-xs font-mono font-bold text-slate-900 pr-10 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-xs font-mono font-bold text-slate-900 pr-10 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 shadow-xs"
                 />
                 <button
                   type="button"
                   onClick={() => setShowLoginPassword(!showLoginPassword)}
-                  className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 cursor-pointer"
                 >
                   {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -973,65 +982,113 @@ export const DoctorView: React.FC = () => {
             <button
               type="submit"
               disabled={loggingIn || !doctorPasswordInput.trim()}
-              className="w-full py-3.5 px-4 bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white font-black text-xs rounded-2xl shadow-lg shadow-sky-600/25 transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 px-4 bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-700 hover:from-sky-700 hover:to-indigo-700 disabled:opacity-50 text-white font-black text-xs rounded-2xl shadow-xl shadow-sky-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
             >
               <KeyRound className="w-4 h-4" />
               <span>{loggingIn ? 'Verifying PIN...' : 'Unlock Doctor OPD Console'}</span>
             </button>
           </form>
+
+          {/* Master Credentials PDF Quick Download for Demo */}
+          <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col items-center gap-2">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              Need Demo Passwords or Links?
+            </span>
+            <a
+              href="/QUEUOUS_CREDENTIALS.pdf"
+              download="QUEUOUS_CREDENTIALS.pdf"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-bold rounded-xl border border-slate-200 shadow-2xs transition-all active:scale-95"
+              title="Download Master Passwords & Demo Links PDF"
+            >
+              <FileDown className="w-3.5 h-3.5 text-sky-600" />
+              <span>Download Master Credentials (PDF)</span>
+            </a>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-6 pb-24">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-24">
       {/* Header with Doctor Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200/90 shadow-sm mb-6">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/95 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] mb-6 relative overflow-hidden">
+        <div className="absolute -top-16 -right-16 w-48 h-48 bg-sky-500/5 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="flex items-center gap-4">
           {clinicData?.logoUrl ? (
             <img
               src={clinicData.logoUrl}
               alt={clinicData.name}
-              className="w-12 h-12 rounded-2xl border border-slate-200 object-contain p-1 bg-white shadow-2xs shrink-0"
+              className="w-14 h-14 rounded-2xl border border-slate-200 object-contain p-1 bg-white shadow-xs shrink-0"
             />
           ) : (
-            <div className="p-3 bg-sky-50 text-sky-600 rounded-2xl shrink-0">
-              <Stethoscope className="w-6 h-6" />
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-600 via-indigo-600 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-sky-600/25 shrink-0 ring-2 ring-sky-100">
+              <Stethoscope className="w-7 h-7" />
             </div>
           )}
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-black text-slate-900 tracking-tight">
-                {clinicData?.name ? `${clinicData.name} • Doctor Cabin` : 'Doctor OPD & EMR Console'}
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                {clinicData?.name ? `${clinicData.name}` : 'Doctor OPD Console'}
               </h1>
-              <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">
-                Live EMR
+              <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Cabin Active</span>
               </span>
             </div>
-            <p className="text-xs text-slate-500 font-medium">
-              {currentDoc?.displayName} • {currentDoc?.specialty || 'General OPD'} ({currentDoc?.roomNumber ? (currentDoc.roomNumber.toLowerCase().includes('cabin') ? currentDoc.roomNumber : `Cabin ${currentDoc.roomNumber}`) : 'Cabin 1'})
+            <p className="text-xs text-slate-600 font-semibold mt-0.5 flex flex-wrap items-center gap-1.5">
+              <span className="text-sky-700 font-black">{currentDoc?.displayName}</span>
+              <span className="text-slate-300">•</span>
+              <span>{currentDoc?.specialty || 'General OPD'}</span>
+              <span className="text-slate-300">•</span>
+              <span className="px-2 py-0.5 bg-slate-100 text-slate-800 rounded-md font-mono font-bold text-[11px]">
+                {currentDoc?.roomNumber ? (currentDoc.roomNumber.toLowerCase().includes('cabin') ? currentDoc.roomNumber : `Cabin ${currentDoc.roomNumber}`) : 'Cabin 1'}
+              </span>
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
+          {/* Test Voice Chime Announcement */}
+          <button
+            onClick={() => {
+              playClinicVoiceAnnouncement('A-101', currentDoc?.roomNumber || 'Cabin 1', currentDoc?.displayName, true);
+            }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-xs font-bold rounded-xl transition-all border border-emerald-200 cursor-pointer active:scale-95 shadow-2xs"
+            title="Test real voice announcement and acoustic chime"
+          >
+            <Volume2 className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Test Voice Chime</span>
+          </button>
+
+          {/* Master PDF Download Button */}
+          <a
+            href="/QUEUOUS_CREDENTIALS.pdf"
+            download="QUEUOUS_CREDENTIALS.pdf"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-all border border-slate-200 cursor-pointer active:scale-95 shadow-2xs"
+            title="Download Master Credentials & Direct Demo Links PDF"
+          >
+            <FileDown className="w-3.5 h-3.5 text-sky-600" />
+            <span className="hidden sm:inline">Credentials (PDF)</span>
+          </a>
+
           {/* Direct Cabin Link Button */}
           {currentDoc && (
             <button
               onClick={() => copyDoctorCabinLink(currentDoc)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-xl transition-all border border-emerald-300 cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold rounded-xl transition-all border border-sky-300 cursor-pointer active:scale-95"
               title="Copy direct dedicated link for this doctor cabin"
             >
               {copiedDoctorId === currentDoc.id ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  <Check className="w-3.5 h-3.5 text-sky-600" />
                   <span>Link Copied!</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Copy My Cabin Link</span>
+                  <Copy className="w-3.5 h-3.5 text-sky-600" />
+                  <span>Copy Cabin Link</span>
                 </>
               )}
             </button>
@@ -1044,16 +1101,16 @@ export const DoctorView: React.FC = () => {
             title="View all dedicated doctor links for this hospital"
           >
             <Share2 className="w-3.5 h-3.5 text-indigo-600" />
-            <span>All Doctor Links</span>
+            <span>All Links</span>
           </button>
 
           <button
             onClick={() => setShowChangePinModal(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold rounded-xl transition-all border border-sky-200/80 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl transition-all border border-slate-200 cursor-pointer"
             title="Change My Doctor PIN / Password"
           >
-            <KeyRound className="w-3.5 h-3.5 text-sky-600" />
-            <span>Change PIN</span>
+            <KeyRound className="w-3.5 h-3.5 text-slate-500" />
+            <span>PIN</span>
           </button>
 
           <button
@@ -1062,7 +1119,7 @@ export const DoctorView: React.FC = () => {
             title="Switch Cabin / Logout"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span>Switch / Lock</span>
+            <span>Switch</span>
           </button>
 
           <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-200">
@@ -1109,18 +1166,18 @@ export const DoctorView: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Consultation / OPD Card */}
         <div className="lg:col-span-2 space-y-5">
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Active Consultation Desk</span>
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] relative overflow-hidden">
+            <div className="flex items-center justify-between mb-5 pb-3.5 border-b border-slate-100">
+              <span className="text-xs font-black text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-xs shadow-emerald-500/50"></span>
+                <span>Active Consultation Station</span>
               </span>
               {activePatient && (
                 <span
-                  className={`text-xs font-black px-3.5 py-1 rounded-full ${
+                  className={`text-xs font-black px-3.5 py-1.5 rounded-full shadow-2xs border ${
                     activePatient.status === 'IN_CONSULTATION'
-                      ? 'bg-blue-100 text-blue-800 animate-pulse'
-                      : 'bg-emerald-100 text-emerald-800'
+                      ? 'bg-blue-50 text-blue-800 border-blue-200 animate-pulse'
+                      : 'bg-emerald-50 text-emerald-800 border-emerald-200'
                   }`}
                 >
                   {activePatient.status === 'IN_CONSULTATION' ? '● In Consultation' : 'Waiting at Door (Called)'}
@@ -1131,30 +1188,30 @@ export const DoctorView: React.FC = () => {
             {activePatient ? (
               <div className="space-y-5">
                 {/* Patient Overview Header */}
-                <div className="flex items-start justify-between bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <div className="flex items-start justify-between bg-gradient-to-r from-slate-50 via-sky-50/30 to-indigo-50/30 p-5 rounded-2xl border border-slate-200/80 shadow-2xs">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-3xl font-black text-slate-900 font-mono tracking-tight">
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <span className="text-3xl sm:text-4xl font-black text-slate-900 font-mono tracking-tight bg-white px-3.5 py-1 rounded-2xl border border-slate-200 shadow-xs">
                         {activePatient.token}
                       </span>
-                      <span className="text-xs font-mono font-bold text-slate-600 bg-slate-200/80 px-2 py-0.5 rounded-md">
+                      <span className="text-xs font-mono font-bold text-slate-600 bg-slate-200/80 px-2.5 py-1 rounded-xl">
                         Ref: #QL-{activePatient.id.substring(0, 6).toUpperCase()}
                       </span>
-                      <span className="text-xs font-bold text-sky-700 bg-sky-100 px-2.5 py-0.5 rounded-full">
+                      <span className="text-xs font-black text-sky-700 bg-sky-100/80 px-3 py-1 rounded-full border border-sky-200">
                         Live OPD Token
                       </span>
                     </div>
-                    <h2 className="text-lg font-black text-slate-900 mt-1">
+                    <h2 className="text-xl font-black text-slate-900 mt-2">
                       {activePatient.patient.name}
                     </h2>
-                    <p className="text-xs text-slate-500 mt-0.5 flex flex-wrap items-center gap-2">
-                      <span>{activePatient.patient.age ? `${activePatient.patient.age} yrs` : 'Age N/A'}</span>
+                    <p className="text-xs text-slate-500 mt-1 flex flex-wrap items-center gap-2">
+                      <span className="font-semibold">{activePatient.patient.age ? `${activePatient.patient.age} yrs` : 'Age N/A'}</span>
                       <span>•</span>
-                      <span>{activePatient.patient.gender || 'Patient'}</span>
+                      <span className="font-semibold">{activePatient.patient.gender || 'Patient'}</span>
                       <span>•</span>
-                      <span>Phone: {activePatient.patient.mobile}</span>
+                      <span className="font-mono font-bold text-slate-700">Phone: {activePatient.patient.mobile}</span>
                       {activePatient.patient.bloodGroup && (
-                        <span className="font-bold text-red-600 bg-red-50 border border-red-100 px-2 py-0.5 rounded text-[11px]">
+                        <span className="font-black text-red-600 bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-lg text-[11px]">
                           Blood: {activePatient.patient.bloodGroup}
                         </span>
                       )}
@@ -1163,18 +1220,18 @@ export const DoctorView: React.FC = () => {
 
                   <div className="text-right">
                     {activePatient.isFollowUp ? (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded-full">
-                        <Sparkles className="w-3.5 h-3.5" />
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-purple-100 text-purple-900 text-xs font-black rounded-full border border-purple-200 shadow-2xs">
+                        <Sparkles className="w-3.5 h-3.5 text-purple-600" />
                         <span>{activePatient.feeAmount === 0 || activePatient.paymentStatus === 'FREE_FOLLOW_UP' ? '15-Day Free Follow-Up (₹0)' : `Follow-Up (₹${activePatient.feeAmount})`}</span>
                       </span>
                     ) : activePatient.paymentStatus === 'PAID' ? (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full">
-                        <CheckCircle className="w-3.5 h-3.5" />
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-100 text-emerald-900 text-xs font-black rounded-full border border-emerald-200 shadow-2xs">
+                        <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
                         <span>Fee Paid (₹{activePatient.feeAmount || 500})</span>
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">
-                        <Clock className="w-3.5 h-3.5" />
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-100 text-amber-900 text-xs font-black rounded-full border border-amber-200 shadow-2xs">
+                        <Clock className="w-3.5 h-3.5 text-amber-600" />
                         <span>Fee Due at Counter</span>
                       </span>
                     )}
@@ -1182,33 +1239,33 @@ export const DoctorView: React.FC = () => {
                 </div>
 
                 {/* Stated Symptoms / Complaint */}
-                <div className="p-3.5 bg-sky-50/60 rounded-2xl border border-sky-100">
-                  <span className="text-[10px] font-bold text-sky-700 uppercase tracking-wide block mb-0.5">
+                <div className="p-4 bg-sky-50/70 rounded-2xl border border-sky-100 shadow-2xs">
+                  <span className="text-[10px] font-black text-sky-800 uppercase tracking-wider block mb-1">
                     Chief Complaint / Patient Visit Reason:
                   </span>
-                  <p className="text-xs font-semibold text-slate-800">
+                  <p className="text-xs font-bold text-slate-900 leading-relaxed">
                     "{activePatient.visitReason || 'General medical consultation'}"
                   </p>
                 </div>
 
                 {/* Status Switchers if CALLED */}
                 {activePatient.status === 'CALLED' && (
-                  <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <div className="p-4 sm:p-5 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-200 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
                     <div>
-                      <div className="text-xs font-extrabold text-emerald-950">Patient has entered consultation cabin?</div>
-                      <div className="text-[11px] text-emerald-700">Click start to begin clinical examination & prescription writing.</div>
+                      <div className="text-xs font-black text-emerald-950">Patient has entered consultation cabin?</div>
+                      <div className="text-[11px] text-emerald-700 font-medium mt-0.5">Click start to begin clinical examination & prescription writing.</div>
                     </div>
                     <div className="flex gap-2 w-full sm:w-auto">
                       <button
                         onClick={() => handleStatusChange(activePatient.id, 'IN_CONSULTATION')}
-                        className="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2.5 px-5 rounded-xl text-xs transition-all shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2"
+                        className="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2.5 px-5 rounded-xl text-xs transition-all shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                       >
                         <Play className="w-3.5 h-3.5 fill-white" />
                         <span>Start Consultation</span>
                       </button>
                       <button
                         onClick={() => handleStatusChange(activePatient.id, 'NO_SHOW')}
-                        className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all"
+                        className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all cursor-pointer"
                       >
                         Absent (No-Show)
                       </button>
@@ -1556,23 +1613,26 @@ export const DoctorView: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="text-center py-10 px-4">
-                <div className="w-16 h-16 rounded-3xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto mb-4 border border-sky-100 shadow-inner">
-                  <Stethoscope className="w-8 h-8" />
+              <div className="text-center py-12 px-4 relative">
+                <div className="relative w-20 h-20 mx-auto mb-4">
+                  <div className="absolute inset-0 rounded-3xl bg-sky-400/20 animate-ping opacity-60" />
+                  <div className="relative w-20 h-20 rounded-3xl bg-gradient-to-tr from-sky-50 to-indigo-50 text-sky-600 flex items-center justify-center border border-sky-200 shadow-inner">
+                    <Stethoscope className="w-10 h-10" />
+                  </div>
                 </div>
-                <h3 className="text-lg font-black text-slate-900 tracking-tight">Cabin Ready for Next Patient</h3>
-                <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                <h3 className="text-xl font-black text-slate-900 tracking-tight">Consultation Cabin Ready</h3>
+                <p className="text-xs text-slate-500 mt-1.5 max-w-sm mx-auto leading-relaxed">
                   {waitingPatients.length > 0
-                    ? `${waitingPatients.length} patient(s) waiting in the OPD lobby. Click below to chime and announce the next patient.`
-                    : 'The OPD queue is clear. When patients register at reception or self-check-in QR, they will appear here.'}
+                    ? `There are ${waitingPatients.length} patient(s) waiting in the OPD lobby. Click below to chime and announce the next patient.`
+                    : 'The OPD waiting queue is clear. When patients register at reception or entrance QR, they will appear in real-time.'}
                 </p>
 
                 {waitingPatients.length > 0 && (
-                  <div className="mt-6 max-w-md mx-auto">
+                  <div className="mt-7 max-w-md mx-auto">
                     <button
                       type="button"
                       onClick={() => handleStatusChange(waitingPatients[0].id, 'CALLED')}
-                      className="w-full py-4 px-6 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-sm rounded-2xl shadow-xl shadow-emerald-600/30 transition-all flex items-center justify-center gap-3 group active:scale-[0.99] cursor-pointer shimmer-sweep"
+                      className="w-full py-4 px-6 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-sm rounded-2xl shadow-xl shadow-emerald-600/30 transition-all flex items-center justify-center gap-3 group active:scale-[0.99] cursor-pointer shimmer-sweep ring-4 ring-emerald-100"
                     >
                       <BellRing className="w-5 h-5 text-amber-300 animate-bounce" />
                       <span>CALL NEXT PATIENT: Token {waitingPatients[0].token}</span>
@@ -1581,8 +1641,8 @@ export const DoctorView: React.FC = () => {
                       </span>
                       <ArrowRight className="w-4 h-4 text-emerald-200 group-hover:translate-x-1 transition-transform" />
                     </button>
-                    <p className="text-[11px] text-slate-400 mt-2 font-medium">
-                      Next in queue: <strong className="text-slate-800">{waitingPatients[0].patient.name}</strong> • "{waitingPatients[0].visitReason || 'General checkup'}"
+                    <p className="text-[11px] text-slate-500 mt-2.5 font-medium">
+                      Next in queue: <strong className="text-slate-900">{waitingPatients[0].patient.name}</strong> • "{waitingPatients[0].visitReason || 'General checkup'}"
                     </p>
                   </div>
                 )}
@@ -1592,28 +1652,35 @@ export const DoctorView: React.FC = () => {
         </div>
 
         {/* Sidebar: Upcoming Queue & Completed Consultations */}
-        <div className="space-y-4">
-          <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm">
-            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center justify-between">
-              <span>Next in Line ({waitingPatients.length})</span>
+        <div className="space-y-5">
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-[0_6px_25px_-5px_rgba(0,0,0,0.05)]">
+            <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-3.5 flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
+                <span>Next in Line ({waitingPatients.length})</span>
+              </span>
               <Clock className="w-4 h-4 text-slate-400" />
             </h3>
 
             {waitingPatients.length === 0 ? (
-              <p className="text-xs text-slate-400 py-6 text-center">No waiting patients</p>
+              <div className="py-8 text-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+                <p className="text-xs font-semibold text-slate-400">No waiting patients in queue</p>
+              </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-2.5">
                 {waitingPatients.map((item, index) => (
                   <div
                     key={item.id}
-                    className="p-3 bg-slate-50 hover:bg-slate-100/70 rounded-2xl border border-slate-100 flex items-center justify-between transition-all"
+                    className="p-3 bg-slate-50/80 hover:bg-white rounded-2xl border border-slate-200/70 hover:border-sky-300 hover:shadow-xs flex items-center justify-between transition-all"
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono font-black text-sm text-sky-700">{item.token}</span>
-                        <span className="text-xs font-bold text-slate-800">{item.patient.name}</span>
+                        <span className="font-mono font-black text-sm text-sky-700 bg-white px-2 py-0.5 rounded-lg border border-slate-200 shadow-2xs">
+                          {item.token}
+                        </span>
+                        <span className="text-xs font-bold text-slate-900">{item.patient.name}</span>
                       </div>
-                      <p className="text-[11px] text-slate-400 truncate max-w-[150px] mt-0.5">
+                      <p className="text-[11px] text-slate-500 truncate max-w-[150px] mt-1 font-medium">
                         {item.visitReason || 'General checkup'}
                       </p>
                     </div>
@@ -1621,13 +1688,13 @@ export const DoctorView: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleStatusChange(item.id, 'CALLED')}
-                        className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold rounded-lg shadow-2xs flex items-center gap-1 transition-all active:scale-95 cursor-pointer"
+                        className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-black rounded-xl shadow-xs flex items-center gap-1 transition-all active:scale-95 cursor-pointer"
                         title={`Call Token ${item.token}`}
                       >
-                        <BellRing className="w-3 h-3 text-emerald-200" />
+                        <BellRing className="w-3.5 h-3.5 text-emerald-200" />
                         <span>Call</span>
                       </button>
-                      <span className="text-[10px] font-extrabold text-slate-400 bg-white px-1.5 py-0.5 rounded-md border border-slate-200">
+                      <span className="text-[10px] font-black text-slate-400 bg-white px-1.5 py-0.5 rounded-md border border-slate-200">
                         #{index + 1}
                       </span>
                     </div>
@@ -1638,35 +1705,42 @@ export const DoctorView: React.FC = () => {
           </div>
 
           {/* Today's Completed OPD Consultations */}
-          <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">Completed Today</span>
-              <span className="text-xs font-black text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100">
-                {completedPatients.length} Seen
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-[0_6px_25px_-5px_rgba(0,0,0,0.05)]">
+            <div className="flex items-center justify-between mb-3.5">
+              <span className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Seen Today</span>
+              </span>
+              <span className="text-xs font-black text-emerald-800 bg-emerald-100/80 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                {completedPatients.length} Patients
               </span>
             </div>
 
             {completedPatients.length === 0 ? (
-              <p className="text-xs text-slate-400 py-4 text-center">No completed consultations yet</p>
+              <div className="py-6 text-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+                <p className="text-xs font-semibold text-slate-400">No completed consultations yet</p>
+              </div>
             ) : (
-              <div className="space-y-2 max-h-64 overflow-y-auto">
+              <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
                 {completedPatients.map((item) => (
                   <div
                     key={item.id}
-                    className="p-2.5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between text-xs"
+                    className="p-2.5 bg-slate-50/80 hover:bg-white rounded-2xl border border-slate-200/70 hover:border-slate-300 flex items-center justify-between text-xs transition-all"
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-xs text-slate-900">{item.token}</span>
+                        <span className="font-mono font-bold text-xs text-slate-900 bg-white px-1.5 py-0.5 rounded border border-slate-200">
+                          {item.token}
+                        </span>
                         <span className="font-bold text-slate-800 truncate max-w-[120px]">{item.patient.name}</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 truncate max-w-[130px] block">
-                        {item.diagnosis || 'Consultation complete'}
+                      <span className="text-[10px] text-slate-500 truncate max-w-[130px] block mt-0.5 font-medium">
+                        {item.diagnosis || 'Consultation completed'}
                       </span>
                     </div>
                     <button
                       onClick={() => handleOpenPrescriptionModal(item.id)}
-                      className="px-2.5 py-1 bg-white hover:bg-sky-50 text-sky-700 border border-slate-200 hover:border-sky-300 rounded-xl font-bold text-[11px] flex items-center gap-1 shadow-2xs"
+                      className="px-2.5 py-1 bg-white hover:bg-sky-50 text-sky-700 border border-slate-200 hover:border-sky-300 rounded-xl font-bold text-[11px] flex items-center gap-1 shadow-2xs active:scale-95 cursor-pointer"
                     >
                       <Printer className="w-3 h-3" />
                       <span>Rx</span>

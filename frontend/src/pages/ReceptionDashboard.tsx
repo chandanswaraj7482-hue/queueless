@@ -31,6 +31,9 @@ import {
   LogOut,
   ShieldCheck,
   Zap,
+  FileDown,
+  Activity,
+  TrendingUp,
 } from 'lucide-react';
 import { playClinicChime } from '../utils/audio';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
@@ -681,18 +684,25 @@ export const ReceptionDashboard: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="max-w-md mx-auto p-4 sm:p-6 mt-12 pb-24">
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl text-center">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-600/25">
-            <Users className="w-7 h-7" />
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] text-center relative overflow-hidden">
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+          
+          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-emerald-500 text-white flex items-center justify-center mx-auto mb-4 shadow-xl shadow-emerald-600/30 ring-4 ring-emerald-50">
+            <Users className="w-8 h-8" />
           </div>
 
-          <h1 className="text-xl font-black text-slate-900 tracking-tight">{hospitalDisplayName} • Reception Desk</h1>
-          <p className="text-xs text-slate-500 mt-1 mb-6">
-            Enter receptionist password to manage OPD walk-ins, cash token issuance, and patient calls.
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-800 text-[11px] font-black uppercase tracking-wider rounded-full border border-emerald-200/80 mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+            <span>OPD Dispatch & Cashier Counter</span>
+          </div>
+
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">{hospitalDisplayName} • Reception Desk</h1>
+          <p className="text-xs text-slate-500 mt-1 mb-6 leading-relaxed">
+            Enter receptionist password to manage OPD walk-ins, cash token issuance, patient calls, and cashier ledgers.
           </p>
 
           {loginError && (
-            <div className="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-semibold flex items-center gap-2 text-left">
+            <div className="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-2xl text-xs font-semibold flex items-center gap-2 text-left animate-shake">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
               <span>{loginError}</span>
             </div>
@@ -708,14 +718,14 @@ export const ReceptionDashboard: React.FC = () => {
                   type={showLoginPassword ? 'text' : 'password'}
                   value={receptionPasswordInput}
                   onChange={(e) => setReceptionPasswordInput(e.target.value)}
-                  placeholder="Enter reception password"
+                  placeholder="Enter reception password (e.g. reception123)"
                   autoFocus
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-xs font-mono font-bold text-slate-900 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-xs font-mono font-bold text-slate-900 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/50 shadow-xs"
                 />
                 <button
                   type="button"
                   onClick={() => setShowLoginPassword(!showLoginPassword)}
-                  className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 cursor-pointer"
                 >
                   {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -725,12 +735,28 @@ export const ReceptionDashboard: React.FC = () => {
             <button
               type="submit"
               disabled={loggingIn || !receptionPasswordInput.trim()}
-              className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-black text-xs rounded-2xl shadow-lg shadow-emerald-600/25 transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 disabled:opacity-50 text-white font-black text-xs rounded-2xl shadow-xl shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
             >
               <KeyRound className="w-4 h-4" />
               <span>{loggingIn ? 'Authenticating...' : 'Unlock Reception Desk'}</span>
             </button>
           </form>
+
+          {/* Master Credentials PDF Quick Download for Demo */}
+          <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col items-center gap-2">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              Need Demo Passwords or Links?
+            </span>
+            <a
+              href="/QUEUOUS_CREDENTIALS.pdf"
+              download="QUEUOUS_CREDENTIALS.pdf"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-bold rounded-xl border border-slate-200 shadow-2xs transition-all active:scale-95"
+              title="Download Master Passwords & Demo Links PDF"
+            >
+              <FileDown className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Download Master Credentials (PDF)</span>
+            </a>
+          </div>
         </div>
       </div>
     );
@@ -739,96 +765,114 @@ export const ReceptionDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-28">
       {/* Header & Quick Action */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white/95 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] mb-6 relative overflow-hidden">
+        <div className="absolute -top-16 -right-16 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+        
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
-            <span>{hospitalDisplayName} • Reception Desk</span>
-            <span className="flex h-2.5 w-2.5 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
+              <span>{hospitalDisplayName} • Reception Desk</span>
+              <span className="flex h-2.5 w-2.5 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+            </h1>
+            <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200">
+              <span>⚡ Counter Active</span>
             </span>
-          </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            OPD queue controller, fee ledger, and counter walk-in management.
+          </div>
+          <p className="text-xs text-slate-500 mt-1 font-medium">
+            Live OPD queue controller, cashier collection desk, and patient token dispatch.
           </p>
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-bold">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>Counter Active</span>
-          </div>
-
-          <button
-            onClick={handleReceptionLogout}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all"
-            title="Lock Desk / Logout"
+          {/* Master PDF Download Button */}
+          <a
+            href="/QUEUOUS_CREDENTIALS.pdf"
+            download="QUEUOUS_CREDENTIALS.pdf"
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-all border border-slate-200 cursor-pointer active:scale-95 shadow-2xs"
+            title="Download Master Credentials & Direct Demo Links PDF"
           >
-            <LogOut className="w-3.5 h-3.5" />
-            <span>Lock</span>
-          </button>
+            <FileDown className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="hidden sm:inline">Credentials (PDF)</span>
+          </a>
 
           <button
             onClick={openFinancialLedger}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-extrabold rounded-xl transition-all"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-black rounded-xl transition-all shadow-2xs cursor-pointer active:scale-95"
           >
-            <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
             <span>Audit Fee Ledger</span>
           </button>
 
           <button
             onClick={() => setShowWalkInModal(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-all"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-all border border-slate-200 cursor-pointer active:scale-95 shadow-2xs"
           >
-            <UserPlus className="w-4 h-4" />
+            <UserPlus className="w-3.5 h-3.5" />
             <span>Add Walk-In</span>
           </button>
 
           <button
             onClick={handleCallNext}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-black rounded-xl shadow-md shadow-emerald-600/25 transition-all group active:scale-95"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-black rounded-xl shadow-lg shadow-emerald-600/30 transition-all group active:scale-95 cursor-pointer ring-2 ring-emerald-200"
             title="Press Alt + N to call next patient"
           >
             <PhoneCall className="w-4 h-4" />
             <span>CALL NEXT</span>
-            <span className="text-[10px] bg-emerald-800/80 px-1.5 py-0.5 rounded text-emerald-200 font-mono font-normal">
+            <span className="text-[10px] bg-emerald-900/80 px-1.5 py-0.5 rounded text-emerald-200 font-mono font-normal">
               Alt+N
             </span>
+          </button>
+
+          <button
+            onClick={handleReceptionLogout}
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-xl transition-all border border-slate-200 cursor-pointer"
+            title="Lock Desk / Logout"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Lock</span>
           </button>
         </div>
       </div>
 
       {/* Financial & Operational Summary Cards */}
       {summary && (
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5 mb-6">
-          <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-sm">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Collection</span>
-            <div className="text-2xl font-black text-emerald-600 mt-1">₹{summary.totalRevenue}</div>
-            <span className="text-[10px] text-slate-400 mt-0.5 block">Net fees received</span>
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5 mb-6">
+          <div className="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-emerald-300 transition-all">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500" />
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Total Collections</span>
+            <div className="text-2xl sm:text-3xl font-black text-emerald-600 mt-1 tracking-tight">₹{summary.totalRevenue}</div>
+            <span className="text-[10px] text-slate-500 font-medium mt-1 block">Net revenue today</span>
           </div>
 
-          <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-sm">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Online UPI</span>
-            <div className="text-2xl font-black text-sky-600 mt-1">₹{summary.upiRevenue}</div>
-            <span className="text-[10px] text-slate-400 mt-0.5 block">Verified digital</span>
+          <div className="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-sky-300 transition-all">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-500 to-blue-500" />
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Online UPI</span>
+            <div className="text-2xl sm:text-3xl font-black text-sky-600 mt-1 tracking-tight">₹{summary.upiRevenue}</div>
+            <span className="text-[10px] text-slate-500 font-medium mt-1 block">Instant bank gateway</span>
           </div>
 
-          <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-sm">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Counter Cash</span>
-            <div className="text-2xl font-black text-amber-600 mt-1">₹{summary.cashRevenue}</div>
-            <span className="text-[10px] text-slate-400 mt-0.5 block">Collected at desk</span>
+          <div className="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-amber-300 transition-all">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500" />
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Counter Cash</span>
+            <div className="text-2xl sm:text-3xl font-black text-amber-600 mt-1 tracking-tight">₹{summary.cashRevenue}</div>
+            <span className="text-[10px] text-slate-500 font-medium mt-1 block">Approved at desk</span>
           </div>
 
-          <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-sm">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">15-Day Follow-Up</span>
-            <div className="text-2xl font-black text-purple-600 mt-1">{summary.freeFollowUps}</div>
-            <span className="text-[10px] text-slate-400 mt-0.5 block">Review visits (₹250)</span>
+          <div className="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-purple-300 transition-all">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-500" />
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">15-Day Follow-Up</span>
+            <div className="text-2xl sm:text-3xl font-black text-purple-600 mt-1 tracking-tight">{summary.freeFollowUps}</div>
+            <span className="text-[10px] text-slate-500 font-medium mt-1 block">Routine reviews (₹250)</span>
           </div>
 
-          <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-sm">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Waiting in Lobby</span>
-            <div className="text-2xl font-black text-slate-900 mt-1">{summary.waiting}</div>
-            <span className="text-[10px] text-slate-400 mt-0.5 block">Avg wait: {summary.avgWaitMinutes}m</span>
+          <div className="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-slate-400 transition-all col-span-2 lg:col-span-1">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-slate-700 to-slate-900" />
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Waiting Lobby</span>
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1 tracking-tight">{summary.waiting}</div>
+            <span className="text-[10px] text-slate-500 font-medium mt-1 block">Avg wait: {summary.avgWaitMinutes}m</span>
           </div>
         </div>
       )}
@@ -1084,13 +1128,13 @@ export const ReceptionDashboard: React.FC = () => {
       </div>
 
       {/* Category Tabs: ALL | AWAITING_CASH | ACTIVE_QUEUE | COMPLETED */}
-      <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+      <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1.5">
         <button
           onClick={() => setQueueTab('ALL')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+          className={`px-4 py-2 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             queueTab === 'ALL'
-              ? 'bg-slate-900 text-white shadow-sm'
-              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+              ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20'
+              : 'bg-white/90 text-slate-700 hover:bg-slate-100 border border-slate-200/80 shadow-2xs'
           }`}
         >
           All Entries ({queue.length})
@@ -1098,63 +1142,63 @@ export const ReceptionDashboard: React.FC = () => {
 
         <button
           onClick={() => setQueueTab('AWAITING_CASH')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+          className={`px-4 py-2 rounded-2xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
             queueTab === 'AWAITING_CASH'
-              ? 'bg-amber-600 text-white shadow-sm'
-              : 'bg-white text-amber-800 hover:bg-amber-50 border border-amber-200'
+              ? 'bg-amber-600 text-white shadow-md shadow-amber-600/20'
+              : 'bg-white/90 text-amber-900 hover:bg-amber-50 border border-amber-200/80 shadow-2xs'
           }`}
         >
           <span>⚠️ Awaiting Cash at Desk</span>
-          <span className="px-1.5 py-0.2 bg-amber-100 text-amber-900 rounded-full text-[10px] font-black">
+          <span className="px-2 py-0.5 bg-amber-100 text-amber-950 rounded-full text-[10px] font-black">
             {pendingCashPatients.length}
           </span>
         </button>
 
         <button
           onClick={() => setQueueTab('ACTIVE_QUEUE')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+          className={`px-4 py-2 rounded-2xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
             queueTab === 'ACTIVE_QUEUE'
-              ? 'bg-emerald-600 text-white shadow-sm'
-              : 'bg-white text-emerald-800 hover:bg-emerald-50 border border-emerald-200'
+              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
+              : 'bg-white/90 text-emerald-900 hover:bg-emerald-50 border border-emerald-200/80 shadow-2xs'
           }`}
         >
           <span>Active in Doctor Queue</span>
-          <span className="px-1.5 py-0.2 bg-emerald-100 text-emerald-900 rounded-full text-[10px] font-black">
+          <span className="px-2 py-0.5 bg-emerald-100 text-emerald-950 rounded-full text-[10px] font-black">
             {queue.filter((i) => i.status === 'WAITING' || i.status === 'CALLED' || i.status === 'IN_CONSULTATION').length}
           </span>
         </button>
 
         <button
           onClick={() => setQueueTab('COMPLETED')}
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+          className={`px-4 py-2 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             queueTab === 'COMPLETED'
-              ? 'bg-slate-800 text-white shadow-sm'
-              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+              ? 'bg-slate-800 text-white shadow-md shadow-slate-800/20'
+              : 'bg-white/90 text-slate-700 hover:bg-slate-100 border border-slate-200/80 shadow-2xs'
           }`}
         >
-          Completed / Past ({queue.filter((i) => i.status === 'COMPLETED').length})
+          Completed Today ({queue.filter((i) => i.status === 'COMPLETED').length})
         </button>
       </div>
 
       {/* Main Queue & Financial Ledger Table */}
-      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+      <div className="bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200/90 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-extrabold">
+            <thead className="bg-slate-50/90 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-black text-[11px]">
               <tr>
-                <th className="py-3.5 px-4">Token & Time</th>
-                <th className="py-3.5 px-4">Patient Profile</th>
-                <th className="py-3.5 px-4">Doctor & Room</th>
-                <th className="py-3.5 px-4">Consultation Fee & Mode</th>
-                <th className="py-3.5 px-4">Visit Reason</th>
-                <th className="py-3.5 px-4">Status</th>
-                <th className="py-3.5 px-4 text-right">Actions</th>
+                <th className="py-4 px-4">Token & Time</th>
+                <th className="py-4 px-4">Patient Profile</th>
+                <th className="py-4 px-4">Doctor & Cabin</th>
+                <th className="py-4 px-4">Consultation Fee & Status</th>
+                <th className="py-4 px-4">Visit Reason</th>
+                <th className="py-4 px-4">Status</th>
+                <th className="py-4 px-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredQueue.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-14 text-center text-slate-400 font-medium">
+                  <td colSpan={7} className="py-16 text-center text-slate-400 font-semibold">
                     No patient entries found for {startDate === endDate ? startDate : `${startDate} to ${endDate}`}.
                   </td>
                 </tr>
@@ -1168,28 +1212,30 @@ export const ReceptionDashboard: React.FC = () => {
                   });
 
                   return (
-                    <tr key={item.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-3.5 px-4">
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-mono font-black text-sm text-slate-900">{item.token}</span>
-                          <span className="font-mono text-[10px] text-slate-500 font-bold bg-slate-100 px-1 rounded">
+                    <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono font-black text-sm text-slate-900 bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200 shadow-2xs">
+                            {item.token}
+                          </span>
+                          <span className="font-mono text-[10px] text-slate-500 font-bold bg-slate-100/70 px-1.5 py-0.5 rounded">
                             #QL-{item.id.substring(0, 6).toUpperCase()}
                           </span>
                           {item.paymentStatus !== 'PAID' && !item.isFollowUp && (
-                            <span className="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-black bg-amber-100 text-amber-900 border border-amber-300">
-                              Unapproved
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-black bg-amber-100 text-amber-900 border border-amber-300">
+                              Awaiting Cash
                             </span>
                           )}
                         </div>
-                        <span className="text-[11px] text-slate-400 font-medium block mt-0.5">{item.queueDate} • {timeFormatted}</span>
+                        <span className="text-[11px] text-slate-400 font-medium block mt-1">{item.queueDate} • {timeFormatted}</span>
                       </td>
 
-                      <td className="py-3.5 px-4">
-                        <div className="font-bold text-slate-900">{item.patient.name}</div>
-                        <div className="text-slate-400 text-[11px] flex items-center gap-1.5 flex-wrap mt-0.5">
-                          <span>{item.patient.mobile}</span>
+                      <td className="py-4 px-4">
+                        <div className="font-black text-slate-900 text-sm">{item.patient.name}</div>
+                        <div className="text-slate-500 text-[11px] flex items-center gap-1.5 flex-wrap mt-0.5 font-medium">
+                          <span className="font-mono">{item.patient.mobile}</span>
                           {item.patient.bloodGroup && (
-                            <span className="font-black text-red-600 bg-red-50 border border-red-100 px-1.5 py-0.2 rounded text-[10px]">
+                            <span className="font-black text-red-600 bg-red-50 border border-red-200 px-1.5 py-0.2 rounded text-[10px]">
                               {item.patient.bloodGroup}
                             </span>
                           )}
@@ -1197,23 +1243,25 @@ export const ReceptionDashboard: React.FC = () => {
                         </div>
                       </td>
 
-                      <td className="py-3.5 px-4">
-                        <div className="font-bold text-slate-800">{item.doctor?.displayName || 'Unassigned'}</div>
-                        <div className="text-slate-400 text-[11px] font-medium">{item.doctor?.roomNumber || 'Cabin 1'}</div>
+                      <td className="py-4 px-4">
+                        <div className="font-bold text-slate-900">{item.doctor?.displayName || 'Unassigned'}</div>
+                        <div className="text-sky-700 text-[11px] font-mono font-bold mt-0.5">
+                          {item.doctor?.roomNumber || 'Cabin 1'}
+                        </div>
                       </td>
 
-                      <td className="py-3.5 px-4">
+                      <td className="py-4 px-4">
                         {item.isFollowUp ? (
                           <div>
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-purple-100 text-purple-800">
+                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black bg-purple-100 text-purple-900 border border-purple-200 shadow-2xs">
                               <Sparkles className="w-3 h-3 text-purple-600" />
                               <span>₹250 (15-Day Follow-Up)</span>
                             </span>
-                            <span className="text-[10px] text-slate-400 block mt-0.5">Follow-Up Re-visit Slip</span>
+                            <span className="text-[10px] text-slate-400 block mt-0.5 font-medium">Review Slip</span>
                           </div>
                         ) : item.paymentStatus === 'PAID' ? (
                           <div>
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">
+                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-900 border border-emerald-200 shadow-2xs">
                               <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                               <span>PAID ₹{item.feeAmount} ({item.payment?.provider || 'CASH'})</span>
                             </span>
@@ -1223,33 +1271,33 @@ export const ReceptionDashboard: React.FC = () => {
                           </div>
                         ) : (
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">
                               DUE ₹{item.feeAmount}
                             </span>
                             <button
                               onClick={() => handleCollectCash(item.id, 'CASH')}
-                              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[10px] font-black shadow-sm flex items-center gap-1 transition-all"
+                              className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[10px] font-black shadow-xs flex items-center gap-1 transition-all cursor-pointer active:scale-95"
                               title="Approve cash payment and admit into doctor queue"
                             >
                               <Banknote className="w-3 h-3" />
-                              <span>Approve Payment & Admit</span>
+                              <span>Approve & Admit</span>
                             </button>
                           </div>
                         )}
                       </td>
 
-                      <td className="py-3.5 px-4 text-slate-600 max-w-xs truncate font-medium">
+                      <td className="py-4 px-4 text-slate-600 max-w-xs truncate font-medium">
                         {item.visitReason || '-'}
                       </td>
 
-                      <td className="py-3.5 px-4">{getStatusBadge(item.status, item.paymentStatus)}</td>
+                      <td className="py-4 px-4">{getStatusBadge(item.status, item.paymentStatus)}</td>
 
-                      <td className="py-3.5 px-4 text-right">
+                      <td className="py-4 px-4 text-right">
                         <div className="inline-flex items-center gap-1.5">
                           {item.status === 'WAITING' && (
                             <button
                               onClick={() => handleTransition(item.id, 'CALLED')}
-                              className="px-3 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-bold rounded-xl text-[11px] transition-colors"
+                              className="px-3 py-1 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 font-bold rounded-xl text-[11px] transition-colors border border-emerald-200 cursor-pointer active:scale-95 shadow-2xs"
                             >
                               Call
                             </button>
@@ -1259,19 +1307,19 @@ export const ReceptionDashboard: React.FC = () => {
                             <>
                               <button
                                 onClick={() => handleTransition(item.id, 'IN_CONSULTATION')}
-                                className="px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold rounded-xl text-[11px] transition-colors"
+                                className="px-2.5 py-1 bg-blue-50 text-blue-800 hover:bg-blue-100 font-bold rounded-xl text-[11px] transition-colors border border-blue-200 cursor-pointer active:scale-95 shadow-2xs"
                               >
                                 In Consult
                               </button>
                               <button
                                 onClick={() => handleTransition(item.id, 'SKIPPED')}
-                                className="px-2 py-1 bg-orange-50 text-orange-700 hover:bg-orange-100 font-semibold rounded-xl text-[11px] transition-colors"
+                                className="px-2 py-1 bg-orange-50 text-orange-800 hover:bg-orange-100 font-semibold rounded-xl text-[11px] transition-colors border border-orange-200 cursor-pointer"
                               >
                                 Skip
                               </button>
                               <button
                                 onClick={() => handleTransition(item.id, 'NO_SHOW')}
-                                className="px-2 py-1 bg-red-50 text-red-700 hover:bg-red-100 font-semibold rounded-xl text-[11px] transition-colors"
+                                className="px-2 py-1 bg-red-50 text-red-800 hover:bg-red-100 font-semibold rounded-xl text-[11px] transition-colors border border-red-200 cursor-pointer"
                               >
                                 Absent
                               </button>
@@ -1281,7 +1329,7 @@ export const ReceptionDashboard: React.FC = () => {
                           {item.status === 'IN_CONSULTATION' && (
                             <button
                               onClick={() => handleTransition(item.id, 'COMPLETED')}
-                              className="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-bold rounded-xl text-[11px] transition-colors"
+                              className="px-3 py-1 bg-emerald-600 text-white hover:bg-emerald-700 font-bold rounded-xl text-[11px] transition-colors shadow-2xs cursor-pointer active:scale-95"
                             >
                               Complete
                             </button>
@@ -1290,7 +1338,7 @@ export const ReceptionDashboard: React.FC = () => {
                           {(item.status === 'SKIPPED' || item.status === 'NO_SHOW') && (
                             <button
                               onClick={() => handleTransition(item.id, 'WAITING')}
-                              className="px-2.5 py-1 bg-slate-100 text-slate-700 hover:bg-slate-200 font-semibold rounded-xl text-[11px] transition-colors flex items-center gap-1"
+                              className="px-2.5 py-1 bg-slate-100 text-slate-700 hover:bg-slate-200 font-semibold rounded-xl text-[11px] transition-colors flex items-center gap-1 cursor-pointer"
                             >
                               <RotateCcw className="w-3 h-3" /> Recall
                             </button>
@@ -1299,7 +1347,7 @@ export const ReceptionDashboard: React.FC = () => {
                           {item.token !== 'PENDING' && (
                             <button
                               onClick={() => setThermalSlipItem(item)}
-                              className="p-1.5 text-slate-400 hover:text-slate-800 rounded-lg hover:bg-slate-100 transition-colors"
+                              className="p-1.5 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
                               title="Print 58mm/80mm POS Slip"
                             >
                               <Printer className="w-3.5 h-3.5" />

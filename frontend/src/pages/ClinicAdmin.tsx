@@ -302,6 +302,24 @@ export const ClinicAdmin: React.FC = () => {
   const [savingProfile, setSavingProfile] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Custom Hospital Branding Add-On State (Paid feature to upload official hospital logo)
+  const [hasCustomBrandingAddon, setHasCustomBrandingAddon] = useState(false);
+  const [activatingBranding, setActivatingBranding] = useState(false);
+  const [brandingSuccessMsg, setBrandingSuccessMsg] = useState<string | null>(null);
+
+  const handleUnlockBranding = () => {
+    setActivatingBranding(true);
+    setTimeout(() => {
+      setHasCustomBrandingAddon(true);
+      if (activeSlug) {
+        localStorage.setItem('queueless_branding_unlocked_' + activeSlug, 'true');
+      }
+      setActivatingBranding(false);
+      setBrandingSuccessMsg('🎉 Custom Hospital Branding Add-On Activated! You can now upload and display your official hospital logo.');
+      setTimeout(() => setBrandingSuccessMsg(null), 6000);
+    }, 800);
+  };
+
   // Queue & Cash Rules States
   const [settings, setSettings] = useState<ClinicSettings>({
     allowWalkIns: true,
@@ -382,6 +400,8 @@ export const ClinicAdmin: React.FC = () => {
         setOpeningHours(cData.data.openingHours || customHours);
         setClinicLogo(customLogo || cData.data.logoUrl || '');
         setFollowUpDays(cData.data.followUpDays || customFollowUp);
+        const brandingUnlocked = localStorage.getItem('queueless_branding_unlocked_' + activeSlug) === 'true' || !!cData.data?.isWhiteLabel || !!customLogo;
+        setHasCustomBrandingAddon(brandingUnlocked);
         if (cData.data.settings) {
           try {
             const parsed = typeof cData.data.settings === 'string' ? JSON.parse(cData.data.settings) : cData.data.settings;
@@ -415,6 +435,7 @@ export const ClinicAdmin: React.FC = () => {
       setOpeningHours(customHours);
       setClinicLogo(customLogo);
       setFollowUpDays(customFollowUp);
+      setHasCustomBrandingAddon(localStorage.getItem('queueless_branding_unlocked_' + activeSlug) === 'true' || !!customLogo);
     } finally {
       setLoading(false);
     }
@@ -1587,15 +1608,79 @@ export const ClinicAdmin: React.FC = () => {
 
           <form onSubmit={handleSaveProfile} className="space-y-6">
             {/* 1. Custom Hospital Logo Section */}
-            <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200/80">
-              <label className="block text-xs font-bold text-slate-800 mb-1">
-                Hospital / Clinic Official Logo
-              </label>
-              <p className="text-[11px] text-slate-500 mb-4">
-                This logo will appear on your entrance standees, patient mobile check-in screen, TV kiosk banner, and digital token passes.
-              </p>
+            <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <label className="block text-xs font-bold text-slate-800">
+                    Hospital / Clinic Official Logo & Identity
+                  </label>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    This logo appears on your entrance standees, patient mobile check-in screen, TV kiosk banner, and digital Rx letterhead.
+                  </p>
+                </div>
+                {hasCustomBrandingAddon ? (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 text-[10px] font-black rounded-full border border-emerald-300">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Custom Branding Active</span>
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-800 text-[10px] font-black rounded-full border border-amber-300">
+                    <Lock className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Paid Add-On Required</span>
+                  </span>
+                )}
+              </div>
 
-              <div className="flex flex-col sm:flex-row items-center gap-5">
+              {brandingSuccessMsg && (
+                <div className="p-3 bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl text-xs font-bold flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>{brandingSuccessMsg}</span>
+                </div>
+              )}
+
+              {/* Locked State Paywall Banner if Add-on is not purchased */}
+              {!hasCustomBrandingAddon ? (
+                <div className="p-4 bg-gradient-to-br from-amber-50 via-orange-50 to-indigo-50 border border-amber-200 rounded-2xl space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2.5 bg-amber-500 text-white rounded-xl shadow-xs shrink-0 mt-0.5">
+                      <Lock className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-black text-slate-900 text-xs">
+                        Custom Hospital Logo & White-Labeling (Separate Add-On Required)
+                      </h4>
+                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                        By default, your OPD passes, TV kiosks, and print standees show the verified <strong>Queueless Healthcare OS Emblem</strong>. 
+                        If your hospital wants to upload and display its own official logo, custom brand colors, and remove Queueless branding, a separate add-on payout is required.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-white/95 rounded-xl border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div>
+                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Add-On Pricing</span>
+                      <strong className="text-base font-black text-slate-900">
+                        ₹1,999 / mo <span className="text-xs font-normal text-slate-500">($29/mo)</span>
+                      </strong>
+                      <span className="text-[10px] text-emerald-700 font-bold block mt-0.5">
+                        ✓ Included free in Enterprise & White-Label Tier
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleUnlockBranding}
+                      disabled={activatingBranding}
+                      className="px-4 py-2.5 bg-gradient-to-r from-amber-600 to-indigo-600 hover:from-amber-700 hover:to-indigo-700 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-200" />
+                      <span>{activatingBranding ? 'Processing Payout...' : 'Pay & Unlock Custom Hospital Logo'}</span>
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+
+              {/* Upload Controls — Active when Add-on is Unlocked */}
+              <div className={`flex flex-col sm:flex-row items-center gap-5 ${!hasCustomBrandingAddon ? 'opacity-40 pointer-events-none filter grayscale' : ''}`}>
                 {/* Logo Preview */}
                 <div className="relative group shrink-0">
                   <div className="w-24 h-24 rounded-2xl bg-white border-2 border-dashed border-slate-300 p-1 flex items-center justify-center overflow-hidden shadow-inner">

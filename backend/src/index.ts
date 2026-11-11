@@ -17,6 +17,7 @@ import { reportRouter } from './routes/reports';
 import { paymentRouter } from './routes/payment';
 import { patientRouter } from './routes/patient';
 import { reviewRouter } from './routes/review';
+import { aiRouter } from './routes/ai';
 
 dotenv.config();
 
@@ -59,6 +60,7 @@ app.use('/api/v1/reports', reportRouter);
 app.use('/api/v1/payments', paymentRouter);
 app.use('/api/v1/patient', patientRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/ai', aiRouter);
 
 // Health Check with Firewall Telemetry
 app.get('/health', (req, res) => {

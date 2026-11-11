@@ -45,6 +45,7 @@ import {
   Car,
   Coffee,
   PhoneCall,
+  RefreshCw,
 } from 'lucide-react';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
@@ -501,6 +502,76 @@ export const DoctorView: React.FC = () => {
   });
   const [showRxCustomizer, setShowRxCustomizer] = useState(false);
   const [modalCustomSections, setModalCustomSections] = useState<RxCustomSection[]>([]);
+
+  // Google AI Studio (Gemini 1.5 Flash) Copilot State
+  const [aiGeneratingSummary, setAiGeneratingSummary] = useState(false);
+  const [aiSummaryResult, setAiSummaryResult] = useState<string | null>(null);
+  const [showAiDictationModal, setShowAiDictationModal] = useState(false);
+  const [rawDictationText, setRawDictationText] = useState('');
+  const [aiParsingDictation, setAiParsingDictation] = useState(false);
+
+  const handleGenerateAiSummary = async (lang: 'hi' | 'en') => {
+    setAiGeneratingSummary(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/ai/summarize-rx`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patientName: activePatient?.patient?.name || 'Patient',
+          doctorName: currentDoc?.displayName || 'Doctor',
+          diagnosis,
+          medicines,
+          advice: clinicalNotes,
+          language: lang,
+        }),
+      });
+      const data = await res.json();
+      if (data.success && data.summary) {
+        setAiSummaryResult(data.summary);
+        setClinicalNotes((prev) => `${prev ? prev + '\n\n' : ''}💡 [Gemini AI ${lang === 'hi' ? 'Hindi' : 'English'} Directions]: ${data.summary}`);
+        playClinicChime();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setAiGeneratingSummary(false);
+    }
+  };
+
+  const handleParseAiDictation = async () => {
+    if (!rawDictationText.trim()) return;
+    setAiParsingDictation(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/ai/dictate-rx`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rawNotes: rawDictationText.trim() }),
+      });
+      const data = await res.json();
+      if (data.success && data.data) {
+        const d = data.data;
+        if (d.diagnosis) setDiagnosis(d.diagnosis);
+        if (d.vitals) setVitals((prev) => ({ ...prev, ...d.vitals }));
+        if (Array.isArray(d.medicines) && d.medicines.length > 0) {
+          setMedicines((prev) => [...prev, ...d.medicines]);
+        }
+        if (Array.isArray(d.labTests) && d.labTests.length > 0) {
+          setLabTests((prev) => Array.from(new Set([...prev, ...d.labTests])));
+        }
+        if (d.advice) setClinicalNotes(d.advice);
+        if (d.followUpDays) setFollowUpDays(d.followUpDays);
+        setShowAiDictationModal(false);
+        setRawDictationText('');
+        playClinicChime();
+        setDispatchSuccessBanner('✨ Gemini AI successfully structured clinical dictation into prescription form!');
+        setTimeout(() => setDispatchSuccessBanner(null), 5000);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setAiParsingDictation(false);
+    }
+  };
 
   const handleAddPresetSection = (title: string, defaultContent: string) => {
     const newSec: RxCustomSection = {
@@ -1675,6 +1746,70 @@ export const DoctorView: React.FC = () => {
                           </button>
                         ))}
                       </div>
+                    </div>
+
+                    {/* ✨ Google AI Studio (Gemini 1.5 Flash) Copilot Bar */}
+                    <div className="p-3.5 bg-gradient-to-r from-indigo-50/90 via-sky-50/90 to-teal-50/90 rounded-2xl border border-indigo-200/90 shadow-2xs space-y-2.5">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <div className="p-1.5 bg-indigo-600 text-white rounded-lg shadow-xs">
+                            <Sparkles className="w-4 h-4 text-amber-300" />
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-xs font-black text-slate-900">
+                                Gemini AI Clinical Copilot
+                              </h4>
+                              <span className="text-[9px] font-black uppercase px-2 py-0.2 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-200">
+                                Google AI Studio
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-slate-500">
+                              Instant dictation parsing, prescription structuring & bilingual patient WhatsApp directions.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <button
+                            type="button"
+                            onClick={() => setShowAiDictationModal(true)}
+                            className="px-3 py-1.5 bg-white hover:bg-slate-50 text-indigo-700 text-[11px] font-bold rounded-xl border border-indigo-200 shadow-2xs flex items-center gap-1.5 transition-all cursor-pointer"
+                          >
+                            <Zap className="w-3.5 h-3.5 text-amber-500" />
+                            <span>🎙️ AI Dictate Notes</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleGenerateAiSummary('hi')}
+                            disabled={aiGeneratingSummary}
+                            className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-black rounded-xl shadow-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                          >
+                            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                            <span>{aiGeneratingSummary ? 'Translating...' : 'Hindi Directions'}</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleGenerateAiSummary('en')}
+                            disabled={aiGeneratingSummary}
+                            className="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white text-[11px] font-black rounded-xl shadow-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                          >
+                            <Sparkles className="w-3.5 h-3.5 text-teal-200" />
+                            <span>{aiGeneratingSummary ? 'Translating...' : 'English Directions'}</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {aiSummaryResult && (
+                        <div className="p-2.5 bg-white rounded-xl border border-indigo-100 text-xs text-slate-800 space-y-1">
+                          <span className="text-[10px] font-black uppercase text-indigo-700 block">
+                            ✨ Generated Patient WhatsApp Directions (Auto-Added to Advice):
+                          </span>
+                          <p className="text-xs font-medium text-slate-700 leading-relaxed">{aiSummaryResult}</p>
+                        </div>
+                      )}
                     </div>
 
                     {/* 3. Prescription Rx Table & Quick Drug Presets */}
@@ -3024,6 +3159,88 @@ export const DoctorView: React.FC = () => {
                 className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all cursor-pointer"
               >
                 Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🎙️ Gemini AI Dictation & Clinical Note Structuring Modal (Google AI Studio) */}
+      {showAiDictationModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 animate-scale-up space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md">
+                  <Sparkles className="w-5 h-5 text-amber-300" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                    <span>Gemini AI Clinical Scribe</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded-full">
+                      Google AI Studio
+                    </span>
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Dictate or paste raw doctor notes. Gemini extracts diagnosis, vitals & medicine table instantly.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowAiDictationModal(false)}
+                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-700 block">
+                Doctor Dictation / Raw Clinical Notes:
+              </label>
+              <textarea
+                rows={5}
+                value={rawDictationText}
+                onChange={(e) => setRawDictationText(e.target.value)}
+                placeholder="Example: Patient has high fever 102 F, BP 130/80, pulse 84, sore throat. Prescribe Tab Paracetamol 650mg twice daily for 3 days after food, Tab Azithromycin 500mg once daily for 3 days. Advice blood CBC and return after 4 days."
+                className="w-full p-3.5 bg-slate-50 border border-slate-300 rounded-2xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed"
+              />
+              <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                <span>💡 Tip: Mention dose, timing (1-0-1 or OD/BD), and vitals freely.</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setRawDictationText(
+                      'Patient has high fever 101.4 F, BP 124/82 mmHg, pulse 80 bpm, cough and cold for 3 days. Prescribe Tab Paracetamol 650mg TDS for 3 days after meals, Tab Levocetirizine 5mg OD at night for 5 days. Drink warm fluids, avoid cold water, follow up after 5 days.'
+                    )
+                  }
+                  className="text-indigo-600 font-bold hover:underline cursor-pointer"
+                >
+                  Load Sample Dictation
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setShowAiDictationModal(false)}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleParseAiDictation}
+                disabled={aiParsingDictation || !rawDictationText.trim()}
+                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black rounded-xl shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                {aiParsingDictation ? (
+                  <RefreshCw className="w-4 h-4 animate-spin text-indigo-200" />
+                ) : (
+                  <Zap className="w-4 h-4 text-amber-300" />
+                )}
+                <span>{aiParsingDictation ? 'Structuring with Gemini...' : 'Extract & Fill Rx Form'}</span>
               </button>
             </div>
           </div>

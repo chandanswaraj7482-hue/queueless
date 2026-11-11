@@ -706,3 +706,4 @@ export const AnimatedClinicalReels: React.FC = () => {
     </div>
   );
 };
+

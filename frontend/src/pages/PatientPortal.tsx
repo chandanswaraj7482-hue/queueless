@@ -233,12 +233,12 @@ export const PatientPortal: React.FC = () => {
 
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] font-black uppercase tracking-wider text-emerald-800 mb-2">
               <Lock className="w-3 h-3 text-emerald-600" />
-              <span>Encrypted Patient Health Portal</span>
+              <span>Universal Patient Health Passport</span>
             </div>
 
-            <h1 className="text-xl font-black text-slate-900 tracking-tight">Patient Portal & Live Tracker</h1>
+            <h1 className="text-xl font-black text-slate-900 tracking-tight">Patient Login & Multi-Hospital Vault</h1>
             <p className="text-xs text-slate-500 mt-1 mb-5">
-              Securely access your complete OPD history, doctor prescriptions, and 15-day follow-up review passes.
+              Securely access your complete OPD history, doctor prescriptions, and follow-up passes across all Queueless-enabled hospitals with just your mobile number.
             </p>
 
             {/* Mode Switcher Pills */}
@@ -441,8 +441,18 @@ export const PatientPortal: React.FC = () => {
                 <p className="text-xs text-slate-500 mt-0.5">
                   Mobile: {portalData.patient.mobile} • {portalData.patient.age ? `${portalData.patient.age} yrs` : 'Age N/A'} • {portalData.patient.gender || 'Patient'}
                 </p>
+                <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                  <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-md flex items-center gap-1">
+                    <Building2 className="w-3 h-3 text-indigo-600" />
+                    <span>{portalData.totalHospitals || 1} Hospitals Connected</span>
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                    <span>Universal Health Passport (ABDM)</span>
+                  </span>
+                </div>
                 {portalData.patient.address && (
-                  <p className="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1">
+                  <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
                     <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
                     <span>{portalData.patient.address}</span>
                   </p>
@@ -487,8 +497,13 @@ export const PatientPortal: React.FC = () => {
                     Ref: #QL-{portalData.activeToken.id.substring(0, 6).toUpperCase()}
                   </span>
                 </div>
-                <p className="text-xs text-sky-100 mt-1">
-                  Doctor: <span className="font-bold text-white">{portalData.activeToken.doctorName}</span> ({portalData.activeToken.roomNumber})
+                <p className="text-xs text-sky-100 mt-1 flex flex-wrap items-center gap-1.5">
+                  <span className="font-bold text-white flex items-center gap-1">
+                    <Building2 className="w-3.5 h-3.5 text-sky-200" />
+                    <span>{portalData.activeToken.clinicName || 'Queueless Hospital'}</span>
+                  </span>
+                  <span>•</span>
+                  <span>Doctor: <strong className="text-white">{portalData.activeToken.doctorName}</strong> ({portalData.activeToken.roomNumber})</span>
                 </p>
               </div>
 
@@ -570,8 +585,12 @@ export const PatientPortal: React.FC = () => {
                         <div className="text-[10px] text-slate-400 font-medium">#QL-{item.id.substring(0, 6).toUpperCase()}</div>
                       </td>
                       <td className="py-3.5 px-5">
-                        <div className="font-bold text-slate-800">{item.doctorName}</div>
-                        <div className="text-slate-400 text-[11px]">{item.roomNumber}</div>
+                        <div className="font-extrabold text-indigo-700 flex items-center gap-1.5">
+                          <Building2 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                          <span>{item.clinicName}</span>
+                        </div>
+                        <div className="font-bold text-slate-800 text-xs mt-0.5">{item.doctorName}</div>
+                        <div className="text-slate-400 text-[10px]">{item.roomNumber}</div>
                       </td>
                       <td className="py-3.5 px-5 text-slate-600 max-w-xs truncate font-medium">
                         {item.visitReason || '-'}

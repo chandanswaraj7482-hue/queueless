@@ -118,7 +118,7 @@ patientRouter.get('/check-eligibility', async (req, res) => {
   }
 });
 
-// 2. Patient Secure Login & Full Medical/Visit History
+// 2. Patient Secure Login & Universal Multi-Hospital Medical/Visit History
 patientRouter.post('/login', async (req, res) => {
   try {
     const { mobile, pin } = req.body;
@@ -130,26 +130,35 @@ patientRouter.post('/login', async (req, res) => {
     const cleanMobile = String(mobile).replace(/\D/g, '');
     const searchSuffix = cleanMobile.length >= 10 ? cleanMobile.slice(-10) : cleanMobile;
 
-    const patient = await prisma.patient.findFirst({
+    // Find all patient profiles with this mobile number across all clinics/tenants
+    const matchingPatients = await prisma.patient.findMany({
       where: {
         mobile: {
           contains: searchSuffix,
         },
       },
-      include: {
-        queueEntries: {
-          orderBy: { joinedAt: 'desc' },
-          include: {
-            doctor: true,
-            service: true,
-            clinic: true,
-            payment: true,
+    });
+
+    // Query all queue entries across all hospitals where this patient visited
+    const allQueueEntries = await prisma.queueEntry.findMany({
+      where: {
+        patient: {
+          mobile: {
+            contains: searchSuffix,
           },
         },
       },
+      orderBy: { joinedAt: 'desc' },
+      include: {
+        doctor: true,
+        service: true,
+        clinic: true,
+        payment: true,
+        patient: true,
+      },
     });
 
-    if (!patient) {
+    if (matchingPatients.length === 0 && allQueueEntries.length === 0) {
       return res.status(404).json({
         success: false,
         error: `No registered patient record found for mobile "${mobile}". Please register for an OPD token first.`,
@@ -164,16 +173,28 @@ patientRouter.post('/login', async (req, res) => {
       });
     }
 
+    const primaryPatient = matchingPatients[0] || allQueueEntries[0]?.patient || {
+      id: 'guest-patient',
+      name: 'Patient',
+      mobile: mobile,
+      email: null,
+      age: null,
+      gender: null,
+      bloodGroup: null,
+      address: null,
+      emergencyContact: null,
+    };
+
     const today = new Date().toISOString().split('T')[0];
-    const activeToday = patient.queueEntries.find(
+    const activeToday = allQueueEntries.find(
       (e) => e.queueDate === today && (e.status === 'WAITING' || e.status === 'CALLED' || e.status === 'IN_CONSULTATION')
     );
 
-    // Calculate active free follow-ups
+    // Calculate active free follow-ups across all clinics
     const followUpPasses: any[] = [];
     const seenDoctors = new Set();
 
-    patient.queueEntries.forEach((entry) => {
+    allQueueEntries.forEach((entry) => {
       if (entry.doctor && !seenDoctors.has(entry.doctorId) && entry.paymentStatus === 'PAID') {
         seenDoctors.add(entry.doctorId);
         const visitDate = new Date(entry.joinedAt);
@@ -184,6 +205,8 @@ patientRouter.post('/login', async (req, res) => {
             doctorName: entry.doctor.displayName,
             specialty: entry.doctor.specialty,
             roomNumber: entry.doctor.roomNumber,
+            clinicName: entry.clinic.name,
+            clinicSlug: entry.clinic.slug,
             lastVisitDate: entry.queueDate,
             daysRemaining: clinicWindow - diffDays,
           });
@@ -195,21 +218,24 @@ patientRouter.post('/login', async (req, res) => {
       success: true,
       data: {
         patient: {
-          id: patient.id,
-          name: patient.name,
-          mobile: patient.mobile,
-          email: patient.email,
-          age: patient.age,
-          gender: patient.gender,
-          bloodGroup: patient.bloodGroup,
-          address: patient.address,
-          emergencyContact: patient.emergencyContact,
+          id: primaryPatient.id,
+          name: primaryPatient.name,
+          mobile: primaryPatient.mobile || mobile,
+          email: primaryPatient.email,
+          age: primaryPatient.age,
+          gender: primaryPatient.gender,
+          bloodGroup: primaryPatient.bloodGroup,
+          address: primaryPatient.address,
+          emergencyContact: primaryPatient.emergencyContact,
         },
         activeToken: activeToday
           ? {
+              id: activeToday.id,
               token: activeToday.token,
               publicToken: activeToday.publicToken,
               status: activeToday.status,
+              clinicName: activeToday.clinic.name,
+              clinicSlug: activeToday.clinic.slug,
               doctorName: activeToday.doctor?.displayName,
               roomNumber: activeToday.doctor?.roomNumber,
               feeAmount: activeToday.feeAmount,
@@ -218,8 +244,9 @@ patientRouter.post('/login', async (req, res) => {
             }
           : null,
         followUpPasses,
-        totalVisits: patient.queueEntries.length,
-        history: patient.queueEntries.map((e) => ({
+        totalVisits: allQueueEntries.length,
+        totalHospitals: Array.from(new Set(allQueueEntries.map((e) => e.clinic.name))).length,
+        history: allQueueEntries.map((e) => ({
           id: e.id,
           token: e.token,
           publicToken: e.publicToken,
@@ -229,6 +256,7 @@ patientRouter.post('/login', async (req, res) => {
           doctorName: e.doctor?.displayName || 'General OPD',
           roomNumber: e.doctor?.roomNumber || 'Room 1',
           clinicName: e.clinic.name,
+          clinicSlug: e.clinic.slug,
           feeAmount: e.feeAmount,
           paymentStatus: e.paymentStatus,
           isFollowUp: e.isFollowUp,

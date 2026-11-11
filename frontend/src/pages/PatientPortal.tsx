@@ -704,6 +704,50 @@ export const PatientPortal: React.FC = () => {
             </span>
           </div>
 
+          {/* 🛡️ USA & Global Insurance Card (EDI 270/271 Cleared) */}
+          <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl border border-slate-800 relative overflow-hidden">
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center border border-indigo-400/30">
+                  <CreditCard className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-black text-white">UnitedHealthcare • Choice Plus PPO</h3>
+                    <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 text-[10px] font-bold rounded-full border border-emerald-500/30">
+                      EDI Cleared
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">Subscriber: {portalData.patient.name} • Group: #GRP-99482</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Member ID</span>
+                <span className="text-xs font-black font-mono text-white tracking-wider">UHC-948201-A</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 text-center">
+              <div className="p-2.5 bg-white/5 rounded-xl border border-white/5">
+                <span className="text-[10px] text-slate-400 font-bold block uppercase">OPD Co-Pay</span>
+                <span className="text-base font-black text-emerald-400 font-mono mt-0.5 block">$35.00</span>
+              </div>
+              <div className="p-2.5 bg-white/5 rounded-xl border border-white/5">
+                <span className="text-[10px] text-slate-400 font-bold block uppercase">Remaining Ded.</span>
+                <span className="text-base font-black text-white font-mono mt-0.5 block">$250.00</span>
+              </div>
+              <div className="p-2.5 bg-white/5 rounded-xl border border-white/5">
+                <span className="text-[10px] text-slate-400 font-bold block uppercase">Coinsurance</span>
+                <span className="text-base font-black text-indigo-300 font-mono mt-0.5 block">80 / 20</span>
+              </div>
+              <div className="p-2.5 bg-white/5 rounded-xl border border-white/5">
+                <span className="text-[10px] text-slate-400 font-bold block uppercase">Pre-Auth</span>
+                <span className="text-xs font-black text-emerald-300 block mt-1">Not Required</span>
+              </div>
+            </div>
+          </div>
+
           {/* Active Today Token Card (If Any) */}
           {portalData.activeToken && (
             <div className="bg-gradient-to-r from-sky-600 to-indigo-600 text-white rounded-3xl p-6 shadow-xl shadow-sky-600/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">

@@ -42,6 +42,9 @@ import {
   Star,
   BookmarkPlus,
   Sliders,
+  Car,
+  Coffee,
+  PhoneCall,
 } from 'lucide-react';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
@@ -279,6 +282,29 @@ interface QueueItem {
   vitalsJson?: string;
   prescriptionJson?: string;
   clinicalNotes?: string;
+  virtualWait?: {
+    location?: 'LOBBY' | 'CAR' | 'CAFE';
+    vehiclePlate?: string;
+    notes?: string;
+    pagedAt?: string;
+    pagedMessage?: string;
+    insurance?: {
+      payerName: string;
+      memberId: string;
+      groupNumber: string;
+      coverageStatus: string;
+      networkStatus: string;
+      copay: number;
+      deductibleTotal: number;
+      deductibleMet: number;
+      deductibleRemaining: number;
+      coinsurance: string;
+      priorAuthRequired: boolean;
+      verifiedAt: string;
+      copayPaid?: boolean;
+      copayPaymentRef?: string;
+    };
+  };
   patient: {
     id?: string;
     name: string;
@@ -881,6 +907,28 @@ export const DoctorView: React.FC = () => {
     }
   };
 
+  const handlePageCar = async (entryId: string, patientName: string) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/queue/${entryId}/page-car`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          doctorName: currentDoc?.displayName || 'Doctor',
+          examRoom: currentDoc?.roomNumber ? `Cabin ${currentDoc.roomNumber}` : 'Cabin 1',
+        }),
+      });
+      const resJson = await res.json();
+      if (resJson.success) {
+        setDispatchSuccessBanner(`📲 Paged ${patientName} via SMS! Called into ${currentDoc?.roomNumber || 'Cabin 1'}`);
+        playClinicChime();
+        setTimeout(() => setDispatchSuccessBanner(null), 5000);
+        fetchDoctorQueue();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const activePatient = queue.find((item) => item.status === 'CALLED' || item.status === 'IN_CONSULTATION');
 
   // Set default initial consultation values if existing
@@ -1398,6 +1446,18 @@ export const DoctorView: React.FC = () => {
                       {activePatient.patient.bloodGroup && (
                         <span className="font-black text-red-600 bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-lg text-[11px]">
                           Blood: {activePatient.patient.bloodGroup}
+                        </span>
+                      )}
+                      {activePatient.virtualWait?.location === 'CAR' && (
+                        <span className="font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-lg text-[11px] inline-flex items-center gap-1">
+                          <Car className="w-3 h-3 text-emerald-600" />
+                          <span>Waiting in Car ({activePatient.virtualWait.vehiclePlate || 'Parked'})</span>
+                        </span>
+                      )}
+                      {activePatient.virtualWait?.insurance && (
+                        <span className="font-black text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-lg text-[11px] inline-flex items-center gap-1">
+                          <ShieldCheck className="w-3 h-3 text-indigo-600" />
+                          <span>Insurance Cleared: {activePatient.virtualWait.insurance.payerName} (Copay ${activePatient.virtualWait.insurance.copay} {activePatient.virtualWait.insurance.copayPaid ? 'PAID' : 'DUE'})</span>
                         </span>
                       )}
                     </p>
@@ -2172,8 +2232,40 @@ export const DoctorView: React.FC = () => {
                       <p className="text-[11px] text-slate-500 truncate max-w-[150px] mt-1 font-medium">
                         {item.visitReason || 'General checkup'}
                       </p>
+
+                      {/* Virtual Wait Location Badge */}
+                      {item.virtualWait?.location === 'CAR' ? (
+                        <div className="mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 bg-emerald-100/90 text-emerald-800 text-[10px] font-bold rounded-md">
+                          <Car className="w-3 h-3 text-emerald-700" />
+                          <span className="truncate max-w-[130px]">{item.virtualWait.vehiclePlate || 'In Car'}</span>
+                        </div>
+                      ) : item.virtualWait?.location === 'CAFE' ? (
+                        <div className="mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 bg-amber-100/90 text-amber-800 text-[10px] font-bold rounded-md">
+                          <Coffee className="w-3 h-3 text-amber-700" />
+                          <span>Nearby Cafe</span>
+                        </div>
+                      ) : null}
+
+                      {/* Insurance Eligibility Cleared Badge */}
+                      {item.virtualWait?.insurance && (
+                        <div className="mt-0.5 text-[9px] font-bold text-indigo-700 flex items-center gap-1">
+                          <ShieldCheck className="w-2.5 h-2.5 text-indigo-600" />
+                          <span>EDI Cleared: Copay ${item.virtualWait.insurance.copay} ({item.virtualWait.insurance.copayPaid ? 'PAID' : 'DUE'})</span>
+                        </div>
+                      )}
                     </div>
                     <div className="flex items-center gap-1.5">
+                      {item.virtualWait?.location === 'CAR' && (
+                        <button
+                          type="button"
+                          onClick={() => handlePageCar(item.id, item.patient.name)}
+                          className="px-2.5 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-[10px] font-black rounded-xl shadow-xs flex items-center gap-1 transition-all active:scale-95 cursor-pointer"
+                          title="Page patient from car via SMS"
+                        >
+                          <PhoneCall className="w-3 h-3 text-sky-200" />
+                          <span>Page Car</span>
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => handleStatusChange(item.id, 'CALLED')}

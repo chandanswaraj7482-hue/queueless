@@ -19,7 +19,9 @@ import {
   Award,
   TrendingDown,
   ThumbsUp,
+  PenSquare,
 } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
 
 export interface ClinicalReviewItem {
   id: string;
@@ -161,7 +163,23 @@ const DEFAULT_REVIEWS: ClinicalReviewItem[] = [
 ];
 
 export const ClinicalReviewsCarousel: React.FC = () => {
-  const [reviews, setReviews] = useState<ClinicalReviewItem[]>(DEFAULT_REVIEWS);
+  const [reviews, setReviews] = useState<ClinicalReviewItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('queueless_community_reviews');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const defaultFiltered = DEFAULT_REVIEWS.filter(
+            (def) => !parsed.some((p: ClinicalReviewItem) => p.id === def.id)
+          );
+          return [...parsed, ...defaultFiltered];
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to parse saved reviews from localStorage', e);
+    }
+    return DEFAULT_REVIEWS;
+  });
   const [selectedCategory, setSelectedCategory] = useState<'ALL' | 'DOCTORS' | 'PATIENTS'>('ALL');
   const [startIndex, setStartIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
@@ -284,20 +302,46 @@ export const ClinicalReviewsCarousel: React.FC = () => {
     const newReview: ClinicalReviewItem = {
       id: `rev-${Date.now()}`,
       author: formData.author,
-      role: formData.role || 'Clinical Administrator',
+      role: formData.role || (formData.category === 'DOCTORS' ? 'Clinic Owner & Physician' : 'Verified Patient / Caregiver'),
       org: formData.org,
-      avatar: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=200&auto=format&fit=crop&q=80',
-      badge: 'Verified Submission',
+      avatar: formData.category === 'DOCTORS'
+        ? 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&auto=format&fit=crop&q=80'
+        : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
+      badge: formData.rating >= 4 ? 'Verified Clinical Endorsement' : 'Verified Community Review',
       category: formData.category,
       rating: formData.rating,
-      highlight: formData.highlight || 'Zero Counter Chaos',
-      highlightMetric: 'Verified by Queueless',
+      highlight: formData.highlight || `${formData.rating}.0 Star Experience`,
+      highlightMetric: formData.rating >= 4 ? 'Verified by Queueless' : 'Customer Feedback',
       text: formData.text,
       verifiedHospital: true,
       date: 'Just now',
     };
 
-    setReviews([newReview, ...reviews]);
+    const updatedReviews = [newReview, ...reviews];
+    setReviews(updatedReviews);
+
+    // Persist in localStorage so it stays visible forever
+    try {
+      const customSubmissions = updatedReviews.filter(
+        (r) => r.badge === 'Verified Clinical Endorsement' || r.badge === 'Verified Community Review'
+      );
+      localStorage.setItem('queueless_community_reviews', JSON.stringify(customSubmissions));
+
+      // Asynchronously send to backend review API
+      fetch(`${API_BASE_URL}/api/v1/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patientName: formData.author,
+          rating: formData.rating,
+          comment: `[${formData.role || formData.category} @ ${formData.org}] ${formData.text}`,
+          feedbackTags: [formData.highlight || 'Hospital Review', formData.category],
+        }),
+      }).catch((err) => console.warn('Could not sync review to backend:', err));
+    } catch (e) {
+      console.warn('Storage error:', e);
+    }
+
     setSubmissionSuccess(true);
     setTimeout(() => {
       setIsModalOpen(false);
@@ -361,10 +405,10 @@ export const ClinicalReviewsCarousel: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs shadow-md shadow-blue-500/20 hover:shadow-lg transition-all inline-flex items-center gap-1.5 cursor-pointer"
+            className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 active:scale-95 text-white font-extrabold text-xs shadow-lg shadow-blue-500/25 transition-all inline-flex items-center gap-2 cursor-pointer hover:scale-105"
           >
-            <Sparkles className="w-3.5 h-3.5 text-cyan-200" />
-            <span>Submit Review</span>
+            <PenSquare className="w-4 h-4 text-cyan-200" />
+            <span>✍️ Write a Review</span>
           </button>
         </div>
       </div>
@@ -690,15 +734,16 @@ export const ClinicalReviewsCarousel: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Key Metric Achieved
+                      Your Category / Role
                     </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. -80% Wait Times"
-                      value={formData.highlight}
-                      onChange={(e) => setFormData({ ...formData, highlight: e.target.value })}
-                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    <select
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value as 'DOCTORS' | 'PATIENTS' })}
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+                    >
+                      <option value="DOCTORS">🩺 Doctor / Hospital Leader</option>
+                      <option value="PATIENTS">👤 Patient / Family Member</option>
+                    </select>
                   </div>
 
                   <div>
@@ -708,10 +753,13 @@ export const ClinicalReviewsCarousel: React.FC = () => {
                     <select
                       value={formData.rating}
                       onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })}
-                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
                     >
-                      <option value={5}>⭐⭐⭐⭐⭐ (5.0 Excellent)</option>
-                      <option value={4}>⭐⭐⭐⭐ (4.0 Very Good)</option>
+                      <option value={5}>⭐⭐⭐⭐⭐ 5.0 (Outstanding Experience)</option>
+                      <option value={4}>⭐⭐⭐⭐ 4.0 (Very Good)</option>
+                      <option value={3}>⭐⭐⭐ 3.0 (Average Experience)</option>
+                      <option value={2}>⭐⭐ 2.0 (Needs Improvement)</option>
+                      <option value={1}>⭐ 1.0 (Critical Feedback / Bugs)</option>
                     </select>
                   </div>
                 </div>

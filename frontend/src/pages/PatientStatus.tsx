@@ -189,8 +189,8 @@ const generateWhatsAppRxUrl = (data: any) => {
   text += `━━━━━━━━━━━━━━━━━━━━━\n`;
   const tokenRef = data.publicToken || data.tokenNumber || data.token;
   text += `🔗 *View & Download Official PDF Prescription:*\n`;
-  text += `http://localhost:5173/token/${tokenRef}\n\n`;
-  text += `🔐 *Synced to Patient ID:* Login at http://localhost:5173/portal with +91 ${cleanPhone}\n`;
+  text += `${window.location.origin}/token/${tokenRef}\n\n`;
+  text += `🔐 *Synced to Patient ID:* Login at ${window.location.origin}/portal with +91 ${cleanPhone}\n`;
   text += `_Powered by Queueless Healthcare OS_`;
 
   return `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(text)}`;

@@ -64,8 +64,19 @@ app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/ai', aiRouter);
 app.use('/api/v1/notifications', notificationRouter);
 
-// Health Check with Firewall Telemetry
-app.get('/health', (req, res) => {
+// Root route — service info
+app.get('/', (req, res) => {
+  res.json({
+    service: 'Queueless Clinical OS API',
+    version: '1.0.0',
+    status: 'live',
+    docs: '/health',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Health Check with Firewall Telemetry (supports /health and /healthz)
+app.get(['/health', '/healthz'], (req, res) => {
   res.json({
     status: 'healthy',
     product: 'Queueless Clinic Queue System',

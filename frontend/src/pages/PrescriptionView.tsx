@@ -97,7 +97,7 @@ export const PrescriptionView: React.FC = () => {
         : '') +
       (rx.advice ? `📝 *ADVICE:* ${rx.advice}\n\n` : '') +
       (rx.followUpDays ? `📅 *Next Review:* After ${rx.followUpDays} days in OPD\n\n` : '') +
-      `🔗 *View Official Rx:* http://localhost:5173/prescription/${publicToken}\n` +
+      `🔗 *View Official Rx:* ${window.location.origin}/prescription/${publicToken}\n` +
       `_Powered by Queueless Healthcare OS_`
   );
 

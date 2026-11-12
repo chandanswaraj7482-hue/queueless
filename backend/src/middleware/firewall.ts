@@ -142,6 +142,7 @@ export const wafInspectionMiddleware = (req: Request, res: Response, next: NextF
 // ============================================================================
 const ALLOWED_ORIGINS = [
   'https://queueless-os.vercel.app',
+  'https://queueless-96kv.onrender.com',
   'https://queueless-api-rho.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000',

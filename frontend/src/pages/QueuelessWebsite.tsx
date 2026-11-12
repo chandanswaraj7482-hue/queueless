@@ -2680,9 +2680,9 @@ export const QueuelessWebsite: React.FC = () => {
                 Starting from just {selectedCurrency.symbol}{selectedCurrency.rates.STARTER.monthly}/month with 14-Day Free Pilot. Includes instant high-resolution vector QR passes, 55" Smart TV Kiosks, zero IT hardware capex, and full clinical onboarding.
               </p>
               <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-slate-400">
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> 14-Day Free Trial</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> 14-Day Free Pilot (Clinics)</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Solo & Polyclinic Tiers</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Multi-Hospital Enterprise</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Multi-Hospital Enterprise SLA</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> ABDM, HIPAA & EMR Sync</span>
               </div>
             </div>

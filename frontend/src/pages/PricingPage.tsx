@@ -211,15 +211,28 @@ export const PricingPage: React.FC = () => {
                       className={`w-full py-3.5 px-6 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer btn-physics ${
                         plan.highlight
                           ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/25 ring-2 ring-blue-500/20 active:scale-95 shimmer-sweep hover-glow-blue'
+                          : plan.id === 'ENTERPRISE'
+                          ? 'bg-gradient-to-r from-slate-900 to-indigo-950 hover:from-black hover:to-indigo-900 text-white border border-indigo-500/40 active:scale-95 shadow-md'
                           : 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white active:scale-95'
                       }`}
                     >
                       <Zap className="w-4 h-4 fill-white" />
-                      <span>Start 14-Day Free Pilot ➔</span>
+                      <span>
+                        {plan.id === 'ENTERPRISE' ? 'Deploy Enterprise License ➔' : 'Start 14-Day Free Pilot ➔'}
+                      </span>
                     </button>
                     <p className="text-[10px] text-center text-slate-500 dark:text-slate-400 mt-2 font-semibold flex items-center justify-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <span>14 Days Free • Instant Cloud Setup • Cancel Anytime</span>
+                      {plan.id === 'ENTERPRISE' ? (
+                        <>
+                          <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
+                          <span>Dedicated Hospital SLA • Custom Integration • 30-Day Guarantee</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          <span>14 Days Free Pilot • Instant Cloud Setup • Cancel Anytime</span>
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -239,7 +252,7 @@ export const PricingPage: React.FC = () => {
                     Paid White-Label Add-On
                   </span>
                   <span className="text-xs font-mono font-extrabold text-purple-900 dark:text-purple-200">
-                    {selectedCurrency.code === 'INR' ? '₹1,999/month' : '$29/month'}
+                    {selectedCurrency.code === 'INR' ? '₹3,499/month' : '$49/month'}
                   </span>
                 </div>
                 <h4 className="text-base font-black text-slate-900 dark:text-white mt-1">

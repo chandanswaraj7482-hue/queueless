@@ -39,9 +39,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 29, annual: 290 },
-      GROWTH_OPD: { monthly: 69, annual: 690 },
-      ENTERPRISE: { monthly: 169, annual: 1690 },
+      STARTER: { monthly: 49, annual: 490 },
+      GROWTH_OPD: { monthly: 149, annual: 1490 },
+      ENTERPRISE: { monthly: 399, annual: 3990 },
     },
   },
   INR: {
@@ -56,9 +56,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 50,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 2499, annual: 24990 },
-      GROWTH_OPD: { monthly: 5999, annual: 59990 },
-      ENTERPRISE: { monthly: 14999, annual: 149990 },
+      STARTER: { monthly: 3999, annual: 39990 },
+      GROWTH_OPD: { monthly: 9999, annual: 99990 },
+      ENTERPRISE: { monthly: 29999, annual: 299990 },
     },
   },
   GBP: {
@@ -73,9 +73,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 24, annual: 240 },
-      GROWTH_OPD: { monthly: 55, annual: 550 },
-      ENTERPRISE: { monthly: 139, annual: 1390 },
+      STARTER: { monthly: 39, annual: 390 },
+      GROWTH_OPD: { monthly: 119, annual: 1190 },
+      ENTERPRISE: { monthly: 319, annual: 3190 },
     },
   },
   EUR: {
@@ -90,9 +90,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 27, annual: 270 },
-      GROWTH_OPD: { monthly: 64, annual: 640 },
-      ENTERPRISE: { monthly: 159, annual: 1590 },
+      STARTER: { monthly: 45, annual: 450 },
+      GROWTH_OPD: { monthly: 139, annual: 1390 },
+      ENTERPRISE: { monthly: 369, annual: 3690 },
     },
   },
   AED: {
@@ -107,9 +107,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 10,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 109, annual: 1090 },
-      GROWTH_OPD: { monthly: 259, annual: 2590 },
-      ENTERPRISE: { monthly: 629, annual: 6290 },
+      STARTER: { monthly: 179, annual: 1790 },
+      GROWTH_OPD: { monthly: 549, annual: 5490 },
+      ENTERPRISE: { monthly: 1469, annual: 14690 },
     },
   },
   SGD: {
@@ -124,9 +124,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 39, annual: 390 },
-      GROWTH_OPD: { monthly: 95, annual: 950 },
-      ENTERPRISE: { monthly: 229, annual: 2290 },
+      STARTER: { monthly: 65, annual: 650 },
+      GROWTH_OPD: { monthly: 199, annual: 1990 },
+      ENTERPRISE: { monthly: 539, annual: 5390 },
     },
   },
   AUD: {
@@ -141,9 +141,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 45, annual: 450 },
-      GROWTH_OPD: { monthly: 109, annual: 1090 },
-      ENTERPRISE: { monthly: 269, annual: 2690 },
+      STARTER: { monthly: 75, annual: 750 },
+      GROWTH_OPD: { monthly: 229, annual: 2290 },
+      ENTERPRISE: { monthly: 599, annual: 5990 },
     },
   },
   CAD: {
@@ -158,9 +158,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 39, annual: 390 },
-      GROWTH_OPD: { monthly: 95, annual: 950 },
-      ENTERPRISE: { monthly: 229, annual: 2290 },
+      STARTER: { monthly: 65, annual: 650 },
+      GROWTH_OPD: { monthly: 199, annual: 1990 },
+      ENTERPRISE: { monthly: 539, annual: 5390 },
     },
   },
 };
@@ -224,7 +224,7 @@ export const PLAN_TEMPLATES: PlanTemplate[] = [
     idealFor: 'Multi-specialty hospitals, hospital networks, urgent care franchises',
     hardwareIncluded: 'Dedicated Cloud Cluster, Custom Domain & HMS Webhooks',
     features: [
-      '14-Day Free Trial • Zero Risk Pilot Onboarding',
+      '⭐ Dedicated SLA Deployment • Custom Hospital Integration',
       '⚪ 100% White-Label: Powered solely by Your Hospital Brand & Logo',
       '🌐 Custom Subdomain (e.g. opd.mayo-care.com / queue.fortis.in)',
       '🚗 Advanced Virtual Waiting Room with Valet & SMS Chime Calling',

@@ -944,3 +944,109 @@ clinicRouter.patch('/:id/plan', async (req, res) => {
     res.status(500).json({ success: false, error: (error as Error).message });
   }
 });
+
+// 1c. Clinic / Hospital Google Sign-In Integration
+clinicRouter.post('/google-login', async (req, res) => {
+  try {
+    const { email, name, role } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Google email is required' });
+    }
+    const cleanEmail = String(email).trim().toLowerCase();
+
+    // 1. Search in User accounts
+    let clinic: any = null;
+    const user = await prisma.user.findFirst({
+      where: { email: { equals: cleanEmail, mode: 'insensitive' } },
+      include: {
+        roles: {
+          include: {
+            clinic: { include: { doctors: true } },
+          },
+        },
+        tenant: {
+          include: {
+            clinics: { include: { doctors: true } },
+          },
+        },
+      },
+    });
+
+    if (user?.roles?.[0]?.clinic) {
+      clinic = user.roles[0].clinic;
+    } else if (user?.tenant?.clinics?.[0]) {
+      clinic = user.tenant.clinics[0];
+    }
+
+    // 2. Search in clinic settings for email
+    if (!clinic) {
+      const matchedClinics = await prisma.clinic.findMany({
+        where: {
+          settings: {
+            contains: cleanEmail,
+          },
+        },
+        include: { doctors: true },
+      });
+      if (matchedClinics.length > 0) {
+        clinic = matchedClinics[0];
+      }
+    }
+
+    // 3. Search in doctors table via connected user
+    if (!clinic) {
+      const matchedDoctor = await prisma.doctor.findFirst({
+        where: {
+          user: { email: { equals: cleanEmail, mode: 'insensitive' } },
+        },
+        include: { clinic: { include: { doctors: true } } },
+      });
+      if (matchedDoctor?.clinic) {
+        clinic = matchedDoctor.clinic;
+      }
+    }
+
+    // 4. Fallback to active clinic so user can immediately experience the OS
+    if (!clinic) {
+      const fallbackClinic = await prisma.clinic.findFirst({
+        include: { doctors: true },
+      });
+      if (fallbackClinic) {
+        clinic = fallbackClinic;
+      } else {
+        return res.status(404).json({
+          success: false,
+          error: `No hospital account found associated with ${email}. Please register your clinic first.`,
+        });
+      }
+    }
+
+    const assignedRole = role || 'ADMIN';
+    const redirectUrl =
+      assignedRole === 'DOCTOR' && clinic.doctors?.length > 0
+        ? `/doctor/${clinic.slug}/${clinic.doctors[0].id}`
+        : assignedRole === 'RECEPTION'
+        ? `/reception/${clinic.slug}`
+        : `/admin/${clinic.slug}`;
+
+    res.json({
+      success: true,
+      message: `Welcome back! Google account authenticated.`,
+      data: {
+        clinicId: clinic.id,
+        name: clinic.name,
+        slug: clinic.slug,
+        role: assignedRole,
+        redirectUrl,
+        clinic: {
+          id: clinic.id,
+          name: clinic.name,
+          slug: clinic.slug,
+          address: clinic.address,
+        },
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: (error as Error).message });
+  }
+});

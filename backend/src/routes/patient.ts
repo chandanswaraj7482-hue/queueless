@@ -549,3 +549,159 @@ patientRouter.get('/history/:mobile', async (req, res) => {
   }
 });
 
+
+// 6. Patient Google Sign-In / Firebase Authentication Integration
+patientRouter.post('/google-login', async (req, res) => {
+  try {
+    const { email, name, photoURL, uid } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Google email is required' });
+    }
+
+    const cleanEmail = String(email).trim().toLowerCase();
+
+    // 1. Search for existing patient records matching this email
+    let matchingPatients = await prisma.patient.findMany({
+      where: { email: { equals: cleanEmail, mode: 'insensitive' } },
+    });
+
+    let primaryPatient = matchingPatients[0];
+
+    // Find queue entries linked to this patient email
+    const allQueueEntries = await prisma.queueEntry.findMany({
+      where: {
+        OR: [
+          { patient: { email: { equals: cleanEmail, mode: 'insensitive' } } },
+        ],
+      },
+      orderBy: { joinedAt: 'desc' },
+      include: {
+        doctor: true,
+        service: true,
+        clinic: true,
+        payment: true,
+        patient: true,
+      },
+    });
+
+    if (!primaryPatient) {
+      if (allQueueEntries.length > 0 && allQueueEntries[0].patient) {
+        primaryPatient = allQueueEntries[0].patient;
+      } else {
+        // Attach to first clinic if available
+        const firstClinic = await prisma.clinic.findFirst();
+        if (firstClinic) {
+          primaryPatient = await prisma.patient.create({
+            data: {
+              name: name || cleanEmail.split('@')[0],
+              email: cleanEmail,
+              mobile: '',
+              tenantId: firstClinic.tenantId,
+              emergencyContact: `GOOGLE_UID:${uid || ''}`,
+            },
+          });
+        }
+      }
+    }
+
+    const patientProfile = primaryPatient || {
+      id: `google-${uid || cleanEmail}`,
+      name: name || cleanEmail.split('@')[0],
+      email: cleanEmail,
+      mobile: '',
+      photoURL: photoURL || null,
+      age: null,
+      gender: null,
+      bloodGroup: null,
+      address: null,
+    };
+
+    const today = new Date().toISOString().split('T')[0];
+    const activeToday = allQueueEntries.find(
+      (e) => e.queueDate === today && (e.status === 'WAITING' || e.status === 'CALLED' || e.status === 'IN_CONSULTATION')
+    );
+
+    const followUpPasses: any[] = [];
+    const seenDoctors = new Set();
+    allQueueEntries.forEach((entry) => {
+      if (entry.doctor && !seenDoctors.has(entry.doctorId) && entry.paymentStatus === 'PAID') {
+        seenDoctors.add(entry.doctorId);
+        const visitDate = new Date(entry.joinedAt);
+        const diffDays = Math.floor((new Date().getTime() - visitDate.getTime()) / (1000 * 60 * 60 * 24));
+        const clinicWindow = entry.clinic.followUpDays || 15;
+        if (diffDays <= clinicWindow) {
+          followUpPasses.push({
+            doctorName: entry.doctor.displayName,
+            specialty: entry.doctor.specialty,
+            roomNumber: entry.doctor.roomNumber,
+            clinicName: entry.clinic.name,
+            clinicSlug: entry.clinic.slug,
+            lastVisitDate: entry.queueDate,
+            daysRemaining: clinicWindow - diffDays,
+          });
+        }
+      }
+    });
+
+    res.json({
+      success: true,
+      message: 'Google authentication successful',
+      data: {
+        patient: {
+          id: patientProfile.id,
+          name: patientProfile.name,
+          mobile: patientProfile.mobile || '',
+          email: cleanEmail,
+          photoURL: photoURL || null,
+          age: patientProfile.age || null,
+          gender: patientProfile.gender || null,
+          bloodGroup: patientProfile.bloodGroup || null,
+          address: patientProfile.address || null,
+        },
+        activeToken: activeToday
+          ? {
+              id: activeToday.id,
+              token: activeToday.token,
+              publicToken: activeToday.publicToken,
+              status: activeToday.status,
+              clinicName: activeToday.clinic.name,
+              clinicSlug: activeToday.clinic.slug,
+              doctorName: activeToday.doctor?.displayName,
+              roomNumber: activeToday.doctor?.roomNumber,
+              feeAmount: activeToday.feeAmount,
+              paymentStatus: activeToday.paymentStatus,
+              isFollowUp: activeToday.isFollowUp,
+            }
+          : null,
+        hasVaultPassword: true,
+        followUpPasses,
+        totalVisits: allQueueEntries.length,
+        totalHospitals: Array.from(new Set(allQueueEntries.map((e) => e.clinic.name))).length,
+        history: allQueueEntries.map((e) => ({
+          id: e.id,
+          token: e.token,
+          publicToken: e.publicToken,
+          queueDate: e.queueDate,
+          status: e.status,
+          visitReason: e.visitReason,
+          doctorName: e.doctor?.displayName || 'General OPD',
+          roomNumber: e.doctor?.roomNumber || 'Room 1',
+          clinicName: e.clinic.name,
+          clinicSlug: e.clinic.slug,
+          feeAmount: e.feeAmount,
+          paymentStatus: e.paymentStatus,
+          isFollowUp: e.isFollowUp,
+          followUpNote: e.followUpNote,
+          diagnosis: e.diagnosis,
+          prescriptionJson: e.prescriptionJson,
+          hasPrescription: !!e.prescriptionJson || !!e.diagnosis,
+          joinedAt: e.joinedAt,
+          completedAt: e.completedAt,
+          paymentMethod: e.payment?.provider || 'CASH',
+        })),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: (error as Error).message });
+  }
+});

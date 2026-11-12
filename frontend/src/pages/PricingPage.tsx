@@ -213,15 +213,48 @@ export const PricingPage: React.FC = () => {
                       }`}
                     >
                       <Zap className="w-4 h-4 fill-white" />
-                      <span>Subscribe & Activate ➔</span>
+                      <span>Start 14-Day Free Pilot ➔</span>
                     </button>
-                    <p className="text-[10px] text-center text-slate-400 dark:text-slate-500 mt-2">
-                      Instant setup via Dodo Payments & PayPal • Cancel anytime
+                    <p className="text-[10px] text-center text-slate-500 dark:text-slate-400 mt-2 font-semibold flex items-center justify-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span>14 Days Free • Instant Cloud Setup • Cancel Anytime</span>
                     </p>
                   </div>
                 </div>
               );
             })}
+          </div>
+
+          {/* Optional Power Add-On: Custom Hospital Logo & White-Label Suite */}
+          <div className="max-w-5xl mx-auto mt-12 p-6 rounded-3xl bg-gradient-to-r from-purple-50 via-indigo-50/60 to-blue-50/80 dark:from-purple-950/40 dark:via-indigo-950/30 dark:to-blue-950/40 border border-purple-200/90 dark:border-purple-800/80 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-purple-500/30">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/60 px-2.5 py-0.5 rounded-full border border-purple-300/70 dark:border-purple-700">
+                    Paid White-Label Add-On
+                  </span>
+                  <span className="text-xs font-mono font-extrabold text-purple-900 dark:text-purple-200">
+                    {selectedCurrency.code === 'INR' ? '₹1,999/month' : '$29/month'}
+                  </span>
+                </div>
+                <h4 className="text-base font-black text-slate-900 dark:text-white mt-1">
+                  Custom Hospital Logo & Full White-Label Suite
+                </h4>
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 max-w-xl leading-relaxed">
+                  Replace default Queueless emblems with your hospital's official high-resolution branding on patient passes, 55" waiting room TV kiosks, printed standees, and doctor prescription letterheads.
+                </p>
+              </div>
+            </div>
+            <Link
+              to={`/signup?addon=custom_logo&currency=${currencyCode}`}
+              className="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-black text-xs shrink-0 shadow-md shadow-purple-600/30 transition-all active:scale-95 whitespace-nowrap cursor-pointer flex items-center gap-2"
+            >
+              <span>Add to Hospital Plan</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
 
           {/* Payment Gateways Bar */}

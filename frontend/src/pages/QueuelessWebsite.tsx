@@ -2677,12 +2677,13 @@ export const QueuelessWebsite: React.FC = () => {
                 Predictable, Zero-Surprise Plans for Every Hospital Scale
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed">
-                Starting from just {selectedCurrency.symbol}{selectedCurrency.rates.STARTER.monthly}/month. Includes official laser-etched QR hardware, zero IT setup capex, and a 30-day clinical satisfaction guarantee.
+                Starting from just {selectedCurrency.symbol}{selectedCurrency.rates.STARTER.monthly}/month with 14-Day Free Pilot. Includes instant high-resolution vector QR passes, 55" Smart TV Kiosks, zero IT hardware capex, and full clinical onboarding.
               </p>
               <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-slate-400">
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> 14-Day Free Trial</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Solo & Polyclinic Tiers</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Multi-Hospital Enterprise</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> ABDM & EMR Sync</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> ABDM, HIPAA & EMR Sync</span>
               </div>
             </div>
 
@@ -2691,7 +2692,7 @@ export const QueuelessWebsite: React.FC = () => {
                 to="/pricing"
                 className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-xl shadow-blue-600/30 hover:scale-105 active:scale-95 transition-all text-center flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Explore All Plans & Pricing ➔</span>
+                <span>Explore Plans & 14-Day Pilot ➔</span>
               </Link>
               <button
                 type="button"

@@ -45,6 +45,7 @@ import {
   KeyRound,
   Car,
   Coffee,
+  Mail,
 } from 'lucide-react';
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
 
@@ -236,6 +237,63 @@ export const PatientStatus: React.FC = () => {
   const [payingCopay, setPayingCopay] = useState(false);
   const [pagedBanner, setPagedBanner] = useState<string | null>(null);
 
+  // Free Notification States (Browser Web Push + Free Email Pass)
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>(() => {
+    return typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'default';
+  });
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [emailSuccessMsg, setEmailSuccessMsg] = useState<string | null>(null);
+
+  const requestNotificationPermission = async () => {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      try {
+        const perm = await Notification.requestPermission();
+        setNotificationPermission(perm);
+        if (perm === 'granted') {
+          new Notification('🔔 Queueless Turn Alerts Enabled!', {
+            body: 'You will receive a notification and phone chime when the doctor calls your token.',
+            icon: '/logo.png',
+          });
+        }
+      } catch (err) {
+        console.warn('Notification permission request error:', err);
+      }
+    }
+  };
+
+  const handleSendTokenEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!emailInput.trim() || !emailInput.includes('@')) return;
+    setSendingEmail(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/notifications/send-token-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailInput.trim(),
+          patientName: data?.patientName,
+          token: data?.token,
+          clinicName: data?.clinicName,
+          doctorName: data?.doctorName,
+          roomNumber: data?.roomNumber,
+          publicToken: data?.publicToken || publicToken,
+          estimatedWait: data?.estimatedWaitMinutes,
+        }),
+      });
+      const resData = await res.json();
+      if (resData.success) {
+        setEmailSuccessMsg(`Token pass sent to ${emailInput.trim()}! Please check your inbox.`);
+        setTimeout(() => setShowEmailModal(false), 3500);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSendingEmail(false);
+    }
+  };
+
   // Patient Vault Password State
   const [dismissVaultPrompt, setDismissVaultPrompt] = useState(false);
   const [showVaultPasswordModal, setShowVaultPasswordModal] = useState(false);
@@ -398,6 +456,25 @@ export const PatientStatus: React.FC = () => {
                 fetchedData.doctorName,
                 true
               );
+            }
+
+            // 1. Browser Web Push Notification (100% Free Forever)
+            if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+              try {
+                new Notification(`🔔 Your Turn! Token ${fetchedData.token}`, {
+                  body: `Please proceed immediately to ${fetchedData.roomNumber || 'Cabin 1'} for consultation with Dr. ${fetchedData.doctorName || 'Doctor'}.`,
+                  icon: '/logo.png',
+                  badge: '/logo.png',
+                  tag: 'token-called-' + fetchedData.token,
+                });
+              } catch (e) {
+                console.warn('Browser notification error:', e);
+              }
+            }
+
+            // 2. Phone Vibration (100% Free Forever)
+            if (typeof navigator !== 'undefined' && navigator.vibrate) {
+              navigator.vibrate([300, 100, 300, 100, 300]);
             }
           }
           prevStatusRef.current = fetchedData.status;
@@ -1476,6 +1553,38 @@ export const PatientStatus: React.FC = () => {
         </button>
       </div>
 
+      {/* 100% Free Live Screen Alerts (Web Push Notification API) */}
+      <div className="mb-4">
+        {notificationPermission !== 'granted' ? (
+          <button
+            type="button"
+            onClick={requestNotificationPermission}
+            className="w-full py-2.5 px-3.5 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 border border-amber-300 rounded-2xl flex items-center justify-between text-xs font-bold text-amber-900 transition-all cursor-pointer shadow-xs active:scale-[0.99]"
+          >
+            <div className="flex items-center gap-2 text-left">
+              <BellRing className="w-4 h-4 text-amber-600 shrink-0 animate-bounce" />
+              <div>
+                <span className="block font-black text-amber-950">🔔 Enable Turn Alerts (100% Free)</span>
+                <span className="block text-[10px] text-amber-700 font-normal">Phone will chime when doctor calls your token even in cafeteria</span>
+              </div>
+            </div>
+            <span className="px-2.5 py-1 bg-amber-500 text-white rounded-xl text-[10px] font-black uppercase tracking-wider shrink-0 shadow-xs">
+              Turn On
+            </span>
+          </button>
+        ) : (
+          <div className="w-full py-2 px-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center justify-between text-xs font-bold text-emerald-800">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>Free Turn Alerts Active • Screen & phone chime will alert you</span>
+            </div>
+            <span className="text-[9px] bg-emerald-200 text-emerald-950 px-2 py-0.5 rounded-full font-black">
+              ACTIVE
+            </span>
+          </div>
+        )}
+      </div>
+
       {/* Just Approved Celebration Banner */}
       {justUnlocked && (
         <div className="mb-4 p-5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-3xl shadow-xl shadow-emerald-600/30 text-center animate-bounce">
@@ -2327,6 +2436,38 @@ export const PatientStatus: React.FC = () => {
               </button>
             </div>
 
+            {/* 100% FREE NOTIFICATION ACTIONS: WHATSAPP & EMAIL PASS */}
+            <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <a
+                href={(() => {
+                  const phone = data.patientMobile?.replace(/\D/g, '').slice(-10) || '';
+                  const url = `https://queueless-os.vercel.app/token/${publicToken || data.publicToken || data.token}`;
+                  const msg = `🏥 *${data.clinicName}*\n🎫 *OPD Token:* ${data.token}\n👨‍⚕️ *Doctor:* Dr. ${data.doctorName} (${data.roomNumber})\n⏱️ *Est. Wait:* ~${data.estimatedWaitMinutes} mins\n🔗 *Track Live Wait Status:* ${url}`;
+                  return `https://wa.me/${phone ? `91${phone}` : ''}?text=${encodeURIComponent(msg)}`;
+                })()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-black py-3 px-4 rounded-2xl text-xs transition-all shadow-md flex items-center justify-center gap-2 active:scale-[0.99] cursor-pointer"
+              >
+                <MessageCircle className="w-4 h-4 fill-white" />
+                <span>Save to WhatsApp (Free)</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (data.patientMobile && data.patientMobile.includes('@')) {
+                    setEmailInput(data.patientMobile);
+                  }
+                  setShowEmailModal(true);
+                }}
+                className="w-full bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-black py-3 px-4 rounded-2xl text-xs transition-all shadow-md flex items-center justify-center gap-2 active:scale-[0.99] cursor-pointer"
+              >
+                <Mail className="w-4 h-4" />
+                <span>Email Pass to Me (Free)</span>
+              </button>
+            </div>
+
             {/* VAULT ACCOUNT CREATION BANNER (विकल्प A: Set Password / विकल्प B: Not Now) */}
             {!data.hasVaultPassword && !dismissVaultPrompt && (
               <div className="mt-3 p-4 bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 rounded-2xl border border-emerald-200 text-xs shadow-xs space-y-2">
@@ -2433,6 +2574,79 @@ export const PatientStatus: React.FC = () => {
           <span>Refresh</span>
         </button>
       </div>
+
+      {/* 100% FREE EMAIL TOKEN PASS MODAL (BREVO & RESEND ENGINE) */}
+      {showEmailModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-left relative animate-in zoom-in-95">
+            <button
+              type="button"
+              onClick={() => {
+                setShowEmailModal(false);
+                setEmailSuccessMsg(null);
+              }}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 rounded-full cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center border border-sky-200">
+                <Mail className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-slate-900">Email My OPD Token Pass</h3>
+                <span className="text-[10px] text-emerald-600 font-extrabold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                  100% Free • Zero Cost
+                </span>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+              Receive your official digital token slip, doctor cabin number, and live tracking link directly in your inbox.
+            </p>
+
+            {emailSuccessMsg ? (
+              <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-xs text-emerald-800 font-bold flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{emailSuccessMsg}</span>
+              </div>
+            ) : (
+              <form onSubmit={handleSendTokenEmail} className="space-y-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Enter Your Email Address
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    autoFocus
+                    placeholder="e.g. patient@gmail.com"
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={sendingEmail}
+                  className="w-full py-3 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
+                >
+                  {sendingEmail ? (
+                    <span>Dispatching Free Email...</span>
+                  ) : (
+                    <>
+                      <Mail className="w-4 h-4" />
+                      <span>Send Pass to My Email ➔</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="mt-6 text-center">
         <p className="text-[11px] text-slate-400 font-medium">

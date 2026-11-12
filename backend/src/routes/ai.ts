@@ -12,6 +12,7 @@ const GEMINI_KEYS = [
   'AQ.Ab8RN6JQle9UO0QI-gMQmhvRKt1MK_lS47OOdIBMUIqk30NMgA',
 ];
 
+const GEMINI_API_KEY = GEMINI_KEYS[0] || process.env.GEMINI_API_KEY || '';
 let currentKeyIndex = 0;
 
 function getNextGeminiKey(): string {

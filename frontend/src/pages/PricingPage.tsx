@@ -27,8 +27,10 @@ import {
 
 export const PricingPage: React.FC = () => {
   const navigate = useNavigate();
-  const [currencyCode, setCurrencyCode] = useState<string>('USD');
-  const [billingCycle, setBillingCycle] = useState<'MONTHLY' | 'ANNUAL'>('ANNUAL');
+  const [currencyCode, setCurrencyCode] = useState<string>(() => {
+    return localStorage.getItem('queueless_currency') || 'USD';
+  });
+  const [billingCycle, setBillingCycle] = useState<'MONTHLY' | 'ANNUAL'>('MONTHLY');
   const [faqCategory, setFaqCategory] = useState<FaqCategory>('ALL');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 

@@ -49,7 +49,7 @@ export const HospitalOnboarding: React.FC = () => {
   // URL Params
   const queryPlanId = (searchParams.get('plan') as PlanId) || 'GROWTH_OPD';
   const queryCurrency = searchParams.get('currency') || 'USD';
-  const queryCycle = (searchParams.get('cycle') as 'MONTHLY' | 'ANNUAL') || 'ANNUAL';
+  const queryCycle = (searchParams.get('cycle') as 'MONTHLY' | 'ANNUAL') || 'MONTHLY';
 
   // Step Tracker: 1 = Details & Credentials, 2 = Plan & Billing, 3 = Payment (Dodo/PayPal), 4 = Live Provisioned
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);

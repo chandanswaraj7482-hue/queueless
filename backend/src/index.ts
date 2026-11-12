@@ -91,10 +91,10 @@ app.get(['/health', '/healthz'], (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 5001;
+const PORT = Number(process.env.PORT) || 5001;
 if (process.env.VERCEL !== '1') {
-  server.listen(PORT, () => {
-    console.log(`🚀 Queueless Backend API running on http://localhost:${PORT}`);
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Queueless Backend API running on port ${PORT} (0.0.0.0)`);
   });
 }
 

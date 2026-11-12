@@ -23,6 +23,7 @@ import {
   ExternalLink,
   Youtube,
   Video,
+  Zap,
 } from 'lucide-react';
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
 
@@ -129,6 +130,28 @@ export const AnimatedClinicalReels: React.FC = () => {
   const [activeModalReel, setActiveModalReel] = useState<ClinicalReelData | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<HospitalYouTubeVideo>(HOSPITAL_YOUTUBE_VIDEOS[0]);
   const [isPlayingVideo, setIsPlayingVideo] = useState<boolean>(true);
+  const [isVideoMuted, setIsVideoMuted] = useState<boolean>(true);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const toggleVideoSound = () => {
+    if (isVideoMuted) {
+      iframeRef.current?.contentWindow?.postMessage(
+        JSON.stringify({ event: 'command', func: 'unMute', args: [] }),
+        '*'
+      );
+      iframeRef.current?.contentWindow?.postMessage(
+        JSON.stringify({ event: 'command', func: 'setVolume', args: [100] }),
+        '*'
+      );
+      setIsVideoMuted(false);
+    } else {
+      iframeRef.current?.contentWindow?.postMessage(
+        JSON.stringify({ event: 'command', func: 'mute', args: [] }),
+        '*'
+      );
+      setIsVideoMuted(true);
+    }
+  };
 
   // Animation ticks for each reel
   const [cabinStep, setCabinStep] = useState<number>(0);
@@ -230,25 +253,57 @@ export const AnimatedClinicalReels: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
-            <span className="px-2.5 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-full text-xs font-bold shadow-2xs flex items-center gap-1">
-              <VolumeX className="w-3.5 h-3.5 text-slate-500" />
-              <span>Sound Muted (सुरक्षित शांत मोड)</span>
-            </span>
-            <span className="px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-xs font-bold shadow-2xs">
+            {/* Interactive Sound Toggle Pill */}
+            <button
+              type="button"
+              onClick={toggleVideoSound}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-black shadow-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                isVideoMuted
+                  ? 'bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 ring-2 ring-amber-400/20'
+                  : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 ring-2 ring-emerald-500/20'
+              }`}
+              title={isVideoMuted ? 'Click to Unmute / आवाज चालू करें' : 'Click to Mute / आवाज बंद करें'}
+            >
+              {isVideoMuted ? (
+                <>
+                  <VolumeX className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
+                  <span>🔇 Sound Muted • Click to Unmute (आवाज चालू करें)</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="w-3.5 h-3.5 text-emerald-600 animate-bounce" />
+                  <span>🔊 Sound Active (आवाज चालू है) • Click to Mute</span>
+                </>
+              )}
+            </button>
+            <span className="px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-xs font-bold shadow-2xs hidden sm:inline-flex items-center">
               ✓ ABDM M1/M2 Certified Flow
             </span>
           </div>
         </div>
 
-        {/* 16:9 Cinema Frame Embed (User: "bro sound off hi rakhna user expericne kharb ho jata ha suru me phple se sound band hota mute rheag") */}
-        <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-slate-200/60 dark:border-slate-800">
+        {/* 16:9 Cinema Frame Embed with Autoloop + Muted Autoplay */}
+        <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-slate-200/60 dark:border-slate-800 group">
           <iframe
-            src={`https://www.youtube-nocookie.com/embed/${selectedVideo.id}?autoplay=0&mute=1&rel=0&modestbranding=1`}
+            ref={iframeRef}
+            src={`https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1&mute=${isVideoMuted ? '1' : '0'}&loop=1&playlist=${selectedVideo.id}&controls=1&enablejsapi=1&rel=0&playsinline=1&modestbranding=1`}
             title={selectedVideo.title}
             className="w-full h-full"
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
+
+          {/* Floating Tap to Unmute Overlay Button */}
+          {isVideoMuted && (
+            <button
+              type="button"
+              onClick={toggleVideoSound}
+              className="absolute top-3 right-3 z-20 px-3.5 py-2 bg-black/80 hover:bg-black text-white border border-white/25 rounded-full text-xs font-black flex items-center gap-2 shadow-2xl backdrop-blur-md cursor-pointer transition-all hover:scale-105"
+            >
+              <VolumeX className="w-4 h-4 text-amber-400" />
+              <span>Tap for Sound (आवाज खोलें) 🔊</span>
+            </button>
+          )}
         </div>
 
         {/* Subtitle / Description Bar */}
@@ -330,46 +385,68 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 1: DOCTOR CABIN 1-CLICK CALL                              */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-blue-500/60 transition-all duration-300 flex flex-col justify-between">
+        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-blue-500/80 transition-all duration-300 flex flex-col justify-between">
           {/* Animated Background Canvas Layer */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-black p-4 flex flex-col justify-center items-center overflow-hidden">
-            {/* Background Medical Ambient Grid */}
-            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
+            {/* Background Medical Ambient Grid & Glowing Nebula */}
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#3b82f6_1.5px,transparent_1.5px)] [background-size:16px_16px]" />
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
             {/* Simulated iPad Doctor Console */}
-            <div className="relative z-10 w-full max-w-[240px] bg-slate-900/90 backdrop-blur-xl border border-blue-500/30 rounded-2xl p-3.5 shadow-2xl flex flex-col gap-3">
+            <div className="relative z-10 w-full max-w-[245px] bg-slate-900/95 backdrop-blur-2xl border border-blue-500/40 rounded-2xl p-3.5 shadow-2xl flex flex-col gap-2.5">
               {/* Doctor Header Bar */}
               <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-400 font-bold text-xs">
+                  <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-400/50 flex items-center justify-center text-blue-400 font-bold text-sm shadow-inner">
                     👨‍⚕️
                   </div>
                   <div>
-                    <p className="text-[11px] font-bold text-white leading-tight">Dr. Rohan Sharma</p>
-                    <p className="text-[9px] text-blue-400 font-medium">Cabin 204 • Cardiology</p>
+                    <p className="text-[11px] font-black text-white leading-tight">Dr. Rohan Sharma, MD</p>
+                    <p className="text-[9px] text-blue-400 font-medium">Cabin 204 • Cardiology Hub</p>
                   </div>
                 </div>
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <div className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  <span className="text-[8px] font-bold text-emerald-400">ONLINE</span>
+                </div>
               </div>
 
-              {/* Patient Token Display */}
-              <div className="bg-slate-950/80 rounded-xl p-3 text-center border border-slate-800 relative overflow-hidden">
-                <p className="text-[10px] text-slate-400 uppercase font-semibold">Currently Consulting</p>
-                <div className="text-3xl font-black tracking-tight text-white mt-0.5 flex items-center justify-center gap-1.5">
-                  <span className={cabinStep >= 2 ? 'text-emerald-400 transition-colors' : 'text-slate-200'}>
+              {/* Pulsing Live ECG Vitals Line */}
+              <div className="h-5 w-full flex items-center justify-center overflow-hidden opacity-80">
+                <svg className="w-full h-full text-blue-400 stroke-current fill-none stroke-[1.8]" viewBox="0 0 200 30">
+                  <path
+                    d="M0,15 L40,15 L50,5 L60,25 L70,10 L80,20 L90,15 L140,15 L150,5 L160,25 L170,10 L180,20 L190,15 L200,15"
+                    className="animate-pulse"
+                  />
+                </svg>
+              </div>
+
+              {/* Patient Token Display with Calling Shockwave */}
+              <div className="bg-slate-950/90 rounded-xl p-3 text-center border border-slate-800 relative overflow-hidden">
+                <div className="flex items-center justify-between text-[9px] text-slate-400 uppercase font-semibold mb-1">
+                  <span>Current Patient</span>
+                  <span className="text-blue-400 font-mono">OPD #824</span>
+                </div>
+                
+                <div className="text-3xl font-black tracking-tight text-white flex items-center justify-center gap-2">
+                  <span className={cabinStep >= 2 ? 'text-emerald-400 transition-all scale-105 drop-shadow-[0_0_12px_rgba(52,211,153,0.5)]' : 'text-slate-100'}>
                     {cabinStep >= 2 ? 'A-116' : 'A-115'}
                   </span>
-                  {cabinStep === 2 && (
-                    <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-bold animate-pulse">
+                  {cabinStep >= 2 && (
+                    <span className="text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded-full font-black animate-pulse flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                       CALLING
                     </span>
                   )}
                 </div>
-                <p className="text-[10px] text-slate-400 mt-1">Suresh Verma (Age 42)</p>
+                <p className="text-[10px] text-slate-300 font-semibold mt-1">Suresh Verma (Age 42) • Follow-up</p>
 
                 {/* Animated Ripple Shockwave on Call */}
                 {cabinStep === 1 && (
-                  <div className="absolute inset-0 bg-blue-500/20 rounded-xl animate-ping pointer-events-none" />
+                  <>
+                    <div className="absolute inset-0 bg-blue-500/30 rounded-xl animate-ping pointer-events-none" />
+                    <div className="absolute inset-0 border-2 border-emerald-400 rounded-xl animate-ping pointer-events-none" style={{ animationDuration: '1.2s' }} />
+                  </>
                 )}
               </div>
 
@@ -377,29 +454,32 @@ export const AnimatedClinicalReels: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleToggleSound(1)}
-                className={`w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg ${
+                className={`w-full py-2.5 rounded-xl font-black text-xs flex items-center justify-center gap-2 transition-all shadow-xl cursor-pointer ${
                   cabinStep === 1
-                    ? 'bg-emerald-500 text-white scale-95 shadow-emerald-500/40'
+                    ? 'bg-emerald-500 text-white scale-95 shadow-emerald-500/50 ring-4 ring-emerald-400/30'
                     : cabinStep === 2
-                    ? 'bg-blue-600 text-white ring-2 ring-blue-400'
-                    : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:brightness-110'
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white ring-2 ring-blue-400'
+                    : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:brightness-110 active:scale-95'
                 }`}
               >
-                <Bell className={`w-3.5 h-3.5 ${cabinStep === 2 ? 'animate-bounce text-amber-300' : ''}`} />
-                <span>{cabinStep === 2 ? 'Calling Patient ➔' : 'Call Next Patient'}</span>
+                <Bell className={`w-3.5 h-3.5 ${cabinStep >= 2 ? 'animate-bounce text-amber-300' : ''}`} />
+                <span>{cabinStep >= 2 ? '🔔 Calling Cabin 204...' : 'Call Next Patient ➔'}</span>
               </button>
 
-              {/* Status Ticker */}
-              <div className="flex items-center justify-between text-[9px] text-slate-400 px-1">
-                <span>Waiting in Hall: <strong>3 Patients</strong></span>
-                <span className="text-emerald-400 font-semibold">Zero-Wait Active</span>
+              {/* Status Ticker & Waiting Room Count */}
+              <div className="flex items-center justify-between text-[9px] text-slate-400 px-1 pt-0.5">
+                <span>Waiting in Lobby: <strong className="text-slate-200">{cabinStep >= 2 ? '2 Patients' : '3 Patients'}</strong></span>
+                <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  Zero-Wait
+                </span>
               </div>
             </div>
 
-            {/* Pulse Indicator */}
-            <div className="mt-4 flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-[10px] text-blue-300">
-              <Activity className="w-3 h-3 text-blue-400 animate-pulse" />
-              <span>1-Tap Silent Call • No Intercom Noise</span>
+            {/* Pulse Indicator Pill */}
+            <div className="mt-3 flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-[10px] text-blue-300 backdrop-blur-md">
+              <Activity className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
+              <span>1-Tap Silent Call • Zero Loudspeaker Noise</span>
             </div>
           </div>
 
@@ -452,61 +532,82 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 2: 20-SEC ENTRANCE QR ADMISSION                           */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-emerald-500/60 transition-all duration-300 flex flex-col justify-between">
+        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-emerald-500/80 transition-all duration-300 flex flex-col justify-between">
           {/* Animated Background Canvas Layer */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-emerald-950/40 to-black p-4 flex flex-col justify-center items-center overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-emerald-950/40 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Ambient Depth Elements */}
-            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px]" />
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#10b981_1.5px,transparent_1.5px)] [background-size:16px_16px]" />
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
             {/* Smartphone Mockup */}
-            <div className="relative z-10 w-full max-w-[230px] bg-slate-900 border-2 border-slate-700 rounded-[28px] p-2.5 shadow-2xl flex flex-col gap-2">
-              {/* Phone Speaker Notch */}
-              <div className="w-12 h-1 bg-slate-700 rounded-full mx-auto" />
+            <div className="relative z-10 w-full max-w-[240px] bg-slate-900 border-2 border-slate-700 rounded-[30px] p-2.5 shadow-2xl flex flex-col gap-2">
+              {/* Phone Speaker Notch & Dynamic Island */}
+              <div className="flex items-center justify-between px-3 pt-1">
+                <span className="text-[9px] font-mono font-bold text-slate-400">9:41</span>
+                <div className="w-14 h-3 bg-black rounded-full border border-slate-800 flex items-center justify-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                </div>
+                <span className="text-[9px] font-bold text-slate-400">5G</span>
+              </div>
 
               {/* Screen Content */}
-              <div className="bg-slate-950 rounded-2xl p-3 border border-slate-800 relative overflow-hidden flex flex-col items-center">
+              <div className="bg-slate-950 rounded-2xl p-3 border border-slate-800 relative overflow-hidden flex flex-col items-center min-h-[220px] justify-center">
                 {/* QR Code Scanner Viewfinder with Sweeping Laser */}
                 {qrStep <= 1 && (
-                  <div className="relative w-28 h-28 border-2 border-emerald-500/60 rounded-xl flex items-center justify-center bg-emerald-500/5 my-2">
-                    <QrCode className="w-16 h-16 text-emerald-400 opacity-70" />
-                    {/* Animated Scanning Laser Beam */}
+                  <div className="relative w-32 h-32 border-2 border-emerald-500/70 rounded-2xl flex items-center justify-center bg-emerald-500/5 my-1">
+                    {/* Corner Reticles */}
+                    <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-emerald-400" />
+                    <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-emerald-400" />
+                    <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-emerald-400" />
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-emerald-400" />
+
+                    <QrCode className="w-20 h-20 text-emerald-400 opacity-80" />
+                    {/* Animated Sweeping Laser Beam with Glow */}
                     <div
-                      className="absolute left-1 right-1 h-0.5 bg-emerald-400 shadow-[0_0_12px_#10b981] transition-all duration-700"
+                      className="absolute left-1 right-1 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#10b981] transition-all duration-700 ease-in-out"
                       style={{
-                        top: qrStep === 0 ? '15%' : '85%',
+                        top: qrStep === 0 ? '12%' : '88%',
                       }}
                     />
-                    <div className="absolute -bottom-5 text-[9px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                      Scanning Gate QR...
+                    <div className="absolute -bottom-6 text-[9px] font-black text-emerald-400 bg-emerald-950/90 px-2.5 py-0.5 rounded-full border border-emerald-500/40 shadow-md">
+                      ⚡ Scanning Hospital Standee...
                     </div>
                   </div>
                 )}
 
                 {/* Patient Pass Generated State */}
                 {qrStep >= 2 && (
-                  <div className="w-full text-center py-2 animate-fade-in flex flex-col items-center gap-1.5">
-                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <div className="w-full text-center py-1 animate-fade-in flex flex-col items-center gap-1.5">
+                    <div className="w-9 h-9 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-400 animate-bounce" />
                     </div>
-                    <p className="text-[10px] font-bold text-emerald-300">Live Queue Pass Issued</p>
-                    <div className="bg-slate-900 border border-emerald-500/40 rounded-xl px-3 py-2 w-full mt-1">
-                      <p className="text-[9px] text-slate-400 uppercase">Your Token</p>
-                      <p className="text-2xl font-black text-white text-emerald-400">A-117</p>
-                      <div className="flex items-center justify-between text-[8px] text-slate-300 mt-1 border-t border-slate-800 pt-1">
-                        <span>Ahead: <strong>1 Patient</strong></span>
-                        <span className="text-amber-300 font-bold">ETA: ~6 Mins</span>
+                    <p className="text-[10px] font-black text-emerald-300 uppercase tracking-wide">Live Digital OPD Pass</p>
+                    
+                    <div className="bg-slate-900/90 border border-emerald-500/50 rounded-xl px-3 py-2 w-full mt-0.5 shadow-xl">
+                      <p className="text-[9px] text-slate-400 uppercase font-semibold">Assigned Token</p>
+                      <p className="text-3xl font-black text-emerald-400 tracking-tight drop-shadow">A-117</p>
+                      <div className="flex items-center justify-between text-[8px] text-slate-300 mt-1 border-t border-slate-800 pt-1 font-semibold">
+                        <span>Ahead: <strong className="text-white">1 Patient</strong></span>
+                        <span className="text-amber-300 font-bold flex items-center gap-1">
+                          <Clock className="w-2.5 h-2.5" />
+                          ETA: ~05:42 min
+                        </span>
                       </div>
                     </div>
-                    <span className="text-[8px] text-slate-400 mt-0.5">No App Download Needed</span>
+
+                    <div className="flex items-center gap-1 text-[8px] text-slate-400 mt-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      <span>Zero App Download • Opens in Browser</span>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Caption Pill */}
-            <div className="mt-3 flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] text-emerald-300">
-              <Smartphone className="w-3 h-3 text-emerald-400" />
-              <span>Instant WhatsApp & Web Token</span>
+            <div className="mt-3 flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] text-emerald-300 backdrop-blur-md">
+              <Smartphone className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Instant WhatsApp & Live Web Token Pass</span>
             </div>
           </div>
 
@@ -559,21 +660,22 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 3: SILENT LOBBY & 55" SMART TV CHIME                      */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-indigo-500/60 transition-all duration-300 flex flex-col justify-between">
+        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-indigo-500/80 transition-all duration-300 flex flex-col justify-between">
           {/* Animated Background Canvas Layer */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-indigo-950/40 to-black p-4 flex flex-col justify-center items-center overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-indigo-950/40 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Ambient Background Grid */}
-            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#6366f1_1px,transparent_1px)] [background-size:16px_16px]" />
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#6366f1_1.5px,transparent_1.5px)] [background-size:16px_16px]" />
+            <div className="absolute top-1/2 -right-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
             {/* 55" Smart TV Display Frame */}
-            <div className="relative z-10 w-full max-w-[240px] bg-slate-900/95 border-2 border-slate-700 rounded-2xl p-3 shadow-2xl flex flex-col gap-2">
+            <div className="relative z-10 w-full max-w-[245px] bg-slate-900/95 border-2 border-slate-700 rounded-2xl p-3 shadow-2xl flex flex-col gap-2 ring-1 ring-white/10">
               {/* TV Top Header */}
               <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
                 <div className="flex items-center gap-1.5">
                   <Tv className="w-3.5 h-3.5 text-indigo-400" />
                   <span className="text-[10px] font-black text-white tracking-wide">CAREMAX CENTRAL OPD</span>
                 </div>
-                <span className="text-[9px] font-mono text-emerald-400">11:34 AM</span>
+                <span className="text-[9px] font-mono text-emerald-400 font-bold">11:34 AM</span>
               </div>
 
               {/* Active Multi-Cabin Grid */}
@@ -584,20 +686,27 @@ export const AnimatedClinicalReels: React.FC = () => {
                   <span className="text-xs font-black font-mono text-slate-400">B-108</span>
                 </div>
 
-                {/* Cabin 2 - CALLING / BLINKING */}
+                {/* Cabin 2 - CALLING / BLINKING / STROBE */}
                 <div className={`flex items-center justify-between px-2.5 py-2 rounded-lg border transition-all ${
                   tvStep >= 1
-                    ? 'bg-emerald-950/70 border-emerald-500/70 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                    ? 'bg-emerald-950/80 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)] ring-2 ring-emerald-500/40'
                     : 'bg-slate-950/80 border-slate-800'
                 }`}>
                   <div>
-                    <span className="text-[10px] text-emerald-300 font-bold block">Cabin 2 • Cardiology</span>
-                    <span className="text-[8px] text-emerald-400 uppercase font-semibold">
-                      {tvStep >= 1 ? '🔔 Calling Now' : 'Consulting'}
+                    <span className="text-[10px] text-emerald-300 font-black block">Cabin 2 • Cardiology</span>
+                    <span className="text-[8px] text-emerald-400 uppercase font-bold flex items-center gap-1">
+                      {tvStep >= 1 ? (
+                        <>
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                          <span>🔔 Calling Patient Now</span>
+                        </>
+                      ) : (
+                        'In Consultation'
+                      )}
                     </span>
                   </div>
-                  <span className={`text-base font-black font-mono tracking-tight ${
-                    tvStep >= 1 ? 'text-emerald-300 animate-pulse' : 'text-slate-300'
+                  <span className={`text-lg font-black font-mono tracking-tight ${
+                    tvStep >= 1 ? 'text-emerald-300 animate-pulse drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'text-slate-300'
                   }`}>
                     CMX-101
                   </span>
@@ -610,29 +719,31 @@ export const AnimatedClinicalReels: React.FC = () => {
                 </div>
               </div>
 
-              {/* Equalizer Sound Wave Visualizer */}
-              <div className="flex items-center justify-center gap-1 pt-1">
-                {[12, 24, 16, 28, 14, 22, 18, 26, 15].map((h, i) => (
+              {/* Dynamic Sound Equalizer Spectrum Visualizer */}
+              <div className="flex items-center justify-center gap-1 pt-1.5 pb-0.5">
+                {[14, 26, 18, 30, 16, 28, 20, 32, 18, 24].map((h, i) => (
                   <span
                     key={i}
-                    className="w-1 bg-indigo-400 rounded-full transition-all duration-200"
+                    className="w-1 bg-gradient-to-t from-indigo-500 to-cyan-400 rounded-full transition-all duration-200"
                     style={{
-                      height: tvStep >= 1 ? `${(h * 0.8) + (Math.sin(tvStep + i) * 6)}px` : '4px',
-                      opacity: tvStep >= 1 ? 0.9 : 0.3,
+                      height: tvStep >= 1 ? `${Math.max(4, (h * 0.7) + (Math.sin(tvStep * 2 + i) * 8))}px` : '4px',
+                      opacity: tvStep >= 1 ? 1 : 0.3,
                     }}
                   />
                 ))}
               </div>
 
-              {/* Marquee Ticker */}
-              <div className="bg-slate-950 px-2 py-1 rounded text-[8px] text-amber-300 truncate font-medium text-center">
-                📢 टोकन CMX-101 कृपया कैबिन 2 में पधारें
+              {/* Marquee Ticker with Dual Languages */}
+              <div className="bg-slate-950/90 px-2 py-1 rounded-lg border border-slate-800 text-[8px] text-amber-300 truncate font-bold text-center flex items-center justify-center gap-1">
+                <span>📢 टोकन CMX-101 कृपया कैबिन 2 में पधारें</span>
+                <span className="text-slate-500">•</span>
+                <span className="text-slate-300">Please Proceed</span>
               </div>
             </div>
 
             {/* TV Badge */}
-            <div className="mt-3 flex items-center gap-1.5 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[10px] text-indigo-300">
-              <Tv className="w-3 h-3 text-indigo-400" />
+            <div className="mt-3 flex items-center gap-1.5 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[10px] text-indigo-300 backdrop-blur-md">
+              <Tv className="w-3.5 h-3.5 text-indigo-400" />
               <span>Full HD TV Display with Studio Chime</span>
             </div>
           </div>
@@ -686,70 +797,78 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 4: DIRECT UPI HOSPITAL BANK SETTLEMENT                    */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-purple-500/60 transition-all duration-300 flex flex-col justify-between">
+        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-purple-500/80 transition-all duration-300 flex flex-col justify-between">
           {/* Animated Background Canvas Layer */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-purple-950/40 to-black p-4 flex flex-col justify-center items-center overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-purple-950/40 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Ambient Background Grid */}
-            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:16px_16px]" />
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#a855f7_1.5px,transparent_1.5px)] [background-size:16px_16px]" />
+            <div className="absolute -top-10 -left-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
             {/* UPI Payment Flow Simulation Card */}
-            <div className="relative z-10 w-full max-w-[230px] bg-slate-900 border-2 border-slate-700 rounded-2xl p-3 shadow-2xl flex flex-col gap-2.5">
+            <div className="relative z-10 w-full max-w-[245px] bg-slate-900/95 border-2 border-slate-700 rounded-2xl p-3 shadow-2xl flex flex-col gap-2.5">
               {/* Payment Header */}
               <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-                <span className="text-[10px] font-bold text-white flex items-center gap-1.5">
+                <span className="text-[10px] font-black text-white flex items-center gap-1.5">
                   <CreditCard className="w-3.5 h-3.5 text-purple-400" />
-                  <span>OPD Fee Checkout</span>
+                  <span>OPD Fast Checkout</span>
                 </span>
-                <span className="text-[9px] bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded font-bold">
-                  Direct UPI
+                <span className="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-full font-black">
+                  Instant UPI
                 </span>
               </div>
 
               {/* Consultation Fee Card */}
-              <div className="bg-slate-950 rounded-xl p-2.5 text-center border border-slate-800">
-                <p className="text-[9px] text-slate-400">Total Consultation Fee</p>
-                <p className="text-2xl font-black text-white mt-0.5">₹500</p>
-                <p className="text-[9px] text-purple-400 font-medium">Dr. Rohan Sharma • OPD Pass</p>
+              <div className="bg-slate-950/90 rounded-xl p-2.5 text-center border border-slate-800">
+                <p className="text-[9px] text-slate-400 uppercase font-semibold">Total Consultation Fee</p>
+                <div className="text-3xl font-black text-white mt-0.5 tracking-tight flex items-center justify-center gap-1">
+                  <span className="text-emerald-400 drop-shadow">₹500</span>
+                  <span className="text-[9px] font-bold text-slate-400 font-mono">.00</span>
+                </div>
+                <p className="text-[9px] text-purple-400 font-bold mt-0.5">Dr. Rohan Sharma • OPD Pass</p>
               </div>
 
               {/* Step 1 & 2: Instant UPI Payment Simulation */}
               {paymentStep <= 1 && (
                 <div className="space-y-1.5">
-                  <div className="flex items-center justify-between bg-slate-950 px-2 py-1.5 rounded-lg border border-slate-800 text-[10px]">
-                    <span className="text-slate-300 font-semibold">Google Pay / PhonePe</span>
+                  <div className="flex items-center justify-between bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-800 text-[10px]">
+                    <div className="flex items-center gap-1.5">
+                      <Zap className="w-3.5 h-3.5 text-amber-400" />
+                      <span className="text-slate-200 font-bold">GPay / PhonePe / Paytm</span>
+                    </div>
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                   </div>
                   <button
                     type="button"
                     onClick={() => handleToggleSound(4)}
-                    className="w-full py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:brightness-110 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg active:scale-95 transition-all"
+                    className="w-full py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:brightness-110 text-white rounded-xl font-black text-xs flex items-center justify-center gap-1.5 shadow-xl shadow-purple-600/30 active:scale-95 transition-all cursor-pointer ring-2 ring-purple-400/20"
                   >
-                    <span>Pay ₹500 via UPI</span>
-                    <ArrowRight className="w-3 h-3" />
+                    <span>⚡ Pay ₹500 (Instant Settlement)</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               )}
 
               {/* Step 2 & 3: Direct Bank Settlement Invoice */}
               {paymentStep >= 2 && (
-                <div className="bg-emerald-950/70 border border-emerald-500/60 rounded-xl p-2.5 text-center flex flex-col items-center gap-1 animate-fade-in">
-                  <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <div className="bg-emerald-950/80 border border-emerald-400/80 rounded-xl p-2.5 text-center flex flex-col items-center gap-1 animate-fade-in shadow-xl shadow-emerald-950">
+                  <div className="w-7 h-7 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.5)]">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-bounce" />
                   </div>
-                  <p className="text-[10px] font-bold text-emerald-300">100% Settled Direct to Bank</p>
-                  <p className="text-[8px] text-slate-300">
-                    Direct Hospital A/c • HDFC Bank •••• 5678
+                  <p className="text-[10px] font-black text-emerald-300 uppercase">100% Direct Bank Settlement</p>
+                  <p className="text-[8px] text-slate-300 font-mono">
+                    HDFC Bank •••• 5678 (Hospital Main A/C)
                   </p>
-                  <div className="bg-slate-900/90 text-emerald-400 px-2 py-0.5 rounded text-[8px] font-bold border border-emerald-500/30 mt-0.5">
-                    0% Platform Commission
+                  <div className="bg-slate-900/90 text-emerald-400 px-2.5 py-0.5 rounded-full text-[8px] font-black border border-emerald-500/40 mt-0.5 flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                    <span>0% Platform Commission • Direct Payout</span>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Bottom Caption Pill */}
-            <div className="mt-3 flex items-center gap-1.5 px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-[10px] text-purple-300">
-              <ShieldCheck className="w-3 h-3 text-purple-400" />
+            <div className="mt-3 flex items-center gap-1.5 px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-[10px] text-purple-300 backdrop-blur-md">
+              <ShieldCheck className="w-3.5 h-3.5 text-purple-400" />
               <span>Zero-Custody Direct Bank Settlement</span>
             </div>
           </div>

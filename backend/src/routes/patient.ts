@@ -118,10 +118,81 @@ patientRouter.get('/check-eligibility', async (req, res) => {
   }
 });
 
-// 2. Patient Secure Login & Universal Multi-Hospital Medical/Visit History
+// 2. Patient Secure Login, Token Tracking & Universal Multi-Hospital Medical/Visit History
 patientRouter.post('/login', async (req, res) => {
   try {
-    const { mobile, pin } = req.body;
+    const { mobile, pin, password, token, patientName, email, identifier } = req.body;
+
+    // A. TRACK BY TOKEN ID (With optional verification by Mobile, Email, or Patient Name)
+    if (token) {
+      const cleanToken = String(token).trim();
+      const verifyStr = String(identifier || patientName || mobile || email || '').trim();
+
+      // Find matching queue entries across all hospitals
+      const entries = await prisma.queueEntry.findMany({
+        where: {
+          OR: [
+            { publicToken: cleanToken },
+            { token: { equals: cleanToken, mode: 'insensitive' } },
+            { token: { equals: cleanToken.replace(/^[A-Z]-?/i, ''), mode: 'insensitive' } },
+          ],
+        },
+        include: {
+          patient: true,
+          doctor: true,
+          clinic: true,
+        },
+        orderBy: { joinedAt: 'desc' },
+      });
+
+      if (entries.length === 0) {
+        return res.status(404).json({
+          success: false,
+          error: `Token "${cleanToken}" not found. Please double-check your token number or pass.`,
+        });
+      }
+
+      // If user supplied verification info (Mobile number, Email, or Name)
+      if (verifyStr) {
+        const verifyLower = verifyStr.toLowerCase();
+        const digitsOnly = verifyStr.replace(/\D/g, '');
+        const phoneSuffix = digitsOnly.length >= 10 ? digitsOnly.slice(-10) : digitsOnly;
+
+        const matched = entries.find((e) => {
+          const p = e.patient;
+          if (!p) return false;
+          // 1. Check patient name match
+          if (p.name && p.name.toLowerCase().includes(verifyLower)) return true;
+          // 2. Check email match
+          if (p.email && p.email.toLowerCase().includes(verifyLower)) return true;
+          // 3. Check mobile match
+          if (p.mobile && digitsOnly && p.mobile.replace(/\D/g, '').includes(phoneSuffix)) return true;
+          return false;
+        });
+
+        if (!matched) {
+          return res.status(403).json({
+            success: false,
+            error: 'Verification failed: The entered mobile number, email, or patient name does not match this token.',
+          });
+        }
+
+        return res.json({
+          success: true,
+          publicToken: matched.publicToken,
+          message: 'Identity verified successfully',
+        });
+      }
+
+      // Return publicToken of the active/latest entry
+      return res.json({
+        success: true,
+        publicToken: entries[0].publicToken,
+        message: 'Token found',
+      });
+    }
+
+    // B. FULL VAULT LOGIN BY REGISTERED MOBILE NUMBER OR EMAIL
 
     const inputStr = String(mobile || '').trim();
     if (!inputStr) {
@@ -180,7 +251,6 @@ patientRouter.post('/login', async (req, res) => {
       }
     }
 
-    const { password } = req.body;
     const enteredSecret = String(password || pin || '').trim();
 
     if (storedSecret) {

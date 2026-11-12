@@ -55,8 +55,8 @@ export const AboutPage: React.FC = () => {
 
           <div className="max-w-4xl mx-auto space-y-6 relative z-10">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 dark:bg-blue-950/70 border border-blue-200/80 dark:border-blue-800 rounded-full text-xs font-black uppercase tracking-wider text-blue-900 dark:text-blue-300 shadow-2xs">
-              <HeartPulse className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              <span>Architecting the Zero-Wait Hospital of Tomorrow</span>
+              <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>Zen Simplicity • Omni Power • Zero-Wait Healthcare</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-tight leading-tight">
@@ -66,8 +66,12 @@ export const AboutPage: React.FC = () => {
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
-              Every day, millions of sick patients and anxious families wait 2 to 4 hours in crowded hospital corridors for a 6-minute consultation. Queueless is replacing outdated thermal paper kiosks with an autonomous, zero-hardware clinical queue operating system.
+            <p className="text-base sm:text-xl font-bold text-slate-800 dark:text-slate-200 max-w-2xl mx-auto tracking-tight">
+              One Unified Clinical OS. Zero Hardware. Total Clinical Peace of Mind.
+            </p>
+
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
+              Every day, millions of sick patients and anxious families wait 2 to 4 hours in crowded hospital corridors for a 6-minute consultation. Inspired by the ruthless minimalism of <strong>Zen design</strong> and the all-in-one power of <strong>Omni engineering</strong>, Queueless replaces fragile thermal paper kiosks, blaring loudspeakers, and manual token lines with an autonomous, zero-hardware clinical operating system.
             </p>
 
             {/* Quick Metrics Bar */}

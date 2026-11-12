@@ -164,7 +164,7 @@ export const PatientPortal: React.FC = () => {
       return;
     }
     if (!patientName.trim()) {
-      setError('Please enter the Patient Name for identity verification.');
+      setError('Please enter your Mobile Number, Email, or Patient Name for identity verification.');
       return;
     }
 
@@ -177,14 +177,17 @@ export const PatientPortal: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           token: tokenId.trim(),
+          identifier: patientName.trim(),
           patientName: patientName.trim(),
+          mobile: patientName.trim(),
+          email: patientName.trim(),
         }),
       });
       const data = await res.json();
       if (data.success && data.publicToken) {
         navigate(`/token/${data.publicToken}`);
       } else {
-        setError(data.error || 'Verification failed. Patient name does not match this token.');
+        setError(data.error || 'Verification failed. Mobile number, email, or patient name does not match this token.');
       }
     } catch (err) {
       setError('Could not connect to clinic server. Please try again.');
@@ -586,21 +589,21 @@ export const PatientPortal: React.FC = () => {
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Patient Name (Identity Verification)
+                    Mobile Number, Email, or Patient Name (Identity Verification)
                   </label>
                   <div className="relative">
-                    <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                    <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Karan Mehra"
+                      placeholder="e.g. 9876543210, patient@gmail.com, or Karan Mehra"
                       value={patientName}
                       onChange={(e) => setPatientName(e.target.value)}
                       className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                     />
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-1">
-                    🔒 Required for privacy so nobody else can view your medical details.
+                  <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+                    <span>🔒 Verify with the mobile number, email, or patient name used during check-in.</span>
                   </p>
                 </div>
 

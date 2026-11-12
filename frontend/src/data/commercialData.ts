@@ -39,9 +39,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 49, annual: 490 },
-      GROWTH_OPD: { monthly: 149, annual: 1490 },
-      ENTERPRISE: { monthly: 399, annual: 3990 },
+      STARTER: { monthly: 199, annual: 1990 },
+      GROWTH_OPD: { monthly: 299, annual: 2990 },
+      ENTERPRISE: { monthly: 499, annual: 4990 },
     },
   },
   INR: {
@@ -56,9 +56,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 50,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 3999, annual: 39990 },
-      GROWTH_OPD: { monthly: 9999, annual: 99990 },
-      ENTERPRISE: { monthly: 29999, annual: 299990 },
+      STARTER: { monthly: 14999, annual: 149990 },
+      GROWTH_OPD: { monthly: 24999, annual: 249990 },
+      ENTERPRISE: { monthly: 39999, annual: 399990 },
     },
   },
   GBP: {
@@ -73,9 +73,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 39, annual: 390 },
-      GROWTH_OPD: { monthly: 119, annual: 1190 },
-      ENTERPRISE: { monthly: 319, annual: 3190 },
+      STARTER: { monthly: 159, annual: 1590 },
+      GROWTH_OPD: { monthly: 239, annual: 2390 },
+      ENTERPRISE: { monthly: 399, annual: 3990 },
     },
   },
   EUR: {
@@ -90,9 +90,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 45, annual: 450 },
-      GROWTH_OPD: { monthly: 139, annual: 1390 },
-      ENTERPRISE: { monthly: 369, annual: 3690 },
+      STARTER: { monthly: 189, annual: 1890 },
+      GROWTH_OPD: { monthly: 279, annual: 2790 },
+      ENTERPRISE: { monthly: 469, annual: 4690 },
     },
   },
   AED: {
@@ -107,9 +107,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 10,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 179, annual: 1790 },
-      GROWTH_OPD: { monthly: 549, annual: 5490 },
-      ENTERPRISE: { monthly: 1469, annual: 14690 },
+      STARTER: { monthly: 749, annual: 7490 },
+      GROWTH_OPD: { monthly: 1099, annual: 10990 },
+      ENTERPRISE: { monthly: 1849, annual: 18490 },
     },
   },
   SGD: {
@@ -124,9 +124,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 65, annual: 650 },
-      GROWTH_OPD: { monthly: 199, annual: 1990 },
-      ENTERPRISE: { monthly: 539, annual: 5390 },
+      STARTER: { monthly: 269, annual: 2690 },
+      GROWTH_OPD: { monthly: 399, annual: 3990 },
+      ENTERPRISE: { monthly: 679, annual: 6790 },
     },
   },
   AUD: {
@@ -141,9 +141,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 75, annual: 750 },
-      GROWTH_OPD: { monthly: 229, annual: 2290 },
-      ENTERPRISE: { monthly: 599, annual: 5990 },
+      STARTER: { monthly: 299, annual: 2990 },
+      GROWTH_OPD: { monthly: 449, annual: 4490 },
+      ENTERPRISE: { monthly: 749, annual: 7490 },
     },
   },
   CAD: {
@@ -158,9 +158,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 65, annual: 650 },
-      GROWTH_OPD: { monthly: 199, annual: 1990 },
-      ENTERPRISE: { monthly: 539, annual: 5390 },
+      STARTER: { monthly: 269, annual: 2690 },
+      GROWTH_OPD: { monthly: 399, annual: 3990 },
+      ENTERPRISE: { monthly: 679, annual: 6790 },
     },
   },
 };
@@ -169,12 +169,12 @@ export const PLAN_TEMPLATES: PlanTemplate[] = [
   {
     id: 'STARTER',
     name: 'Starter Clinic',
-    tagline: 'Ideal for solo clinics & specialty practices getting rid of paper tokens.',
-    doctorLimit: 'Up to 2 Consulting Doctors & Cabins',
+    tagline: 'Per clinic location for solo clinics & specialty practices getting rid of paper tokens.',
+    doctorLimit: 'Single Clinic Location • Up to 3 Consulting Doctors',
     idealFor: 'Single-doctor practices, dental clinics, pediatric & eye clinics',
     hardwareIncluded: 'Instant Cloud Setup & Print-Ready Vector QR Kit',
     features: [
-      '14-Day Free Trial • Instant 60-Second Setup',
+      '14-Day Free Pilot • Instant 60-Second Setup',
       'Zero-app patient QR mobile check-in',
       '1,500 monthly digital patient tokens (~50 patients/day)',
       'Pay-as-you-grow token credit top-ups (₹0.20 / credit)',
@@ -192,8 +192,8 @@ export const PLAN_TEMPLATES: PlanTemplate[] = [
     name: 'Growth Super OPD',
     badge: '🔥 MOST POPULAR • WORLDWIDE CHOICE',
     highlight: true,
-    tagline: 'The complete zero-wait operating system for busy multi-cabin polyclinics & urgent care.',
-    doctorLimit: 'Up to 8 Consulting Doctors & Cabins',
+    tagline: 'Per clinic location for busy multi-cabin polyclinics & urgent care facilities.',
+    doctorLimit: 'Single Polyclinic Location • Up to 12 Consulting Doctors',
     idealFor: 'Polyclinics, urgent care clinics, nursing homes & OPD wings',
     hardwareIncluded: 'Instant Cloud Setup & Multi-Screen TV Kiosk URL',
     features: [
@@ -217,10 +217,10 @@ export const PLAN_TEMPLATES: PlanTemplate[] = [
   },
   {
     id: 'ENTERPRISE',
-    name: 'Enterprise & White-Label',
+    name: 'Enterprise Hospital License',
     badge: '100% WHITE-LABEL • HOSPITAL CHAINS',
-    tagline: 'Zero Queueless branding, custom hospital domain, Oracle/Epic EHR APIs, and dedicated SLA.',
-    doctorLimit: 'Unlimited Doctors, Multi-Floors & Cabins',
+    tagline: 'Zero Queueless branding, custom hospital domain, Epic/Oracle EHR APIs, and dedicated SLA.',
+    doctorLimit: 'Hospital Facility or Multi-Branch Network • Unlimited Doctors',
     idealFor: 'Multi-specialty hospitals, hospital networks, urgent care franchises',
     hardwareIncluded: 'Dedicated Cloud Cluster, Custom Domain & HMS Webhooks',
     features: [

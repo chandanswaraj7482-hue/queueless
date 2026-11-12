@@ -166,7 +166,9 @@ export const PricingPage: React.FC = () => {
                           {selectedCurrency.symbol}
                           {displayRate.toLocaleString()}
                         </span>
-                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400">/ doctor / month</span>
+                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+                          {plan.id === 'ENTERPRISE' ? '/ hospital location / month' : '/ clinic location / month'}
+                        </span>
                       </div>
                       <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
                         {billingCycle === 'ANNUAL'

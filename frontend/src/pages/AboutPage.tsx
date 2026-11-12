@@ -56,22 +56,22 @@ export const AboutPage: React.FC = () => {
           <div className="max-w-4xl mx-auto space-y-6 relative z-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-blue-50 via-indigo-50 to-teal-50 dark:from-blue-950/70 dark:via-indigo-950/70 dark:to-teal-950/70 border border-blue-200/90 dark:border-blue-800 rounded-full text-xs font-black uppercase tracking-wider text-blue-950 dark:text-cyan-300 shadow-sm">
               <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>We Don't Chase Trends. We Build What's Next.</span>
+              <span>The Zen & Omni Philosophy</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-tight leading-tight">
-              Eliminating the Agony of <br className="hidden sm:inline" />
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-slate-950 dark:text-white tracking-tight leading-[1.08]">
+              We don't chase trends. <br />
               <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 dark:from-blue-400 dark:via-indigo-400 dark:to-teal-300 bg-clip-text text-transparent">
-                Hospital Waiting Rooms.
+                We build what's next.
               </span>
             </h1>
 
-            <p className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white max-w-3xl mx-auto tracking-tight">
-              "We don't chase trends. We build what's next."
+            <p className="text-lg sm:text-2xl font-bold text-slate-800 dark:text-slate-100 max-w-3xl mx-auto tracking-tight">
+              Eliminating the agony of hospital waiting rooms. Pure clinical flow, zero hardware, zero standing queues.
             </p>
 
             <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
-              Every day, millions of sick patients and anxious families wait 2 to 4 hours in crowded hospital corridors for a 6-minute consultation. While legacy healthtech vendors push clunky ₹2.5 lakh metal kiosks and thermal paper dispensers, Queueless builds what's next: an autonomous, zero-hardware clinical queue operating system that delivers absolute tranquility to hospital corridors.
+              Every day, millions of sick patients and anxious families wait 2 to 4 hours in crowded hospital corridors for a 6-minute consultation. While legacy healthtech vendors push clunky ₹2.5 lakh metal kiosks and thermal paper dispensers, Queueless builds what's next: an autonomous, zero-hardware cloud clinical queue operating system that restores absolute dignity and peace to healthcare.
             </p>
 
             {/* Quick Metrics Bar */}

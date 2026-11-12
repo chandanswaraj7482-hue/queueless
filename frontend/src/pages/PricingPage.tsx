@@ -254,7 +254,7 @@ export const PricingPage: React.FC = () => {
                     Paid White-Label Add-On
                   </span>
                   <span className="text-xs font-mono font-extrabold text-purple-900 dark:text-purple-200">
-                    {selectedCurrency.code === 'INR' ? '₹3,499/month' : '$49/month'}
+                    {selectedCurrency.code === 'INR' ? '₹1,999/month' : '$29/month'}
                   </span>
                 </div>
                 <h4 className="text-base font-black text-slate-900 dark:text-white mt-1">

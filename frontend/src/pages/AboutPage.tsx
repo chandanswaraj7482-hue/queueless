@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
+import { SeoHead } from '../components/SeoHead';
 import { WORLDWIDE_CURRENCIES, CurrencyConfig } from '../data/commercialData';
 
 export const AboutPage: React.FC = () => {
@@ -39,6 +40,12 @@ export const AboutPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans relative overflow-x-clip flex flex-col transition-colors duration-200">
+      <SeoHead
+        title="About Queueless | Our Clinical Philosophy & Architecture"
+        description="We don't chase trends. We build what's next. Queueless was founded to permanently eradicate hospital waiting room congestion with elegant zero-capex software."
+        keywords="about queueless, healthcare innovation, hospital OPD philosophy, clinical workflow engineers, zero capex queue system"
+        canonical="https://queueless-os.vercel.app/about"
+      />
       {/* Universal Commercial Navbar */}
       <CommercialNavbar
         currentCurrencyCode={currencyCode}

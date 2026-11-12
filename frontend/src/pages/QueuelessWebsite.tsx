@@ -64,6 +64,7 @@ import {
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
+import { SeoHead } from '../components/SeoHead';
 import { ClinicalReviewsCarousel } from '../components/ClinicalReviewsCarousel';
 import { AnimatedClinicalReels } from '../components/AnimatedClinicalReels';
 import {
@@ -714,6 +715,12 @@ export const QueuelessWebsite: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans relative overflow-x-clip transition-colors duration-200">
+      <SeoHead
+        title="Zero-Wait Clinical Queue Operating System for Hospitals"
+        description="Dismantling hospital waiting room congestion. Zero hardware capex, instant vector QR passes, smart TV kiosks, ABDM M1/M2 certification, and 1-tap doctor calling."
+        keywords="hospital queue management system, clinic token display, zero wait hospital OS, OPD queue software, ABDM certified clinic software, smart TV token display"
+        canonical="https://queueless-os.vercel.app/"
+      />
       {/* Modern High-End Dot Matrix Blueprint Pattern */}
       <div className="fixed inset-0 pointer-events-none z-0 bg-dot-matrix opacity-70"></div>
 

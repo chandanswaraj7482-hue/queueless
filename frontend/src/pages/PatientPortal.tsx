@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../config/api';
 import { signInWithGoogle } from '../config/firebase';
+import { SeoHead } from '../components/SeoHead';
 import {
   User,
   Phone,
@@ -357,6 +358,12 @@ export const PatientPortal: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6 pb-28">
+      <SeoHead
+        title="Universal Patient Health Vault & Live OPD Token Tracking"
+        description="Access your digital prescriptions, doctor advice, OPD token status, and 15-day free follow-up passes across all Queueless-powered hospitals."
+        keywords="patient portal, OPD token tracker, download digital prescription, hospital queue live status, health vault"
+        canonical="https://queueless-os.vercel.app/portal"
+      />
       {/* If not logged in: Mode Selector & Form */}
       {!portalData ? (
         <div className="max-w-md mx-auto mt-6">

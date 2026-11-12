@@ -1,11 +1,35 @@
 # Robots.txt for Queueless Clinical Queue OS
+# Enterprise Googlebot & Search Engine Indexing Guidelines
+
 User-agent: *
 Allow: /
+Allow: /pricing
+Allow: /features
+Allow: /about
+Allow: /security
+Allow: /roi-calculator
+Allow: /portal
+Allow: /login
+Allow: /signup
+Allow: /privacy
+Allow: /terms
+Allow: /refund-policy
+Allow: /display/city-health
+Allow: /check-in/city-health
+
+# Protect confidential doctor & hospital consoles
 Disallow: /admin/
+Disallow: /hospital-admin/
 Disallow: /doctor/
 Disallow: /reception/
+Disallow: /founder/
+Disallow: /queueless-admin/
+Disallow: /token/
+Disallow: /prescription/
+Disallow: /rx/
 
-# Sitemap for Google Search Indexing & Sitelinks
+# Search Crawl Rate
+Crawl-delay: 1
+
+# Sitemaps
 Sitemap: https://queueless-os.vercel.app/sitemap.xml
-Sitemap: https://frontend-red-ten-39.vercel.app/sitemap.xml
-

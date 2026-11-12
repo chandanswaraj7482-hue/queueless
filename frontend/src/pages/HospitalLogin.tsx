@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
+import { SeoHead } from '../components/SeoHead';
 
 import { API_BASE_URL } from '../config/api';
 import { signInWithGoogle } from '../config/firebase';
@@ -133,6 +134,11 @@ export const HospitalLogin: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans relative overflow-x-clip flex flex-col transition-colors duration-200">
+      <SeoHead
+        title="Hospital Portal Sign In | Clinical Dashboards"
+        description="Sign in to your hospital clinical console: Medical Director analytics, Doctor OPD calling desk, and Reception token control."
+        canonical="https://queueless-os.vercel.app/login"
+      />
       <CommercialNavbar />
 
       <main className="flex-1 flex items-center justify-center py-16 px-4 sm:px-6 relative z-10">

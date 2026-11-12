@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
+import { SeoHead } from '../components/SeoHead';
 import {
   WORLDWIDE_CURRENCIES,
   PLAN_TEMPLATES,
@@ -48,6 +49,12 @@ export const PricingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans relative overflow-x-clip flex flex-col transition-colors duration-200">
+      <SeoHead
+        title="Clinical Queue OS Pricing & Hospital Location Plans"
+        description="Predictable hospital queue management pricing starting at $149/mo (₹9,999/mo) per clinic location. Zero setup fees, unlimited OPD doctors, smart TV kiosks included."
+        keywords="hospital queue pricing, clinic queue cost, OPD token software price, ABDM queue license, zero capex clinic OS"
+        canonical="https://queueless-os.vercel.app/pricing"
+      />
       <CommercialNavbar
         currentCurrencyCode={currencyCode}
         onCurrencyChange={(code) => setCurrencyCode(code)}

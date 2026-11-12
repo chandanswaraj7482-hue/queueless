@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
+import { SeoHead } from '../components/SeoHead';
 import { GLOBAL_COMPLIANCE } from '../data/commercialData';
 
 export const FeaturesPage: React.FC = () => {
@@ -28,6 +29,12 @@ export const FeaturesPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans relative overflow-x-clip flex flex-col transition-colors duration-200">
+      <SeoHead
+        title="5 Clinical Portals & Full OPD Feature Suite"
+        description="Explore Queueless 5-portal ecosystem: Vector QR Patient Badges, 55-inch Lobby Smart TV Kiosks, 1-Tap Doctor Calling, and Multi-Floor OPD Orchestration."
+        keywords="hospital queue features, OPD smart TV display, digital token system, doctor calling console, reception desk queue software"
+        canonical="https://queueless-os.vercel.app/features"
+      />
       <CommercialNavbar
         currentCurrencyCode={currencyCode}
         onCurrencyChange={(code) => setCurrencyCode(code)}

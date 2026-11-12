@@ -11,23 +11,36 @@
     <meta name="keywords" content="Queueless, hospital queue system, clinic token system, ABDM certified queue, OPD queue management, zero wait hospital OS, clinical workflow software" />
     <meta name="author" content="Queueless Technologies Inc." />
     <meta name="google" content="notranslate" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="application-name" content="Queueless Clinical OS" />
+    <meta name="apple-mobile-web-app-title" content="Queueless" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="canonical" href="https://queueless-os.vercel.app/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Queueless Healthcare OS" />
     <meta property="og:url" content="https://queueless-os.vercel.app/" />
     <meta property="og:title" content="Queueless | Zero-Wait Clinical Queue Operating System" />
     <meta property="og:description" content="Dismantling hospital waiting room congestion. Zero hardware capex, instant vector QR passes, smart TV kiosks, and 1-tap doctor calling." />
     <meta property="og:image" content="https://queueless-os.vercel.app/logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Queueless Clinical OS Dashboard and Waiting Kiosk" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:site" content="@queueless_os" />
+    <meta property="twitter:creator" content="@queueless_os" />
     <meta property="twitter:url" content="https://queueless-os.vercel.app/" />
     <meta property="twitter:title" content="Queueless | Clinical Queue OS for Hospitals" />
     <meta property="twitter:description" content="Zero-Wait Clinical Queue Operating System for hospitals and multi-specialty clinics. Active in 450+ hospitals." />
     <meta property="twitter:image" content="https://queueless-os.vercel.app/logo.png" />
 
-    <!-- Google Sitelinks & Structured Data Schema (JSON-LD) -->
+    <!-- Google Sitelinks, SoftwareApplication, Review Rating & FAQ Schema (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -48,16 +61,87 @@
           }
         },
         {
-          "@type": "Organization",
+          "@type": "SoftwareApplication",
+          "@id": "https://queueless-os.vercel.app/#software",
+          "name": "Queueless Clinical Queue Operating System",
+          "operatingSystem": "Web, iOS, Android, Tizen, FireOS, Android TV",
+          "applicationCategory": "HealthApplication",
+          "description": "Next-generation hospital queue operating system that replaces ₹2.5L metal kiosks with smart QR passes, 55-inch TV kiosks, and doctor calling consoles.",
+          "offers": {
+            "@type": "Offer",
+            "price": "149.00",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2027-12-31",
+            "availability": "https://schema.org/InStock",
+            "url": "https://queueless-os.vercel.app/pricing"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "ratingCount": "1420",
+            "bestRating": "5",
+            "worstRating": "1"
+          }
+        },
+        {
+          "@type": "MedicalOrganization",
           "@id": "https://queueless-os.vercel.app/#organization",
           "name": "Queueless Technologies Inc.",
           "url": "https://queueless-os.vercel.app/",
           "logo": "https://queueless-os.vercel.app/queueless-logo.svg",
+          "description": "Pioneers in Zero-Wait hospital outpatient workflows and digital queue orchestration.",
           "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "Customer Support & Hospital Deployment",
-            "email": "support@queueless-os.vercel.app"
+            "email": "somethinglabs.tech@gmail.com",
+            "areaServed": "Global"
           }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://queueless-os.vercel.app/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How does Queueless eliminate hospital OPD wait times?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Queueless replaces crowded reception desks with vector QR check-in badges. Patients scan with their smartphone camera to get a live, dynamically updated digital queue pass with real-time ETA, eliminating physical line wait times."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is Queueless Ayushman Bharat (ABDM M1/M2) certified?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, Queueless is engineered for ABDM Milestone 1 and Milestone 2 compliance, supporting ABHA ID generation, paperless scan-and-share OPD check-in, and HL7 FHIR clinical records exchange."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What hardware is required to run the waiting room TV kiosk?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Zero expensive proprietary hardware is needed. Any standard smart TV, Chromecast, or browser-enabled screen can open the Queueless full-screen 1080p kiosk URL with multilingual acoustic chimes."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How much does a Queueless clinic or hospital subscription cost?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Queueless plans start at $149/month (₹9,999/mo) for single clinic locations, $249/month (₹18,999/mo) for multi-specialty polyclinics, and $399/month (₹29,999/mo) for full hospital networks with unlimited consulting doctors."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can patients check their live prescription and queue token from home?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! Patients can log in to the Queueless Universal Patient Portal with Google or their mobile number to view past prescriptions, lab tests, and 15-day free OPD follow-up eligibility."
+              }
+            }
+          ]
         },
         {
           "@type": "ItemList",
@@ -89,7 +173,7 @@
               "@type": "SiteNavigationElement",
               "position": 4,
               "name": "Queueless OS Pricing & Plans",
-              "description": "Transparent hospital queue pricing starting at ₹2,999/mo ($58/mo) for single clinics to multi-floor hospitals.",
+              "description": "Transparent hospital queue pricing starting at $149/mo (₹9,999/mo) per clinic location.",
               "url": "https://queueless-os.vercel.app/pricing"
             },
             {

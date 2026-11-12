@@ -105,3 +105,4 @@ export const logoutFirebase = async () => {
     console.warn('Firebase logout warning:', e);
   }
 };
+

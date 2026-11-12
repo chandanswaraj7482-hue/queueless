@@ -11,7 +11,7 @@ const FROM_NAME = process.env.FROM_NAME || 'Queueless Healthcare OS';
 /**
  * Helper to dispatch email via Brevo or Resend
  */
-async function sendEmailViaFreeProvider({
+export async function sendEmailViaFreeProvider({
   toEmail,
   toName,
   subject,

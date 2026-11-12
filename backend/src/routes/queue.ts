@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { prisma } from '../prisma';
 import { broadcastQueueUpdate } from '../socket';
 import { generateNextToken } from '../utils/token';
+import { sendEmailViaFreeProvider } from './notification';
 
 export const queueRouter = Router();
 
@@ -255,6 +256,35 @@ queueRouter.post('/public/clinics/:clinicId/check-ins', async (req, res) => {
         metadata: JSON.stringify({ token, name, mobileSuffix: mobile.slice(-4), feeAmount }),
       },
     });
+
+    // Automated Token Pass Email Dispatch (Non-blocking background)
+    if (patient.email && patient.email.includes('@')) {
+      const liveTrackingUrl = `https://queueless-os.vercel.app/token/${publicToken}`;
+      sendEmailViaFreeProvider({
+        toEmail: patient.email.trim(),
+        toName: name || 'Patient',
+        subject: `🎫 Your OPD Token Pass #${token} - ${clinic.name}`,
+        htmlContent: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 20px; background: #ffffff;">
+            <div style="background: linear-gradient(135deg, #0284c7, #4f46e5); color: #fff; padding: 20px; border-radius: 12px; text-align: center;">
+              <h2 style="margin: 0; font-size: 20px; color: #ffffff;">${clinic.name}</h2>
+              <p style="margin: 4px 0 0; font-size: 12px; color: #bae6fd;">Verified OPD Token Pass</p>
+            </div>
+            <div style="text-align: center; padding: 24px 0;">
+              <div style="font-size: 11px; text-transform: uppercase; color: #166534; font-weight: bold; letter-spacing: 1px;">Your Assigned Token</div>
+              <div style="font-size: 44px; font-weight: 900; color: #15803d; margin: 8px 0; font-family: monospace;">${token}</div>
+              <p style="font-size: 13px; color: #475569; margin: 0 0 16px 0;">Hello <strong>${name || 'Patient'}</strong>, your digital queue pass is ready.</p>
+              <div style="margin: 20px 0;">
+                <a href="${liveTrackingUrl}" style="background: #0284c7; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 13px; display: inline-block;">
+                  Track Live Wait Status On Phone ➔
+                </a>
+              </div>
+            </div>
+            <p style="font-size: 10px; color: #94a3b8; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 12px; margin: 0;">Powered by Queueless Clinical OS • 100% Confidential Healthcare</p>
+          </div>
+        `,
+      }).catch((e: any) => console.warn('[Auto Token Email Error]:', e.message));
+    }
 
     // Broadcast realtime update to clinic staff and screens
     broadcastQueueUpdate(clinic.id, 'queue_updated', {
@@ -994,10 +1024,34 @@ queueRouter.put('/:entryId/consultation', async (req, res) => {
       updateData.status = 'COMPLETED';
       updateData.completedAt = new Date();
 
-      // Automated Multi-Channel Dispatch Simulation
+      // Automated Multi-Channel Dispatch
       console.log(`[AUTOMATED WHATSAPP DISPATCH] E-Prescription ${rxNumber} sent as PDF to patient WhatsApp (+91 ${existing.patient.mobile})`);
-      if (existing.patient.email) {
-        console.log(`[AUTOMATED EMAIL DISPATCH] Official PDF E-Prescription ${rxNumber} emailed to ${existing.patient.email}`);
+      if (existing.patient.email && existing.patient.email.includes('@')) {
+        const portalUrl = `https://queueless-os.vercel.app/portal`;
+        sendEmailViaFreeProvider({
+          toEmail: existing.patient.email.trim(),
+          toName: existing.patient.name || 'Patient',
+          subject: `📋 Official Digital Prescription #${rxNumber} - ${existing.clinic.name}`,
+          htmlContent: `
+            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 550px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 20px; background: #ffffff;">
+              <div style="background: linear-gradient(135deg, #059669, #0284c7); color: #ffffff; padding: 20px; border-radius: 12px; text-align: center;">
+                <h2 style="margin: 0; font-size: 20px; color: #ffffff;">${existing.clinic.name}</h2>
+                <p style="margin: 4px 0 0; font-size: 12px; color: #a7f3d0;">Official Digital Prescription</p>
+              </div>
+              <div style="padding: 20px 0;">
+                <p style="font-size: 13px; color: #334155; margin: 0 0 12px 0;">Patient: <strong>${existing.patient.name || 'Patient'}</strong> | Prescribing Doctor: <strong>Dr. ${existing.doctor?.displayName || 'Consultant'}</strong></p>
+                ${diagnosis ? `<p style="background: #f0fdf4; padding: 10px 14px; border-radius: 8px; border: 1px solid #bbf7d0; font-size: 12px; color: #166534; margin: 0 0 16px 0;"><strong>🩺 Clinical Diagnosis:</strong> ${diagnosis}</p>` : ''}
+                ${advice ? `<div style="background: #f8fafc; border-left: 3px solid #0284c7; padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 11px; color: #334155; margin-bottom: 16px;"><strong>Doctor's Advice:</strong> ${advice}</div>` : ''}
+                <div style="margin: 24px 0; text-align: center;">
+                  <a href="${portalUrl}" style="background: #059669; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 13px; display: inline-block;">
+                    View in Health Vault & Download PDF ➔
+                  </a>
+                </div>
+              </div>
+              <p style="font-size: 10px; color: #94a3b8; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 12px; margin: 0;">100% Confidential Health Records • Powered by Queueless Healthcare OS</p>
+            </div>
+          `,
+        }).catch((e: any) => console.warn('[Auto Rx Email Error]:', e.message));
       }
     }
 

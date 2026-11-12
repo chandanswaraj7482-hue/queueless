@@ -8,16 +8,23 @@ import {
 } from 'firebase/auth';
 
 // Firebase configuration for Queueless OS
-// Defaults to the queueless-74dbb project
+// Configured with queueless-74dbb production credentials
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
+  apiKey:
+    import.meta.env.VITE_FIREBASE_API_KEY ||
+    'AIzaSyAQiAf7zRyhieQ8PcigTOLuFJghhFWaEJc',
   authDomain:
-    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'queueless-74dbb.firebaseapp.com',
+    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ||
+    'queueless-74dbb.firebaseapp.com',
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'queueless-74dbb',
   storageBucket:
-    import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'queueless-74dbb.appspot.com',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
+    import.meta.env.VITE_FIREBASE_STORAGE_BUCKET ||
+    'queueless-74dbb.firebasestorage.app',
+  messagingSenderId:
+    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '828291250162',
+  appId:
+    import.meta.env.VITE_FIREBASE_APP_ID ||
+    '1:828291250162:web:df03f5b0919c3a8601dd6b',
 };
 
 let app: any = null;

@@ -16,3 +16,4 @@ services:
         sync: false # Set to your free Neon.tech PostgreSQL connection string in Render Dashboard
       - key: CORS_ORIGIN
         value: https://queueless-os.vercel.app
+

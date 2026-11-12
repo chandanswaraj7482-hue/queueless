@@ -4,8 +4,8 @@ export const notificationRouter = Router();
 
 // Free Email Providers Configuration (Brevo: 300 free/day, Resend: 3,000 free/mo)
 const BREVO_API_KEY = process.env.BREVO_API_KEY || '';
-const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const FROM_EMAIL = process.env.FROM_EMAIL || 'no-reply@queueless.org';
+const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_B5ZnyzJr_H8eeAr7FPNZ5RQCd7rdNJGDc';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'onboarding@resend.dev';
 const FROM_NAME = process.env.FROM_NAME || 'Queueless Healthcare OS';
 
 /**

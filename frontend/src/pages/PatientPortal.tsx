@@ -177,7 +177,10 @@ export const PatientPortal: React.FC = () => {
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({
+        success: false,
+        error: 'Backend service is starting up. Please try again in 5 seconds.',
+      }));
       if (data.success && data.data) {
         setPortalData(data.data);
         localStorage.setItem(
@@ -202,7 +205,10 @@ export const PatientPortal: React.FC = () => {
   const handleOpenRx = async (publicToken: string) => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/queue/${publicToken}/prescription`);
-      const data = await res.json();
+      const data = await res.json().catch(() => ({
+        success: false,
+        error: 'Backend service is starting up. Please try again in 5 seconds.',
+      }));
       if (data.success) {
         setViewingRx(data.data);
       }
@@ -241,7 +247,10 @@ export const PatientPortal: React.FC = () => {
           email: patientName.trim(),
         }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({
+        success: false,
+        error: 'Backend service is starting up. Please try again in 5 seconds.',
+      }));
       if (data.success && data.publicToken) {
         navigate(`/token/${data.publicToken}`);
       } else {
@@ -274,7 +283,10 @@ export const PatientPortal: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile: mobile.trim(), password: password.trim() }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({
+        success: false,
+        error: 'Backend service is starting up. Please try again in 5 seconds.',
+      }));
       if (data.success) {
         setPortalData(data.data);
         localStorage.setItem(
@@ -319,7 +331,10 @@ export const PatientPortal: React.FC = () => {
           name: signupName.trim() || 'Patient',
         }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({
+        success: false,
+        error: 'Backend service is starting up. Please try again in 5 seconds.',
+      }));
       if (data.success) {
         setSignupSuccessMsg('🎉 Account & Password created! Opening your Universal Medical Vault...');
         setMobile(cleanId);

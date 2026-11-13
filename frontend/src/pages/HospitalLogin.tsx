@@ -46,7 +46,10 @@ export const HospitalLogin: React.FC = () => {
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({
+        success: false,
+        error: 'Backend service is starting up. Please try again in 5 seconds.',
+      }));
       if (data.success && data.data) {
         const hospitalName = data.data.clinic?.name || data.data.name || 'Hospital';
         const targetSlug = data.data.clinic?.slug || data.data.slug;
@@ -102,7 +105,10 @@ export const HospitalLogin: React.FC = () => {
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({
+        success: false,
+        error: 'Backend service is starting up. Please try again in 5 seconds.',
+      }));
 
       if (data.success && data.data) {
         const hospitalName = data.data.clinic?.name || data.data.name || 'Hospital';

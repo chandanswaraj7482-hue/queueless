@@ -36,6 +36,7 @@ import {
   CreditCard,
   Mail,
   Sliders,
+  QrCode,
 } from 'lucide-react';
 
 const generateWhatsAppRxUrl = (data: any) => {
@@ -858,47 +859,39 @@ export const PatientPortal: React.FC = () => {
             </span>
           </div>
 
-          {/* 🛡️ USA & Global Insurance Card (EDI 270/271 Cleared) */}
-          <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl border border-slate-800 relative overflow-hidden">
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center border border-indigo-400/30">
-                  <CreditCard className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-black text-white">UnitedHealthcare • Choice Plus PPO</h3>
-                    <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 text-[10px] font-bold rounded-full border border-emerald-500/30">
-                      EDI Cleared
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-400">Subscriber: {portalData.patient.name} • Group: #GRP-99482</p>
-                </div>
+          {/* Real Patient Health Overview Stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-2xs">
+              <div className="flex items-center justify-between text-slate-500 mb-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider">Total Consultations</span>
+                <Stethoscope className="w-4 h-4 text-blue-600" />
               </div>
-              <div className="text-right">
-                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Member ID</span>
-                <span className="text-xs font-black font-mono text-white tracking-wider">UHC-948201-A</span>
+              <div className="text-2xl font-black text-slate-900 font-mono">
+                {portalData.totalVisits || 0}
               </div>
+              <p className="text-[11px] text-slate-400 mt-0.5">Lifetime visits in Queueless network</p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 text-center">
-              <div className="p-2.5 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-[10px] text-slate-400 font-bold block uppercase">OPD Co-Pay</span>
-                <span className="text-base font-black text-emerald-400 font-mono mt-0.5 block">$35.00</span>
+            <div className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-2xs">
+              <div className="flex items-center justify-between text-slate-500 mb-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider">15-Day Free Follow-ups</span>
+                <Sparkles className="w-4 h-4 text-emerald-600" />
               </div>
-              <div className="p-2.5 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-[10px] text-slate-400 font-bold block uppercase">Remaining Ded.</span>
-                <span className="text-base font-black text-white font-mono mt-0.5 block">$250.00</span>
+              <div className="text-2xl font-black text-emerald-600 font-mono">
+                {portalData.followUpPasses?.length || 0}
               </div>
-              <div className="p-2.5 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-[10px] text-slate-400 font-bold block uppercase">Coinsurance</span>
-                <span className="text-base font-black text-indigo-300 font-mono mt-0.5 block">80 / 20</span>
+              <p className="text-[11px] text-slate-400 mt-0.5">Active zero-fee review slots</p>
+            </div>
+
+            <div className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-2xs">
+              <div className="flex items-center justify-between text-slate-500 mb-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider">Connected Hospitals</span>
+                <Building2 className="w-4 h-4 text-indigo-600" />
               </div>
-              <div className="p-2.5 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-[10px] text-slate-400 font-bold block uppercase">Pre-Auth</span>
-                <span className="text-xs font-black text-emerald-300 block mt-1">Not Required</span>
+              <div className="text-2xl font-black text-indigo-600 font-mono">
+                {portalData.totalHospitals || (portalData.history?.length > 0 ? 1 : 0)}
               </div>
+              <p className="text-[11px] text-slate-400 mt-0.5">ABDM-linked clinic network</p>
             </div>
           </div>
 
@@ -994,98 +987,121 @@ export const PatientPortal: React.FC = () => {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-bold">
-                  <tr>
-                    <th className="py-3 px-5">Date</th>
-                    <th className="py-3 px-5">Token</th>
-                    <th className="py-3 px-5">Doctor & Hospital</th>
-                    <th className="py-3 px-5">Diagnosis & Notes</th>
-                    <th className="py-3 px-5">Fee & Payment</th>
-                    <th className="py-3 px-5 text-right">Documents / Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {portalData.history.map((item: any) => (
-                    <tr key={item.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-3.5 px-5 font-semibold text-slate-700">
-                        {item.queueDate}
-                      </td>
-                      <td className="py-3.5 px-5 font-mono text-sm">
-                        <div className="font-black text-slate-900">{item.token}</div>
-                        <div className="text-[10px] text-slate-400 font-medium">#QL-{item.id.substring(0, 6).toUpperCase()}</div>
-                      </td>
-                      <td className="py-3.5 px-5">
-                        <div className="font-extrabold text-indigo-700 flex items-center gap-1.5">
-                          <Building2 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-                          <span>{item.clinicName}</span>
-                        </div>
-                        <div className="font-bold text-slate-800 text-xs mt-0.5">{item.doctorName}</div>
-                        <div className="text-slate-400 text-[10px]">{item.roomNumber}</div>
-                      </td>
-                      <td className="py-3.5 px-5 max-w-xs">
-                        <div className="font-bold text-slate-900 truncate">
-                          {item.diagnosis || item.visitReason || '-'}
-                        </div>
-                        {item.diagnosis && item.visitReason && (
-                          <div className="text-[10px] text-slate-400 truncate mt-0.5">
-                            Reason: {item.visitReason}
-                          </div>
-                        )}
-                      </td>
-                      <td className="py-3.5 px-5">
-                        {item.isFollowUp ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
-                            PAID ₹250 (15-Day Follow-Up)
-                          </span>
-                        ) : item.paymentStatus === 'PAID' ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-100 text-sky-800">
-                            PAID ₹{item.feeAmount} ({item.paymentMethod})
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800">
-                            DUE ₹{item.feeAmount}
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-3.5 px-5 text-right">
-                        <div className="flex items-center justify-end gap-1.5 flex-wrap">
-                          {/* Rx Button */}
-                          {item.hasPrescription && (
-                            <button
-                              onClick={() => handleOpenRx(item.publicToken)}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded-lg text-[11px] border border-emerald-200 transition-colors shadow-2xs cursor-pointer"
-                              title="View & Download Doctor Prescription PDF"
-                            >
-                              <FileText className="w-3 h-3 text-emerald-600" />
-                              <span>Digital Rx</span>
-                            </button>
-                          )}
-
-                          {/* Receipt Button */}
-                          <button
-                            onClick={() => handleOpenReceipt(item)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-bold rounded-lg text-[11px] border border-indigo-200 transition-colors shadow-2xs cursor-pointer"
-                            title="View & Download Official Fee Receipt PDF"
-                          >
-                            <Receipt className="w-3 h-3 text-indigo-600" />
-                            <span>Receipt</span>
-                          </button>
-
-                          {/* Live Ticket Pass */}
-                          <Link
-                            to={`/token/${item.publicToken}`}
-                            className="inline-flex items-center gap-1 px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-[11px] transition-colors"
-                            title="Open Live Token Screen"
-                          >
-                            <Ticket className="w-3 h-3" />
-                          </Link>
-                        </div>
-                      </td>
+              {!portalData.history || portalData.history.length === 0 ? (
+                <div className="py-14 px-6 text-center space-y-4">
+                  <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100 shadow-2xs">
+                    <Stethoscope className="w-7 h-7" />
+                  </div>
+                  <div className="space-y-1 max-w-md mx-auto">
+                    <h3 className="text-sm font-black text-slate-900">No Previous Medical Visits Recorded Yet</h3>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      When you check in at any Queueless hospital OPD or scan a doctor's QR standee, your live queue tokens, digital prescriptions (Rx), and consultation fee receipts will appear here automatically.
+                    </p>
+                  </div>
+                  <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                    <Link
+                      to="/check-in/city-health"
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm inline-flex items-center gap-1.5 transition-all"
+                    >
+                      <QrCode className="w-3.5 h-3.5" />
+                      <span>Self Check-In to OPD</span>
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-bold">
+                    <tr>
+                      <th className="py-3 px-5">Date</th>
+                      <th className="py-3 px-5">Token</th>
+                      <th className="py-3 px-5">Doctor & Hospital</th>
+                      <th className="py-3 px-5">Diagnosis & Notes</th>
+                      <th className="py-3 px-5">Fee & Payment</th>
+                      <th className="py-3 px-5 text-right">Documents / Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {portalData.history.map((item: any) => (
+                      <tr key={item.id} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="py-3.5 px-5 font-semibold text-slate-700">
+                          {item.queueDate}
+                        </td>
+                        <td className="py-3.5 px-5 font-mono text-sm">
+                          <div className="font-black text-slate-900">{item.token}</div>
+                          <div className="text-[10px] text-slate-400 font-medium">#QL-{item.id.substring(0, 6).toUpperCase()}</div>
+                        </td>
+                        <td className="py-3.5 px-5">
+                          <div className="font-extrabold text-indigo-700 flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                            <span>{item.clinicName}</span>
+                          </div>
+                          <div className="font-bold text-slate-800 text-xs mt-0.5">{item.doctorName}</div>
+                          <div className="text-slate-400 text-[10px]">{item.roomNumber}</div>
+                        </td>
+                        <td className="py-3.5 px-5 max-w-xs">
+                          <div className="font-bold text-slate-900 truncate">
+                            {item.diagnosis || item.visitReason || '-'}
+                          </div>
+                          {item.diagnosis && item.visitReason && (
+                            <div className="text-[10px] text-slate-400 truncate mt-0.5">
+                              Reason: {item.visitReason}
+                            </div>
+                          )}
+                        </td>
+                        <td className="py-3.5 px-5">
+                          {item.isFollowUp ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+                              PAID ₹250 (15-Day Follow-Up)
+                            </span>
+                          ) : item.paymentStatus === 'PAID' ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-100 text-sky-800">
+                              PAID ₹{item.feeAmount} ({item.paymentMethod})
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800">
+                              DUE ₹{item.feeAmount}
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-3.5 px-5 text-right">
+                          <div className="flex items-center justify-end gap-1.5 flex-wrap">
+                            {/* Rx Button */}
+                            {item.hasPrescription && (
+                              <button
+                                onClick={() => handleOpenRx(item.publicToken)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded-lg text-[11px] border border-emerald-200 transition-colors shadow-2xs cursor-pointer"
+                                title="View & Download Doctor Prescription PDF"
+                              >
+                                <FileText className="w-3 h-3 text-emerald-600" />
+                                <span>Digital Rx</span>
+                              </button>
+                            )}
+
+                            {/* Receipt Button */}
+                            <button
+                              onClick={() => handleOpenReceipt(item)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-bold rounded-lg text-[11px] border border-indigo-200 transition-colors shadow-2xs cursor-pointer"
+                              title="View & Download Official Fee Receipt PDF"
+                            >
+                              <Receipt className="w-3 h-3 text-indigo-600" />
+                              <span>Receipt</span>
+                            </button>
+
+                            {/* Live Ticket Pass */}
+                            <Link
+                              to={`/token/${item.publicToken}`}
+                              className="inline-flex items-center gap-1 px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-[11px] transition-colors"
+                              title="Open Live Token Screen"
+                            >
+                              <Ticket className="w-3 h-3" />
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>

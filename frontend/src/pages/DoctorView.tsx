@@ -708,12 +708,7 @@ export const DoctorView: React.FC = () => {
           }
         } catch (e) {}
 
-        const fallbackDocs = [
-          { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', roomNumber: 'Cabin 1' },
-          { id: 'doc-2', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology', roomNumber: 'Cabin 2' },
-          { id: 'doc-3', displayName: 'Dr. Priya Patel, MBBS', specialty: 'Pediatrics', roomNumber: 'Cabin 3' },
-          { id: 'doc-4', displayName: 'Dr. Amit Roy, MS', specialty: 'General Medicine', roomNumber: 'Cabin 4' },
-        ];
+        const realDocs = data.data?.doctors || [];
 
         if (data.success && data.data) {
           setClinicData({
@@ -722,12 +717,14 @@ export const DoctorView: React.FC = () => {
             logoUrl: data.data.logoUrl || customHospitalLogo,
           });
           setClinicId(data.data.id);
-          const docs = data.data.doctors?.length > 0 ? data.data.doctors : fallbackDocs;
-          setDoctors(docs);
-          const matched = resolveMatchingDoctor(docs, targetDoctorIdentifier);
+          setDoctors(realDocs);
+          const matched = resolveMatchingDoctor(realDocs, targetDoctorIdentifier);
           if (matched) {
             setSelectedDoctorId(matched.id);
             setLoginDoctorId(matched.id);
+          } else if (realDocs.length > 0) {
+            setSelectedDoctorId(realDocs[0].id);
+            setLoginDoctorId(realDocs[0].id);
           }
         } else {
           setClinicData({
@@ -735,18 +732,13 @@ export const DoctorView: React.FC = () => {
             name: customHospitalName,
             logoUrl: customHospitalLogo,
             slug: activeSlug,
-            doctors: fallbackDocs,
+            doctors: [],
           });
-          setDoctors(fallbackDocs);
-          const matched = resolveMatchingDoctor(fallbackDocs, targetDoctorIdentifier);
-          if (matched) {
-            setSelectedDoctorId(matched.id);
-            setLoginDoctorId(matched.id);
-          }
+          setDoctors([]);
         }
       })
       .catch(() => {
-        let customHospitalName = 'Caremax OPD Central Hospital';
+        let customHospitalName = 'Hospital OPD';
         let customHospitalLogo = '';
         try {
           const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
@@ -770,25 +762,14 @@ export const DoctorView: React.FC = () => {
           }
         } catch (e) {}
 
-        const fallbackDocs = [
-          { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', roomNumber: 'Cabin 1' },
-          { id: 'doc-2', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology', roomNumber: 'Cabin 2' },
-          { id: 'doc-3', displayName: 'Dr. Priya Patel, MBBS', specialty: 'Pediatrics', roomNumber: 'Cabin 3' },
-          { id: 'doc-4', displayName: 'Dr. Amit Roy, MS', specialty: 'General Medicine', roomNumber: 'Cabin 4' },
-        ];
         setClinicData({
           id: activeSlug,
           name: customHospitalName,
           logoUrl: customHospitalLogo,
           slug: activeSlug,
-          doctors: fallbackDocs,
+          doctors: [],
         });
-        setDoctors(fallbackDocs);
-        const matched = resolveMatchingDoctor(fallbackDocs, targetDoctorIdentifier);
-        if (matched) {
-          setSelectedDoctorId(matched.id);
-          setLoginDoctorId(matched.id);
-        }
+        setDoctors([]);
       });
   }, [activeSlug]);
 
@@ -809,132 +790,15 @@ export const DoctorView: React.FC = () => {
     fetch(`${API_BASE_URL}/api/v1/queue/clinics/${clinicId}/today?doctorId=${selectedDoctorId}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.data && data.data.length > 0) {
+        if (data.success && Array.isArray(data.data)) {
           setQueue(data.data);
         } else {
-          setQueue([
-            {
-              id: 'q-101',
-              token: 'A-101',
-              publicToken: 'QL-84921',
-              status: 'IN_CONSULTATION',
-              visitReason: 'Post-op knee ligament review',
-              joinedAt: new Date(Date.now() - 35 * 60000).toISOString(),
-              feeAmount: 250,
-              paymentStatus: 'PAID',
-              patient: {
-                id: 'pat-1',
-                name: 'Vikas Malhotra',
-                mobile: '+91 98765 11223',
-                age: 42,
-                gender: 'Male',
-                bloodGroup: 'B+',
-              },
-              doctor: { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', roomNumber: 'Cabin 1' },
-            },
-            {
-              id: 'q-102',
-              token: 'A-102',
-              publicToken: 'QL-84920',
-              status: 'WAITING',
-              visitReason: 'Joint stiffness & lower back pain',
-              joinedAt: new Date(Date.now() - 20 * 60000).toISOString(),
-              feeAmount: 250,
-              paymentStatus: 'PAID',
-              patient: {
-                id: 'pat-2',
-                name: 'Sunil Verma',
-                mobile: '+91 98765 43210',
-                age: 35,
-                gender: 'Male',
-                bloodGroup: 'O+',
-              },
-              doctor: { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', roomNumber: 'Cabin 1' },
-            },
-            {
-              id: 'q-103',
-              token: 'A-103',
-              publicToken: 'QL-84922',
-              status: 'WAITING',
-              visitReason: 'Routine health checkup',
-              joinedAt: new Date(Date.now() - 10 * 60000).toISOString(),
-              feeAmount: 0,
-              isFollowUp: true,
-              paymentStatus: 'FREE_FOLLOW_UP',
-              patient: {
-                id: 'pat-3',
-                name: 'Ramesh Gupta',
-                mobile: '+91 98111 22334',
-                age: 51,
-                gender: 'Male',
-                bloodGroup: 'A+',
-              },
-              doctor: { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', roomNumber: 'Cabin 1' },
-            },
-          ]);
+          setQueue([]);
         }
       })
-      .catch(() => {
-        setQueue([
-          {
-            id: 'q-101',
-            token: 'A-101',
-            publicToken: 'QL-84921',
-            status: 'IN_CONSULTATION',
-            visitReason: 'Post-op knee ligament review',
-            joinedAt: new Date(Date.now() - 35 * 60000).toISOString(),
-            feeAmount: 250,
-            paymentStatus: 'PAID',
-            patient: {
-              id: 'pat-1',
-              name: 'Vikas Malhotra',
-              mobile: '+91 98765 11223',
-              age: 42,
-              gender: 'Male',
-              bloodGroup: 'B+',
-            },
-            doctor: { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', roomNumber: 'Cabin 1' },
-          },
-          {
-            id: 'q-102',
-            token: 'A-102',
-            publicToken: 'QL-84920',
-            status: 'WAITING',
-            visitReason: 'Joint stiffness & lower back pain',
-            joinedAt: new Date(Date.now() - 20 * 60000).toISOString(),
-            feeAmount: 250,
-            paymentStatus: 'PAID',
-            patient: {
-              id: 'pat-2',
-              name: 'Sunil Verma',
-              mobile: '+91 98765 43210',
-              age: 35,
-              gender: 'Male',
-              bloodGroup: 'O+',
-            },
-            doctor: { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', roomNumber: 'Cabin 1' },
-          },
-          {
-            id: 'q-103',
-            token: 'A-103',
-            publicToken: 'QL-84922',
-            status: 'WAITING',
-            visitReason: 'Routine health checkup',
-            joinedAt: new Date(Date.now() - 10 * 60000).toISOString(),
-            feeAmount: 0,
-            isFollowUp: true,
-            paymentStatus: 'FREE_FOLLOW_UP',
-            patient: {
-              id: 'pat-3',
-              name: 'Ramesh Gupta',
-              mobile: '+91 98111 22334',
-              age: 51,
-              gender: 'Male',
-              bloodGroup: 'A+',
-            },
-            doctor: { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', roomNumber: 'Cabin 1' },
-          },
-        ]);
+      .catch((err) => {
+        console.error('Failed to fetch doctor queue:', err);
+        setQueue([]);
       })
       .finally(() => setLoading(false));
   };
@@ -1252,11 +1116,15 @@ export const DoctorView: React.FC = () => {
                 onChange={(e) => setLoginDoctorId(e.target.value)}
                 className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 shadow-xs cursor-pointer"
               >
-                {doctors.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.displayName} — {d.specialty} ({d.roomNumber || 'Cabin 1'})
-                  </option>
-                ))}
+                {doctors.length === 0 ? (
+                  <option value="">No doctors registered yet (Add in Director Admin)</option>
+                ) : (
+                  doctors.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.displayName} — {d.specialty} ({d.roomNumber || 'Cabin 1'})
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 
@@ -1269,7 +1137,7 @@ export const DoctorView: React.FC = () => {
                   type={showLoginPassword ? 'text' : 'password'}
                   value={doctorPasswordInput}
                   onChange={(e) => setDoctorPasswordInput(e.target.value)}
-                  placeholder="Enter your 4-digit PIN (e.g. 1234)"
+                  placeholder="Enter your 4-digit doctor PIN"
                   autoFocus
                   className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-xs font-mono font-bold text-slate-900 pr-10 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 shadow-xs"
                 />
@@ -1293,20 +1161,10 @@ export const DoctorView: React.FC = () => {
             </button>
           </form>
 
-          {/* Master Credentials PDF Quick Download for Demo */}
-          <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              Need Demo Passwords or Links?
-            </span>
-            <a
-              href="/QUEUOUS_CREDENTIALS.pdf"
-              download="QUEUOUS_CREDENTIALS.pdf"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-bold rounded-xl border border-slate-200 shadow-2xs transition-all active:scale-95"
-              title="Download Master Passwords & Demo Links PDF"
-            >
-              <FileDown className="w-3.5 h-3.5 text-sky-600" />
-              <span>Download Master Credentials (PDF)</span>
-            </a>
+          {/* Staff Assistance Note */}
+          <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-center gap-1.5 text-[11px] text-slate-500 font-medium">
+            <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+            <span>Forgot your PIN? Contact Hospital Reception or Director</span>
           </div>
         </div>
       </div>
@@ -1366,16 +1224,7 @@ export const DoctorView: React.FC = () => {
             <span>Test Voice Chime</span>
           </button>
 
-          {/* Master PDF Download Button */}
-          <a
-            href="/QUEUOUS_CREDENTIALS.pdf"
-            download="QUEUOUS_CREDENTIALS.pdf"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-all border border-slate-200 cursor-pointer active:scale-95 shadow-2xs"
-            title="Download Master Credentials & Direct Demo Links PDF"
-          >
-            <FileDown className="w-3.5 h-3.5 text-sky-600" />
-            <span className="hidden sm:inline">Credentials (PDF)</span>
-          </a>
+
 
           {/* Direct Cabin Link Button */}
           {currentDoc && (
@@ -2381,13 +2230,7 @@ export const DoctorView: React.FC = () => {
                         </div>
                       ) : null}
 
-                      {/* Insurance Eligibility Cleared Badge */}
-                      {item.virtualWait?.insurance && (
-                        <div className="mt-0.5 text-[9px] font-bold text-indigo-700 flex items-center gap-1">
-                          <ShieldCheck className="w-2.5 h-2.5 text-indigo-600" />
-                          <span>EDI Cleared: Copay ${item.virtualWait.insurance.copay} ({item.virtualWait.insurance.copayPaid ? 'PAID' : 'DUE'})</span>
-                        </div>
-                      )}
+
                     </div>
                     <div className="flex items-center gap-1.5">
                       {item.virtualWait?.location === 'CAR' && (
@@ -3206,18 +3049,7 @@ export const DoctorView: React.FC = () => {
                 className="w-full p-3.5 bg-slate-50 border border-slate-300 rounded-2xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed"
               />
               <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
-                <span>💡 Tip: Mention dose, timing (1-0-1 or OD/BD), and vitals freely.</span>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setRawDictationText(
-                      'Patient has high fever 101.4 F, BP 124/82 mmHg, pulse 80 bpm, cough and cold for 3 days. Prescribe Tab Paracetamol 650mg TDS for 3 days after meals, Tab Levocetirizine 5mg OD at night for 5 days. Drink warm fluids, avoid cold water, follow up after 5 days.'
-                    )
-                  }
-                  className="text-indigo-600 font-bold hover:underline cursor-pointer"
-                >
-                  Load Sample Dictation
-                </button>
+                <span>💡 Speak naturally or type: mention complaints, diagnosis, medications, dosage & follow-up.</span>
               </div>
             </div>
 

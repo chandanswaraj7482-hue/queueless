@@ -804,9 +804,14 @@ export const ClinicAdmin: React.FC = () => {
       ctx.font = '20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
       ctx.fillText('Get your digital token instantly & track queue from your phone.', width / 2, 830);
 
-      // URL
+      // URL - dynamically scaled so long hospital slugs never clip outside the card
       ctx.fillStyle = '#0284c7';
-      ctx.font = '600 20px monospace';
+      let urlFontSize = 18;
+      ctx.font = `600 ${urlFontSize}px monospace`;
+      while (ctx.measureText(checkInUrl).width > width - 120 && urlFontSize > 9) {
+        urlFontSize -= 1;
+        ctx.font = `600 ${urlFontSize}px monospace`;
+      }
       ctx.fillText(checkInUrl, width / 2, 875);
 
       // Divider
@@ -2777,9 +2782,11 @@ export const ClinicAdmin: React.FC = () => {
                 <p className="text-xs text-slate-500">
                   Get your digital token instantly & track queue live from your phone.
                 </p>
-                <p className="text-[11px] font-mono text-sky-700 font-semibold pt-2 break-all">
-                  {checkInUrl}
-                </p>
+                <div className="pt-2 px-2">
+                  <span className="inline-block px-3 py-1 bg-sky-50 text-sky-800 font-mono text-[10px] sm:text-[11px] font-semibold rounded-lg border border-sky-200/80 max-w-full break-all">
+                    {checkInUrl}
+                  </span>
+                </div>
               </div>
 
               {/* Platform Provider Footer (Powered by Queueless) */}

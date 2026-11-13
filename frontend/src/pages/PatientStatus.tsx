@@ -229,12 +229,6 @@ export const PatientStatus: React.FC = () => {
   const [vehiclePlate, setVehiclePlate] = useState('');
   const [updatingLocation, setUpdatingLocation] = useState(false);
   const [locationSuccessMsg, setLocationSuccessMsg] = useState<string | null>(null);
-
-  const [selectedPayer, setSelectedPayer] = useState('UnitedHealthcare (Choice Plus PPO)');
-  const [memberId, setMemberId] = useState('UHC-948201-A');
-  const [verifyingInsurance, setVerifyingInsurance] = useState(false);
-  const [insuranceData, setInsuranceData] = useState<any | null>(null);
-  const [payingCopay, setPayingCopay] = useState(false);
   const [pagedBanner, setPagedBanner] = useState<string | null>(null);
 
   // Free Notification States (Browser Web Push + Free Email Pass)
@@ -479,11 +473,10 @@ export const PatientStatus: React.FC = () => {
           }
           prevStatusRef.current = fetchedData.status;
 
-          // Sync Virtual Wait and Insurance data if available
+          // Sync Virtual Wait data if available
           if (fetchedData.virtualWait) {
             if (fetchedData.virtualWait.location) setVirtualLocation(fetchedData.virtualWait.location);
             if (fetchedData.virtualWait.vehiclePlate) setVehiclePlate(fetchedData.virtualWait.vehiclePlate);
-            if (fetchedData.virtualWait.insurance) setInsuranceData(fetchedData.virtualWait.insurance);
             if (fetchedData.virtualWait.pagedMessage) {
               setPagedBanner(fetchedData.virtualWait.pagedMessage);
             }
@@ -599,57 +592,7 @@ export const PatientStatus: React.FC = () => {
     }
   };
 
-  const handleVerifyInsurance = async () => {
-    setVerifyingInsurance(true);
-    try {
-      const entryId = data?.id || publicToken;
-      const res = await fetch(`${API_BASE_URL}/api/v1/queue/${entryId}/verify-insurance`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          payerName: selectedPayer,
-          memberId: memberId.trim() || 'UHC-894021',
-          groupNumber: 'GRP-99482',
-        }),
-      });
-      const resJson = await res.json();
-      if (resJson.success && resJson.data?.insurance) {
-        setInsuranceData(resJson.data.insurance);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setVerifyingInsurance(false);
-    }
-  };
 
-  const handlePayCopay = async () => {
-    setPayingCopay(true);
-    try {
-      const entryId = data?.id || publicToken;
-      const res = await fetch(`${API_BASE_URL}/api/v1/queue/${entryId}/pay-copay`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: insuranceData?.copay || 35,
-          method: 'APPLE_PAY',
-        }),
-      });
-      const resJson = await res.json();
-      if (resJson.success) {
-        setInsuranceData((prev: any) => ({
-          ...prev,
-          copayPaid: true,
-          copayPaymentRef: resJson.data?.copayPaymentRef || 'PAY-CLEARED',
-        }));
-        playClinicChime();
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setPayingCopay(false);
-    }
-  };
 
   // Automatic verification if returning from Cashfree redirect with order_id
   useEffect(() => {
@@ -2225,138 +2168,6 @@ export const PatientStatus: React.FC = () => {
                 )}
               </div>
             )}
-
-            {/* 🛡️ USA Feature: Real-Time Insurance & Co-Pay Verification (EDI 270/271 Engine) */}
-            <div className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-xs space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg">
-                    <ShieldCheck className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-black text-slate-900 flex items-center gap-1.5">
-                      <span>Real-Time US Insurance Eligibility</span>
-                      <span className="text-[10px] bg-indigo-100 text-indigo-800 font-extrabold px-1.5 py-0.2 rounded-full">
-                        EDI 270 / 271 Cleared
-                      </span>
-                    </h4>
-                    <p className="text-[11px] text-slate-500">
-                      Instant coverage check & copay calculation before entering the exam room.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {!insuranceData ? (
-                <div className="space-y-2.5 text-xs">
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                      Select Health Plan / Payer
-                    </label>
-                    <select
-                      value={selectedPayer}
-                      onChange={(e) => setSelectedPayer(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs"
-                    >
-                      <option value="UnitedHealthcare (Choice Plus PPO)">UnitedHealthcare (Choice Plus PPO)</option>
-                      <option value="Blue Cross Blue Shield (Highmark PPO)">Blue Cross Blue Shield (Highmark PPO)</option>
-                      <option value="Aetna (Open Choice Managed Care)">Aetna (Open Choice Managed Care)</option>
-                      <option value="Cigna (Open Access Plus)">Cigna (Open Access Plus)</option>
-                      <option value="Humana (Medicare Advantage)">Humana (Medicare Advantage)</option>
-                      <option value="Medicare Part B (Original)">Medicare Part B (Original CMS)</option>
-                      <option value="Kaiser Permanente (Integrated Health)">Kaiser Permanente (Integrated Health)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                      Member / Subscriber ID
-                    </label>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={memberId}
-                        onChange={(e) => setMemberId(e.target.value)}
-                        placeholder="e.g. UHC-849201"
-                        className="flex-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleVerifyInsurance}
-                        disabled={verifyingInsurance}
-                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs rounded-xl shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-                      >
-                        {verifyingInsurance ? (
-                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                        ) : (
-                          <Zap className="w-3.5 h-3.5 text-amber-300" />
-                        )}
-                        <span>{verifyingInsurance ? 'Clearing...' : 'Verify Coverage'}</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-3 bg-gradient-to-br from-indigo-50/90 to-sky-50/90 border border-indigo-200 rounded-xl space-y-2.5 text-xs">
-                  <div className="flex items-center justify-between border-b border-indigo-100 pb-2">
-                    <div>
-                      <span className="text-[10px] font-black text-indigo-700 uppercase tracking-wide block">
-                        Verified Payer
-                      </span>
-                      <strong className="text-slate-900 text-xs">{insuranceData.payerName}</strong>
-                    </div>
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black border border-emerald-200">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                      <span>{insuranceData.coverageStatus || 'ACTIVE'}</span>
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className="p-2 bg-white rounded-lg border border-indigo-100 shadow-2xs">
-                      <span className="text-[10px] text-slate-400 font-bold block">Patient Co-Pay</span>
-                      <span className="text-base font-black text-slate-900 font-mono">${insuranceData.copay}</span>
-                    </div>
-                    <div className="p-2 bg-white rounded-lg border border-indigo-100 shadow-2xs">
-                      <span className="text-[10px] text-slate-400 font-bold block">Deductible Rem.</span>
-                      <span className="text-xs font-black text-slate-800 block mt-0.5 font-mono">
-                        ${insuranceData.deductibleRemaining}
-                      </span>
-                    </div>
-                    <div className="p-2 bg-white rounded-lg border border-indigo-100 shadow-2xs">
-                      <span className="text-[10px] text-slate-400 font-bold block">Coinsurance</span>
-                      <span className="text-xs font-black text-indigo-700 block mt-0.5">
-                        {insuranceData.coinsurance}
-                      </span>
-                    </div>
-                  </div>
-
-                  {insuranceData.copayPaid ? (
-                    <div className="p-2 bg-emerald-100/90 border border-emerald-300 rounded-lg text-emerald-900 text-xs font-bold flex items-center justify-between">
-                      <span className="flex items-center gap-1.5">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                        <span>${insuranceData.copay} Co-pay Settled via Apple Pay</span>
-                      </span>
-                      <span className="text-[10px] font-mono text-emerald-700">{insuranceData.copayPaymentRef}</span>
-                    </div>
-                  ) : (
-                    <div className="pt-1 flex items-center justify-between gap-2">
-                      <span className="text-[11px] text-slate-600 font-medium">
-                        Due at check-in: <strong className="text-slate-900 font-mono">${insuranceData.copay}</strong>
-                      </span>
-                      <button
-                        type="button"
-                        onClick={handlePayCopay}
-                        disabled={payingCopay}
-                        className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-                      >
-                        <CreditCard className="w-3.5 h-3.5 text-sky-400" />
-                        <span>{payingCopay ? 'Processing...' : `Pay $${insuranceData.copay} Co-pay (Apple Pay)`}</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
 
             {/* Payment Status Card */}
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">

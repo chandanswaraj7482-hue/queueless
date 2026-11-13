@@ -520,7 +520,7 @@ export const PricingPage: React.FC = () => {
               Ready to Eliminate Lobby Chaos in 20 Minutes?
             </h2>
             <p className="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto mt-2">
-              Join 450+ hospitals running zero-wait OPDs. Activate your zero-wait clinical workspace today with Dodo Payments, Cashfree, or Simulated Test Mode.
+              Join 450+ hospitals running zero-wait OPDs. Activate your zero-wait clinical workspace today with Dodo Payments or Cashfree.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link

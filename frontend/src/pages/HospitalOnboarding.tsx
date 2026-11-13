@@ -76,15 +76,12 @@ export const HospitalOnboarding: React.FC = () => {
   const [initialDoctorSpecialty, setInitialDoctorSpecialty] = useState('General Medicine');
   const [initialDoctorRoom, setInitialDoctorRoom] = useState('Cabin 1');
 
-  // Step 3: Payment Gateway (Cashfree Real Production, Simulated Test Mode, Dodo Payments)
-  const [paymentGateway, setPaymentGateway] = useState<'CASHFREE' | 'TEST_MODE' | 'DODOPAYMENTS'>('CASHFREE');
-  const [cardNumber, setCardNumber] = useState('4242 •••• •••• 4242');
-  const [cardExpiry, setCardExpiry] = useState('12/28');
-  const [cardCvc, setCardCvc] = useState('888');
-  const [cardHolder, setCardHolder] = useState('Dr. Clinical Director');
-
-  // Interactive Test Payment Modal & Cancellation Notice
-  const [showSimulationModal, setShowSimulationModal] = useState(false);
+  // Step 3: Payment Gateway (Dodo Payments, Cashfree)
+  const [paymentGateway, setPaymentGateway] = useState<'DODOPAYMENTS' | 'CASHFREE'>('DODOPAYMENTS');
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cardCvc, setCardCvc] = useState('');
+  const [cardHolder, setCardHolder] = useState('');
   const [paymentCancelledNotice, setPaymentCancelledNotice] = useState<string | null>(null);
 
   // Processing & Success State
@@ -136,17 +133,9 @@ export const HospitalOnboarding: React.FC = () => {
     setCurrentStep(3);
   };
 
-  // Step 3: Trigger Payment Verification Simulation
-  const handleInitiatePayment = (e: React.FormEvent) => {
+  // Step 3: Trigger Payment & Hospital Provisioning
+  const handleInitiatePayment = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMsg(null);
-    setPaymentCancelledNotice(null);
-    setShowSimulationModal(true);
-  };
-
-  // User Clicks YES: Payment Approved & Clinic Provisioned
-  const handleApprovePayment = async () => {
-    setShowSimulationModal(false);
     setIsProcessing(true);
     setErrorMsg(null);
     setPaymentCancelledNotice(null);
@@ -269,15 +258,6 @@ export const HospitalOnboarding: React.FC = () => {
     } finally {
       setIsProcessing(false);
     }
-  };
-
-  // User Clicks NO: Payment Declined / Cancelled
-  const handleDeclinePayment = () => {
-    setShowSimulationModal(false);
-    setIsProcessing(false);
-    setPaymentCancelledNotice(
-      'Payment transaction was cancelled or declined by user. No funds were debited. You can review your details or switch payment method and retry anytime.'
-    );
   };
 
   const copyToClipboard = (text: string, label: string) => {
@@ -694,7 +674,7 @@ export const HospitalOnboarding: React.FC = () => {
           )}
 
           {/* ============================================================== */}
-          {/* STEP 3: Payment Gateway Checkout (Cashfree, Dodo Payments, Test Simulator) */}
+          {/* STEP 3: Payment Gateway Checkout (Dodo Payments, Cashfree) */}
           {/* ============================================================== */}
           {currentStep === 3 && (
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-10 shadow-xl space-y-6 animate-in fade-in">
@@ -742,13 +722,38 @@ export const HospitalOnboarding: React.FC = () => {
                 </div>
               )}
 
-              {/* Payment Method Selector Tabs (Cashfree, Test Mode, Dodo Payments) */}
+              {/* Payment Method Selector Tabs (Dodo Payments, Cashfree) */}
               <div className="space-y-3">
                 <span className="text-xs font-black text-slate-900 dark:text-white block">
                   Select Payment Method:
                 </span>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Dodo Payments Tab (Primary / Global & Founder Billing) */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPaymentGateway('DODOPAYMENTS');
+                      setPaymentCancelledNotice(null);
+                    }}
+                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
+                      paymentGateway === 'DODOPAYMENTS'
+                        ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-950/50 shadow-md ring-2 ring-blue-500/10'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                        <CreditCard className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                        <span>Dodo Payments</span>
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[9px] font-black uppercase">GLOBAL</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
+                      International Cards & Founder Billing
+                    </span>
+                  </button>
+
                   {/* Cashfree Payments Production Tab */}
                   <button
                     type="button"
@@ -756,7 +761,7 @@ export const HospitalOnboarding: React.FC = () => {
                       setPaymentGateway('CASHFREE');
                       setPaymentCancelledNotice(null);
                     }}
-                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${
+                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${
                       paymentGateway === 'CASHFREE'
                         ? 'border-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/40 shadow-md ring-2 ring-emerald-500/10'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
@@ -767,66 +772,10 @@ export const HospitalOnboarding: React.FC = () => {
                         <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                         <span>Cashfree</span>
                       </span>
-                      <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">LIVE</span>
+                      <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">INR LIVE</span>
                     </div>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
-                      UPI, Cards, Netbanking
-                    </span>
-                  </button>
-
-                  {/* Dodo Payments Tab */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPaymentGateway('DODOPAYMENTS');
-                      setPaymentCancelledNotice(null);
-                    }}
-                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
-                      paymentGateway === 'DODOPAYMENTS'
-                        ? 'border-blue-600 bg-blue-50/40 dark:bg-blue-950/40 shadow-md ring-2 ring-blue-500/10'
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <CreditCard className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        <span>Dodo Payments</span>
-                      </span>
-                      {paymentGateway === 'DODOPAYMENTS' && (
-                        <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-                      )}
-                    </div>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
-                      Global Cards & Billing
-                    </span>
-                  </button>
-
-                  {/* Test Mode Simulation Tab */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPaymentGateway('TEST_MODE');
-                      setPaymentCancelledNotice(null);
-                    }}
-                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${
-                      paymentGateway === 'TEST_MODE'
-                        ? 'border-blue-600 bg-blue-50/40 dark:bg-blue-950/40 shadow-md ring-2 ring-blue-500/10'
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <FlaskConical className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        <span>Test Simulator</span>
-                      </span>
-                      {paymentGateway === 'TEST_MODE' ? (
-                        <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-                      ) : (
-                        <span className="px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[9px] font-bold">Sandbox</span>
-                      )}
-                    </div>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
-                      Instant Simulation
+                      UPI, NetBanking, RuPay & Indian Cards
                     </span>
                   </button>
                 </div>
@@ -849,38 +798,7 @@ export const HospitalOnboarding: React.FC = () => {
                       Instant settlement powered by your verified <strong>Cashfree Production Merchant Account</strong>. Supports Google Pay, PhonePe, Paytm, RuPay, Visa, Mastercard, and Indian NetBanking.
                     </p>
                   </div>
-                ) : paymentGateway === 'TEST_MODE' ? (
-                  <div className="p-5 bg-gradient-to-br from-blue-50/80 to-indigo-50/40 dark:from-blue-950/40 dark:to-indigo-950/40 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-3">
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-900 dark:text-white">
-                      <div className="flex items-center gap-2">
-                        <FlaskConical className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        <span>Interactive Gateway Test Sandbox</span>
-                      </div>
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-[10px] font-black uppercase border border-emerald-200 dark:border-emerald-800">
-                        Active Sandbox
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                      When you click <strong>Proceed to Payment</strong> below, an interactive prompt will ask: <strong>"Did the payment succeed?"</strong> with explicit <strong>Yes</strong> (Approve & Provision Workspace) and <strong>No</strong> (Cancel / Decline) options to test both outcomes.
-                    </p>
-
-                    <div className="p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-blue-100 dark:border-blue-900 text-xs font-mono space-y-1.5 text-slate-600 dark:text-slate-300">
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-400">Hospital:</span>
-                        <span className="text-slate-900 dark:text-white font-bold">{hospitalName || 'Queueless OPD'}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-400">Simulated Card:</span>
-                        <span className="text-slate-900 dark:text-white font-bold">4242 •••• •••• 4242 (Visa Test)</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-400">Total Billed:</span>
-                        <span className="text-blue-600 dark:text-blue-400 font-bold">{selectedCurrency.symbol}{totalAmount.toLocaleString()} {selectedCurrency.code}</span>
-                      </div>
-                    </div>
-                  </div>
-                ) : paymentGateway === 'DODOPAYMENTS' ? (
+                ) : (
                   <div className="p-5 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
                     <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
                       <span>Card Details via Dodo Payments</span>
@@ -952,7 +870,7 @@ export const HospitalOnboarding: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                ) : null}
+                )}
 
                 {/* Trust Guarantees */}
                 <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
@@ -984,80 +902,11 @@ export const HospitalOnboarding: React.FC = () => {
                     <span>
                       {isProcessing
                         ? 'Verifying & Provisioning Workspace...'
-                        : paymentGateway === 'TEST_MODE'
-                        ? `Simulate Payment (${selectedCurrency.symbol}${totalAmount.toLocaleString()}) ➔`
                         : `Pay ${selectedCurrency.symbol}${totalAmount.toLocaleString()} & Activate Hospital ➔`}
                     </span>
                   </button>
                 </div>
               </form>
-            </div>
-          )}
-
-          {/* ============================================================== */}
-          {/* INTERACTIVE PAYMENT SIMULATOR MODAL (YES / NO DECISION)         */}
-          {/* ============================================================== */}
-          {showSimulationModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-              <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-5 animate-in zoom-in-95">
-                <div className="text-center space-y-2">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-800 flex items-center justify-center mx-auto text-blue-600 dark:text-blue-400 shadow-sm">
-                    <FlaskConical className="w-7 h-7" />
-                  </div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[10px] font-black uppercase tracking-wider border border-blue-200 dark:border-blue-800">
-                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
-                    Payment Gateway Simulator
-                  </div>
-                  <h3 className="text-xl font-black text-slate-950 dark:text-white">
-                    Did the Payment Succeed?
-                  </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">
-                    Hospital: <strong className="text-slate-900 dark:text-white">{hospitalName}</strong> • Due: <strong className="text-blue-600 dark:text-blue-400 font-mono">{selectedCurrency.symbol}{totalAmount.toLocaleString()} {selectedCurrency.code}</strong>
-                  </p>
-                </div>
-
-                <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 text-center font-medium">
-                  Select your test response below to simulate the bank/gateway outcome:
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 pt-1">
-                  {/* NO: Payment Declined / Cancelled */}
-                  <button
-                    type="button"
-                    onClick={handleDeclinePayment}
-                    className="p-4 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-950/70 border border-rose-200 dark:border-rose-900 rounded-2xl text-rose-800 dark:text-rose-200 font-bold text-xs flex flex-col items-center justify-center gap-2 cursor-pointer btn-physics active:scale-95 transition-all shadow-sm"
-                  >
-                    <div className="w-9 h-9 rounded-full bg-rose-200 dark:bg-rose-900 flex items-center justify-center text-rose-700 dark:text-rose-300">
-                      <X className="w-5 h-5 stroke-[2.5]" />
-                    </div>
-                    <span className="font-black text-sm">No</span>
-                    <span className="text-[10px] text-rose-600 dark:text-rose-400 font-normal">Failed / Cancelled</span>
-                  </button>
-
-                  {/* YES: Payment Approved & Activated */}
-                  <button
-                    type="button"
-                    onClick={handleApprovePayment}
-                    className="p-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs flex flex-col items-center justify-center gap-2 cursor-pointer btn-physics hover-glow-emerald active:scale-95 transition-all shadow-lg shadow-emerald-600/30 ring-2 ring-emerald-500/20 shimmer-sweep"
-                  >
-                    <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white">
-                      <Check className="w-5 h-5 stroke-[3]" />
-                    </div>
-                    <span className="font-black text-sm">Yes</span>
-                    <span className="text-[10px] text-emerald-100 font-normal">Payment Approved</span>
-                  </button>
-                </div>
-
-                <div className="text-center pt-1">
-                  <button
-                    type="button"
-                    onClick={() => setShowSimulationModal(false)}
-                    className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 font-medium cursor-pointer"
-                  >
-                    Cancel & Return to Form
-                  </button>
-                </div>
-              </div>
             </div>
           )}
 
@@ -1072,7 +921,7 @@ export const HospitalOnboarding: React.FC = () => {
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-black text-xs uppercase tracking-wider">
-                  Payment Confirmed via {paymentGateway === 'TEST_MODE' ? 'Simulated Gateway (Approved)' : paymentGateway === 'DODOPAYMENTS' ? 'Dodo Payments' : 'Cashfree Payments'}
+                  Payment Confirmed via {paymentGateway === 'DODOPAYMENTS' ? 'Dodo Payments' : 'Cashfree Payments'}
                 </span>
                 <h1 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
                   🎉 Congratulations! {provisionedData.clinic.name} Is Live!

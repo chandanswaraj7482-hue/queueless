@@ -25,28 +25,38 @@ const applyThemeToDOM = (next: Theme) => {
     root.style.colorScheme = 'light';
   }
   try {
-    localStorage.setItem('queueless_theme_v2', next);
     localStorage.setItem('queueless_theme', next);
+    localStorage.setItem('queueless_theme_v2', next);
   } catch {}
 };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>('light');
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('queueless_theme') as Theme | null;
+      if (saved === 'dark' || saved === 'light') return saved;
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+    }
+    return 'light';
+  });
 
   useEffect(() => {
-    // Strictly enforce light theme across all pages
-    applyThemeToDOM('light');
-  }, []);
+    applyThemeToDOM(theme);
+  }, [theme]);
 
   const toggleTheme = () => {
-    // Strict Light Theme Only
-    applyThemeToDOM('light');
-    setThemeState('light');
+    setThemeState((prev) => {
+      const next = prev === 'dark' ? 'light' : 'dark';
+      applyThemeToDOM(next);
+      return next;
+    });
   };
 
-  const setTheme = (_next: Theme) => {
-    applyThemeToDOM('light');
-    setThemeState('light');
+  const setTheme = (next: Theme) => {
+    applyThemeToDOM(next);
+    setThemeState(next);
   };
 
   return (

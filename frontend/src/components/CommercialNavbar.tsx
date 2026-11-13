@@ -170,19 +170,34 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             })}
           </nav>
 
-          {/* Right Action Bar (On Mobile: ONLY the Hamburger Menu Button appears here; all actions slide into drawer) */}
+          {/* Right Action Bar */}
           <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Theme Toggle Button (Desktop & Tablet) */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="p-2 text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100/80 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700/80 backdrop-blur-md rounded-full transition-all cursor-pointer shadow-2xs"
+              aria-label="Toggle Theme"
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-slate-700 dark:text-slate-200" />
+              )}
+            </button>
+
             {/* Currency Selector Pill (Desktop only) */}
-            <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/70 hover:bg-slate-200/80 border border-slate-200/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 transition-all shadow-2xs">
-              <Globe className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+            <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/70 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 transition-all shadow-2xs">
+              <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0" />
               <select
                 aria-label="Currency"
                 value={currentCurrencyCode}
                 onChange={(e) => handleCurrencySelect(e.target.value)}
-                className="bg-transparent text-slate-800 font-bold cursor-pointer focus:outline-none pr-0.5 text-xs"
+                className="bg-transparent text-slate-800 dark:text-slate-100 font-bold cursor-pointer focus:outline-none pr-0.5 text-xs"
               >
                 {Object.values(WORLDWIDE_CURRENCIES).map((curr) => (
-                  <option key={curr.code} value={curr.code} className="bg-white text-slate-900 font-medium">
+                  <option key={curr.code} value={curr.code} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-medium">
                     {curr.flag} {curr.code}
                   </option>
                 ))}
@@ -304,27 +319,49 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               </Link>
             </div>
 
-            {/* 4. Mobile Currency Picker in Drawer */}
-            <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl flex items-center justify-between text-xs font-bold text-slate-700">
-              <span className="flex items-center gap-1.5">
-                <Globe className="w-4 h-4 text-blue-600" />
-                <span>Select Currency:</span>
-              </span>
-              <select
-                aria-label="Mobile Currency"
-                value={currentCurrencyCode}
-                onChange={(e) => {
-                  handleCurrencySelect(e.target.value);
-                  setMobileMenuOpen(false);
+            {/* 4. Mobile Theme & Currency Picker in Drawer */}
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  toggleTheme();
                 }}
-                className="bg-white border border-slate-200 text-slate-900 font-bold px-2 py-1 rounded-lg focus:outline-none text-xs"
+                className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-2xl flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200"
               >
-                {Object.values(WORLDWIDE_CURRENCIES).map((curr) => (
-                  <option key={curr.code} value={curr.code}>
-                    {curr.flag} {curr.code} ({curr.symbol})
-                  </option>
-                ))}
-              </select>
+                <span className="flex items-center gap-1.5">
+                  {theme === 'dark' ? (
+                    <Sun className="w-4 h-4 text-amber-400" />
+                  ) : (
+                    <Moon className="w-4 h-4 text-slate-700" />
+                  )}
+                  <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                </span>
+                <span className="text-[10px] uppercase font-black px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
+                  {theme}
+                </span>
+              </button>
+
+              <div className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-2xl flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200">
+                <span className="flex items-center gap-1">
+                  <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
+                  <span>Currency:</span>
+                </span>
+                <select
+                  aria-label="Mobile Currency"
+                  value={currentCurrencyCode}
+                  onChange={(e) => {
+                    handleCurrencySelect(e.target.value);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-bold px-1.5 py-1 rounded-lg focus:outline-none text-[11px]"
+                >
+                  {Object.values(WORLDWIDE_CURRENCIES).map((curr) => (
+                    <option key={curr.code} value={curr.code}>
+                      {curr.flag} {curr.code}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
         )}

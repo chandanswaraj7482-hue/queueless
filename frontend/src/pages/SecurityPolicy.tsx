@@ -108,14 +108,14 @@ export const SecurityPolicy: React.FC = () => {
             <section className="space-y-3">
               <h2 className="text-lg font-black text-slate-950 dark:text-white flex items-center gap-2">
                 <span className="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs flex items-center justify-center font-mono">3</span>
-                <span>Payment Security (Dodo Payments & PayPal)</span>
+                <span>Payment Security (Dodo Payments & Cashfree)</span>
               </h2>
               <p>
                 Both subscription billing and patient consultation fee collections adhere to the highest international financial security standards:
               </p>
               <ul className="space-y-1.5 list-disc pl-5 text-slate-600 dark:text-slate-400">
                 <li>Payment processing environments maintain <strong>PCI-DSS Level 1 Certification</strong>, the highest tier of security in the payments industry.</li>
-                <li>Raw credit card data never touches Queueless servers; all entries are tokenized directly within sandboxed iframe containers provided by Dodo Payments or PayPal.</li>
+                <li>Raw payment card and banking data never touch Queueless servers; all entries are tokenized directly within sandboxed iframe containers provided by Dodo Payments and Cashfree.</li>
                 <li>Instant webhook verification ensures immediate hospital workspace activation upon confirmed charge.</li>
               </ul>
             </section>

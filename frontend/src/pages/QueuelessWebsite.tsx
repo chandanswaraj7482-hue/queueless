@@ -3820,7 +3820,7 @@ export const QueuelessWebsite: React.FC = () => {
                                 : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
                             }`}
                           >
-                            {method === 'CARD' ? '💳 Stripe Card' : method === 'APPLE_PAY' ? '🍏 Apple / GPay' : '🅿️ PayPal / Wire'}
+                            {method === 'CARD' ? '💳 Card' : method === 'APPLE_PAY' ? '🍏 Apple / GPay' : '⚡ UPI / Netbanking'}
                           </button>
                         ))
                       )}

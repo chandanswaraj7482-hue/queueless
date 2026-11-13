@@ -51,7 +51,7 @@ export const HospitalOnboarding: React.FC = () => {
   const queryCurrency = searchParams.get('currency') || 'USD';
   const queryCycle = (searchParams.get('cycle') as 'MONTHLY' | 'ANNUAL') || 'MONTHLY';
 
-  // Step Tracker: 1 = Details & Credentials, 2 = Plan & Billing, 3 = Payment (Dodo/PayPal), 4 = Live Provisioned
+  // Step Tracker: 1 = Details & Credentials, 2 = Plan & Billing, 3 = Payment (Dodo/Cashfree), 4 = Live Provisioned
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
 
   // Currency & Billing
@@ -76,13 +76,12 @@ export const HospitalOnboarding: React.FC = () => {
   const [initialDoctorSpecialty, setInitialDoctorSpecialty] = useState('General Medicine');
   const [initialDoctorRoom, setInitialDoctorRoom] = useState('Cabin 1');
 
-  // Step 3: Payment Gateway (Cashfree Real Production, Simulated Test Mode, Dodo Payments, PayPal)
-  const [paymentGateway, setPaymentGateway] = useState<'CASHFREE' | 'TEST_MODE' | 'DODOPAYMENTS' | 'PAYPAL'>('CASHFREE');
+  // Step 3: Payment Gateway (Cashfree Real Production, Simulated Test Mode, Dodo Payments)
+  const [paymentGateway, setPaymentGateway] = useState<'CASHFREE' | 'TEST_MODE' | 'DODOPAYMENTS'>('CASHFREE');
   const [cardNumber, setCardNumber] = useState('4242 •••• •••• 4242');
   const [cardExpiry, setCardExpiry] = useState('12/28');
   const [cardCvc, setCardCvc] = useState('888');
   const [cardHolder, setCardHolder] = useState('Dr. Clinical Director');
-  const [paypalEmail, setPaypalEmail] = useState('');
 
   // Interactive Test Payment Modal & Cancellation Notice
   const [showSimulationModal, setShowSimulationModal] = useState(false);
@@ -695,7 +694,7 @@ export const HospitalOnboarding: React.FC = () => {
           )}
 
           {/* ============================================================== */}
-          {/* STEP 3: Payment Gateway Checkout (Test Mode, Dodo, PayPal)     */}
+          {/* STEP 3: Payment Gateway Checkout (Cashfree, Dodo Payments, Test Simulator) */}
           {/* ============================================================== */}
           {currentStep === 3 && (
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-10 shadow-xl space-y-6 animate-in fade-in">
@@ -743,13 +742,13 @@ export const HospitalOnboarding: React.FC = () => {
                 </div>
               )}
 
-              {/* Payment Method Selector Tabs (Test Mode, Dodo Payments, PayPal) */}
+              {/* Payment Method Selector Tabs (Cashfree, Test Mode, Dodo Payments) */}
               <div className="space-y-3">
                 <span className="text-xs font-black text-slate-900 dark:text-white block">
                   Select Payment Method:
                 </span>
 
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   {/* Cashfree Payments Production Tab */}
                   <button
                     type="button"
@@ -772,6 +771,33 @@ export const HospitalOnboarding: React.FC = () => {
                     </div>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
                       UPI, Cards, Netbanking
+                    </span>
+                  </button>
+
+                  {/* Dodo Payments Tab */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPaymentGateway('DODOPAYMENTS');
+                      setPaymentCancelledNotice(null);
+                    }}
+                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
+                      paymentGateway === 'DODOPAYMENTS'
+                        ? 'border-blue-600 bg-blue-50/40 dark:bg-blue-950/40 shadow-md ring-2 ring-blue-500/10'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                        <CreditCard className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                        <span>Dodo Payments</span>
+                      </span>
+                      {paymentGateway === 'DODOPAYMENTS' && (
+                        <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+                      )}
+                    </div>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
+                      Global Cards & Billing
                     </span>
                   </button>
 
@@ -801,60 +827,6 @@ export const HospitalOnboarding: React.FC = () => {
                     </div>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
                       Instant Simulation
-                    </span>
-                  </button>
-
-                  {/* Dodo Payments Tab */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPaymentGateway('DODOPAYMENTS');
-                      setPaymentCancelledNotice(null);
-                    }}
-                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
-                      paymentGateway === 'DODOPAYMENTS'
-                        ? 'border-blue-600 bg-blue-50/40 dark:bg-blue-950/40 shadow-md ring-2 ring-blue-500/10'
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <CreditCard className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        <span>Dodo</span>
-                      </span>
-                      {paymentGateway === 'DODOPAYMENTS' && (
-                        <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-                      )}
-                    </div>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
-                      Global Cards
-                    </span>
-                  </button>
-
-                  {/* PayPal Tab */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPaymentGateway('PAYPAL');
-                      setPaymentCancelledNotice(null);
-                    }}
-                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
-                      paymentGateway === 'PAYPAL'
-                        ? 'border-blue-600 bg-blue-50/40 dark:bg-blue-950/40 shadow-md ring-2 ring-blue-500/10'
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1">
-                        <span className="text-[#003087] dark:text-[#387df5]">Pay</span>
-                        <span className="text-[#0079C1] dark:text-[#52a6e6] -ml-1">Pal</span>
-                      </span>
-                      {paymentGateway === 'PAYPAL' && (
-                        <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-                      )}
-                    </div>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
-                      Worldwide USD
                     </span>
                   </button>
                 </div>
@@ -980,31 +952,7 @@ export const HospitalOnboarding: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                ) : (
-                  <div className="p-5 bg-[#003087]/5 dark:bg-[#003087]/20 rounded-2xl border border-[#0079C1]/30 dark:border-[#0079C1]/40 space-y-4">
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
-                      <span>PayPal Instant Checkout</span>
-                      <span className="text-[10px] text-[#0079C1] dark:text-[#52a6e6] font-bold">Buyer Protection Guaranteed</span>
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
-                        PayPal Account Email
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="paypal@yourhospital.com"
-                        value={paypalEmail}
-                        onChange={(e) => setPaypalEmail(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      />
-                    </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                      You will be authenticated via PayPal's secure gateway to authorize this monthly/annual subscription.
-                    </p>
-                  </div>
-                )}
+                ) : null}
 
                 {/* Trust Guarantees */}
                 <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
@@ -1124,7 +1072,7 @@ export const HospitalOnboarding: React.FC = () => {
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-black text-xs uppercase tracking-wider">
-                  Payment Confirmed via {paymentGateway === 'TEST_MODE' ? 'Simulated Gateway (Approved)' : paymentGateway === 'DODOPAYMENTS' ? 'Dodo Payments' : 'PayPal'}
+                  Payment Confirmed via {paymentGateway === 'TEST_MODE' ? 'Simulated Gateway (Approved)' : paymentGateway === 'DODOPAYMENTS' ? 'Dodo Payments' : 'Cashfree Payments'}
                 </span>
                 <h1 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
                   🎉 Congratulations! {provisionedData.clinic.name} Is Live!

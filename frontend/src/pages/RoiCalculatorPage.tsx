@@ -269,7 +269,7 @@ export const RoiCalculatorPage: React.FC = () => {
                   <span>Protect This Revenue (Activate OS) ➔</span>
                 </Link>
                 <p className="text-[10px] text-center text-slate-400 mt-2">
-                  Instant activation via Dodo Payments & PayPal • 30-day money-back guarantee
+                  Instant activation via Dodo Payments & Cashfree • 30-day money-back guarantee
                 </p>
               </div>
             </div>

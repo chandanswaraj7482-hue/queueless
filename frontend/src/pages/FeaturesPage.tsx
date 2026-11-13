@@ -414,7 +414,7 @@ export const FeaturesPage: React.FC = () => {
               Transform Your Hospital OPD Today
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
-              Setup takes less than 20 minutes. Select your plan, check out with Dodo Payments or PayPal, and print your QR standee today.
+              Setup takes less than 20 minutes. Select your plan, check out with Dodo Payments or Cashfree, and print your QR standee today.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
               <Link

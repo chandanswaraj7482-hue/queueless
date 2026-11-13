@@ -44,7 +44,7 @@ export const RefundPolicy: React.FC = () => {
             <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-1">
               <span><strong>Effective Date:</strong> November 1, 2026</span>
               <span>•</span>
-              <span><strong>Supported Gateways:</strong> Dodo Payments & PayPal</span>
+              <span><strong>Supported Gateways:</strong> Dodo Payments & Cashfree</span>
               <span>•</span>
               <span className="text-emerald-700 dark:text-emerald-400 font-semibold">30-Day Money-Back Guarantee</span>
             </div>
@@ -110,12 +110,12 @@ export const RefundPolicy: React.FC = () => {
 
                 <div className="p-4 bg-slate-50 dark:bg-slate-950/80 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-base font-black text-[#003087] dark:text-[#387df5]">Pay</span>
-                    <span className="text-base font-black text-[#0079C1] dark:text-[#52a6e6] -ml-1.5">Pal</span>
-                    <span className="font-black text-slate-900 dark:text-white text-xs ml-1">Worldwide</span>
+                    <CreditCard className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <span className="font-black text-slate-900 dark:text-white text-xs">Dodo Payments & Cards</span>
+                    <span className="font-black text-slate-400 text-xs ml-1">Worldwide</span>
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 pt-1">
-                    Refunds to PayPal accounts are typically completed <strong>instantly to within 48 hours</strong> back to your PayPal balance or linked card.
+                    Refunds via Dodo Payments or Cashfree are typically completed <strong>within 24 to 48 hours</strong> back to your original payment method.
                   </p>
                 </div>
               </div>
@@ -167,7 +167,7 @@ export const RefundPolicy: React.FC = () => {
                   <Mail className="w-3.5 h-3.5" />
                   <a href="mailto:billing@queuelesslabs.com" className="hover:underline">billing@queuelesslabs.com</a>
                 </p>
-                <p className="text-slate-500 dark:text-slate-400">Dedicated assistance for Dodo Payments, PayPal & Bank Transfer Invoicing</p>
+                <p className="text-slate-500 dark:text-slate-400">Dedicated assistance for Dodo Payments, Cashfree & Bank Transfer Invoicing</p>
               </div>
             </section>
           </div>

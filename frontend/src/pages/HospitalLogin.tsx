@@ -342,7 +342,7 @@ export const HospitalLogin: React.FC = () => {
               Don't have an active hospital subscription yet?
             </p>
             <p className="text-[11px] text-slate-600 dark:text-slate-300">
-              Purchase your plan via Dodo Payments or PayPal and get all 5 clinical portals provisioned in 20 seconds.
+              Purchase your plan via Dodo Payments or Cashfree and get all 5 clinical portals provisioned in 20 seconds.
             </p>
             <Link
               to="/signup"

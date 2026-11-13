@@ -101,11 +101,9 @@ interface ClinicSettings {
   autoRouteSameDoctor?: boolean;
   priorityFollowUp?: boolean;
   // Hospital Direct Bank & Payment Gateway Settings
-  paymentGatewayProvider?: 'CASHFREE' | 'RAZORPAY' | 'DIRECT_UPI' | 'STRIPE';
+  paymentGatewayProvider?: 'CASHFREE' | 'DIRECT_UPI' | 'STRIPE';
   cashfreeAppId?: string;
   cashfreeSecretKey?: string;
-  razorpayKeyId?: string;
-  razorpayKeySecret?: string;
   directUpiId?: string;
   bankAccountHolderName?: string;
   bankAccountNumber?: string;
@@ -1917,12 +1915,6 @@ export const ClinicAdmin: React.FC = () => {
                     badge: '💳 UPI + Cards + Netbanking',
                     desc: 'Instant auto-settlement with automated webhooks',
                   },
-                  {
-                    id: 'RAZORPAY',
-                    name: 'Razorpay Gateway',
-                    badge: '🏦 Corporate Gateway',
-                    desc: 'Automated settlement to registered hospital current a/c',
-                  },
                 ].map((p) => {
                   const isSelected = (settings.paymentGatewayProvider || 'DIRECT_UPI') === p.id;
                   return (
@@ -2020,40 +2012,6 @@ export const ClinicAdmin: React.FC = () => {
                       placeholder="cfsk_ma_prod_xxxxxxxxxxxxxxxx"
                       value={settings.cashfreeSecretKey || ''}
                       onChange={(e) => setSettings({ ...settings, cashfreeSecretKey: e.target.value })}
-                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {settings.paymentGatewayProvider === 'RAZORPAY' && (
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-                <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">
-                  Razorpay Key & Secret
-                </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
-                      Razorpay Key ID *
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="rzp_live_xxxxxxxxxxxxxxxx"
-                      value={settings.razorpayKeyId || ''}
-                      onChange={(e) => setSettings({ ...settings, razorpayKeyId: e.target.value })}
-                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
-                      Razorpay Key Secret *
-                    </label>
-                    <input
-                      type="password"
-                      placeholder="xxxxxxxxxxxxxxxxxxxxxxxx"
-                      value={settings.razorpayKeySecret || ''}
-                      onChange={(e) => setSettings({ ...settings, razorpayKeySecret: e.target.value })}
                       className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>

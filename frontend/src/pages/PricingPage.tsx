@@ -300,13 +300,12 @@ export const PricingPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* PayPal Badge */}
+              {/* Dodo Payments & Cashfree Badge */}
               <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl">
-                <span className="text-xl font-black text-[#003087]">Pay</span>
-                <span className="text-xl font-black text-[#0079C1] -ml-2">Pal</span>
+                <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 <div className="text-left ml-1">
-                  <span className="block text-xs font-black text-slate-900 dark:text-white">PayPal Verified</span>
-                  <span className="block text-[10px] text-slate-500 dark:text-slate-400">Buyer Protection Guaranteed</span>
+                  <span className="block text-xs font-black text-slate-900 dark:text-white">Dodo Payments & Cashfree</span>
+                  <span className="block text-[10px] text-slate-500 dark:text-slate-400">Global & Domestic Settlement</span>
                 </div>
               </div>
 
@@ -425,7 +424,7 @@ export const PricingPage: React.FC = () => {
                     <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">✓ Supported</td>
                   </tr>
                   <tr>
-                    <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">Dodo Payments & PayPal Integration</td>
+                    <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">Dodo Payments & Cashfree Gateway Integration</td>
                     <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">✓ Supported</td>
                     <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400 bg-blue-50/30 dark:bg-blue-950/30">✓ Supported</td>
                     <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">✓ Supported</td>
@@ -521,7 +520,7 @@ export const PricingPage: React.FC = () => {
               Ready to Eliminate Lobby Chaos in 20 Minutes?
             </h2>
             <p className="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto mt-2">
-              Join 450+ hospitals running zero-wait OPDs. Activate your zero-wait clinical workspace today with Dodo Payments, PayPal, or Simulated Test Mode.
+              Join 450+ hospitals running zero-wait OPDs. Activate your zero-wait clinical workspace today with Dodo Payments, Cashfree, or Simulated Test Mode.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link

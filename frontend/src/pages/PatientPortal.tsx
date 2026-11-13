@@ -1528,23 +1528,23 @@ export const PatientPortal: React.FC = () => {
 
               {/* Patient Bio Card */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
-                <div>
+                <div className="min-w-0">
                   <span className="text-[10px] text-slate-400 uppercase font-bold block">Patient Name</span>
-                  <strong className="text-slate-900 text-sm">{portalData.patient.name}</strong>
+                  <strong className="text-slate-900 text-sm truncate block">{portalData.patient.name}</strong>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <span className="text-[10px] text-slate-400 uppercase font-bold block">ID (Mobile/Email)</span>
-                  <span className="font-mono font-bold text-slate-800">{portalData.patient.mobile || portalData.patient.email}</span>
+                  <span className="font-mono font-bold text-slate-800 text-[11px] break-all block">{portalData.patient.mobile || portalData.patient.email}</span>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <span className="text-[10px] text-slate-400 uppercase font-bold block">Age / Gender</span>
-                  <span className="font-bold text-slate-800">
-                    {portalData.patient.age ? `${portalData.patient.age} yrs` : 'N/A'} • {portalData.patient.gender || 'Patient'}
+                  <span className="font-bold text-slate-800 truncate block">
+                    {portalData.patient.age ? `${portalData.patient.age} yrs` : 'Age N/A'} • {portalData.patient.gender || 'Patient'}
                   </span>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <span className="text-[10px] text-slate-400 uppercase font-bold block">Blood Group</span>
-                  <span className="font-black text-red-700">{portalData.patient.bloodGroup || 'Not Recorded'}</span>
+                  <span className="font-black text-red-700 block">{portalData.patient.bloodGroup || 'Not Recorded'}</span>
                 </div>
               </div>
 
@@ -1607,7 +1607,7 @@ export const PatientPortal: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-end gap-3 print:hidden">
               <button
                 onClick={() => setShowFullHistoryModal(false)}
                 className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"

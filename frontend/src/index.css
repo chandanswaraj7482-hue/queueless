@@ -613,7 +613,7 @@ body {
   }
 
   /* Digital Rx Letterhead Print Area */
-  #printable-rx, #printable-rx-area {
+  #printable-rx, #printable-rx-area, #printable-full-history {
     max-width: 760px !important;
     width: 100% !important;
     margin: 0 auto !important;
@@ -627,13 +627,15 @@ body {
 
   body:has(#opd-receipt-print) > *:not(.fixed),
   body:has(#printable-rx) > *:not(.fixed),
-  body:has(#printable-rx-area) > *:not(.fixed) {
+  body:has(#printable-rx-area) > *:not(.fixed),
+  body:has(#printable-full-history) > *:not(.fixed) {
     display: none !important;
   }
 
   body:has(#opd-receipt-print) .fixed,
   body:has(#printable-rx) .fixed,
-  body:has(#printable-rx-area) .fixed {
+  body:has(#printable-rx-area) .fixed,
+  body:has(#printable-full-history) .fixed {
     position: static !important;
     background: transparent !important;
     padding: 0 !important;
@@ -642,7 +644,8 @@ body {
 
   body:has(#opd-receipt-print) .fixed > div,
   body:has(#printable-rx) .fixed > div,
-  body:has(#printable-rx-area) .fixed > div {
+  body:has(#printable-rx-area) .fixed > div,
+  body:has(#printable-full-history) .fixed > div {
     max-width: 100% !important;
     box-shadow: none !important;
     border: none !important;

@@ -11,9 +11,11 @@ import {
   ShieldCheck,
   Sun,
   Moon,
+  Languages,
 } from 'lucide-react';
 import { WORLDWIDE_CURRENCIES, CurrencyConfig } from '../data/commercialData';
 import { useTheme } from '../context/ThemeContext';
+import { GOOGLE_LANGUAGES, getStoredLanguage, changeLanguage } from '../utils/googleTranslate';
 
 interface CommercialNavbarProps {
   currentCurrencyCode?: string;
@@ -41,6 +43,13 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
 
   const selectedCurrency: CurrencyConfig =
     WORLDWIDE_CURRENCIES[currentCurrencyCode] || WORLDWIDE_CURRENCIES.USD;
+
+  const [currentLang, setCurrentLang] = useState<string>(() => getStoredLanguage());
+
+  const handleLanguageChange = (code: string) => {
+    setCurrentLang(code);
+    changeLanguage(code);
+  };
 
   const handleCurrencySelect = (code: string) => {
     if (onCurrencyChange) {
@@ -204,6 +213,23 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               </select>
             </div>
 
+            {/* Global Language Selector Pill (Desktop only) */}
+            <div className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/70 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 transition-all shadow-2xs">
+              <Languages className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+              <select
+                aria-label="Language"
+                value={currentLang}
+                onChange={(e) => handleLanguageChange(e.target.value)}
+                className="bg-transparent text-slate-800 dark:text-slate-100 font-bold cursor-pointer focus:outline-none pr-0.5 text-xs"
+              >
+                {GOOGLE_LANGUAGES.map((l) => (
+                  <option key={l.code} value={l.code} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-medium">
+                    {l.flag} {l.native} ({l.name})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Book a Demo Button (Desktop only: md:inline-flex; on phone it slides into drawer) */}
             {onOpenAuditModal ? (
               <button
@@ -362,6 +388,29 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   ))}
                 </select>
               </div>
+            </div>
+
+            {/* 5. Mobile Language Selector in Drawer */}
+            <div className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-2xl flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200">
+              <span className="flex items-center gap-1.5">
+                <Languages className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                <span>Language (भाषा):</span>
+              </span>
+              <select
+                aria-label="Mobile Language"
+                value={currentLang}
+                onChange={(e) => {
+                  handleLanguageChange(e.target.value);
+                  setMobileMenuOpen(false);
+                }}
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-bold px-2 py-1 rounded-lg focus:outline-none text-[11px]"
+              >
+                {GOOGLE_LANGUAGES.map((l) => (
+                  <option key={l.code} value={l.code}>
+                    {l.flag} {l.native} ({l.name})
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         )}

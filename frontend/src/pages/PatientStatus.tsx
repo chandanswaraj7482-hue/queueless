@@ -5,6 +5,7 @@ import { socket } from '../utils/socket';
 import {
   Clock,
   CheckCircle2,
+  AlertCircle,
   BellRing,
   User,
   MapPin,
@@ -231,6 +232,13 @@ export const PatientStatus: React.FC = () => {
   const [locationSuccessMsg, setLocationSuccessMsg] = useState<string | null>(null);
   const [pagedBanner, setPagedBanner] = useState<string | null>(null);
 
+  // In-app sleek notification banner (replaces window.alert)
+  const [patientToast, setPatientToast] = useState<{ message: string; type: 'error' | 'success' | 'info' } | null>(null);
+  const showPatientToast = (message: string, type: 'error' | 'success' | 'info' = 'info') => {
+    setPatientToast({ message, type });
+    setTimeout(() => setPatientToast(null), 4000);
+  };
+
   // Free Notification States (Browser Web Push + Free Email Pass)
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>(() => {
     return typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'default';
@@ -385,10 +393,10 @@ export const PatientStatus: React.FC = () => {
           setReviewSuccess(false);
         }, 2200);
       } else {
-        alert(resData.error || 'Failed to submit review');
+        showPatientToast(resData.error || 'Failed to submit review', 'error');
       }
     } catch (err) {
-      alert('Network error while saving review');
+      showPatientToast('Network error while saving review', 'error');
     } finally {
       setReviewSubmitting(false);
     }
@@ -705,10 +713,10 @@ export const PatientStatus: React.FC = () => {
           }
         }, 2200);
       } else {
-        alert(resData.error || 'Payment failed');
+        showPatientToast(resData.error || 'Payment failed', 'error');
       }
     } catch (err) {
-      alert('Payment failed. Please try again.');
+      showPatientToast('Payment failed. Please try again.', 'error');
     } finally {
       setPayingOnline(false);
     }
@@ -920,6 +928,31 @@ export const PatientStatus: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto p-4 sm:p-6 pb-28 relative">
+      {/* Toast Notification */}
+      {patientToast && (
+        <div
+          role="alert"
+          className={`fixed top-4 right-4 z-50 max-w-sm w-[90vw] p-3.5 rounded-2xl border shadow-xl flex items-center justify-between gap-3 animate-in fade-in slide-in-from-top-3 ${
+            patientToast.type === 'error'
+              ? 'bg-rose-50 border-rose-300 text-rose-950'
+              : patientToast.type === 'success'
+              ? 'bg-emerald-50 border-emerald-300 text-emerald-950'
+              : 'bg-sky-50 border-sky-300 text-sky-950'
+          }`}
+        >
+          <div className="flex items-center gap-2.5">
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+            <span className="text-xs font-bold">{patientToast.message}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPatientToast(null)}
+            className="text-slate-400 hover:text-slate-700 text-sm font-bold px-1"
+          >
+            ✕
+          </button>
+        </div>
+      )}
       {/* ============================================================== */}
       {/* QUEUELESS EXPERIENCE REVIEW POPUP MODAL                         */}
       {/* Branded zero-wait feedback dialog                               */}
@@ -2313,14 +2346,14 @@ export const PatientStatus: React.FC = () => {
                     className="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer transition-all active:scale-[0.99]"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>विकल्प A: Set Account Password</span>
+                    <span>Set Account Password</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setDismissVaultPrompt(true)}
                     className="py-2 px-3 bg-white hover:bg-slate-50 text-slate-600 font-bold rounded-xl text-xs border border-slate-200 cursor-pointer transition-all"
                   >
-                    Not Now (बाद में)
+                    Not Now
                   </button>
                 </div>
               </div>

@@ -237,6 +237,25 @@ export const ReceptionDashboard: React.FC = () => {
   const [cashToast, setCashToast] = useState<string | null>(null);
   const cashInputRef = useRef<HTMLInputElement>(null);
 
+  // In-App Toast Notification (replaces native window.alert)
+  const [toast, setToast] = useState<{
+    id: string;
+    type: 'success' | 'info' | 'warning' | 'error';
+    message: string;
+  } | null>(null);
+
+  const showToast = (message: string, type: 'success' | 'info' | 'warning' | 'error' = 'info') => {
+    setToast({ id: Date.now().toString(), type, message });
+  };
+
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => {
+      setToast(null);
+    }, 4500);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
   // Keyboard Shortcuts: Alt+N -> Call Next, Alt+C -> Focus Cash Counter
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
@@ -356,7 +375,7 @@ export const ReceptionDashboard: React.FC = () => {
   // Export Financial Ledger CSV for the selected date range
   const exportLedgerCSV = () => {
     if (!ledgerData?.ledger || ledgerData.ledger.length === 0) {
-      alert('No transactions to export for this date range.');
+      showToast('No transactions to export for this date range.', 'info');
       return;
     }
     const headers = ['Date', 'Time', 'Token', 'Patient Name', 'Mobile', 'Doctor', 'Cabin', 'Fee', 'Payment Status', 'Method', 'Transaction ID'];
@@ -398,11 +417,12 @@ export const ReceptionDashboard: React.FC = () => {
       if (data.success && data.data) {
         playClinicChime();
         fetchQueue();
+        showToast(`Calling Token ${data.data.token || ''} to Cabin!`, 'success');
       } else {
-        alert(data.message || 'No waiting patients.');
+        showToast(data.message || 'No waiting patients in queue.', 'info');
       }
     } catch (err) {
-      alert('Failed to call next patient.');
+      showToast('Failed to call next patient. Please try again.', 'error');
     }
   };
 
@@ -419,7 +439,7 @@ export const ReceptionDashboard: React.FC = () => {
         fetchQueue();
       }
     } catch (err) {
-      alert('Status change failed.');
+      showToast('Status change failed.', 'error');
     }
   };
 
@@ -433,13 +453,15 @@ export const ReceptionDashboard: React.FC = () => {
       });
       const data = await res.json();
       if (data.success) {
-        setCashToast(`✓ Cash collected! Token ${data.token || ''} APPROVED & admitted into Doctor queue!`);
+        const successMsg = `✓ Cash collected! Token ${data.token || ''} APPROVED & admitted into Doctor queue!`;
+        setCashToast(successMsg);
+        showToast(successMsg, 'success');
         setTimeout(() => setCashToast(null), 4500);
         playClinicChime();
         fetchQueue();
       }
     } catch (err) {
-      alert('Failed to update payment status.');
+      showToast('Failed to update payment status.', 'error');
     }
   };
 
@@ -447,7 +469,7 @@ export const ReceptionDashboard: React.FC = () => {
   const handleVerifyCashByToken = async (tokenToVerify?: string) => {
     const inputVal = (tokenToVerify || cashTokenInput).trim();
     if (!inputVal) {
-      alert('Please enter a Mobile number or Token ID');
+      showToast('Please enter a Mobile number or Token ID', 'warning');
       return;
     }
     setVerifyingCash(true);
@@ -462,16 +484,18 @@ export const ReceptionDashboard: React.FC = () => {
       });
       const data = await res.json();
       if (data.success) {
+        const msg = data.message || `✓ Cash collected! Official Token ${data.token || ''} issued.`;
         setCashTokenInput('');
-        setCashToast(data.message || `✓ Cash collected! Official Token ${data.token || ''} issued.`);
+        setCashToast(msg);
+        showToast(msg, 'success');
         setTimeout(() => setCashToast(null), 5000);
         playClinicChime();
         fetchQueue();
       } else {
-        alert(data.error || 'Failed to verify cash payment');
+        showToast(data.error || 'Failed to verify cash payment', 'error');
       }
     } catch (err) {
-      alert('Network error while processing cash admission');
+      showToast('Network error while processing cash admission', 'error');
     } finally {
       setVerifyingCash(false);
     }
@@ -511,12 +535,13 @@ export const ReceptionDashboard: React.FC = () => {
         setWalkInName('');
         setWalkInMobile('');
         setWalkInReason('');
+        showToast('Walk-in patient admitted successfully!', 'success');
         fetchQueue();
       } else {
-        alert(data.error || 'Failed to add walk-in');
+        showToast(data.error || 'Failed to add walk-in', 'error');
       }
     } catch (err) {
-      alert('Failed to add walk-in');
+      showToast('Failed to add walk-in. Please try again.', 'error');
     } finally {
       setSubmittingWalkIn(false);
     }
@@ -748,6 +773,42 @@ export const ReceptionDashboard: React.FC = () => {
         </div>
       )}
 
+      {/* Floating Modern Toast Notification (replaces native browser alert) */}
+      {toast && (
+        <div
+          role="alert"
+          className={`fixed top-6 right-6 z-50 max-w-md w-[92vw] sm:w-auto p-4 rounded-2xl border shadow-2xl flex items-center justify-between gap-4 transition-all duration-300 animate-in fade-in slide-in-from-top-4 ${
+            toast.type === 'error'
+              ? 'bg-rose-50 border-rose-300 text-rose-950'
+              : toast.type === 'warning'
+              ? 'bg-amber-50 border-amber-300 text-amber-950'
+              : toast.type === 'success'
+              ? 'bg-emerald-50 border-emerald-300 text-emerald-950'
+              : 'bg-sky-50 border-sky-300 text-sky-950'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            {toast.type === 'error' ? (
+              <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+            ) : toast.type === 'warning' ? (
+              <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
+            ) : toast.type === 'success' ? (
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+            ) : (
+              <Clock className="w-5 h-5 text-sky-600 shrink-0" />
+            )}
+            <span className="text-xs sm:text-sm font-bold tracking-tight">{toast.message}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setToast(null)}
+            className="text-slate-400 hover:text-slate-800 font-black px-2 py-1 text-sm rounded-lg hover:bg-slate-200/50 transition-colors cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Toast Alert */}
       {cashToast && (
         <div className="mb-6 p-4 bg-emerald-50 border-2 border-emerald-400 text-emerald-950 rounded-2xl flex items-center justify-between text-xs font-bold shadow-lg animate-bounce">
@@ -873,7 +934,7 @@ export const ReceptionDashboard: React.FC = () => {
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              🗓️ Yesterday (Kal)
+              🗓️ Yesterday
             </button>
 
             <button
@@ -884,7 +945,7 @@ export const ReceptionDashboard: React.FC = () => {
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              📊 Last 7 Days (Pichhla Hafta)
+              📊 Last 7 Days
             </button>
 
             <button

@@ -122,6 +122,11 @@ export const ClinicAdmin: React.FC = () => {
   const [downloading, setDownloading] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
   // Business Admin Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => !!getAuthSession('ADMIN'));
   const [adminPasswordInput, setAdminPasswordInput] = useState('');
@@ -238,11 +243,11 @@ export const ClinicAdmin: React.FC = () => {
     if (!clinic?.id) return;
 
     if (secAdminPassword && secAdminPassword.trim().length < 8) {
-      alert('⚠️ Security Policy: Hospital Admin Password must be at least 8 characters long.');
+      showToast('⚠️ Security Policy: Hospital Admin Password must be at least 8 characters long.');
       return;
     }
     if (secReceptionPassword && secReceptionPassword.trim().length < 6) {
-      alert('⚠️ Security Policy: Reception Desk Password must be at least 6 characters long.');
+      showToast('⚠️ Security Policy: Reception Desk Password must be at least 6 characters long.');
       return;
     }
 
@@ -261,10 +266,10 @@ export const ClinicAdmin: React.FC = () => {
       if (data.success) {
         showToast('✓ Staff & Doctor passwords successfully updated by Business Admin!');
       } else {
-        alert(data.error || 'Failed to update passwords');
+        showToast(data.error || 'Failed to update passwords');
       }
     } catch (err) {
-      alert('Error updating passwords');
+      showToast('Error updating passwords');
     } finally {
       setSavingSecurity(false);
     }
@@ -443,18 +448,13 @@ export const ClinicAdmin: React.FC = () => {
     fetchClinicData();
   }, []);
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
   // Hospital Logo Upload Handler
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      alert('Logo file size must be less than 2MB');
+      showToast('Logo file size must be less than 2MB');
       return;
     }
 
@@ -550,7 +550,7 @@ export const ClinicAdmin: React.FC = () => {
         showToast('Queue rules & cash policy saved successfully!');
       }
     } catch (err) {
-      alert('Failed to save settings');
+      showToast('Failed to save settings');
     } finally {
       setSavingSettings(false);
     }
@@ -593,7 +593,7 @@ export const ClinicAdmin: React.FC = () => {
       resetDoctorForm();
       fetchClinicData();
     } catch (err) {
-      alert('Error saving doctor');
+      showToast('Error saving doctor');
     }
   };
 
@@ -606,7 +606,7 @@ export const ClinicAdmin: React.FC = () => {
       showToast('Doctor removed.');
       fetchClinicData();
     } catch (err) {
-      alert('Failed to delete doctor');
+      showToast('Failed to delete doctor');
     }
   };
 
@@ -662,7 +662,7 @@ export const ClinicAdmin: React.FC = () => {
       resetServiceForm();
       fetchClinicData();
     } catch (err) {
-      alert('Error saving service');
+      showToast('Error saving service');
     }
   };
 
@@ -675,7 +675,7 @@ export const ClinicAdmin: React.FC = () => {
       showToast('Service deleted.');
       fetchClinicData();
     } catch (err) {
-      alert('Failed to delete service');
+      showToast('Failed to delete service');
     }
   };
 
@@ -2482,7 +2482,7 @@ export const ClinicAdmin: React.FC = () => {
                   type="button"
                   onClick={() => {
                     if (!samePasswordInput.trim()) {
-                      alert('Please enter a password to sync.');
+                      showToast('Please enter a password to sync.');
                       return;
                     }
                     applySamePasswordToAll(samePasswordInput.trim());

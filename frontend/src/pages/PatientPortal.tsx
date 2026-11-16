@@ -1236,7 +1236,7 @@ export const PatientPortal: React.FC = () => {
                           <td className="p-2.5 text-slate-700 font-medium">{m.dosage}</td>
                           <td className="p-2.5 text-slate-700 font-mono font-bold text-blue-700">{m.frequency}</td>
                           <td className="p-2.5 text-slate-700 font-medium">{m.duration}</td>
-                          <td className="p-2.5 text-slate-600 italic font-medium">{m.instructions || 'After Food (खाने के बाद)'}</td>
+                          <td className="p-2.5 text-slate-600 italic font-medium">{m.instructions || 'After Food'}</td>
                         </tr>
                       ))
                     ) : (

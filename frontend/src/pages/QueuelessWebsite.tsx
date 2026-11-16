@@ -2303,7 +2303,7 @@ export const QueuelessWebsite: React.FC = () => {
                       Cabin 1 — Dr. Rohan Sharma (General OPD)
                     </div>
                     <div className="text-xs text-amber-300 font-medium">
-                      🔊 "टोकन नंबर A-114, कृपया केबिन नंबर 1 में पधारें"
+                      🔊 "Token number A-114, please proceed to Cabin 1"
                     </div>
                   </div>
 

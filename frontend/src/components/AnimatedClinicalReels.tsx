@@ -262,17 +262,17 @@ export const AnimatedClinicalReels: React.FC = () => {
                   ? 'bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 ring-2 ring-amber-400/20'
                   : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 ring-2 ring-emerald-500/20'
               }`}
-              title={isVideoMuted ? 'Click to Unmute / आवाज चालू करें' : 'Click to Mute / आवाज बंद करें'}
+              title={isVideoMuted ? 'Click to Unmute' : 'Click to Mute'}
             >
               {isVideoMuted ? (
                 <>
                   <VolumeX className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
-                  <span>🔇 Sound Muted • Click to Unmute (आवाज चालू करें)</span>
+                  <span>🔇 Sound Muted • Click to Unmute</span>
                 </>
               ) : (
                 <>
                   <Volume2 className="w-3.5 h-3.5 text-emerald-600 animate-bounce" />
-                  <span>🔊 Sound Active (आवाज चालू है) • Click to Mute</span>
+                  <span>🔊 Sound Active • Click to Mute</span>
                 </>
               )}
             </button>
@@ -301,7 +301,7 @@ export const AnimatedClinicalReels: React.FC = () => {
               className="absolute top-3 right-3 z-20 px-3.5 py-2 bg-black/80 hover:bg-black text-white border border-white/25 rounded-full text-xs font-black flex items-center gap-2 shadow-2xl backdrop-blur-md cursor-pointer transition-all hover:scale-105"
             >
               <VolumeX className="w-4 h-4 text-amber-400" />
-              <span>Tap for Sound (आवाज खोलें) 🔊</span>
+              <span>Tap for Sound 🔊</span>
             </button>
           )}
         </div>
@@ -733,11 +733,9 @@ export const AnimatedClinicalReels: React.FC = () => {
                 ))}
               </div>
 
-              {/* Marquee Ticker with Dual Languages */}
+              {/* Marquee Ticker */}
               <div className="bg-slate-950/90 px-2 py-1 rounded-lg border border-slate-800 text-[8px] text-amber-300 truncate font-bold text-center flex items-center justify-center gap-1">
-                <span>📢 टोकन CMX-101 कृपया कैबिन 2 में पधारें</span>
-                <span className="text-slate-500">•</span>
-                <span className="text-slate-300">Please Proceed</span>
+                <span>📢 Token CMX-101 • Please proceed to Cabin 2</span>
               </div>
             </div>
 

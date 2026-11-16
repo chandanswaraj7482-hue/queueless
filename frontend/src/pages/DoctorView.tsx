@@ -121,18 +121,18 @@ const COMMON_ADVICE_CHIPS = [
 ];
 
 const QUICK_DRUG_PRESETS = [
-  { name: '+ Paracetamol 650mg', row: { medicineName: 'Tab. Paracetamol 650mg (Dolo)', dosage: '1 Tab', frequency: '1-0-1', duration: '3 Days', instructions: 'After Food (खाने के बाद - SOS for fever/pain)' } },
-  { name: '+ Pan-D 40mg (Acidity)', row: { medicineName: 'Cap. Pan-D (Pantoprazole + Domperidone)', dosage: '1 Cap', frequency: '1-0-0', duration: '5 Days', instructions: 'Before Food (सुबह खाली पेट 30 mins पहले)' } },
-  { name: '+ Azithromycin 500mg', row: { medicineName: 'Tab. Azithromycin 500mg (Azee)', dosage: '1 Tab', frequency: '1-0-0', duration: '3 Days', instructions: 'After Food (खाने के बाद)' } },
-  { name: '+ Cetirizine 10mg', row: { medicineName: 'Tab. Cetirizine 10mg (Okacet)', dosage: '1 Tab', frequency: '0-0-1', duration: '5 Days', instructions: 'At Bedtime (रात को सोते समय)' } },
-  { name: '+ Augmentin 625mg', row: { medicineName: 'Tab. Augmentin 625mg (Amoxyclav)', dosage: '1 Tab', frequency: '1-0-1', duration: '5 Days', instructions: 'After Food (खाने के बाद)' } },
-  { name: '+ Cough Syrup 10ml', row: { medicineName: 'Syp. Ascoril-D / Grilinctus', dosage: '10 ml', frequency: '1-1-1', duration: '5 Days', instructions: 'After Food (गुनगुने पानी से)' } },
+  { name: '+ Paracetamol 650mg', row: { medicineName: 'Tab. Paracetamol 650mg (Dolo)', dosage: '1 Tab', frequency: '1-0-1', duration: '3 Days', instructions: 'After Food - SOS for fever/pain' } },
+  { name: '+ Pan-D 40mg (Acidity)', row: { medicineName: 'Cap. Pan-D (Pantoprazole + Domperidone)', dosage: '1 Cap', frequency: '1-0-0', duration: '5 Days', instructions: 'Before Food - 30 mins before breakfast' } },
+  { name: '+ Azithromycin 500mg', row: { medicineName: 'Tab. Azithromycin 500mg (Azee)', dosage: '1 Tab', frequency: '1-0-0', duration: '3 Days', instructions: 'After Food' } },
+  { name: '+ Cetirizine 10mg', row: { medicineName: 'Tab. Cetirizine 10mg (Okacet)', dosage: '1 Tab', frequency: '0-0-1', duration: '5 Days', instructions: 'At Bedtime' } },
+  { name: '+ Augmentin 625mg', row: { medicineName: 'Tab. Augmentin 625mg (Amoxyclav)', dosage: '1 Tab', frequency: '1-0-1', duration: '5 Days', instructions: 'After Food' } },
+  { name: '+ Cough Syrup 10ml', row: { medicineName: 'Syp. Ascoril-D / Grilinctus', dosage: '10 ml', frequency: '1-1-1', duration: '5 Days', instructions: 'After Food (With warm water)' } },
   { name: '+ Electral ORS', row: { medicineName: 'Sachet Electral ORS', dosage: '1 Sachet', frequency: 'Twice Daily', duration: '3 Days', instructions: 'In 1L boiled and cooled water' } },
-  { name: '+ Telma 40mg (BP)', row: { medicineName: 'Tab. Telmisartan 40mg (Telma)', dosage: '1 Tab', frequency: '1-0-0', duration: '30 Days', instructions: 'Morning after breakfast (नाश्ते के बाद)' } },
-  { name: '+ Metformin 500mg', row: { medicineName: 'Tab. Metformin 500mg (Glycomet)', dosage: '1 Tab', frequency: '1-0-1', duration: '30 Days', instructions: 'After Food (खाने के बाद)' } },
-  { name: '+ Ondansetron 4mg', row: { medicineName: 'Tab. Ondansetron 4mg (Emeset)', dosage: '1 Tab', frequency: 'SOS', duration: '3 Days', instructions: 'Before Food (उल्टी महसूस होने पर)' } },
-  { name: '+ Montair-LC', row: { medicineName: 'Tab. Montair-LC (Montelukast + Levo)', dosage: '1 Tab', frequency: '0-0-1', duration: '7 Days', instructions: 'At Bedtime (रात को सोते समय)' } },
-  { name: '+ Neurobion Forte', row: { medicineName: 'Tab. Neurobion Forte (B-Complex)', dosage: '1 Tab', frequency: '1-0-0', duration: '15 Days', instructions: 'After Food (रोज सुबह नाश्ते के बाद)' } },
+  { name: '+ Telma 40mg (BP)', row: { medicineName: 'Tab. Telmisartan 40mg (Telma)', dosage: '1 Tab', frequency: '1-0-0', duration: '30 Days', instructions: 'Morning after breakfast' } },
+  { name: '+ Metformin 500mg', row: { medicineName: 'Tab. Metformin 500mg (Glycomet)', dosage: '1 Tab', frequency: '1-0-1', duration: '30 Days', instructions: 'After Food' } },
+  { name: '+ Ondansetron 4mg', row: { medicineName: 'Tab. Ondansetron 4mg (Emeset)', dosage: '1 Tab', frequency: 'SOS', duration: '3 Days', instructions: 'Before Food (If nausea occurs)' } },
+  { name: '+ Montair-LC', row: { medicineName: 'Tab. Montair-LC (Montelukast + Levo)', dosage: '1 Tab', frequency: '0-0-1', duration: '7 Days', instructions: 'At Bedtime' } },
+  { name: '+ Neurobion Forte', row: { medicineName: 'Tab. Neurobion Forte (B-Complex)', dosage: '1 Tab', frequency: '1-0-0', duration: '15 Days', instructions: 'After Food (Every morning after breakfast)' } },
 ];
 
 const generateWhatsAppRxUrl = (data: any) => {
@@ -462,7 +462,7 @@ export const DoctorView: React.FC = () => {
   const [diagnosis, setDiagnosis] = useState('');
   const [vitals, setVitals] = useState<Vitals>({ bp: '120/80', pulse: '76', temp: '98.6', spo2: '99', weight: '' });
   const [medicines, setMedicines] = useState<MedicineRow[]>([
-    { medicineName: 'Tab. Paracetamol 650mg', dosage: '1 Tab', frequency: '1-0-1', duration: '5 Days', instructions: 'After Food (खाने के बाद)' },
+    { medicineName: 'Tab. Paracetamol 650mg', dosage: '1 Tab', frequency: '1-0-1', duration: '5 Days', instructions: 'After Food' },
   ]);
   const [labTests, setLabTests] = useState<string[]>([]);
   const [customLabInput, setCustomLabInput] = useState('');
@@ -949,7 +949,8 @@ export const DoctorView: React.FC = () => {
 
     const validMeds = medicines.filter((m) => m.medicineName.trim().length > 0);
     if (validMeds.length === 0 && !diagnosis.trim()) {
-      alert('Please enter at least a diagnosis or one medicine before saving.');
+      setDispatchSuccessBanner('⚠️ Please enter at least a diagnosis or one medicine before saving.');
+      setTimeout(() => setDispatchSuccessBanner(null), 5000);
       return;
     }
 
@@ -957,7 +958,7 @@ export const DoctorView: React.FC = () => {
       id: `CUSTOM_${Date.now()}`,
       name: `⭐ ${presetName.trim()}`,
       diagnosis: diagnosis || 'General Clinical Treatment Protocol',
-      medicines: validMeds.length > 0 ? [...validMeds] : [{ medicineName: 'Tab. Paracetamol 650mg', dosage: '1 Tab', frequency: '1-0-1', duration: '5 Days', instructions: 'After Food (खाने के बाद)' }],
+      medicines: validMeds.length > 0 ? [...validMeds] : [{ medicineName: 'Tab. Paracetamol 650mg', dosage: '1 Tab', frequency: '1-0-1', duration: '5 Days', instructions: 'After Food' }],
       labTests: [...labTests],
       clinicalNotes: clinicalNotes || 'Follow dietary advice and take medicines on time.',
     };
@@ -1749,12 +1750,12 @@ export const DoctorView: React.FC = () => {
                                   list={`freq-options-${index}`}
                                 />
                                 <datalist id={`freq-options-${index}`}>
-                                  <option value="1-0-1 (सुबह-शाम)" />
-                                  <option value="1-1-1 (सुबह-दोपहर-रात)" />
-                                  <option value="1-0-0 (सुबह)" />
-                                  <option value="0-0-1 (रात को)" />
-                                  <option value="0-1-0 (दोपहर)" />
-                                  <option value="SOS (ज़रूरत पर)" />
+                                  <option value="1-0-1 (Morning - Night)" />
+                                  <option value="1-1-1 (Morning - Afternoon - Night)" />
+                                  <option value="1-0-0 (Morning)" />
+                                  <option value="0-0-1 (Night)" />
+                                  <option value="0-1-0 (Afternoon)" />
+                                  <option value="SOS (As Needed)" />
                                 </datalist>
                               </div>
 
@@ -1790,18 +1791,18 @@ export const DoctorView: React.FC = () => {
                               </div>
                             </div>
 
-                            {/* Row 2: Food / Timing Instructions (खाना खाने से पहले/बाद) */}
+                            {/* Row 2: Food / Timing Instructions */}
                             <div className="flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-slate-100 text-[11px]">
                               <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mr-1">
-                                🍽️ निर्देश:
+                                🍽️ Instructions:
                               </span>
                               {[
-                                'After Food (खाने के बाद)',
-                                'Before Food (खाने से पहले)',
-                                'Empty Stomach (खाली पेट)',
-                                'At Bedtime (रात को सोते समय)',
-                                'With Milk (दूध के साथ)',
-                                'SOS (ज़रूरत पड़ने पर)',
+                                'After Food',
+                                'Before Food',
+                                'Empty Stomach',
+                                'At Bedtime',
+                                'With Milk',
+                                'SOS (As Needed)',
                               ].map((instructionOption) => (
                                 <button
                                   key={instructionOption}
@@ -1818,7 +1819,7 @@ export const DoctorView: React.FC = () => {
                               ))}
                               <input
                                 type="text"
-                                placeholder="या कस्टम निर्देश लिखें (जैसे: गुनगुने पानी के साथ)..."
+                                placeholder="Or enter custom instructions (e.g. With warm water)..."
                                 value={med.instructions}
                                 onChange={(e) => handleMedicineChange(index, 'instructions', e.target.value)}
                                 className="flex-1 min-w-[170px] text-[10px] font-medium text-slate-700 bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-200 focus:outline-none"
@@ -2005,7 +2006,7 @@ export const DoctorView: React.FC = () => {
                       <div className="flex items-center justify-between mb-2">
                         <label className="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                           <Sliders className="w-3.5 h-3.5 text-indigo-600" />
-                          <span>Custom Rx Sections & Notes (कस्टम सेक्शन)</span>
+                          <span>Custom Rx Sections & Notes</span>
                         </label>
                         <button
                           type="button"
@@ -2332,7 +2333,7 @@ export const DoctorView: React.FC = () => {
                   </span>
                   <div>
                     <div className="font-black text-xs text-slate-800">
-                      Customize Letterhead & Sections (हटाएं या नया जोड़ें)
+                      Customize Letterhead & Sections
                     </div>
                     <div className="text-[10px] text-slate-500">
                       Toggle sections on/off or add custom fields before printing or sharing
@@ -2354,7 +2355,7 @@ export const DoctorView: React.FC = () => {
                 <div className="mt-3 pt-3 border-t border-slate-200 space-y-3">
                   <div>
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">
-                      1. Show / Hide Standard Sections (हटाएं / छुपाएं):
+                      1. Show / Hide Standard Sections:
                     </span>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                       <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
@@ -2462,7 +2463,7 @@ export const DoctorView: React.FC = () => {
                   {/* 2. Add Custom Section Directly to Modal */}
                   <div className="pt-2 border-t border-slate-200">
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">
-                      2. Add Custom Section to Letterhead (कस्टम जोड़ें):
+                      2. Add Custom Section to Letterhead:
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       <button
@@ -2636,7 +2637,7 @@ export const DoctorView: React.FC = () => {
                             <td className="p-2.5 text-slate-700 font-medium">{m.dosage}</td>
                             <td className="p-2.5 text-slate-700 font-mono font-bold text-blue-700">{m.frequency}</td>
                             <td className="p-2.5 text-slate-700 font-medium">{m.duration}</td>
-                            <td className="p-2.5 text-slate-600 italic font-medium">{m.instructions || 'After Food (खाने के बाद)'}</td>
+                            <td className="p-2.5 text-slate-600 italic font-medium">{m.instructions || 'After Food'}</td>
                           </tr>
                         ))
                       ) : (

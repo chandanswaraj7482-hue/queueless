@@ -77,7 +77,17 @@ export const HospitalOnboarding: React.FC = () => {
   const [initialDoctorRoom, setInitialDoctorRoom] = useState('Cabin 1');
 
   // Step 3: Payment Gateway (Dodo Payments, Cashfree)
-  const [paymentGateway, setPaymentGateway] = useState<'DODOPAYMENTS' | 'CASHFREE'>('DODOPAYMENTS');
+  const [paymentGateway, setPaymentGateway] = useState<'DODOPAYMENTS' | 'CASHFREE'>(
+    currencyCode === 'INR' ? 'CASHFREE' : 'DODOPAYMENTS'
+  );
+
+  useEffect(() => {
+    if (currencyCode === 'INR') {
+      setPaymentGateway('CASHFREE');
+    } else {
+      setPaymentGateway('DODOPAYMENTS');
+    }
+  }, [currencyCode]);
   const [cardNumber, setCardNumber] = useState('');
   const [cardExpiry, setCardExpiry] = useState('');
   const [cardCvc, setCardCvc] = useState('');

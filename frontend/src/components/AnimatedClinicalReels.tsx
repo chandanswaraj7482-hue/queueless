@@ -24,6 +24,8 @@ import {
   Youtube,
   Video,
   Zap,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
 
@@ -202,6 +204,30 @@ export const AnimatedClinicalReels: React.FC = () => {
   const [qrStep, setQrStep] = useState<number>(0);
   const [tvStep, setTvStep] = useState<number>(0);
   const [paymentStep, setPaymentStep] = useState<number>(0);
+
+  // Mobile Gesture Slider State for 9:16 Simulators
+  const [activeReelIndex, setActiveReelIndex] = useState<number>(0);
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  const handleScrollReels = () => {
+    if (!sliderRef.current) return;
+    const { scrollLeft, clientWidth } = sliderRef.current;
+    if (clientWidth > 0) {
+      const cardWidth = clientWidth * 0.82 + 16;
+      const index = Math.round(scrollLeft / cardWidth);
+      setActiveReelIndex(Math.min(Math.max(index, 0), 3));
+    }
+  };
+
+  const scrollToReel = (index: number) => {
+    if (!sliderRef.current) return;
+    const cardWidth = sliderRef.current.clientWidth * 0.82 + 16;
+    sliderRef.current.scrollTo({
+      left: index * cardWidth,
+      behavior: 'smooth',
+    });
+    setActiveReelIndex(index);
+  };
 
   // Continuous animation loops
   useEffect(() => {
@@ -429,22 +455,72 @@ export const AnimatedClinicalReels: React.FC = () => {
         </div>
       </div>
 
-      {/* Subheader for 4 Interactive Simulators */}
-      <div className="text-center pt-4">
+      {/* Subheader for 4 Interactive Simulators with Mobile Touch Gesture Slider */}
+      <div className="flex flex-col items-center justify-center gap-2 pt-4">
         <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 flex items-center justify-center gap-2">
           <span className="h-px w-12 bg-slate-300 dark:bg-slate-700"></span>
           <span>Or Explore Interactive 9:16 Clinical Studio Simulators Below</span>
           <span className="h-px w-12 bg-slate-300 dark:bg-slate-700"></span>
         </span>
+
+        {/* Mobile Swipe / Gesture Slider Controls */}
+        <div className="flex sm:hidden items-center justify-between w-full px-2 pt-1 pb-1">
+          <div className="flex items-center gap-1.5 text-[11px] font-extrabold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-800 px-3 py-1 rounded-full shadow-2xs">
+            <span className="animate-pulse">👈 Swipe Reels 👉</span>
+            <span className="text-slate-400 dark:text-slate-500">•</span>
+            <span className="text-slate-600 dark:text-slate-300 font-mono font-bold">{activeReelIndex + 1}/4</span>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => scrollToReel(Math.max(0, activeReelIndex - 1))}
+              disabled={activeReelIndex === 0}
+              aria-label="Previous clinical simulator reel"
+              className="p-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 disabled:opacity-30 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <div className="flex items-center gap-1 px-1">
+              {[0, 1, 2, 3].map((dot) => (
+                <button
+                  key={dot}
+                  type="button"
+                  onClick={() => scrollToReel(dot)}
+                  aria-label={`Go to reel ${dot + 1}`}
+                  className={`h-2 rounded-full transition-all cursor-pointer ${
+                    activeReelIndex === dot
+                      ? 'w-5 bg-sky-500 shadow-xs'
+                      : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                  }`}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => scrollToReel(Math.min(3, activeReelIndex + 1))}
+              disabled={activeReelIndex === 3}
+              aria-label="Next clinical simulator reel"
+              className="p-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 disabled:opacity-30 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* 4 Vertical (9:16) Animated Reel Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {/* 4 Vertical (9:16) Animated Reel Cards (Gesture Horizontal Slider on Mobile, Multi-col Grid on Desktop) */}
+      <div
+        ref={sliderRef}
+        onScroll={handleScrollReels}
+        className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 sm:pb-0 px-3 sm:px-0 -mx-3 sm:mx-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 touch-pan-x"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
         
         {/* ============================================================== */}
         {/* REEL 1: DOCTOR CABIN 1-CLICK CALL                              */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-blue-500/80 transition-all duration-300 flex flex-col justify-between">
+        <div className="relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-blue-500/80 transition-all duration-300 flex flex-col justify-between">
           {/* Animated Background Canvas Layer */}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Background Medical Ambient Grid & Glowing Nebula */}
@@ -591,7 +667,7 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 2: 20-SEC ENTRANCE QR ADMISSION                           */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-emerald-500/80 transition-all duration-300 flex flex-col justify-between">
+        <div className="relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-emerald-500/80 transition-all duration-300 flex flex-col justify-between">
           {/* Animated Background Canvas Layer */}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-emerald-950/40 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Ambient Depth Elements */}
@@ -719,7 +795,7 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 3: SILENT LOBBY & 55" SMART TV CHIME                      */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-indigo-500/80 transition-all duration-300 flex flex-col justify-between">
+        <div className="relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-indigo-500/80 transition-all duration-300 flex flex-col justify-between">
           {/* Animated Background Canvas Layer */}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-indigo-950/40 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Ambient Background Grid */}
@@ -854,7 +930,7 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 4: DIRECT UPI HOSPITAL BANK SETTLEMENT                    */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-purple-500/80 transition-all duration-300 flex flex-col justify-between">
+        <div className="relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-purple-500/80 transition-all duration-300 flex flex-col justify-between">
           {/* Animated Background Canvas Layer */}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-purple-950/40 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Ambient Background Grid */}
@@ -976,6 +1052,28 @@ export const AnimatedClinicalReels: React.FC = () => {
           </div>
         </div>
 
+      </div>
+
+      {/* Mobile Swipe Navigation Dots & Pill (Below Reels) */}
+      <div className="flex sm:hidden flex-col items-center justify-center gap-2 pt-1 pb-2">
+        <div className="flex items-center gap-1.5">
+          {[0, 1, 2, 3].map((dot) => (
+            <button
+              key={dot}
+              type="button"
+              onClick={() => scrollToReel(dot)}
+              aria-label={`Go to clinical simulator reel ${dot + 1}`}
+              className={`h-2 rounded-full transition-all cursor-pointer ${
+                activeReelIndex === dot
+                  ? 'w-6 bg-sky-500 shadow-xs'
+                  : 'w-2 bg-slate-300 dark:bg-slate-700'
+              }`}
+            />
+          ))}
+        </div>
+        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+          Swipe horizontally to explore all 4 OPD studio simulators
+        </p>
       </div>
 
       {/* Bottom Subtitle / Instruction */}

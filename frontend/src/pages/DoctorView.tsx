@@ -943,20 +943,29 @@ export const DoctorView: React.FC = () => {
     setClinicalNotes(preset.clinicalNotes);
   };
 
-  const handleSaveCurrentAsCustomPreset = () => {
-    const presetName = window.prompt('Enter a custom name for this clinical template (e.g. "My Dengue Care Protocol" or "Post-Op Knee Care"):');
-    if (!presetName || !presetName.trim()) return;
+  const [showPresetNameModal, setShowPresetNameModal] = useState(false);
+  const [customPresetNameInput, setCustomPresetNameInput] = useState('');
 
+  const handleOpenSavePresetModal = () => {
     const validMeds = medicines.filter((m) => m.medicineName.trim().length > 0);
     if (validMeds.length === 0 && !diagnosis.trim()) {
-      setDispatchSuccessBanner('⚠️ Please enter at least a diagnosis or one medicine before saving.');
+      setDispatchSuccessBanner('⚠️ Please enter at least a diagnosis or one medicine before saving as template.');
       setTimeout(() => setDispatchSuccessBanner(null), 5000);
       return;
     }
+    setCustomPresetNameInput(diagnosis ? `Protocol: ${diagnosis.slice(0, 24)}` : 'My Custom Rx Protocol');
+    setShowPresetNameModal(true);
+  };
 
+  const handleConfirmSaveCustomPreset = (e: React.FormEvent) => {
+    e.preventDefault();
+    const presetName = customPresetNameInput.trim();
+    if (!presetName) return;
+
+    const validMeds = medicines.filter((m) => m.medicineName.trim().length > 0);
     const newPreset: ClinicalPreset = {
       id: `CUSTOM_${Date.now()}`,
-      name: `⭐ ${presetName.trim()}`,
+      name: `⭐ ${presetName}`,
       diagnosis: diagnosis || 'General Clinical Treatment Protocol',
       medicines: validMeds.length > 0 ? [...validMeds] : [{ medicineName: 'Tab. Paracetamol 650mg', dosage: '1 Tab', frequency: '1-0-1', duration: '5 Days', instructions: 'After Food' }],
       labTests: [...labTests],
@@ -970,11 +979,13 @@ export const DoctorView: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
+    setShowPresetNameModal(false);
+    setDispatchSuccessBanner(`✓ Clinical template "${presetName}" saved!`);
+    setTimeout(() => setDispatchSuccessBanner(null), 4000);
   };
 
   const handleDeleteCustomPreset = (presetId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!window.confirm('Delete this custom preset?')) return;
     const updated = customDoctorPresets.filter((p) => p.id !== presetId);
     setCustomDoctorPresets(updated);
     try {
@@ -982,6 +993,8 @@ export const DoctorView: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
+    setDispatchSuccessBanner('✓ Custom clinical template removed.');
+    setTimeout(() => setDispatchSuccessBanner(null), 3000);
   };
 
   const handleAddAdviceChip = (chipText: string) => {
@@ -1512,7 +1525,7 @@ export const DoctorView: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
-                            onClick={handleSaveCurrentAsCustomPreset}
+                            onClick={handleOpenSavePresetModal}
                             className="px-2.5 py-1 bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-xl text-[10px] font-extrabold shadow-2xs transition-all active:scale-95 flex items-center gap-1 cursor-pointer"
                             title="Save current diagnosis, medicines & advice as your own reusable clinical template"
                           >

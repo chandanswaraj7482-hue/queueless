@@ -121,6 +121,13 @@ export const ClinicAdmin: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'ANALYTICS' | 'DOCTORS' | 'SERVICES' | 'PAYMENTS' | 'PROFILE' | 'RULES' | 'SECURITY' | 'STANDEE'>('OVERVIEW');
   const [downloading, setDownloading] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    confirmLabel?: string;
+    onConfirm: () => void;
+  } | null>(null);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -597,17 +604,25 @@ export const ClinicAdmin: React.FC = () => {
     }
   };
 
-  const handleDeleteDoctor = async (doctorId: string) => {
-    if (!window.confirm('Are you sure you want to remove this doctor from OPD?')) return;
-    try {
-      await fetch(`${API_BASE_URL}/api/v1/clinics/${clinic.id}/doctors/${doctorId}`, {
-        method: 'DELETE',
-      });
-      showToast('Doctor removed.');
-      fetchClinicData();
-    } catch (err) {
-      showToast('Failed to delete doctor');
-    }
+  const handleDeleteDoctor = (doctorId: string) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Remove Doctor from OPD Roster',
+      message: 'Are you sure you want to remove this doctor? Existing past consultations will be retained in logs.',
+      confirmLabel: 'Remove Doctor',
+      onConfirm: async () => {
+        setConfirmModal(null);
+        try {
+          await fetch(`${API_BASE_URL}/api/v1/clinics/${clinic.id}/doctors/${doctorId}`, {
+            method: 'DELETE',
+          });
+          showToast('Doctor removed.');
+          fetchClinicData();
+        } catch (err) {
+          showToast('Failed to delete doctor');
+        }
+      },
+    });
   };
 
   const resetDoctorForm = () => {
@@ -666,17 +681,25 @@ export const ClinicAdmin: React.FC = () => {
     }
   };
 
-  const handleDeleteService = async (serviceId: string) => {
-    if (!window.confirm('Are you sure you want to delete this service?')) return;
-    try {
-      await fetch(`${API_BASE_URL}/api/v1/clinics/${clinic.id}/services/${serviceId}`, {
-        method: 'DELETE',
-      });
-      showToast('Service deleted.');
-      fetchClinicData();
-    } catch (err) {
-      showToast('Failed to delete service');
-    }
+  const handleDeleteService = (serviceId: string) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete OPD Clinical Service',
+      message: 'Are you sure you want to delete this service? This will remove it from walk-in check-in counters.',
+      confirmLabel: 'Delete Service',
+      onConfirm: async () => {
+        setConfirmModal(null);
+        try {
+          await fetch(`${API_BASE_URL}/api/v1/clinics/${clinic.id}/services/${serviceId}`, {
+            method: 'DELETE',
+          });
+          showToast('Service deleted.');
+          fetchClinicData();
+        } catch (err) {
+          showToast('Failed to delete service');
+        }
+      },
+    });
   };
 
   const resetServiceForm = () => {
@@ -2925,6 +2948,40 @@ export const ClinicAdmin: React.FC = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal (Replaces native browser window.confirm) */}
+      {confirmModal && confirmModal.isOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 bg-red-100 text-red-600 rounded-2xl shrink-0">
+                <AlertCircle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-extrabold text-slate-900 tracking-tight">{confirmModal.title}</h3>
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">{confirmModal.message}</p>
+              </div>
+            </div>
+
+            <div className="pt-2 flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setConfirmModal(null)}
+                className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmModal.onConfirm}
+                className="px-5 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-md transition-all active:scale-95"
+              >
+                {confirmModal.confirmLabel || 'Confirm'}
+              </button>
+            </div>
           </div>
         </div>
       )}

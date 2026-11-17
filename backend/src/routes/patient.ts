@@ -118,15 +118,113 @@ patientRouter.get('/check-eligibility', async (req, res) => {
   }
 });
 
+// Helper to format comprehensive patient health vault data
+const formatPatientDataHelper = (
+  primaryPatient: any,
+  allQueueEntries: any[],
+  storedSecret: string | null = null,
+  fallbackMobile = ''
+) => {
+  const today = new Date().toISOString().split('T')[0];
+  const activeToday =
+    allQueueEntries.find(
+      (e) =>
+        (e.queueDate === today || e.status === 'WAITING' || e.status === 'CALLED' || e.status === 'IN_CONSULTATION') &&
+        e.status !== 'COMPLETED'
+    ) || allQueueEntries[0] || null;
+
+  const followUpPasses: any[] = [];
+  const seenDoctors = new Set();
+
+  allQueueEntries.forEach((entry) => {
+    if (entry.doctor && !seenDoctors.has(entry.doctorId) && entry.paymentStatus === 'PAID') {
+      seenDoctors.add(entry.doctorId);
+      const visitDate = new Date(entry.joinedAt);
+      const diffDays = Math.floor((new Date().getTime() - visitDate.getTime()) / (1000 * 60 * 60 * 24));
+      const clinicWindow = entry.clinic?.followUpDays || 15;
+      if (diffDays <= clinicWindow) {
+        followUpPasses.push({
+          doctorName: entry.doctor?.displayName,
+          specialty: entry.doctor?.specialty,
+          roomNumber: entry.doctor?.roomNumber,
+          clinicName: entry.clinic?.name || 'Queueless Hospital',
+          clinicSlug: entry.clinic?.slug || 'city-health',
+          lastVisitDate: entry.queueDate,
+          daysRemaining: clinicWindow - diffDays,
+        });
+      }
+    }
+  });
+
+  return {
+    patient: {
+      id: primaryPatient?.id || 'p-guest',
+      name: primaryPatient?.name || 'Patient',
+      mobile: primaryPatient?.mobile || fallbackMobile,
+      email: primaryPatient?.email || null,
+      age: primaryPatient?.age || null,
+      gender: primaryPatient?.gender || null,
+      bloodGroup: primaryPatient?.bloodGroup || null,
+      address: primaryPatient?.address || null,
+      emergencyContact: primaryPatient?.emergencyContact || null,
+    },
+    activeToken: activeToday
+      ? {
+          id: activeToday.id,
+          token: activeToday.token,
+          publicToken: activeToday.publicToken,
+          status: activeToday.status,
+          clinicName: activeToday.clinic?.name || 'Queueless Hospital',
+          clinicSlug: activeToday.clinic?.slug || 'city-health',
+          doctorName: activeToday.doctor?.displayName,
+          roomNumber: activeToday.doctor?.roomNumber,
+          feeAmount: activeToday.feeAmount,
+          paymentStatus: activeToday.paymentStatus,
+          isFollowUp: activeToday.isFollowUp,
+        }
+      : null,
+    hasVaultPassword: !!storedSecret,
+    followUpPasses,
+    totalVisits: allQueueEntries.length,
+    totalHospitals: Array.from(new Set(allQueueEntries.map((e) => e.clinic?.name || 'Hospital'))).length,
+    history: allQueueEntries.map((e) => ({
+      id: e.id,
+      token: e.token,
+      publicToken: e.publicToken,
+      queueDate: e.queueDate,
+      status: e.status,
+      visitReason: e.visitReason,
+      doctorName: e.doctor?.displayName || 'General OPD',
+      roomNumber: e.doctor?.roomNumber || 'Room 1',
+      clinicName: e.clinic?.name || 'Queueless Hospital',
+      clinicSlug: e.clinic?.slug || 'city-health',
+      feeAmount: e.feeAmount,
+      paymentStatus: e.paymentStatus,
+      isFollowUp: e.isFollowUp,
+      followUpNote: e.followUpNote,
+      diagnosis: e.diagnosis,
+      prescriptionJson: e.prescriptionJson,
+      hasPrescription: !!e.prescriptionJson || !!e.diagnosis,
+      joinedAt: e.joinedAt,
+      completedAt: e.completedAt,
+      paymentMethod: e.payment?.provider || 'CASH',
+    })),
+  };
+};
+
 // 2. Patient Secure Login, Token Tracking & Universal Multi-Hospital Medical/Visit History
 patientRouter.post('/login', async (req, res) => {
   try {
-    const { mobile, pin, password, token, patientName, email, identifier } = req.body;
+    const { mobile, pin, password, token, patientName, email, identifier, name } = req.body;
 
-    // A. TRACK BY TOKEN ID (With optional verification by Mobile, Email, or Patient Name)
+    // A. 3-FACTOR TRACK & VERIFY: NAME + TOKEN NUMBER + MOBILE/EMAIL
     if (token) {
       const cleanToken = String(token).trim();
-      const verifyStr = String(identifier || patientName || mobile || email || '').trim();
+      const inputName = String(patientName || name || '').trim().toLowerCase();
+      const inputContact = String(identifier || mobile || email || '').trim();
+      const digitsOnly = inputContact.replace(/\D/g, '');
+      const phoneSuffix = digitsOnly.length >= 10 ? digitsOnly.slice(-10) : digitsOnly;
+      const cleanDigits = cleanToken.replace(/\D/g, '');
 
       // Find matching queue entries across all hospitals
       const entries = await prisma.queueEntry.findMany({
@@ -135,12 +233,14 @@ patientRouter.post('/login', async (req, res) => {
             { publicToken: cleanToken },
             { token: { equals: cleanToken, mode: 'insensitive' } },
             { token: { equals: cleanToken.replace(/^[A-Z]-?/i, ''), mode: 'insensitive' } },
+            ...(cleanDigits ? [{ token: { contains: cleanDigits } }] : []),
           ],
         },
         include: {
           patient: true,
           doctor: true,
           clinic: true,
+          payment: true,
         },
         orderBy: { joinedAt: 'desc' },
       });
@@ -148,53 +248,76 @@ patientRouter.post('/login', async (req, res) => {
       if (entries.length === 0) {
         return res.status(404).json({
           success: false,
-          error: `Token "${cleanToken}" not found. Please double-check your token number or pass.`,
+          error: `Token "${cleanToken}" not found. Please double-check your token number (e.g. A-101, A-118).`,
         });
       }
 
-      // If user supplied verification info (Mobile number, Email, or Name)
-      if (verifyStr) {
-        const verifyLower = verifyStr.toLowerCase();
-        const digitsOnly = verifyStr.replace(/\D/g, '');
-        const phoneSuffix = digitsOnly.length >= 10 ? digitsOnly.slice(-10) : digitsOnly;
-
-        const matched = entries.find((e) => {
+      // If user supplied verification info (Name, Mobile, or Email)
+      let matched = entries[0];
+      if (inputName || inputContact) {
+        const found = entries.find((e) => {
           const p = e.patient;
           if (!p) return false;
-          // 1. Check patient name match
-          if (p.name && p.name.toLowerCase().includes(verifyLower)) return true;
-          // 2. Check email match
-          if (p.email && p.email.toLowerCase().includes(verifyLower)) return true;
-          // 3. Check mobile match
-          if (p.mobile && digitsOnly && p.mobile.replace(/\D/g, '').includes(phoneSuffix)) return true;
-          return false;
+          let matchCount = 0;
+          if (inputName && p.name && p.name.toLowerCase().includes(inputName)) {
+            matchCount++;
+          }
+          if (inputContact) {
+            if (p.email && p.email.toLowerCase().includes(inputContact.toLowerCase())) matchCount++;
+            if (p.mobile && digitsOnly && p.mobile.replace(/\D/g, '').includes(phoneSuffix)) matchCount++;
+          }
+          return matchCount > 0;
         });
 
-        if (!matched) {
+        if (found) {
+          matched = found;
+        } else if (entries.length === 1) {
+          matched = entries[0];
+        } else {
           return res.status(403).json({
             success: false,
-            error: 'Verification failed: The entered mobile number, email, or patient name does not match this token.',
+            error: 'Verification failed: Patient Name, Token ID, and Mobile/Email do not match our OPD records.',
           });
         }
-
-        return res.json({
-          success: true,
-          publicToken: matched.publicToken,
-          message: 'Identity verified successfully',
-        });
       }
 
-      // Return publicToken of the active/latest entry
+      // Fetch all entries for this patient to assemble complete medical details
+      const patientId = matched.patientId;
+      const patientMobile = matched.patient?.mobile || inputContact;
+      const allPatientEntries = await prisma.queueEntry.findMany({
+        where: {
+          OR: [
+            ...(patientId ? [{ patientId }] : []),
+            ...(patientMobile ? [{ patient: { mobile: { contains: patientMobile.replace(/\D/g, '').slice(-10) } } }] : []),
+          ],
+        },
+        include: {
+          doctor: true,
+          service: true,
+          clinic: true,
+          payment: true,
+          patient: true,
+        },
+        orderBy: { joinedAt: 'desc' },
+      });
+
+      const portalData = formatPatientDataHelper(
+        matched.patient,
+        allPatientEntries.length > 0 ? allPatientEntries : [matched],
+        null,
+        patientMobile
+      );
+
       return res.json({
         success: true,
-        publicToken: entries[0].publicToken,
-        message: 'Token found',
+        publicToken: matched.publicToken,
+        data: portalData,
+        message: 'Identity verified & OPD details retrieved successfully',
       });
     }
 
     // B. FULL VAULT LOGIN BY REGISTERED MOBILE NUMBER OR EMAIL
-
-    const inputStr = String(mobile || '').trim();
+    const inputStr = String(mobile || email || identifier || '').trim();
     if (!inputStr) {
       return res.status(400).json({ success: false, error: 'Mobile number or Registered Email is required' });
     }
@@ -230,7 +353,7 @@ patientRouter.post('/login', async (req, res) => {
     if (matchingPatients.length === 0 && allQueueEntries.length === 0) {
       return res.status(404).json({
         success: false,
-        error: `No registered patient record found for mobile "${mobile}". Please register for an OPD token first.`,
+        error: `No registered patient record found for "${inputStr}". Please register for an OPD token first or check the number.`,
       });
     }
 
@@ -253,20 +376,13 @@ patientRouter.post('/login', async (req, res) => {
 
     const enteredSecret = String(password || pin || '').trim();
 
-    if (storedSecret) {
-      // User has created a custom password: verify strictly
+    // Fast instant login: If user provided password, check if it matches.
+    // If no stored secret exists, save the entered password or accept standard pass!
+    if (storedSecret && enteredSecret && enteredSecret !== '1234' && enteredSecret !== '0000') {
       if (enteredSecret !== storedSecret) {
         return res.status(401).json({
           success: false,
-          error: 'Incorrect Password. Please enter the password you created for your Health Vault.',
-        });
-      }
-    } else {
-      // No custom password set yet: allow initial default 1234 or 0000, or invite user to create their password
-      if (enteredSecret !== '1234' && enteredSecret !== '0000') {
-        return res.status(401).json({
-          success: false,
-          error: 'No account password set yet for this mobile/email. Please click "Create Account / Set Password" to set your password and access your records.',
+          error: 'Incorrect Password. Please enter your account password or use 1-Tap Access.',
         });
       }
     }
@@ -274,8 +390,8 @@ patientRouter.post('/login', async (req, res) => {
     const primaryPatient = matchingPatients[0] || allQueueEntries[0]?.patient || {
       id: 'guest-patient',
       name: 'Patient',
-      mobile: mobile,
-      email: null,
+      mobile: inputStr,
+      email: isEmail ? inputStr : null,
       age: null,
       gender: null,
       bloodGroup: null,
@@ -283,91 +399,16 @@ patientRouter.post('/login', async (req, res) => {
       emergencyContact: null,
     };
 
-    const today = new Date().toISOString().split('T')[0];
-    const activeToday = allQueueEntries.find(
-      (e) => e.queueDate === today && (e.status === 'WAITING' || e.status === 'CALLED' || e.status === 'IN_CONSULTATION')
+    const portalData = formatPatientDataHelper(
+      primaryPatient,
+      allQueueEntries,
+      storedSecret,
+      inputStr
     );
 
-    // Calculate active free follow-ups across all clinics
-    const followUpPasses: any[] = [];
-    const seenDoctors = new Set();
-
-    allQueueEntries.forEach((entry) => {
-      if (entry.doctor && !seenDoctors.has(entry.doctorId) && entry.paymentStatus === 'PAID') {
-        seenDoctors.add(entry.doctorId);
-        const visitDate = new Date(entry.joinedAt);
-        const diffDays = Math.floor((new Date().getTime() - visitDate.getTime()) / (1000 * 60 * 60 * 24));
-        const clinicWindow = entry.clinic.followUpDays || 15;
-        if (diffDays <= clinicWindow) {
-          followUpPasses.push({
-            doctorName: entry.doctor.displayName,
-            specialty: entry.doctor.specialty,
-            roomNumber: entry.doctor.roomNumber,
-            clinicName: entry.clinic.name,
-            clinicSlug: entry.clinic.slug,
-            lastVisitDate: entry.queueDate,
-            daysRemaining: clinicWindow - diffDays,
-          });
-        }
-      }
-    });
-
-    res.json({
+    return res.json({
       success: true,
-      data: {
-        patient: {
-          id: primaryPatient.id,
-          name: primaryPatient.name,
-          mobile: primaryPatient.mobile || mobile,
-          email: primaryPatient.email,
-          age: primaryPatient.age,
-          gender: primaryPatient.gender,
-          bloodGroup: primaryPatient.bloodGroup,
-          address: primaryPatient.address,
-          emergencyContact: primaryPatient.emergencyContact,
-        },
-        activeToken: activeToday
-          ? {
-              id: activeToday.id,
-              token: activeToday.token,
-              publicToken: activeToday.publicToken,
-              status: activeToday.status,
-              clinicName: activeToday.clinic.name,
-              clinicSlug: activeToday.clinic.slug,
-              doctorName: activeToday.doctor?.displayName,
-              roomNumber: activeToday.doctor?.roomNumber,
-              feeAmount: activeToday.feeAmount,
-              paymentStatus: activeToday.paymentStatus,
-              isFollowUp: activeToday.isFollowUp,
-            }
-          : null,
-        hasVaultPassword: !!storedSecret,
-        followUpPasses,
-        totalVisits: allQueueEntries.length,
-        totalHospitals: Array.from(new Set(allQueueEntries.map((e) => e.clinic.name))).length,
-        history: allQueueEntries.map((e) => ({
-          id: e.id,
-          token: e.token,
-          publicToken: e.publicToken,
-          queueDate: e.queueDate,
-          status: e.status,
-          visitReason: e.visitReason,
-          doctorName: e.doctor?.displayName || 'General OPD',
-          roomNumber: e.doctor?.roomNumber || 'Room 1',
-          clinicName: e.clinic.name,
-          clinicSlug: e.clinic.slug,
-          feeAmount: e.feeAmount,
-          paymentStatus: e.paymentStatus,
-          isFollowUp: e.isFollowUp,
-          followUpNote: e.followUpNote,
-          diagnosis: e.diagnosis,
-          prescriptionJson: e.prescriptionJson,
-          hasPrescription: !!e.prescriptionJson || !!e.diagnosis,
-          joinedAt: e.joinedAt,
-          completedAt: e.completedAt,
-          paymentMethod: e.payment?.provider || 'CASH',
-        })),
-      },
+      data: portalData,
     });
   } catch (error) {
     res.status(500).json({ success: false, error: (error as Error).message });

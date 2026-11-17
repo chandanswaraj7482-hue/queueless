@@ -29,6 +29,9 @@ import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
 
 export interface HospitalYouTubeVideo {
   id: string;
+  type: 'local' | 'youtube';
+  localSrc?: string;
+  poster?: string;
   title: string;
   subtitle: string;
   hospital: string;
@@ -40,34 +43,67 @@ export interface HospitalYouTubeVideo {
 
 export const HOSPITAL_YOUTUBE_VIDEOS: HospitalYouTubeVideo[] = [
   {
-    id: 'Kq_zVB05H3o',
+    id: 'local_checkin',
+    type: 'local',
+    localSrc: '/assets/videos/reel_patient_checkin.mp4',
+    poster: '/assets/hero-hospital-lounge.jpg',
     title: 'ABDM Scan & Share: QR Code se OPD Registration & Live Token Flow',
     subtitle: 'Real product tutorial: Patient scans hospital QR code, instantly shares demographic data via ABHA / Scan & Share, and receives a digital OPD token on phone without standing in queue.',
     hospital: 'HospitalEasy Clinical Demo • Smart OPD',
     badge: 'Real Software Demo',
     badgeColor: 'bg-emerald-600',
-    duration: 'Live Tutorial',
+    duration: '0:45 min',
     source: 'ABDM Scan & Share System',
   },
   {
-    id: 'Q1ppsSQsuLM',
-    title: 'NextGen eHospital OPD Registration & Token Workflow (Hindi)',
-    subtitle: 'Comprehensive hospital walkthrough in Hindi: Digital patient registration, doctor department assignment, and instant token generation.',
+    id: 'local_doctor',
+    type: 'local',
+    localSrc: '/assets/videos/reel_doctor_cabin.mp4',
+    poster: '/assets/hero-hospital-lounge.jpg',
+    title: 'NextGen eHospital OPD Registration & Token Workflow',
+    subtitle: 'Comprehensive hospital walkthrough: Digital patient registration, doctor department assignment, and instant token generation from cabin console.',
     hospital: 'NextGen eHospital Platform',
     badge: 'eHospital Clinical Flow',
     badgeColor: 'bg-blue-600',
-    duration: 'Hospital Walkthrough',
+    duration: '1:12 min',
     source: 'eHospital Clinical Network',
   },
   {
-    id: 'HLBvlg64rOk',
+    id: 'local_lounge',
+    type: 'local',
+    localSrc: '/assets/videos/reel_hospital_lounge.mp4',
+    poster: '/assets/hero-hospital-lounge.jpg',
     title: 'Doctor Cabin Calling & Lobby TV Acoustic Chime Synchronizer',
     subtitle: 'How doctors 1-tap call next patient from their cabin console, instantly triggering waiting room TV acoustic chime and multilingual voice announcement.',
     hospital: 'CareMax Multi-Specialty • 450+ Beds',
     badge: 'Doctor Cabin Calling',
     badgeColor: 'bg-indigo-600',
-    duration: '3:40 mins',
+    duration: '0:58 min',
     source: 'Clinical Systems Case Study',
+  },
+  {
+    id: 'local_daycare',
+    type: 'local',
+    localSrc: '/assets/videos/reel_daycare_surgery.mp4',
+    poster: '/assets/hero-hospital-lounge.jpg',
+    title: 'Fast-Track Cashier Counter & Cashfree Admission Flow',
+    subtitle: 'Desk reception counter approves cash collections, admits walk-in patients, and issues official OPD tokens in under 5 seconds.',
+    hospital: 'Apex Surgical Daycare Hub',
+    badge: 'Desk Admission',
+    badgeColor: 'bg-purple-600',
+    duration: '1:05 min',
+    source: 'Cashfree & Counter Flow',
+  },
+  {
+    id: 't-X3NQPuTX8',
+    type: 'youtube',
+    title: 'Official NHA Ayushman Bharat (ABDM) Scan & Share Guide',
+    subtitle: 'National Health Authority official guide on using ABHA QR scan-to-register to eliminate hospital queues across India.',
+    hospital: 'National Health Authority (NHA)',
+    badge: 'NHA Official',
+    badgeColor: 'bg-amber-600',
+    duration: 'Official Guide',
+    source: 'Ayushman Bharat Digital Mission',
   },
 ];
 
@@ -132,24 +168,32 @@ export const AnimatedClinicalReels: React.FC = () => {
   const [isPlayingVideo, setIsPlayingVideo] = useState<boolean>(true);
   const [isVideoMuted, setIsVideoMuted] = useState<boolean>(true);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const toggleVideoSound = () => {
-    if (isVideoMuted) {
-      iframeRef.current?.contentWindow?.postMessage(
-        JSON.stringify({ event: 'command', func: 'unMute', args: [] }),
-        '*'
-      );
-      iframeRef.current?.contentWindow?.postMessage(
-        JSON.stringify({ event: 'command', func: 'setVolume', args: [100] }),
-        '*'
-      );
-      setIsVideoMuted(false);
+    if (selectedVideo.type === 'local') {
+      if (videoRef.current) {
+        videoRef.current.muted = !isVideoMuted;
+        setIsVideoMuted(!isVideoMuted);
+      }
     } else {
-      iframeRef.current?.contentWindow?.postMessage(
-        JSON.stringify({ event: 'command', func: 'mute', args: [] }),
-        '*'
-      );
-      setIsVideoMuted(true);
+      if (isVideoMuted) {
+        iframeRef.current?.contentWindow?.postMessage(
+          JSON.stringify({ event: 'command', func: 'unMute', args: [] }),
+          '*'
+        );
+        iframeRef.current?.contentWindow?.postMessage(
+          JSON.stringify({ event: 'command', func: 'setVolume', args: [100] }),
+          '*'
+        );
+        setIsVideoMuted(false);
+      } else {
+        iframeRef.current?.contentWindow?.postMessage(
+          JSON.stringify({ event: 'command', func: 'mute', args: [] }),
+          '*'
+        );
+        setIsVideoMuted(true);
+      }
     }
   };
 
@@ -284,14 +328,29 @@ export const AnimatedClinicalReels: React.FC = () => {
 
         {/* 16:9 Cinema Frame Embed with Autoloop + Muted Autoplay */}
         <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-slate-200/60 dark:border-slate-800 group">
-          <iframe
-            ref={iframeRef}
-            src={`https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1&mute=${isVideoMuted ? '1' : '0'}&loop=1&playlist=${selectedVideo.id}&controls=1&enablejsapi=1&rel=0&playsinline=1&modestbranding=1`}
-            title={selectedVideo.title}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          />
+          {selectedVideo.type === 'local' ? (
+            <video
+              key={selectedVideo.localSrc}
+              ref={videoRef}
+              src={selectedVideo.localSrc}
+              poster={selectedVideo.poster}
+              autoPlay
+              loop
+              muted={isVideoMuted}
+              playsInline
+              controls
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <iframe
+              ref={iframeRef}
+              src={`https://www.youtube-nocookie.com/embed/${selectedVideo.id}?autoplay=1&mute=${isVideoMuted ? '1' : '0'}&loop=1&playlist=${selectedVideo.id}&controls=1&enablejsapi=1&rel=0&playsinline=1&modestbranding=1`}
+              title={selectedVideo.title}
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          )}
 
           {/* Floating Tap to Unmute Overlay Button */}
           {isVideoMuted && (
@@ -341,7 +400,7 @@ export const AnimatedClinicalReels: React.FC = () => {
                 >
                   <div className="relative w-16 h-12 rounded-xl overflow-hidden shrink-0 bg-slate-900 border border-slate-200 dark:border-slate-700">
                     <img
-                      src={`https://i.ytimg.com/vi/${vid.id}/mqdefault.jpg`}
+                      src={vid.type === 'local' ? (vid.poster || '/assets/hero-hospital-lounge.jpg') : `https://i.ytimg.com/vi/${vid.id}/mqdefault.jpg`}
                       alt={vid.title}
                       className="w-full h-full object-cover"
                     />

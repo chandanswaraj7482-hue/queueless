@@ -741,7 +741,7 @@ export const QueuelessWebsite: React.FC = () => {
       {/* ============================================================== */}
       {/* 2. WORLD-CLASS ENTERPRISE HEALTHCARE SAAS HERO                */}
       {/* ============================================================== */}
-      <section className="relative pt-24 sm:pt-36 pb-12 sm:pb-20 px-3 sm:px-6 z-10 overflow-hidden text-center">
+      <section className="relative pt-6 sm:pt-14 pb-12 sm:pb-20 px-3 sm:px-6 z-10 overflow-hidden text-center">
         {/* Soft Radial Ambient Lighting */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(56,189,248,0.18),rgba(99,102,241,0.08),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(14,165,233,0.18),rgba(99,102,241,0.08),rgba(0,0,0,0))] pointer-events-none -z-10" />
 
@@ -1025,7 +1025,7 @@ export const QueuelessWebsite: React.FC = () => {
             <div className="pt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
               {/* Left: Patient Smartphone View (iPhone 16 Pro Style) */}
               <div className="lg:col-span-5 flex justify-center items-center">
-                <div className="w-[285px] sm:w-[310px] bg-slate-950 rounded-[48px] p-3.5 shadow-2xl border-4 border-slate-700/90 ring-1 ring-slate-900/20 relative overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)]">
+                <div className="w-full max-w-[285px] sm:max-w-[310px] bg-slate-950 rounded-[48px] p-3.5 shadow-2xl border-4 border-slate-700/90 ring-1 ring-slate-900/20 relative overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)]">
                   {/* Subtle Titanium Side Reflection */}
                   <div className="absolute inset-y-0 left-0 w-0.5 bg-white/20"></div>
 
@@ -1183,7 +1183,7 @@ export const QueuelessWebsite: React.FC = () => {
                   </div>
 
                   {/* Primary Active Call Spotlight (Sonar Pulse + High Contrast Beacon) */}
-                  <div className="p-4 bg-gradient-to-r from-emerald-950/60 via-slate-900 to-emerald-950/40 rounded-2xl border-2 border-emerald-500/60 flex items-center justify-between shadow-lg shadow-emerald-500/10 relative overflow-hidden transition-all duration-300">
+                  <div className="p-4 bg-gradient-to-r from-emerald-950/60 via-slate-900 to-emerald-950/40 rounded-2xl border-2 border-emerald-500/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg shadow-emerald-500/10 relative overflow-hidden transition-all duration-300">
                     {/* Radar Sonar Ping Wave */}
                     {simulatedCallFlash && (
                       <div className="absolute right-6 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full border border-emerald-400/40 animate-sonar pointer-events-none"></div>

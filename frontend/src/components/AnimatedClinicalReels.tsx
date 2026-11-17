@@ -212,20 +212,33 @@ export const AnimatedClinicalReels: React.FC = () => {
   const handleScrollReels = () => {
     if (!sliderRef.current) return;
     const { scrollLeft, clientWidth } = sliderRef.current;
-    if (clientWidth > 0) {
-      const cardWidth = clientWidth * 0.82 + 16;
-      const index = Math.round(scrollLeft / cardWidth);
-      setActiveReelIndex(Math.min(Math.max(index, 0), 3));
+    if (clientWidth > 0 && sliderRef.current.children.length > 0) {
+      let closestIdx = 0;
+      let minDiff = Infinity;
+      Array.from(sliderRef.current.children).forEach((child, i) => {
+        const el = child as HTMLElement;
+        const diff = Math.abs(el.offsetLeft - scrollLeft);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIdx = i;
+        }
+      });
+      setActiveReelIndex(Math.min(Math.max(closestIdx, 0), 3));
     }
   };
 
   const scrollToReel = (index: number) => {
     if (!sliderRef.current) return;
-    const cardWidth = sliderRef.current.clientWidth * 0.82 + 16;
-    sliderRef.current.scrollTo({
-      left: index * cardWidth,
-      behavior: 'smooth',
-    });
+    const targetChild = sliderRef.current.children[index] as HTMLElement;
+    if (targetChild) {
+      targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    } else {
+      const cardWidth = sliderRef.current.clientWidth * 0.82 + 16;
+      sliderRef.current.scrollTo({
+        left: index * cardWidth,
+        behavior: 'smooth',
+      });
+    }
     setActiveReelIndex(index);
   };
 
@@ -336,13 +349,15 @@ export const AnimatedClinicalReels: React.FC = () => {
             >
               {isVideoMuted ? (
                 <>
-                  <VolumeX className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
-                  <span>🔇 Sound Muted • Click to Unmute</span>
+                  <VolumeX className="w-3.5 h-3.5 text-amber-600 animate-pulse shrink-0" />
+                  <span className="hidden sm:inline">🔇 Sound Muted • Click to Unmute</span>
+                  <span className="sm:hidden">🔇 Unmute</span>
                 </>
               ) : (
                 <>
-                  <Volume2 className="w-3.5 h-3.5 text-emerald-600 animate-bounce" />
-                  <span>🔊 Sound Active • Click to Mute</span>
+                  <Volume2 className="w-3.5 h-3.5 text-emerald-600 animate-bounce shrink-0" />
+                  <span className="hidden sm:inline">🔊 Sound Active • Click to Mute</span>
+                  <span className="sm:hidden">🔊 Mute</span>
                 </>
               )}
             </button>

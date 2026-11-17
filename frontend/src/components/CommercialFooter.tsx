@@ -314,9 +314,9 @@ export const CommercialFooter: React.FC = () => {
           </div>
         </div>
 
-        {/* Sleek, Low-Opacity Subtle Watermark */}
-        <div className="pt-4 pb-2 text-center select-none pointer-events-none w-full flex items-center justify-center opacity-15 hover:opacity-25 transition-opacity">
-          <h2 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-slate-700 whitespace-nowrap">
+        {/* Sleek, Low-Opacity Subtle Watermark (Constrained to prevent mobile horizontal scroll) */}
+        <div className="pt-4 pb-2 text-center select-none pointer-events-none w-full max-w-full overflow-hidden flex items-center justify-center opacity-15 hover:opacity-25 transition-opacity">
+          <h2 className="text-4xl sm:text-7xl md:text-9xl font-black tracking-tighter text-slate-700 truncate select-none">
             Queueless
           </h2>
         </div>

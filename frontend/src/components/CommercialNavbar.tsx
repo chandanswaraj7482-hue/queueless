@@ -271,7 +271,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-slate-800 hover:text-slate-950 hover:bg-slate-100 rounded-2xl cursor-pointer transition-all border border-slate-200/80 shadow-2xs shrink-0"
+              className="md:hidden p-2 text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl cursor-pointer transition-all border border-slate-200/80 dark:border-slate-800 shadow-2xs shrink-0"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6 stroke-[2.5]" /> : <Menu className="w-6 h-6 stroke-[2.5]" />}
@@ -281,7 +281,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
 
         {/* Mobile Navigation Dropdown Slider Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden pt-4 pb-4 border-t border-slate-200/80 mt-3 space-y-3 bg-white/95 backdrop-blur-2xl rounded-3xl p-4 border border-slate-200 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="md:hidden pt-4 pb-4 border-t border-slate-200/80 dark:border-slate-800 mt-3 space-y-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl p-4 border border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150 text-slate-800 dark:text-slate-100">
             {/* 1. Prominent Patient Vault Mobile Button */}
             <Link
               to="/portal"
@@ -304,8 +304,8 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   onClick={() => setMobileMenuOpen(false)}
                   className={`block px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
                     location.pathname === item.href
-                      ? 'bg-blue-50 text-blue-700 font-extrabold'
-                      : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+                      ? 'bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-extrabold'
+                      : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {item.label}
@@ -314,7 +314,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             </div>
 
             {/* 3. Action Buttons */}
-            <div className="space-y-2 pt-2 border-t border-slate-100">
+            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
               {onOpenAuditModal ? (
                 <button
                   type="button"
@@ -322,7 +322,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                     setMobileMenuOpen(false);
                     onOpenAuditModal();
                   }}
-                  className="w-full py-3 px-4 bg-slate-950 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-sm text-center flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3 px-4 bg-slate-950 dark:bg-white dark:text-slate-950 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-sm text-center flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Book a Demo (60s OPD Audit) ➔</span>
                 </button>
@@ -330,7 +330,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                 <Link
                   to="/signup"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-3 px-4 bg-slate-950 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-sm block"
+                  className="w-full text-center py-3 px-4 bg-slate-950 dark:bg-white dark:text-slate-950 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-sm block"
                 >
                   Book a Demo ➔
                 </Link>
@@ -339,7 +339,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-2.5 px-3 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold text-xs rounded-xl block"
+                className="w-full text-center py-2.5 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl block"
               >
                 Hospital Staff Sign In (Director / Doctor / Desk) ➔
               </Link>

@@ -151,9 +151,9 @@ export const PricingPage: React.FC = () => {
               return (
                 <div
                   key={plan.id}
-                  className={`relative rounded-3xl p-8 flex flex-col justify-between transition-all card-interactive ${
+                  className={`relative rounded-3xl p-5 sm:p-8 flex flex-col justify-between transition-all card-interactive ${
                     plan.highlight
-                      ? 'bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-2xl shadow-blue-500/15 scale-102 ring-4 ring-blue-500/10'
+                      ? 'bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-2xl shadow-blue-500/15 lg:scale-102 ring-4 ring-blue-500/10'
                       : 'bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 shadow-lg hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl'
                   }`}
                 >
@@ -334,8 +334,13 @@ export const PricingPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="overflow-x-auto bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
-              <table className="w-full text-left text-xs border-collapse">
+            {/* Mobile Horizontal Swipe Indicator */}
+            <div className="sm:hidden flex items-center justify-center gap-1.5 py-1.5 px-3 bg-blue-50 dark:bg-blue-950/60 rounded-xl border border-blue-200/80 dark:border-blue-800 text-[11px] font-bold text-blue-700 dark:text-blue-300 w-fit mx-auto">
+              <span>👈 Swipe sideways to compare all tiers 👉</span>
+            </div>
+
+            <div className="overflow-x-auto bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm scrollbar-thin">
+              <table className="min-w-[700px] w-full text-left text-xs border-collapse">
                 <thead>
                   <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950">
                     <th className="p-4 sm:p-5 font-bold text-slate-700 dark:text-slate-300 w-1/3">Feature</th>

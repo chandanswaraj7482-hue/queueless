@@ -70,9 +70,7 @@ export const HospitalLogin: React.FC = () => {
           })
         );
 
-        setTimeout(() => {
-          navigate(targetUrl);
-        }, 800);
+        navigate(targetUrl);
       } else {
         setError(data.error || 'Could not verify hospital account for this Google email.');
       }
@@ -125,9 +123,7 @@ export const HospitalLogin: React.FC = () => {
           })
         );
 
-        setTimeout(() => {
-          navigate(targetUrl);
-        }, 800);
+        navigate(targetUrl);
       } else {
         setError(data.error || 'Invalid credentials or inactive subscription.');
       }

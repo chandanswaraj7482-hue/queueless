@@ -447,6 +447,7 @@ patientRouter.post(['/set-pin', '/set-password'], async (req, res) => {
         : { mobile: { contains: searchSuffix } },
     });
 
+    let primaryPatient = patients[0];
     if (patients.length > 0) {
       for (const p of patients) {
         await prisma.patient.update({
@@ -460,7 +461,7 @@ patientRouter.post(['/set-pin', '/set-password'], async (req, res) => {
     } else {
       const defaultTenant = await prisma.tenant.findFirst();
       if (defaultTenant) {
-        await prisma.patient.create({
+        primaryPatient = await prisma.patient.create({
           data: {
             tenantId: defaultTenant.id,
             name: name && name.trim() ? name.trim() : 'Patient',
@@ -472,8 +473,33 @@ patientRouter.post(['/set-pin', '/set-password'], async (req, res) => {
       }
     }
 
+    // Retrieve all patient queue entries to build instant portal payload
+    const allQueueEntries = await prisma.queueEntry.findMany({
+      where: {
+        patient: isEmail
+          ? { email: { equals: inputStr, mode: 'insensitive' } }
+          : { mobile: { contains: searchSuffix } },
+      },
+      orderBy: { joinedAt: 'desc' },
+      include: {
+        doctor: true,
+        service: true,
+        clinic: true,
+        payment: true,
+        patient: true,
+      },
+    });
+
+    const portalData = formatPatientDataHelper(
+      primaryPatient || { id: 'p-new', name: name || 'Patient', mobile: cleanMobile, email: isEmail ? inputStr : null },
+      allQueueEntries,
+      rawSecret,
+      inputStr
+    );
+
     res.json({
       success: true,
+      data: portalData,
       message: 'Universal Health Vault Password successfully created! You can now log in anytime to access and download your medical records.',
     });
   } catch (error) {

@@ -1910,6 +1910,50 @@ export const ClinicAdmin: React.FC = () => {
             </span>
           </div>
 
+          {/* Queueless OS Cloud Plan, AutoPay Mandate & Token Validity Section */}
+          <div className="p-5 bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl border border-indigo-900 shadow-md space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="p-1.5 bg-indigo-500/20 text-indigo-300 rounded-lg">
+                    <Zap className="w-4 h-4" />
+                  </span>
+                  <h3 className="text-sm font-black text-white tracking-tight">
+                    Queueless OS Subscription & AutoPay Mandate
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-300 mt-1">
+                  Active Hospital Tier: <strong className="text-indigo-300">{clinic?.plan || 'GROWTH_OPD'}</strong> • Status: <span className="text-emerald-400 font-bold">Active</span>
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 rounded-full text-xs font-black flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span>AutoPay Mandate Active</span>
+                </span>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-slate-950/70 rounded-2xl border border-slate-800 text-xs space-y-2">
+              <div className="flex items-center justify-between text-[11px] text-slate-400">
+                <span>Billing Frequency: <strong>Monthly Auto-Debit</strong></span>
+                <span>Gateway: <strong>Cashfree UPI AutoPay / Dodo Payments</strong></span>
+              </div>
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                Recurring revenue automatically settles to the Queueless platform account. Your next scheduled auto-debit renewal is on day 30 of your cycle.
+              </p>
+            </div>
+
+            {/* Strict Token Validity Notice */}
+            <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-[11px] text-amber-200 flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div className="leading-relaxed">
+                <strong>Strict Token Expiration Policy:</strong> Token credits are valid strictly during the active 30-day billing cycle. Unused credits expire automatically upon renewal and <strong>do not stack or carry over into new plan upgrades</strong>.
+              </div>
+            </div>
+          </div>
+
           <form onSubmit={handleSaveSettings} className="space-y-6">
             {/* Direct Settlement Explanation Banner */}
             <div className="p-4 bg-emerald-50/70 rounded-2xl border border-emerald-200/80 text-xs text-emerald-950 flex items-start gap-3">

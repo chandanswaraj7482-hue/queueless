@@ -436,23 +436,24 @@ export const PatientPortal: React.FC = () => {
         setSignupSuccessMsg('🎉 Account & Password created! Opening your Universal Medical Vault...');
         setMobile(cleanId);
         setPassword(signupPassword.trim());
-        setTimeout(() => {
-          fetch(`${API_BASE_URL}/api/v1/patient/login`, {
+        localStorage.setItem(
+          'queueless_patient_session',
+          JSON.stringify({ mobile: cleanId, password: signupPassword.trim() })
+        );
+        if (data.data) {
+          setPortalData(data.data);
+        } else {
+          // Instant direct fetch without lag
+          const logRes = await fetch(`${API_BASE_URL}/api/v1/patient/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ mobile: cleanId, password: signupPassword.trim() }),
-          })
-            .then((r) => r.json())
-            .then((logData) => {
-              if (logData.success) {
-                setPortalData(logData.data);
-                localStorage.setItem(
-                  'queueless_patient_session',
-                  JSON.stringify({ mobile: cleanId, password: signupPassword.trim() })
-                );
-              }
-            });
-        }, 800);
+          });
+          const logData = await logRes.json();
+          if (logData.success && logData.data) {
+            setPortalData(logData.data);
+          }
+        }
       } else {
         setError(data.error || 'Failed to create password.');
       }

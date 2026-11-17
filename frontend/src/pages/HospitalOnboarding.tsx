@@ -882,6 +882,34 @@ export const HospitalOnboarding: React.FC = () => {
                   </div>
                 )}
 
+                {/* AutoPay Recurring Mandate & Token Validity Notice */}
+                <div className="p-4 bg-slate-50 dark:bg-slate-950/80 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="p-1.5 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 rounded-lg">
+                        <Zap className="w-3.5 h-3.5" />
+                      </span>
+                      <span className="text-xs font-black text-slate-900 dark:text-white">
+                        AutoPay Recurring Mandate
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
+                      Active
+                    </span>
+                  </div>
+
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                    By confirming checkout, you activate an automated monthly renewal mandate via {paymentGateway === 'CASHFREE' ? 'Cashfree UPI AutoPay' : 'Dodo Payments Global Recurring'}. Monthly subscription fees and token refills renew automatically directly to the platform account. Cancel anytime from your Hospital Admin settings with 1 tap.
+                  </p>
+
+                  <div className="pt-1 p-2.5 bg-amber-50 dark:bg-amber-950/40 rounded-xl border border-amber-200/80 dark:border-amber-800/80 text-[10px] text-amber-900 dark:text-amber-200 flex items-start gap-2">
+                    <ShieldCheck className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                    <span>
+                      <strong>Strict Token Expiration Policy:</strong> Token credits are valid strictly during the active 30-day billing cycle. Unused tokens automatically expire at cycle end and <strong>do not roll over or stack into new plan upgrades</strong>.
+                    </span>
+                  </div>
+                </div>
+
                 {/* Trust Guarantees */}
                 <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
                   <span className="flex items-center gap-1 text-emerald-600 font-bold">

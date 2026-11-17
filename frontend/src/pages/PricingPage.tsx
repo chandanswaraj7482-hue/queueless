@@ -13,6 +13,7 @@ import {
   Phone,
   Check,
   Award,
+  ShieldAlert,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
@@ -386,17 +387,35 @@ export const PricingPage: React.FC = () => {
                   </tr>
                   <tr>
                     <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">
-                      <div>Token Credit Roll-Over & Validity</div>
-                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal mt-0.5">Retention policy for unused top-up credits</div>
+                      <div>Token Credit Validity & Expiration</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal mt-0.5">Strict retention policy: unused credits expire with plan cycle</div>
                     </td>
                     <td className="p-4 sm:p-5 text-center text-slate-600 dark:text-slate-400 font-medium">
-                      30-Day Cycle
+                      <span className="text-rose-600 dark:text-rose-400 font-bold block">Strict 30-Day Expiry</span>
+                      <span className="text-[9px] text-slate-400 block">Zero roll-over to new plans</span>
                     </td>
-                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400 bg-blue-50/30 dark:bg-blue-950/30">
-                      ✓ 60-Day Roll-Over
+                    <td className="p-4 sm:p-5 text-center font-bold text-blue-700 dark:text-blue-300 bg-blue-50/30 dark:bg-blue-950/30">
+                      <span className="text-blue-600 dark:text-blue-400 font-bold block">Active Cycle Expiry</span>
+                      <span className="text-[9px] text-slate-500 dark:text-slate-400 block">Expires on monthly renewal • No carryover</span>
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-slate-900 dark:text-white">
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold block">Annual Contract Period</span>
+                      <span className="text-[9px] text-slate-500 dark:text-slate-400 block">Expires on renewal date • No rollover</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">
+                      <div>🔁 AutoPay Recurring Mandate</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal mt-0.5">Direct founder account recurring revenue via Cashfree & Dodo</div>
                     </td>
                     <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">
-                      ✓ Perpetual Enterprise Pool
+                      ✓ Cashfree UPI / Dodo AutoPay
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400 bg-blue-50/30 dark:bg-blue-950/30">
+                      ✓ Cashfree UPI / Dodo AutoPay
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">
+                      ✓ Dedicated Auto-Mandate
                     </td>
                   </tr>
                   <tr>
@@ -443,6 +462,20 @@ export const PricingPage: React.FC = () => {
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            {/* AutoPay & Strict Token Validity Policy Banner */}
+            <div className="mt-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/40 border border-amber-200 dark:border-amber-800 text-xs text-slate-800 dark:text-slate-200 space-y-2">
+              <div className="flex items-center gap-2 font-black text-amber-900 dark:text-amber-300">
+                <ShieldAlert className="w-4 h-4 shrink-0" />
+                <span>Strict Token Expiry & AutoPay Recurring Mandate Policy</span>
+              </div>
+              <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
+                • <strong>Strict Validity Window:</strong> All monthly token allowances and top-up credits are strictly valid for their specific billing period (30 days for monthly subscriptions). Unused tokens expire automatically on plan renewal or expiration and <strong>do not stack or roll over into future plan purchases</strong>.
+              </p>
+              <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
+                • <strong>AutoPay Mandate:</strong> Subscriptions and top-up credit packs are billed via automated recurring debit (Cashfree UPI AutoPay for Indian Clinics, and Dodo Payments Recurring for Global Cards). Mandates ensure uninterrupted clinic queue operations and direct settlement to platform founder accounts with 0% downtime.
+              </p>
             </div>
           </div>
         </section>

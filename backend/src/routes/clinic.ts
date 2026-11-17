@@ -155,18 +155,31 @@ clinicRouter.post('/subscribe', async (req, res) => {
       ? `${address?.trim() || 'Central Health Campus'}, ${city.trim()}`
       : (address?.trim() || 'Central Health Campus');
 
+    const cycleDays = billingCycle === 'ANNUAL' ? 365 : 30;
+    const initialTokens = planId === 'STARTER' ? 1500 : planId === 'ENTERPRISE' ? 50000 : 10000;
+
     const subscriptionData = {
-      planId: planId || 'PENDING_GRANT',
-      planName: planName || 'Awaiting Founder Approval',
+      planId: planId || 'GROWTH_OPD',
+      planName: planName || 'Growth Super OPD',
       billingCycle: billingCycle || 'MONTHLY',
       currency: currency || 'INR',
       hardwareAddon: !!hardwareAddon,
       totalAmount: totalAmount || 0,
-      paymentMethod: paymentMethod || 'FOUNDER_GATEWAY',
-      paymentStatus: 'PENDING_APPROVAL',
+      paymentMethod: paymentMethod || 'CASHFREE',
+      paymentStatus: 'PAID',
+      autopay: true,
+      autopayStatus: 'ACTIVE',
+      autopayMandateProvider: (paymentMethod === 'DODOPAYMENTS' || currency !== 'INR') ? 'DODO_PAYMENTS_RECURRING' : 'CASHFREE_UPI_AUTOPAY',
+      tokenValidityPolicy: 'STRICT_CYCLE_EXPIRY',
+      tokenValidityDays: cycleDays,
+      rolloverAllowed: false, // Strict: Tokens expire on cycle end and do not roll over across plans
+      tokenCreditsAllocated: initialTokens,
+      tokenCreditsRemaining: initialTokens,
+      cycleStartedAt: new Date().toISOString(),
+      cycleExpiresAt: new Date(Date.now() + cycleDays * 24 * 60 * 60 * 1000).toISOString(),
       subscribedAt: new Date().toISOString(),
-      status: 'PENDING_APPROVAL',
-      planStatus: 'PENDING_APPROVAL',
+      status: 'ACTIVE',
+      planStatus: 'ACTIVE',
       adminEmail: adminEmail || null,
     };
 

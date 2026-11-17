@@ -75,7 +75,12 @@ export const HospitalLogin: React.FC = () => {
         setError(data.error || 'Could not verify hospital account for this Google email.');
       }
     } catch (err: any) {
-      setError(err?.message || 'Google authentication failed.');
+      const msg = err?.message || '';
+      if (msg.includes('Firebase') || msg.includes('auth/')) {
+        setError('Google authentication temporarily unavailable. Please sign in with your Staff Passkey below.');
+      } else {
+        setError(msg || 'Google authentication failed.');
+      }
     } finally {
       setGoogleLoading(false);
     }

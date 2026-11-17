@@ -648,10 +648,10 @@ export const AboutPage: React.FC = () => {
                 <p className="text-xs text-slate-300">For enterprise partnerships, custom integrations, or advisory, connect with the team.</p>
               </div>
               <a
-                href="mailto:somethinglabs.tech@gmail.com"
+                href="mailto:somethinglabs@zohomail.in"
                 className="px-6 py-3 rounded-2xl bg-white hover:bg-slate-100 text-slate-950 font-black text-xs transition-all shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap cursor-pointer"
               >
-                somethinglabs.tech@gmail.com ➔
+                somethinglabs@zohomail.in ➔
               </a>
             </div>
           </div>

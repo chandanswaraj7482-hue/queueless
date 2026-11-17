@@ -232,7 +232,14 @@ export const PatientPortal: React.FC = () => {
         setError(data.error || 'Google login failed. Please try again.');
       }
     } catch (err: any) {
-      setError(err?.message || 'Google sign-in error.');
+      const msg = err?.message || '';
+      if (msg.includes('auth/popup-closed-by-user') || msg.includes('cancelled')) {
+        setError('Google sign-in was cancelled.');
+      } else if (msg.includes('Firebase') || msg.includes('auth/') || msg.includes('internal-error')) {
+        setError('Google Sign-In is optimizing your security session. Please log in with your Mobile/Token ID or 1-Tap Demo below.');
+      } else {
+        setError(msg || 'Google sign-in error.');
+      }
     } finally {
       setLoading(false);
     }
@@ -551,7 +558,11 @@ export const PatientPortal: React.FC = () => {
             {error && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-2xl flex items-center gap-2 text-xs text-red-700 text-left font-medium">
                 <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-                <span>{error}</span>
+                <span>
+                  {error.includes('Firebase') || error.includes('auth/internal-error')
+                    ? 'Authentication service is optimizing your secure session. Please try again or log in with your Mobile/Token ID.'
+                    : error}
+                </span>
               </div>
             )}
 

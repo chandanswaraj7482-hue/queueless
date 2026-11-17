@@ -226,14 +226,15 @@ patientRouter.post('/login', async (req, res) => {
       const phoneSuffix = digitsOnly.length >= 10 ? digitsOnly.slice(-10) : digitsOnly;
       const cleanDigits = cleanToken.replace(/\D/g, '');
 
-      // Find matching queue entries across all hospitals
-      const entries = await prisma.queueEntry.findMany({
+      // Find matching queue entries across all hospitals (fast direct index match with limit)
+      let entries = await prisma.queueEntry.findMany({
         where: {
           OR: [
             { publicToken: cleanToken },
-            { token: { equals: cleanToken, mode: 'insensitive' } },
-            { token: { equals: cleanToken.replace(/^[A-Z]-?/i, ''), mode: 'insensitive' } },
-            ...(cleanDigits ? [{ token: { contains: cleanDigits } }] : []),
+            { token: cleanToken },
+            { token: cleanToken.toUpperCase() },
+            { token: cleanToken.replace(/^[A-Z]-?/i, '') },
+            ...(cleanDigits ? [{ token: cleanDigits }] : []),
           ],
         },
         include: {
@@ -243,7 +244,25 @@ patientRouter.post('/login', async (req, res) => {
           payment: true,
         },
         orderBy: { joinedAt: 'desc' },
+        take: 10,
       });
+
+      // Fallback substring match only if direct indexed match returned nothing
+      if (entries.length === 0 && cleanDigits) {
+        entries = await prisma.queueEntry.findMany({
+          where: {
+            token: { contains: cleanDigits },
+          },
+          include: {
+            patient: true,
+            doctor: true,
+            clinic: true,
+            payment: true,
+          },
+          orderBy: { joinedAt: 'desc' },
+          take: 5,
+        });
+      }
 
       if (entries.length === 0) {
         return res.status(404).json({
@@ -281,25 +300,27 @@ patientRouter.post('/login', async (req, res) => {
         }
       }
 
-      // Fetch all entries for this patient to assemble complete medical details
+      // Fetch all entries for this patient to assemble complete medical details (Indexed fast query)
       const patientId = matched.patientId;
       const patientMobile = matched.patient?.mobile || inputContact;
-      const allPatientEntries = await prisma.queueEntry.findMany({
-        where: {
-          OR: [
-            ...(patientId ? [{ patientId }] : []),
-            ...(patientMobile ? [{ patient: { mobile: { contains: patientMobile.replace(/\D/g, '').slice(-10) } } }] : []),
-          ],
-        },
-        include: {
-          doctor: true,
-          service: true,
-          clinic: true,
-          payment: true,
-          patient: true,
-        },
-        orderBy: { joinedAt: 'desc' },
-      });
+      let allPatientEntries: any[] = [];
+      if (patientId) {
+        allPatientEntries = await prisma.queueEntry.findMany({
+          where: { patientId },
+          include: {
+            doctor: true,
+            service: true,
+            clinic: true,
+            payment: true,
+            patient: true,
+          },
+          orderBy: { joinedAt: 'desc' },
+          take: 25,
+        });
+      }
+      if (allPatientEntries.length === 0) {
+        allPatientEntries = [matched];
+      }
 
       const portalData = formatPatientDataHelper(
         matched.patient,
@@ -331,16 +352,25 @@ patientRouter.post('/login', async (req, res) => {
       where: isEmail
         ? { email: { equals: inputStr, mode: 'insensitive' } }
         : { mobile: { contains: searchSuffix } },
+      take: 10,
     });
 
-    // Query all queue entries across all hospitals where this patient visited
-    const allQueueEntries = await prisma.queueEntry.findMany({
-      where: {
-        patient: isEmail
-          ? { email: { equals: inputStr, mode: 'insensitive' } }
-          : { mobile: { contains: searchSuffix } },
-      },
+    const patientIds = matchingPatients.map((p) => p.id);
+
+    // Query all queue entries across all hospitals where this patient visited (Indexed fast query)
+    const whereClause: any =
+      patientIds.length > 0
+        ? { patientId: { in: patientIds } }
+        : {
+            patient: isEmail
+              ? { email: inputStr }
+              : { mobile: { contains: searchSuffix } },
+          };
+
+    const allQueueEntries: any[] = await prisma.queueEntry.findMany({
+      where: whereClause,
       orderBy: { joinedAt: 'desc' },
+      take: 25,
       include: {
         doctor: true,
         service: true,

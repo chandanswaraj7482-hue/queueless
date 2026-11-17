@@ -768,7 +768,7 @@ export const QueuelessWebsite: React.FC = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-            className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-950 dark:text-white tracking-tight leading-tight px-1"
+            className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-950 dark:text-white tracking-[-0.03em] sm:tracking-tight leading-[1.12] sm:leading-tight px-1"
           >
             Autonomous Zero-Wait <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
@@ -781,7 +781,7 @@ export const QueuelessWebsite: React.FC = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-            className="text-xs sm:text-base md:text-lg text-slate-600 dark:text-slate-300 font-normal max-w-2xl mx-auto leading-relaxed px-2"
+            className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 font-medium max-w-2xl mx-auto leading-relaxed px-2"
           >
             Dismantle crowded reception waiting halls with zero hardware capex. 95% of patients scan a QR pass on mobile, track their live waiting position in real-time, and walk directly into the doctor's cabin when called.
           </motion.p>

@@ -66,11 +66,19 @@ div::selection {
   text-shadow: none !important;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 html, body {
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
   position: relative;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  overflow-wrap: break-word;
 }
 
 body {

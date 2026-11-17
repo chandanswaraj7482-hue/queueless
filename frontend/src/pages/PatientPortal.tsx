@@ -433,7 +433,7 @@ export const PatientPortal: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 pb-28">
+    <div className="max-w-4xl mx-auto p-3 sm:p-6 pb-28 text-slate-800 dark:text-slate-100 transition-colors duration-200">
       <SeoHead
         title="Universal Patient Health Vault & Live OPD Token Tracking"
         description="Access your digital prescriptions, doctor advice, OPD token status, and 15-day free follow-up passes across all Queueless-powered hospitals."
@@ -442,14 +442,14 @@ export const PatientPortal: React.FC = () => {
       />
       {/* If not logged in: Mode Selector & Form */}
       {!portalData ? (
-        <div className="max-w-md mx-auto mt-6">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm text-center">
+        <div className="max-w-md mx-auto mt-4 sm:mt-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-xl text-center transition-colors">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="relative">
                 <img
                   src="/logo.png"
                   alt="Queueless"
-                  className="w-12 h-12 rounded-2xl shadow-sm border border-slate-200 object-cover"
+                  className="w-12 h-12 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 object-cover"
                 />
                 <span className="absolute -bottom-0.5 -right-0.5 p-1 bg-emerald-500 rounded-full text-white">
                   <ShieldCheck className="w-3 h-3" />
@@ -457,18 +457,18 @@ export const PatientPortal: React.FC = () => {
               </div>
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] font-black uppercase tracking-wider text-emerald-800 mb-2">
-              <Lock className="w-3 h-3 text-emerald-600" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 rounded-full text-[10px] font-black uppercase tracking-wider text-emerald-800 dark:text-emerald-300 mb-2">
+              <Lock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
               <span>Universal Patient Health Passport</span>
             </div>
 
-            <h1 className="text-xl font-black text-slate-900 tracking-tight">Patient Login & Multi-Hospital Vault</h1>
-            <p className="text-xs text-slate-500 mt-1 mb-5">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">Patient Login & Multi-Hospital Vault</h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-5 leading-relaxed">
               Securely access your complete OPD history, doctor prescriptions, and follow-up passes across all Queueless-enabled hospitals with your ID and password.
             </p>
 
             {/* Mode Switcher Pills (Login vs Track Token) */}
-            <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-2xl mb-5 text-xs font-bold">
+            <div className="grid grid-cols-2 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl mb-5 text-xs font-bold border border-slate-200/60 dark:border-slate-700/60">
               <button
                 type="button"
                 onClick={() => {
@@ -478,11 +478,11 @@ export const PatientPortal: React.FC = () => {
                 }}
                 className={`py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   authMode === 'LOGIN' || authMode === 'SIGNUP'
-                    ? 'bg-white text-sky-900 shadow-sm font-extrabold'
-                    : 'text-slate-500 hover:text-slate-900'
+                    ? 'bg-white dark:bg-slate-900 text-sky-900 dark:text-sky-300 shadow-sm font-extrabold border border-slate-200/50 dark:border-slate-700/50'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                <Lock className="w-3.5 h-3.5 text-sky-600" />
+                <Lock className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                 <span>Login</span>
               </button>
 
@@ -495,25 +495,25 @@ export const PatientPortal: React.FC = () => {
                 }}
                 className={`py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   authMode === 'TRACK'
-                    ? 'bg-white text-emerald-900 shadow-sm font-extrabold'
-                    : 'text-slate-500 hover:text-slate-900'
+                    ? 'bg-white dark:bg-slate-900 text-emerald-900 dark:text-emerald-300 shadow-sm font-extrabold border border-slate-200/50 dark:border-slate-700/50'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                <Ticket className="w-3.5 h-3.5 text-emerald-600" />
+                <Ticket className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>Track Token</span>
               </button>
             </div>
 
             {signupSuccessMsg && (
-              <div className="mb-4 p-3.5 bg-emerald-50 border border-emerald-300 rounded-2xl flex items-center gap-2 text-xs text-emerald-800 text-left font-bold animate-in fade-in">
-                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+              <div className="mb-4 p-3.5 bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-800 rounded-2xl flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-200 text-left font-bold animate-in fade-in">
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                 <span>{signupSuccessMsg}</span>
               </div>
             )}
 
             {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-2xl flex items-center gap-2 text-xs text-red-700 text-left font-medium">
-                <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+              <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/70 border border-red-200 dark:border-red-800 rounded-2xl flex items-center gap-2 text-xs text-red-700 dark:text-red-200 text-left font-medium">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-600 dark:text-red-400" />
                 <span>
                   {error.includes('Firebase') || error.includes('auth/internal-error')
                     ? 'Authentication service is optimizing your secure session. Please try again or log in with your Mobile/Token ID.'
@@ -526,7 +526,7 @@ export const PatientPortal: React.FC = () => {
             {authMode === 'LOGIN' && (
               <form onSubmit={handleLogin} className="space-y-4 text-left">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Registered Mobile Number or Email (ID)</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Registered Mobile Number or Email (ID)</label>
                   <div className="relative">
                     <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
@@ -535,17 +535,17 @@ export const PatientPortal: React.FC = () => {
                       placeholder="e.g. 9876543210 or patient@gmail.com"
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-1">
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
                     Enter the mobile number or email used during your hospital check-in.
                   </p>
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-bold text-slate-700">Account Password</label>
+                    <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Account Password</label>
                   </div>
                   <div className="relative">
                     <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
@@ -555,12 +555,12 @@ export const PatientPortal: React.FC = () => {
                       placeholder="Enter your account password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                      className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -583,13 +583,12 @@ export const PatientPortal: React.FC = () => {
                   )}
                 </button>
 
-
                 <div className="relative my-3">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-slate-200" />
+                    <div className="w-full border-t border-slate-200 dark:border-slate-800" />
                   </div>
                   <div className="relative flex justify-center text-[10px] uppercase font-bold">
-                    <span className="bg-white px-3 text-slate-400">Or continue with</span>
+                    <span className="bg-white dark:bg-slate-900 px-3 text-slate-400 dark:text-slate-500">Or continue with</span>
                   </div>
                 </div>
 
@@ -597,7 +596,7 @@ export const PatientPortal: React.FC = () => {
                   type="button"
                   onClick={handleGoogleSignIn}
                   disabled={loading}
-                  className="w-full py-3 px-4 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 active:scale-[0.99]"
+                  className="w-full py-3 px-4 bg-white dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 active:scale-[0.99]"
                 >
                   <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                     <path
@@ -622,7 +621,7 @@ export const PatientPortal: React.FC = () => {
 
                 {/* Quick Switch to Create Account */}
                 <div className="pt-2 text-center text-xs">
-                  <span className="text-slate-400">First time or don't have a password yet? </span>
+                  <span className="text-slate-400 dark:text-slate-500">First time or don't have a password yet? </span>
                   <button
                     type="button"
                     onClick={() => {
@@ -630,7 +629,7 @@ export const PatientPortal: React.FC = () => {
                       setError(null);
                       setSignupSuccessMsg(null);
                     }}
-                    className="font-bold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer"
+                    className="font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 hover:underline cursor-pointer"
                   >
                     Create Account Here →
                   </button>
@@ -642,7 +641,7 @@ export const PatientPortal: React.FC = () => {
             {authMode === 'SIGNUP' && (
               <form onSubmit={handleSignup} className="space-y-4 text-left">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Patient Full Name</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Patient Full Name</label>
                   <div className="relative">
                     <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
@@ -650,13 +649,13 @@ export const PatientPortal: React.FC = () => {
                       placeholder="e.g. Rahul Sharma"
                       value={signupName}
                       onChange={(e) => setSignupName(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Mobile Number or Email (ID) *</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Mobile Number or Email (ID) *</label>
                   <div className="relative">
                     <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
@@ -665,14 +664,14 @@ export const PatientPortal: React.FC = () => {
                       placeholder="e.g. 9876543210 or patient@gmail.com"
                       value={signupMobile}
                       onChange={(e) => setSignupMobile(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-bold text-slate-700">Create Account Password *</label>
+                    <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Create Account Password *</label>
                   </div>
                   <div className="relative">
                     <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
@@ -682,12 +681,12 @@ export const PatientPortal: React.FC = () => {
                       placeholder="Create secure password (min 4 characters)"
                       value={signupPassword}
                       onChange={(e) => setSignupPassword(e.target.value)}
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-indigo-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                     <button
                       type="button"
                       onClick={() => setShowSignupPassword(!showSignupPassword)}
-                      className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                      className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
                     >
                       {showSignupPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -695,7 +694,7 @@ export const PatientPortal: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Confirm Account Password *</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Confirm Account Password *</label>
                   <div className="relative">
                     <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
@@ -704,11 +703,11 @@ export const PatientPortal: React.FC = () => {
                       placeholder="Re-enter the same password"
                       value={signupConfirmPassword}
                       onChange={(e) => setSignupConfirmPassword(e.target.value)}
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-indigo-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                   </div>
-                  <div className="mt-1.5 p-2 bg-slate-50 border border-slate-200 rounded-lg text-[10px] text-slate-500 space-y-0.5">
-                    <p className="font-semibold text-slate-700">🔒 Universal Health Vault Protection:</p>
+                  <div className="mt-1.5 p-2 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg text-[10px] text-slate-500 dark:text-slate-400 space-y-0.5">
+                    <p className="font-semibold text-slate-700 dark:text-slate-300">🔒 Universal Health Vault Protection:</p>
                     <p>This password protects your OPD prescriptions, lab reports, and doctor visits forever across all hospitals.</p>
                   </div>
                 </div>
@@ -731,10 +730,10 @@ export const PatientPortal: React.FC = () => {
 
                 <div className="relative my-3">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-slate-200" />
+                    <div className="w-full border-t border-slate-200 dark:border-slate-800" />
                   </div>
                   <div className="relative flex justify-center text-[10px] uppercase font-bold">
-                    <span className="bg-white px-3 text-slate-400">Or continue with</span>
+                    <span className="bg-white dark:bg-slate-900 px-3 text-slate-400 dark:text-slate-500">Or continue with</span>
                   </div>
                 </div>
 
@@ -742,7 +741,7 @@ export const PatientPortal: React.FC = () => {
                   type="button"
                   onClick={handleGoogleSignIn}
                   disabled={loading}
-                  className="w-full py-3 px-4 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 active:scale-[0.99]"
+                  className="w-full py-3 px-4 bg-white dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 active:scale-[0.99]"
                 >
                   <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                     <path
@@ -767,7 +766,7 @@ export const PatientPortal: React.FC = () => {
 
                 {/* Quick Switch to Login */}
                 <div className="pt-2 text-center text-xs">
-                  <span className="text-slate-400">Already set your password before? </span>
+                  <span className="text-slate-400 dark:text-slate-500">Already set your password before? </span>
                   <button
                     type="button"
                     onClick={() => {
@@ -775,7 +774,7 @@ export const PatientPortal: React.FC = () => {
                       setError(null);
                       setSignupSuccessMsg(null);
                     }}
-                    className="font-bold text-sky-600 hover:text-sky-800 hover:underline cursor-pointer"
+                    className="font-bold text-sky-600 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 hover:underline cursor-pointer"
                   >
                     Login with Password Here →
                   </button>
@@ -788,7 +787,7 @@ export const PatientPortal: React.FC = () => {
               <form onSubmit={handleTrackByToken} className="space-y-4 text-left">
                 {/* 1. Patient Name */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                     1. Patient Full Name *
                   </label>
                   <div className="relative">
@@ -799,14 +798,14 @@ export const PatientPortal: React.FC = () => {
                       placeholder="e.g. Rahul Sharma"
                       value={trackName}
                       onChange={(e) => setTrackName(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                     />
                   </div>
                 </div>
 
                 {/* 2. Token Number */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                     2. Assigned Token Number *
                   </label>
                   <div className="relative">
@@ -817,14 +816,14 @@ export const PatientPortal: React.FC = () => {
                       placeholder="e.g. A-101, A-118, 101"
                       value={trackToken}
                       onChange={(e) => setTrackToken(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-black text-slate-900 uppercase placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-black uppercase placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                     />
                   </div>
                 </div>
 
                 {/* 3. Mobile Number or Email */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                     3. Mobile Number or Email *
                   </label>
                   <div className="relative">
@@ -835,14 +834,13 @@ export const PatientPortal: React.FC = () => {
                       placeholder="e.g. 98765 11111 or patient@gmail.com"
                       value={trackContact}
                       onChange={(e) => setTrackContact(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                     />
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 flex items-center gap-1">
                     <span>🔒 Enter the contact details provided at hospital reception or QR check-in.</span>
                   </p>
                 </div>
-
 
                 <button
                   type="submit"
@@ -862,8 +860,8 @@ export const PatientPortal: React.FC = () => {
               </form>
             )}
 
-            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-2 text-[11px] text-slate-400 dark:text-slate-500">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>100% Confidential Patient Health OS • Powered by Queueless</span>
             </div>
           </div>
@@ -872,38 +870,38 @@ export const PatientPortal: React.FC = () => {
         /* Logged In: Patient Full Profile & History Dashboard */
         <div className="space-y-6">
           {/* Patient Header Card */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
             <div className="flex items-start gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white font-black text-xl flex items-center justify-center shadow-md">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white font-black text-xl flex items-center justify-center shadow-md shrink-0">
                 {portalData.patient.name ? portalData.patient.name.charAt(0).toUpperCase() : 'P'}
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-black text-slate-900 tracking-tight">
+                  <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                     {portalData.patient.name}
                   </h1>
                   {portalData.patient.bloodGroup && (
-                    <span className="text-[11px] font-black text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded-md">
+                    <span className="text-[11px] font-black text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-950/70 border border-red-200 dark:border-red-800 px-2 py-0.5 rounded-md">
                       {portalData.patient.bloodGroup}
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   ID: {portalData.patient.mobile || portalData.patient.email} • {portalData.patient.age ? `${portalData.patient.age} yrs` : 'Age N/A'} • {portalData.patient.gender || 'Patient'}
                 </p>
                 <div className="flex flex-wrap items-center gap-2 mt-1.5">
-                  <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-md flex items-center gap-1">
-                    <Building2 className="w-3 h-3 text-indigo-600" />
+                  <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200 dark:border-indigo-800 px-2 py-0.5 rounded-md flex items-center gap-1">
+                    <Building2 className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
                     <span>{portalData.totalHospitals || 1} Hospitals Connected</span>
                   </span>
-                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                  <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-md flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                     <span>Universal Health Passport (ABDM)</span>
                   </span>
                 </div>
                 {portalData.patient.address && (
-                  <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-slate-400 dark:text-slate-500 shrink-0" />
                     <span>{portalData.patient.address}</span>
                   </p>
                 )}
@@ -914,7 +912,7 @@ export const PatientPortal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowFullHistoryModal(true)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-indigo-700 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition-all cursor-pointer shadow-2xs"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 dark:hover:text-white bg-indigo-50 dark:bg-indigo-950/70 hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-indigo-200 dark:border-indigo-800 rounded-xl transition-all cursor-pointer shadow-2xs"
                 title="Download full lifetime medical history as PDF"
               >
                 <Download className="w-3.5 h-3.5" />
@@ -923,7 +921,7 @@ export const PatientPortal: React.FC = () => {
 
               <button
                 onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-rose-700 dark:text-rose-300 hover:text-rose-900 dark:hover:text-white bg-rose-50 dark:bg-rose-950/70 hover:bg-rose-100 dark:hover:bg-rose-900 border border-rose-200 dark:border-rose-800 rounded-xl transition-all cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Lock & Logout</span>
@@ -932,51 +930,51 @@ export const PatientPortal: React.FC = () => {
           </div>
 
           {/* Privacy & Health Vault Assurance */}
-          <div className="p-3 bg-emerald-50/80 border border-emerald-200 rounded-2xl flex items-center justify-between gap-3">
+          <div className="p-3 bg-emerald-50/80 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 rounded-2xl flex items-center justify-between gap-3 transition-colors">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span className="text-xs font-bold text-emerald-900">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <span className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
                 🔒 Protected Patient Medical Vault • All OPD visits, prescriptions, and fee receipts safely encrypted
               </span>
             </div>
-            <span className="text-[10px] font-black uppercase text-emerald-700 bg-white px-2.5 py-0.5 rounded-full border border-emerald-200">
+            <span className="text-[10px] font-black uppercase text-emerald-700 dark:text-emerald-300 bg-white dark:bg-slate-900 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-700 shrink-0">
               Password Protected
             </span>
           </div>
 
           {/* Real Patient Health Overview Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-2xs">
-              <div className="flex items-center justify-between text-slate-500 mb-1">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs transition-colors">
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider">Total Consultations</span>
-                <Stethoscope className="w-4 h-4 text-blue-600" />
+                <Stethoscope className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               </div>
-              <div className="text-2xl font-black text-slate-900 font-mono">
+              <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
                 {portalData.totalVisits || 0}
               </div>
-              <p className="text-[11px] text-slate-400 mt-0.5">Lifetime visits in Queueless network</p>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">Lifetime visits in Queueless network</p>
             </div>
 
-            <div className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-2xs">
-              <div className="flex items-center justify-between text-slate-500 mb-1">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs transition-colors">
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider">15-Day Free Follow-ups</span>
-                <Sparkles className="w-4 h-4 text-emerald-600" />
+                <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               </div>
-              <div className="text-2xl font-black text-emerald-600 font-mono">
+              <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
                 {portalData.followUpPasses?.length || 0}
               </div>
-              <p className="text-[11px] text-slate-400 mt-0.5">Active zero-fee review slots</p>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">Active zero-fee review slots</p>
             </div>
 
-            <div className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-2xs">
-              <div className="flex items-center justify-between text-slate-500 mb-1">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs transition-colors">
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider">Connected Hospitals</span>
-                <Building2 className="w-4 h-4 text-indigo-600" />
+                <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <div className="text-2xl font-black text-indigo-600 font-mono">
+              <div className="text-2xl font-black text-indigo-600 dark:text-indigo-400 font-mono">
                 {portalData.totalHospitals || (portalData.history?.length > 0 ? 1 : 0)}
               </div>
-              <p className="text-[11px] text-slate-400 mt-0.5">ABDM-linked clinic network</p>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">ABDM-linked clinic network</p>
             </div>
           </div>
 
@@ -1047,11 +1045,11 @@ export const PatientPortal: React.FC = () => {
           )}
 
           {/* Complete Visit History Table */}
-          <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
-            <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
+            <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h2 className="text-base font-black text-slate-900">OPD Consultation & Medical History</h2>
-                <p className="text-xs text-slate-500">
+                <h2 className="text-base font-black text-slate-900 dark:text-white">OPD Consultation & Medical History</h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Complete record of all your visits, bills, and issued digital prescriptions across all hospitals.
                 </p>
               </div>
@@ -1059,13 +1057,13 @@ export const PatientPortal: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowFullHistoryModal(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-xl border border-indigo-200 transition-all cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-950/70 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-bold text-xs rounded-xl border border-indigo-200 dark:border-indigo-800 transition-all cursor-pointer shadow-2xs"
                   title="Download and print complete health history as PDF"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Download Summary (PDF)</span>
                 </button>
-                <span className="text-xs font-bold px-3 py-1 bg-slate-100 text-slate-700 rounded-full">
+                <span className="text-xs font-bold px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full">
                   Total Visits: {portalData.totalVisits}
                 </span>
               </div>
@@ -1074,12 +1072,12 @@ export const PatientPortal: React.FC = () => {
             <div className="overflow-x-auto">
               {!portalData.history || portalData.history.length === 0 ? (
                 <div className="py-14 px-6 text-center space-y-4">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100 shadow-2xs">
+                  <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto border border-blue-100 dark:border-blue-800 shadow-2xs">
                     <Stethoscope className="w-7 h-7" />
                   </div>
                   <div className="space-y-1 max-w-md mx-auto">
-                    <h3 className="text-sm font-black text-slate-900">No Previous Medical Visits Recorded Yet</h3>
-                    <p className="text-xs text-slate-500 leading-relaxed">
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white">No Previous Medical Visits Recorded Yet</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                       When you check in at any Queueless hospital OPD or scan a doctor's QR standee, your live queue tokens, digital prescriptions (Rx), and consultation fee receipts will appear here automatically.
                     </p>
                   </div>
@@ -1095,7 +1093,7 @@ export const PatientPortal: React.FC = () => {
                 </div>
               ) : (
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-bold">
+                  <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">
                     <tr>
                       <th className="py-3 px-5">Date</th>
                       <th className="py-3 px-5">Token</th>
@@ -1105,26 +1103,26 @@ export const PatientPortal: React.FC = () => {
                       <th className="py-3 px-5 text-right">Documents / Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                     {portalData.history.map((item: any) => (
-                      <tr key={item.id} className="hover:bg-slate-50/70 transition-colors">
-                        <td className="py-3.5 px-5 font-semibold text-slate-700">
+                      <tr key={item.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="py-3.5 px-5 font-semibold text-slate-700 dark:text-slate-300">
                           {item.queueDate}
                         </td>
                         <td className="py-3.5 px-5 font-mono text-sm">
-                          <div className="font-black text-slate-900">{item.token}</div>
-                          <div className="text-[10px] text-slate-400 font-medium">#QL-{item.id.substring(0, 6).toUpperCase()}</div>
+                          <div className="font-black text-slate-900 dark:text-white">{item.token}</div>
+                          <div className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">#QL-{item.id.substring(0, 6).toUpperCase()}</div>
                         </td>
                         <td className="py-3.5 px-5">
-                          <div className="font-extrabold text-indigo-700 flex items-center gap-1.5">
+                          <div className="font-extrabold text-indigo-700 dark:text-indigo-400 flex items-center gap-1.5">
                             <Building2 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
                             <span>{item.clinicName}</span>
                           </div>
-                          <div className="font-bold text-slate-800 text-xs mt-0.5">{item.doctorName}</div>
-                          <div className="text-slate-400 text-[10px]">{item.roomNumber}</div>
+                          <div className="font-bold text-slate-800 dark:text-slate-200 text-xs mt-0.5">{item.doctorName}</div>
+                          <div className="text-slate-400 dark:text-slate-500 text-[10px]">{item.roomNumber}</div>
                         </td>
                         <td className="py-3.5 px-5 max-w-xs">
-                          <div className="font-bold text-slate-900 truncate">
+                          <div className="font-bold text-slate-900 dark:text-white truncate">
                             {item.diagnosis || item.visitReason || '-'}
                           </div>
                           {item.diagnosis && item.visitReason && (

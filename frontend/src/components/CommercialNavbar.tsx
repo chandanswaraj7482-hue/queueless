@@ -242,7 +242,17 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               <span>Log In</span>
             </Link>
 
-            {/* Mobile Hamburger Toggle (The ONLY button visible on phone/mobile screens!) */}
+            {/* Patient Vault Mobile Quick Action (Direct 1-tap for mobile patients) */}
+            <Link
+              to="/portal"
+              className="md:hidden inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-500/10 dark:bg-emerald-500/20 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 rounded-full text-[11px] font-bold transition-all shadow-2xs shrink-0"
+              title="Universal Patient Health Vault"
+            >
+              <Sparkles className="w-3 h-3 text-emerald-500 shrink-0" />
+              <span>Vault</span>
+            </Link>
+
+            {/* Mobile Hamburger Toggle */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

@@ -3004,7 +3004,7 @@ export const QueuelessWebsite: React.FC = () => {
           {/* Book 1-on-1 Demo Lead Box */}
           <div className="p-7 sm:p-9 rounded-[32px] bg-gradient-to-br from-indigo-900 via-slate-900 to-slate-950 text-white shadow-xl space-y-4">
             <div className="text-center space-y-1">
-              <h3 className="text-lg font-black text-white">Need an Enterprise Multi-Floor Quote or On-Site Demo?</h3>
+              <h3 className="text-lg font-black text-white">Need an Enterprise Multi-Floor Quote or Hospital Walkthrough?</h3>
               <p className="text-xs text-slate-300 font-normal">
                 Our global HealthTech deployment engineers will walk your medical executive team through a live 1-on-1 walkthrough.
               </p>
@@ -3013,7 +3013,7 @@ export const QueuelessWebsite: React.FC = () => {
             {leadSubmitted ? (
               <div className="p-4 bg-emerald-950/60 border border-emerald-500/40 rounded-2xl text-center space-y-1">
                 <CheckCircle2 className="w-6 h-6 text-emerald-400 mx-auto" />
-                <h4 className="text-sm font-black text-emerald-200">Demo Request Confirmed!</h4>
+                <h4 className="text-sm font-black text-emerald-200">Hospital Walkthrough Confirmed!</h4>
                 <p className="text-xs text-slate-300">
                   Our hospital onboarding team will reach out to you within 2 hours.
                 </p>
@@ -3248,7 +3248,7 @@ export const QueuelessWebsite: React.FC = () => {
                 <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-sm">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Executive Demo Confirmed!</h3>
+                <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Executive Walkthrough Confirmed!</h3>
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-w-sm mx-auto font-medium">
                   Thank you <strong>{demoName}</strong>. Our Healthcare Implementation Specialist has booked your 1-on-1 walkthrough for <strong>{demoHospital}</strong>. A calendar invite has been sent to <strong>{demoEmail || demoPhone}</strong>.
                 </p>
@@ -3280,7 +3280,7 @@ export const QueuelessWebsite: React.FC = () => {
                     <span>Hospital Leadership Walkthrough</span>
                   </div>
                   <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
-                    Schedule a 1-on-1 Executive Demo
+                    Schedule a 1-on-1 Executive Walkthrough
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
                     See Queueless live on your hospital screens. Tailored for Medical Superintendents & Directors.

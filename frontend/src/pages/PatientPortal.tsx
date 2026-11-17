@@ -236,7 +236,7 @@ export const PatientPortal: React.FC = () => {
       if (msg.includes('auth/popup-closed-by-user') || msg.includes('cancelled')) {
         setError('Google sign-in was cancelled.');
       } else if (msg.includes('Firebase') || msg.includes('auth/') || msg.includes('internal-error')) {
-        setError('Google Sign-In is optimizing your security session. Please log in with your Mobile/Token ID or 1-Tap Demo below.');
+        setError('Google Sign-In is optimizing your security session. Please log in with your Mobile/Email or Track your Token below.');
       } else {
         setError(msg || 'Google sign-in error.');
       }
@@ -326,50 +326,6 @@ export const PatientPortal: React.FC = () => {
     }
   };
 
-  // 1-Tap Sample Token Auto-Fill
-  const handleQuickFillSample = () => {
-    setTrackName('Amit Verma');
-    setTrackToken('A-101');
-    setTrackContact('98765 11111');
-    setError(null);
-  };
-
-  // 1-Tap Instant Demo Access (Amit Verma)
-  const handleFastDemoLogin = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/patient/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token: 'A-101',
-          name: 'Amit Verma',
-          patientName: 'Amit Verma',
-          mobile: '9876511111',
-        }),
-      });
-      const data = await res.json();
-      if (data.success && data.data) {
-        setPortalData(data.data);
-        localStorage.setItem(
-          'queueless_patient_session',
-          JSON.stringify({
-            name: 'Amit Verma',
-            token: 'A-101',
-            mobile: '9876511111',
-            timestamp: Date.now(),
-          })
-        );
-      } else {
-        setError(data.error || 'Could not load demo patient.');
-      }
-    } catch (e) {
-      setError('Could not load demo patient. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -627,16 +583,6 @@ export const PatientPortal: React.FC = () => {
                   )}
                 </button>
 
-                {/* 1-Tap Fast Demo Access for Instant Zero-Wait Testing */}
-                <button
-                  type="button"
-                  onClick={handleFastDemoLogin}
-                  disabled={loading}
-                  className="w-full py-2.5 px-3 bg-gradient-to-r from-emerald-50 to-teal-50 hover:from-emerald-100 hover:to-teal-100 border border-emerald-300 text-emerald-900 font-extrabold text-xs rounded-xl shadow-2xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
-                >
-                  <Zap className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
-                  <span>⚡ 1-Tap Instant Access (Demo: Amit Verma • Token A-101)</span>
-                </button>
 
                 <div className="relative my-3">
                   <div className="absolute inset-0 flex items-center">
@@ -850,7 +796,7 @@ export const PatientPortal: React.FC = () => {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Amit Verma, Rahul Sharma"
+                      placeholder="e.g. Rahul Sharma"
                       value={trackName}
                       onChange={(e) => setTrackName(e.target.value)}
                       className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
@@ -897,18 +843,6 @@ export const PatientPortal: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Quick Sample Token Auto-Fill Chip */}
-                <button
-                  type="button"
-                  onClick={handleQuickFillSample}
-                  className="w-full text-left p-2.5 bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200 rounded-xl text-[11px] text-emerald-900 transition-colors flex items-center justify-between gap-2 cursor-pointer font-bold"
-                >
-                  <span className="flex items-center gap-1.5">
-                    <Zap className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Quick Sample: Amit Verma • Token A-101 • 98765 11111</span>
-                  </span>
-                  <span className="text-[10px] text-emerald-700 font-extrabold uppercase">Auto-Fill →</span>
-                </button>
 
                 <button
                   type="submit"

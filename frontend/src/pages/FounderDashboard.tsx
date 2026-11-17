@@ -629,7 +629,7 @@ export const FounderDashboard: React.FC = () => {
               href="/QUEUOUS_CREDENTIALS.pdf"
               download="QUEUOUS_CREDENTIALS.pdf"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-bold rounded-xl border border-amber-400/30 transition-all active:scale-95 shadow-2xs"
-              title="Download Master Passwords & Demo Links PDF"
+              title="Download Master Passwords & Access Links PDF"
             >
               <FileDown className="w-3.5 h-3.5 text-amber-300" />
               <span>Download Master Credentials (PDF)</span>
@@ -717,7 +717,7 @@ export const FounderDashboard: React.FC = () => {
               href="/QUEUOUS_CREDENTIALS.pdf"
               download="QUEUOUS_CREDENTIALS.pdf"
               className="px-3.5 py-2 bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 rounded-xl text-xs font-black border border-amber-400/40 transition-all flex items-center gap-1.5 backdrop-blur-xs cursor-pointer shadow-xs active:scale-95"
-              title="Download Master Credentials & Direct Demo Links PDF"
+              title="Download Master Credentials & Access Links PDF"
             >
               <FileDown className="w-3.5 h-3.5 text-amber-300" />
               <span>Credentials (PDF)</span>
@@ -1178,10 +1178,10 @@ export const FounderDashboard: React.FC = () => {
               </span>
               <div>
                 <span className="text-xs font-black text-slate-900 block">
-                  1-Click Live Review Demo Presets
+                  1-Click Live Review Presets
                 </span>
                 <span className="text-[11px] text-slate-500">
-                  Simulate incoming patient reviews with zero typing for live demonstrations!
+                  Simulate incoming patient reviews with 1-click clinical presets!
                 </span>
               </div>
             </div>
@@ -1405,7 +1405,7 @@ export const FounderDashboard: React.FC = () => {
                 <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
                   {searchQuery || selectedStarFilter !== 'ALL'
                     ? 'Try clearing the search box or star filter.'
-                    : 'Click a preset above to populate demo reviews!'}
+                    : 'Click a preset above to populate sample reviews!'}
                 </p>
               </div>
             ) : (

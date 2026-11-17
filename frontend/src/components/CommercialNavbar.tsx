@@ -205,21 +205,21 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             </div>
 
 
-            {/* Book a Demo Button (Desktop only: md:inline-flex; on phone it slides into drawer) */}
+            {/* Start Free Pilot Button (Desktop only: md:inline-flex; on phone it slides into drawer) */}
             {onOpenAuditModal ? (
               <button
                 type="button"
                 onClick={onOpenAuditModal}
                 className="hidden md:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-950 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               >
-                <span>Book a Demo</span>
+                <span>Start Free Pilot</span>
               </button>
             ) : (
               <Link
                 to="/signup"
                 className="hidden md:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-950 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               >
-                <span>Book a Demo</span>
+                <span>Start Free Pilot</span>
               </Link>
             )}
 
@@ -299,7 +299,8 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   }}
                   className="w-full py-3 px-4 bg-slate-950 dark:bg-white dark:text-slate-950 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-sm text-center flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <span>Book a Demo (60s OPD Audit) ➔</span>
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-400 dark:text-cyan-600" />
+                  <span>Start 14-Day Free Pilot ➔</span>
                 </button>
               ) : (
                 <Link
@@ -307,7 +308,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full text-center py-3 px-4 bg-slate-950 dark:bg-white dark:text-slate-950 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-sm block"
                 >
-                  Book a Demo ➔
+                  Start 14-Day Free Pilot ➔
                 </Link>
               )}
 

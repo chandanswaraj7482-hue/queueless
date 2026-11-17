@@ -690,21 +690,34 @@ export const HospitalOnboarding: React.FC = () => {
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-10 shadow-xl space-y-6 animate-in fade-in">
               <div className="border-b border-slate-100 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-1 rounded-full border border-blue-200/60 dark:border-blue-800">
-                    Step 3 of 3 • Secure Payment
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-200/60 dark:border-emerald-800">
+                      Step 3 of 3 • 14-Day Free Pilot
+                    </span>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-1 rounded-full border border-blue-200/60 dark:border-blue-800">
+                      AutoPay Mandate Setup
+                    </span>
+                  </div>
                   <h2 className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white mt-2">
-                    Complete Subscription & Activate Hospital
+                    Authorize AutoPay & Start 14-Day Free Pilot
                   </h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Your hospital workspace and dashboard will unlock instantly upon payment.
+                    Pay <strong>{selectedCurrency.symbol}0 today</strong>. Your hospital unlocks immediately. When your 14-day free pilot concludes, your chosen {selectedPlan.name} is automatically purchased via AutoPay.
                   </p>
                 </div>
 
-                <div className="text-right bg-slate-50 dark:bg-slate-950 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
-                  <span className="text-[10px] text-slate-400 block font-bold uppercase">Amount Due</span>
-                  <span className="text-xl font-black text-blue-600 dark:text-blue-400 font-mono">
-                    {selectedCurrency.symbol}{totalAmount.toLocaleString()} {selectedCurrency.code}
+                <div className="text-right bg-emerald-50/80 dark:bg-emerald-950/60 p-3.5 rounded-2xl border border-emerald-200/80 dark:border-emerald-800">
+                  <div className="flex items-center gap-1.5 justify-end">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-black uppercase tracking-wider">
+                      Due Today
+                    </span>
+                  </div>
+                  <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono block">
+                    {selectedCurrency.symbol}0 <span className="text-xs font-normal text-emerald-700 dark:text-emerald-300">FREE FOR 14 DAYS</span>
+                  </span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-semibold mt-0.5">
+                    Then {selectedCurrency.symbol}{totalAmount.toLocaleString()} / {billingCycle === 'ANNUAL' ? 'year' : 'month'} auto-debit on Day 15
                   </span>
                 </div>
               </div>
@@ -882,24 +895,24 @@ export const HospitalOnboarding: React.FC = () => {
                   </div>
                 )}
 
-                {/* AutoPay Recurring Mandate & Token Validity Notice */}
-                <div className="p-4 bg-slate-50 dark:bg-slate-950/80 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2.5">
+                {/* AutoPay Recurring Mandate & 14-Day Free Pilot Notice */}
+                <div className="p-4 bg-emerald-50/50 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200/90 dark:border-emerald-800/80 space-y-2.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="p-1.5 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 rounded-lg">
                         <Zap className="w-3.5 h-3.5" />
                       </span>
                       <span className="text-xs font-black text-slate-900 dark:text-white">
-                        AutoPay Recurring Mandate
+                        14-Day Free Pilot • AutoPay Mandate Authorization
                       </span>
                     </div>
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
-                      Active
+                    <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
+                      ₹0 / $0 Charged Today
                     </span>
                   </div>
 
                   <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                    By confirming checkout, you activate an automated monthly renewal mandate via {paymentGateway === 'CASHFREE' ? 'Cashfree UPI AutoPay' : 'Dodo Payments Global Recurring'}. Monthly subscription fees and token refills renew automatically directly to the platform account. Cancel anytime from your Hospital Admin settings with 1 tap.
+                    <strong>Zero Charge Today:</strong> By authorizing this mandate via {paymentGateway === 'CASHFREE' ? 'Cashfree UPI AutoPay' : 'Dodo Payments Global Recurring'}, your hospital activates a 14-day free pilot with <strong>₹0 charged today</strong>. When your 14-day trial period finishes, your chosen <strong>{selectedPlan.name}</strong> will automatically be bought and billed ({selectedCurrency.symbol}{totalAmount.toLocaleString()}) via AutoPay directly to the founder account. You may cancel anytime before Day 14 from your dashboard with 1 click to prevent any charge.
                   </p>
 
                   <div className="pt-1 p-2.5 bg-amber-50 dark:bg-amber-950/40 rounded-xl border border-amber-200/80 dark:border-amber-800/80 text-[10px] text-amber-900 dark:text-amber-200 flex items-start gap-2">
@@ -914,10 +927,10 @@ export const HospitalOnboarding: React.FC = () => {
                 <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
                   <span className="flex items-center gap-1 text-emerald-600 font-bold">
                     <ShieldCheck className="w-4 h-4" />
-                    <span>30-Day 100% Money-Back Guarantee</span>
+                    <span>14-Day 100% Free Pilot • Cancel Anytime</span>
                   </span>
                   <span>Instant Automatic Setup</span>
-                  <span>Cancel Anytime</span>
+                  <span>Direct Founder Mandate</span>
                 </div>
 
                 {/* Submit Action */}
@@ -939,8 +952,8 @@ export const HospitalOnboarding: React.FC = () => {
                     <Zap className="w-4 h-4 fill-white" />
                     <span>
                       {isProcessing
-                        ? 'Verifying & Provisioning Workspace...'
-                        : `Pay ${selectedCurrency.symbol}${totalAmount.toLocaleString()} & Activate Hospital ➔`}
+                        ? 'Authorizing AutoPay & Provisioning Workspace...'
+                        : `Authorize AutoPay & Start 14-Day Free Pilot (Pay ${selectedCurrency.symbol}0 Today) ➔`}
                     </span>
                   </button>
                 </div>
@@ -959,13 +972,13 @@ export const HospitalOnboarding: React.FC = () => {
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-black text-xs uppercase tracking-wider">
-                  Payment Confirmed via {paymentGateway === 'DODOPAYMENTS' ? 'Dodo Payments' : 'Cashfree Payments'}
+                  14-Day Free Pilot Active • AutoPay Authorized ({paymentGateway === 'DODOPAYMENTS' ? 'Dodo Payments' : 'Cashfree UPI AutoPay'})
                 </span>
                 <h1 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
                   🎉 Congratulations! {provisionedData.clinic.name} Is Live!
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
-                  Your hospital workspace has been provisioned on the Queueless Clinical Cloud. All 5 operational portals are active and ready for your staff and patients.
+                  Your 14-day free pilot is now live with <strong>₹0 charged today</strong>. All 5 operational portals are active. Your {selectedPlan.name} will automatically buy and renew on Day 15 via your authorized AutoPay mandate unless cancelled from settings.
                 </p>
                 <div className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-800">
                   <span>Official Receipt ID: <strong>{provisionedData.invoiceId}</strong></span>

@@ -240,7 +240,7 @@ export const PricingPage: React.FC = () => {
                       ) : (
                         <>
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          <span>14 Days Free Pilot • Instant Cloud Setup • Cancel Anytime</span>
+                          <span>14-Day Free Pilot • Pay ₹0 / $0 Today • Auto-Renews Day 15</span>
                         </>
                       )}
                     </p>
@@ -419,6 +419,24 @@ export const PricingPage: React.FC = () => {
                     </td>
                   </tr>
                   <tr>
+                    <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">
+                      <div>✨ 14-Day Free Pilot & Billing Conversion</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal mt-0.5">Zero payment today; auto-activates premium when trial ends</div>
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">
+                      <span className="block">Pay ₹0 / $0 Today</span>
+                      <span className="text-[9px] text-slate-500 dark:text-slate-400 font-normal block">Auto-debits on Day 15</span>
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400 bg-blue-50/30 dark:bg-blue-950/30">
+                      <span className="block">Pay ₹0 / $0 Today</span>
+                      <span className="text-[9px] text-blue-600/90 dark:text-blue-300 font-normal block">Auto-buys premium on Day 15</span>
+                    </td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">
+                      <span className="block">14-Day Pilot Available</span>
+                      <span className="text-[9px] text-slate-500 dark:text-slate-400 font-normal block">Custom Billing Terms</span>
+                    </td>
+                  </tr>
+                  <tr>
                     <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">Lobby 55" TV Kiosk Display</td>
                     <td className="p-4 sm:p-5 text-center text-slate-400">1 Screen</td>
                     <td className="p-4 sm:p-5 text-center font-bold text-blue-700 dark:text-blue-300 bg-blue-50/30 dark:bg-blue-950/30">3 Screens</td>
@@ -468,8 +486,11 @@ export const PricingPage: React.FC = () => {
             <div className="mt-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/40 border border-amber-200 dark:border-amber-800 text-xs text-slate-800 dark:text-slate-200 space-y-2">
               <div className="flex items-center gap-2 font-black text-amber-900 dark:text-amber-300">
                 <ShieldAlert className="w-4 h-4 shrink-0" />
-                <span>Strict Token Expiry & AutoPay Recurring Mandate Policy</span>
+                <span>14-Day Free Pilot, AutoPay Recurring Mandate & Strict Token Expiry Policy</span>
               </div>
+              <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
+                • <strong>14-Day Free Pilot with Upfront AutoPay Mandate:</strong> Clinics start their 14-day evaluation with <strong>₹0 / $0 charged today</strong>. An automated recurring AutoPay mandate (Cashfree UPI AutoPay for India, Dodo Payments for Global) is authorized during onboarding. You will not be charged during the 14-day free trial. When the 14-day trial period finishes, your chosen premium plan will be <strong>automatically purchased and debited</strong> via AutoPay. You may cancel anytime before Day 14 from your dashboard with 1 tap.
+              </p>
               <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
                 • <strong>Strict Validity Window:</strong> All monthly token allowances and top-up credits are strictly valid for their specific billing period (30 days for monthly subscriptions). Unused tokens expire automatically on plan renewal or expiration and <strong>do not stack or roll over into future plan purchases</strong>.
               </p>

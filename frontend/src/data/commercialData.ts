@@ -174,7 +174,7 @@ export const PLAN_TEMPLATES: PlanTemplate[] = [
     idealFor: 'Single-doctor practices, dental clinics, pediatric & eye clinics',
     hardwareIncluded: 'Instant Cloud Setup & Print-Ready Vector QR Kit',
     features: [
-      '14-Day Free Pilot • Instant 60-Second Setup',
+      '14-Day Free Pilot • AutoPay Mandate (Pay $0 / ₹0 Today)',
       '🔁 AutoPay Monthly Renewal via Cashfree / Dodo Payments',
       'Zero-app patient QR mobile check-in',
       '1,500 monthly digital patient tokens (~50 patients/day)',
@@ -199,7 +199,7 @@ export const PLAN_TEMPLATES: PlanTemplate[] = [
     idealFor: 'Polyclinics, urgent care clinics, nursing homes & OPD wings',
     hardwareIncluded: 'Instant Cloud Setup & Multi-Screen TV Kiosk URL',
     features: [
-      '14-Day Free Pilot • No Credit Card Required',
+      '14-Day Free Pilot • AutoPay Mandate (Pay $0 / ₹0 Today • Auto-Renews Day 15)',
       '🔁 AutoPay Recurring Mandate (Auto-settles directly to founder account)',
       '🚗 Virtual Waiting Room ("Wait in Your Car / Cafe" Check-in)',
       '🛡️ Real-Time USA Insurance Eligibility Verifier (EDI 270/271)',

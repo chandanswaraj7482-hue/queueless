@@ -1923,14 +1923,14 @@ export const ClinicAdmin: React.FC = () => {
                   </h3>
                 </div>
                 <p className="text-xs text-slate-300 mt-1">
-                  Active Hospital Tier: <strong className="text-indigo-300">{clinic?.plan || 'GROWTH_OPD'}</strong> • Status: <span className="text-emerald-400 font-bold">Active</span>
+                  Active Hospital Tier: <strong className="text-indigo-300">{clinic?.plan || 'GROWTH_OPD'}</strong> • 14-Day Free Pilot: <span className="text-emerald-400 font-bold">₹0 Today (Active)</span>
                 </p>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
                 <span className="px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 rounded-full text-xs font-black flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                  <span>AutoPay Mandate Active</span>
+                  <span>AutoPay Mandate Active (₹0 / $0 Today)</span>
                 </span>
               </div>
             </div>
@@ -1941,7 +1941,7 @@ export const ClinicAdmin: React.FC = () => {
                 <span>Gateway: <strong>Cashfree UPI AutoPay / Dodo Payments</strong></span>
               </div>
               <p className="text-[11px] text-slate-300 leading-relaxed">
-                Recurring revenue automatically settles to the Queueless platform account. Your next scheduled auto-debit renewal is on day 30 of your cycle.
+                <strong>14-Day Free Pilot Active:</strong> You will not be charged anything during your 14-day free pilot period. When your 14-day free trial concludes, your chosen premium plan will automatically be purchased and debited via AutoPay directly to the founder account. You may cancel anytime before Day 14 with 1 click to avoid any charges.
               </p>
             </div>
 

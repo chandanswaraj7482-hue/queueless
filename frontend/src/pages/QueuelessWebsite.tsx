@@ -872,7 +872,7 @@ export const QueuelessWebsite: React.FC = () => {
           >
             <span className="inline-flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-              <span>14-Day Free Pilot • No Card Required</span>
+              <span>14-Day Free Pilot • AutoPay Setup (Pay $0/₹0 Today)</span>
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-blue-500 shrink-0" />

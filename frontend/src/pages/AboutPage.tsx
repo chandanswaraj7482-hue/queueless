@@ -592,6 +592,72 @@ export const AboutPage: React.FC = () => {
         </section>
 
         {/* ============================================================== */}
+        {/* SOMETHING LABS SPOTLIGHT & ENGINEERING ORIGIN                  */}
+        {/* ============================================================== */}
+        <section id="something-labs" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-white border-y border-slate-800">
+          <div className="max-w-5xl mx-auto space-y-12 relative z-10">
+            <div className="text-center space-y-3">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-black uppercase tracking-wider mx-auto">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>Engineered & Built by Something Labs</span>
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
+                Something Labs
+              </h2>
+              <p className="text-slate-400 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed">
+                Queueless Healthcare OS was conceptualized, architected, and built from scratch by <strong>Something Labs</strong> — an elite product engineering laboratory focused on high-scale real-time operating systems.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-6 rounded-3xl bg-slate-800/60 border border-slate-700/80 backdrop-blur-xl space-y-3">
+                <div className="p-3 w-fit rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                  <Cpu className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-black text-white">Zero-Latency Cloud Architecture</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Engineered with WebSockets, sub-10ms state synchronization, and ABDM M1/M2 health data specifications for mission-critical hospital reliability.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-3xl bg-slate-800/60 border border-slate-700/80 backdrop-blur-xl space-y-3">
+                <div className="p-3 w-fit rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  <ShieldCheck className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-black text-white">Dignified Patient Experience</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Built to permanently replace dehumanizing ₹2.5 Lakh metal kiosks and crowded waiting room hallways with effortless mobile passes and voice announcements.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-3xl bg-slate-800/60 border border-slate-700/80 backdrop-blur-xl space-y-3">
+                <div className="p-3 w-fit rounded-2xl bg-sky-500/20 text-sky-400 border border-sky-500/30">
+                  <Globe className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-black text-white">Global Deployment Ready</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Architected by Something Labs to serve healthcare networks across 120+ countries supporting multi-currency, 17+ languages, and HIPAA compliance.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-900/40 via-indigo-900/30 to-purple-900/40 border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+              <div className="space-y-1">
+                <span className="text-[11px] font-black uppercase tracking-wider text-indigo-400">Innovation Studio</span>
+                <h4 className="text-lg sm:text-xl font-black text-white">Built with passion by Something Labs</h4>
+                <p className="text-xs text-slate-300">For enterprise partnerships, custom integrations, or advisory, connect with the team.</p>
+              </div>
+              <a
+                href="mailto:somethinglabs.tech@gmail.com"
+                className="px-6 py-3 rounded-2xl bg-white hover:bg-slate-100 text-slate-950 font-black text-xs transition-all shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap cursor-pointer"
+              >
+                somethinglabs.tech@gmail.com ➔
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ============================================================== */}
         {/* 7. COMPREHENSIVE CLINICAL FAQ SECTION                          */}
         {/* ============================================================== */}
         <section className="py-20 px-4 sm:px-6">

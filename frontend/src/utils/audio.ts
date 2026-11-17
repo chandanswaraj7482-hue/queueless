@@ -280,13 +280,37 @@ export type SpeechLanguageMode =
  */
 let activeUtterances: SpeechSynthesisUtterance[] = [];
 
+// Chrome workaround: keep speech synthesis alive if it gets paused
+if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+  setInterval(() => {
+    try {
+      if (window.speechSynthesis.speaking && window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+    } catch {}
+  }, 3500);
+}
+
 export function playClinicVoiceAnnouncement(
   token: string,
   cabin: string = 'Cabin 1',
   doctorName?: string,
   bilingual: boolean | SpeechLanguageMode = false,
-  repeatTimes: number = 2
+  repeatTimes: number = 1
 ) {
+  // Immediately resume AudioContext & SpeechSynthesis while click event is hot
+  try {
+    const ctx = getAudioContext();
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+    }
+  } catch {}
+
   // First play the authentic hospital 3-tone chime
   playClinicChime();
 
@@ -358,50 +382,82 @@ export function playClinicVoiceAnnouncement(
     }
 
     const playRound = (roundNum: number) => {
+      // Refresh available voices in case browser populated them asynchronously
+      if (cachedVoices.length === 0) {
+        cachedVoices = window.speechSynthesis.getVoices();
+      }
+
       const uttEn = new SpeechSynthesisUtterance(englishText);
-      uttEn.lang = 'en-IN';
+      const enVoice = getBestNaturalVoice('en');
+      if (enVoice) {
+        uttEn.voice = enVoice;
+        uttEn.lang = enVoice.lang || 'en-US';
+      } else {
+        uttEn.lang = navigator.language || 'en-US';
+      }
       uttEn.rate = 0.94;
       uttEn.pitch = 1.0;
       uttEn.volume = 1.0;
-      const enVoice = getBestNaturalVoice('en');
-      if (enVoice) uttEn.voice = enVoice;
 
-      uttEn.onend = () => {
+      activeUtterances.push(uttEn);
+
+      const finishEn = () => {
+        const idx = activeUtterances.indexOf(uttEn);
+        if (idx !== -1) activeUtterances.splice(idx, 1);
+
         if (langMode !== 'en' && secondaryText) {
           const uttSec = new SpeechSynthesisUtterance(secondaryText);
-          uttSec.lang = secondaryLang;
+          const secVoice = getBestNaturalVoice(langMode);
+          if (secVoice) {
+            uttSec.voice = secVoice;
+            uttSec.lang = secVoice.lang || secondaryLang;
+          } else {
+            uttSec.lang = secondaryLang;
+          }
           uttSec.rate = 0.94;
           uttSec.pitch = 1.0;
           uttSec.volume = 1.0;
-          const secVoice = getBestNaturalVoice(langMode);
-          if (secVoice) uttSec.voice = secVoice;
 
-          uttSec.onend = () => {
+          activeUtterances.push(uttSec);
+
+          const finishSec = () => {
+            const secIdx = activeUtterances.indexOf(uttSec);
+            if (secIdx !== -1) activeUtterances.splice(secIdx, 1);
+
             if (roundNum < repeatTimes) {
               setTimeout(() => {
                 playClinicChime();
-                setTimeout(() => playRound(roundNum + 1), 750);
-              }, 1200);
+                setTimeout(() => playRound(roundNum + 1), 350);
+              }, 600);
             }
           };
+
+          uttSec.onend = finishSec;
+          uttSec.onerror = finishSec;
+
+          window.speechSynthesis.resume();
           window.speechSynthesis.speak(uttSec);
         } else {
           if (roundNum < repeatTimes) {
             setTimeout(() => {
               playClinicChime();
-              setTimeout(() => playRound(roundNum + 1), 750);
-            }, 1200);
+              setTimeout(() => playRound(roundNum + 1), 350);
+            }, 600);
           }
         }
       };
 
+      uttEn.onend = finishEn;
+      uttEn.onerror = finishEn;
+
+      window.speechSynthesis.resume();
       window.speechSynthesis.speak(uttEn);
     };
 
-    // Wait for the hospital chime to ring cleanly before speaking (~850ms)
+    // Immediate dispatch while user click activation is active (200ms after chime trigger)
     setTimeout(() => {
       playRound(1);
-    }, 850);
+    }, 200);
   } catch (err) {
     console.warn('Speech synthesis unavailable or blocked by browser', err);
   }

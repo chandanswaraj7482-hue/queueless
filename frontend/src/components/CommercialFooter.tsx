@@ -229,6 +229,12 @@ export const CommercialFooter: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/about#something-labs" className="hover:text-white transition-colors flex items-center gap-1.5 text-sky-400 font-bold">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Built by Something Labs</span>
+                </Link>
+              </li>
+              <li>
                 <Link to="/refund-policy" className="hover:text-white transition-colors">
                   Refund & Cancellation Policy
                 </Link>
@@ -259,9 +265,8 @@ export const CommercialFooter: React.FC = () => {
               <span>Dodo Payments & UPI</span>
             </span>
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-              <span className="text-[#0079C1] font-bold">Pay</span>
-              <span className="text-[#00457C] font-bold">Pal</span>
-              <span className="ml-1 text-slate-200">Verified</span>
+              <ShieldCheck className="w-3 h-3 text-emerald-400" />
+              <span>Cashfree Verified Gateway</span>
             </span>
           </div>
 
@@ -293,7 +298,13 @@ export const CommercialFooter: React.FC = () => {
 
         {/* Bottom Copyright & Compliance Notice */}
         <div className="pt-4 border-t border-slate-800/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
-          <p>© {new Date().getFullYear()} <strong className="text-slate-300 font-bold">Queueless Labs Inc.</strong> All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} <strong className="text-slate-200 font-bold">Queueless Healthcare OS</strong>. Built & Engineered by{' '}
+            <Link to="/about#something-labs" className="text-sky-400 hover:text-sky-300 font-bold underline decoration-sky-500/40">
+              Something Labs
+            </Link>
+            . All rights reserved.
+          </p>
           <div className="flex flex-wrap items-center gap-3">
             <span>India DPDP Compliant</span>
             <span>•</span>

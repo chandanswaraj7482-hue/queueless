@@ -607,20 +607,20 @@ export const ReceptionDashboard: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="max-w-md mx-auto p-4 sm:p-6 mt-12 pb-24">
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] text-center relative overflow-hidden">
+        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] text-center relative overflow-hidden">
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
           
-          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-emerald-500 text-white flex items-center justify-center mx-auto mb-4 shadow-xl shadow-emerald-600/30 ring-4 ring-emerald-50">
+          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-emerald-500 text-white flex items-center justify-center mx-auto mb-4 shadow-xl shadow-emerald-600/30 ring-4 ring-emerald-50 dark:ring-emerald-950">
             <Users className="w-8 h-8" />
           </div>
 
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-800 text-[11px] font-black uppercase tracking-wider rounded-full border border-emerald-200/80 mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-[11px] font-black uppercase tracking-wider rounded-full border border-emerald-200/80 dark:border-emerald-800 mb-3">
             <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
             <span>OPD Dispatch & Cashier Counter</span>
           </div>
 
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">{hospitalDisplayName} • Reception Desk</h1>
-          <p className="text-xs text-slate-500 mt-1 mb-6 leading-relaxed">
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{hospitalDisplayName} • Reception Desk</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-6 leading-relaxed">
             Enter receptionist password to manage OPD walk-ins, cash token issuance, patient calls, and cashier ledgers.
           </p>
 
@@ -633,7 +633,7 @@ export const ReceptionDashboard: React.FC = () => {
 
           <form onSubmit={handleReceptionLogin} className="space-y-4">
             <div className="text-left">
-              <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5">
+              <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
                 Reception Desk Password
               </label>
               <div className="relative">
@@ -643,7 +643,7 @@ export const ReceptionDashboard: React.FC = () => {
                   onChange={(e) => setReceptionPasswordInput(e.target.value)}
                   placeholder="Enter reception desk password"
                   autoFocus
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-xs font-mono font-bold text-slate-900 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/50 shadow-xs"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white dark:text-white pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/50 dark:bg-slate-800 shadow-xs"
                 />
                 <button
                   type="button"
@@ -672,12 +672,12 @@ export const ReceptionDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-28">
       {/* Header & Quick Action */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white/95 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] mb-6 relative overflow-hidden">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] mb-6 relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
         
         <div>
           <div className="flex items-center gap-2.5 flex-wrap">
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
               <span>{hospitalDisplayName} • Reception Desk</span>
               <span className="flex h-2.5 w-2.5 relative">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -688,7 +688,7 @@ export const ReceptionDashboard: React.FC = () => {
               <span>⚡ Counter Active</span>
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1 font-medium">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
             Live OPD queue controller, cashier collection desk, and patient token dispatch.
           </p>
         </div>
@@ -696,7 +696,7 @@ export const ReceptionDashboard: React.FC = () => {
         <div className="flex items-center gap-2.5 flex-wrap">
           <button
             onClick={openFinancialLedger}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-black rounded-xl transition-all shadow-2xs cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-black rounded-xl transition-all shadow-2xs cursor-pointer active:scale-95"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
             <span>Audit Fee Ledger</span>
@@ -704,7 +704,7 @@ export const ReceptionDashboard: React.FC = () => {
 
           <button
             onClick={() => setShowWalkInModal(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-all border border-slate-200 cursor-pointer active:scale-95 shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-xl transition-all border border-slate-200 dark:border-slate-700 cursor-pointer active:scale-95 shadow-2xs"
           >
             <UserPlus className="w-3.5 h-3.5" />
             <span>Add Walk-In</span>
@@ -724,7 +724,7 @@ export const ReceptionDashboard: React.FC = () => {
 
           <button
             onClick={handleReceptionLogout}
-            className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-xl transition-all border border-slate-200 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl transition-all border border-slate-200 dark:border-slate-700 cursor-pointer"
             title="Lock Desk / Logout"
           >
             <LogOut className="w-3.5 h-3.5" />
@@ -736,39 +736,39 @@ export const ReceptionDashboard: React.FC = () => {
       {/* Financial & Operational Summary Cards */}
       {summary && (
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5 mb-6">
-          <div className="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-emerald-300 transition-all">
+          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-emerald-300 transition-all">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500" />
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Total Collections</span>
             <div className="text-2xl sm:text-3xl font-black text-emerald-600 mt-1 tracking-tight">₹{summary.totalRevenue}</div>
-            <span className="text-[10px] text-slate-500 font-medium mt-1 block">Net revenue today</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-1 block">Net revenue today</span>
           </div>
 
-          <div className="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-sky-300 transition-all">
+          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-sky-300 transition-all">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-500 to-blue-500" />
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Online UPI</span>
             <div className="text-2xl sm:text-3xl font-black text-sky-600 mt-1 tracking-tight">₹{summary.upiRevenue}</div>
-            <span className="text-[10px] text-slate-500 font-medium mt-1 block">Instant bank gateway</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-1 block">Instant bank gateway</span>
           </div>
 
-          <div className="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-amber-300 transition-all">
+          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-amber-300 transition-all">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500" />
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Counter Cash</span>
             <div className="text-2xl sm:text-3xl font-black text-amber-600 mt-1 tracking-tight">₹{summary.cashRevenue}</div>
-            <span className="text-[10px] text-slate-500 font-medium mt-1 block">Approved at desk</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-1 block">Approved at desk</span>
           </div>
 
-          <div className="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-purple-300 transition-all">
+          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-purple-300 transition-all">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-500" />
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">15-Day Follow-Up</span>
             <div className="text-2xl sm:text-3xl font-black text-purple-600 mt-1 tracking-tight">{summary.freeFollowUps}</div>
-            <span className="text-[10px] text-slate-500 font-medium mt-1 block">Routine reviews (₹250)</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-1 block">Routine reviews (₹250)</span>
           </div>
 
-          <div className="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-slate-400 transition-all col-span-2 lg:col-span-1">
+          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:border-slate-400 transition-all col-span-2 lg:col-span-1">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-slate-700 to-slate-900" />
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Waiting Lobby</span>
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1 tracking-tight">{summary.waiting}</div>
-            <span className="text-[10px] text-slate-500 font-medium mt-1 block">Avg wait: {summary.avgWaitMinutes}m</span>
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1 tracking-tight">{summary.waiting}</div>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-1 block">Avg wait: {summary.avgWaitMinutes}m</span>
           </div>
         </div>
       )}
@@ -906,7 +906,7 @@ export const ReceptionDashboard: React.FC = () => {
       </div>
 
       {/* Date Range Cockpit & Filter Bar */}
-      <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-sm mb-4 space-y-3">
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm mb-4 space-y-3">
         {/* Row 1: Presets & Custom Range Inputs */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           {/* Quick Presets: Today, Yesterday, Last 7 Days, This Month, All */}
@@ -972,7 +972,7 @@ export const ReceptionDashboard: React.FC = () => {
           </div>
 
           {/* Custom From Date -> To Date Pickers */}
-          <div className="flex items-center gap-2 bg-slate-50 border border-slate-200/90 p-1.5 rounded-2xl flex-wrap">
+          <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 p-1.5 rounded-2xl flex-wrap">
             <span className="text-[11px] font-bold text-slate-500 pl-1">From:</span>
             <input
               type="date"
@@ -981,7 +981,7 @@ export const ReceptionDashboard: React.FC = () => {
                 setStartDate(e.target.value);
                 setDatePreset('CUSTOM');
               }}
-              className="px-2.5 py-1 text-xs font-bold rounded-xl border border-slate-300 text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="px-2.5 py-1 text-xs font-bold rounded-xl border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
             />
 
             <span className="text-[11px] font-bold text-slate-500">To:</span>
@@ -992,7 +992,7 @@ export const ReceptionDashboard: React.FC = () => {
                 setEndDate(e.target.value);
                 setDatePreset('CUSTOM');
               }}
-              className="px-2.5 py-1 text-xs font-bold rounded-xl border border-slate-300 text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="px-2.5 py-1 text-xs font-bold rounded-xl border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-white bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
             />
 
             <button
@@ -1025,7 +1025,7 @@ export const ReceptionDashboard: React.FC = () => {
             <select
               value={selectedDoctor}
               onChange={(e) => setSelectedDoctor(e.target.value)}
-              className="px-3 py-2 text-xs font-bold rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+              className="px-3 py-2 text-xs font-bold rounded-xl border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
             >
               <option value="ALL">All Doctors</option>
               {doctors.map((doc) => (
@@ -1052,7 +1052,7 @@ export const ReceptionDashboard: React.FC = () => {
                 placeholder="Search token, patient, phone..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 text-xs font-medium rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="w-full pl-9 pr-3 py-1.5 text-xs font-medium rounded-xl border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500"
               />
             </div>
           </div>
@@ -1066,7 +1066,7 @@ export const ReceptionDashboard: React.FC = () => {
           className={`px-4 py-2 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             queueTab === 'ALL'
               ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20'
-              : 'bg-white/90 text-slate-700 hover:bg-slate-100 border border-slate-200/80 shadow-2xs'
+              : 'bg-white/90 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-800 shadow-2xs'
           }`}
         >
           All Entries ({queue.length})
@@ -1077,7 +1077,7 @@ export const ReceptionDashboard: React.FC = () => {
           className={`px-4 py-2 rounded-2xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
             queueTab === 'AWAITING_CASH'
               ? 'bg-amber-600 text-white shadow-md shadow-amber-600/20'
-              : 'bg-white/90 text-amber-900 hover:bg-amber-50 border border-amber-200/80 shadow-2xs'
+              : 'bg-white/90 dark:bg-slate-900 text-amber-900 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800 shadow-2xs'
           }`}
         >
           <span>⚠️ Awaiting Cash at Desk</span>
@@ -1091,7 +1091,7 @@ export const ReceptionDashboard: React.FC = () => {
           className={`px-4 py-2 rounded-2xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
             queueTab === 'ACTIVE_QUEUE'
               ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
-              : 'bg-white/90 text-emerald-900 hover:bg-emerald-50 border border-emerald-200/80 shadow-2xs'
+              : 'bg-white/90 dark:bg-slate-900 text-emerald-900 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800 shadow-2xs'
           }`}
         >
           <span>Active in Doctor Queue</span>
@@ -1105,7 +1105,7 @@ export const ReceptionDashboard: React.FC = () => {
           className={`px-4 py-2 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             queueTab === 'COMPLETED'
               ? 'bg-slate-800 text-white shadow-md shadow-slate-800/20'
-              : 'bg-white/90 text-slate-700 hover:bg-slate-100 border border-slate-200/80 shadow-2xs'
+              : 'bg-white/90 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-800 shadow-2xs'
           }`}
         >
           Completed Today ({queue.filter((i) => i.status === 'COMPLETED').length})
@@ -1113,10 +1113,10 @@ export const ReceptionDashboard: React.FC = () => {
       </div>
 
       {/* Main Queue & Financial Ledger Table */}
-      <div className="bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200/90 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] overflow-hidden">
+      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50/90 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-black text-[11px]">
+            <thead className="bg-slate-50/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-black text-[11px]">
               <tr>
                 <th className="py-4 px-4">Token & Time</th>
                 <th className="py-4 px-4">Patient Profile</th>
@@ -1127,7 +1127,7 @@ export const ReceptionDashboard: React.FC = () => {
                 <th className="py-4 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {filteredQueue.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-16 text-center text-slate-400 font-semibold">
@@ -1144,10 +1144,10 @@ export const ReceptionDashboard: React.FC = () => {
                   });
 
                   return (
-                    <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
+                    <tr key={item.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/60 transition-colors">
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-2">
-                          <span className="font-mono font-black text-sm text-slate-900 bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200 shadow-2xs">
+                          <span className="font-mono font-black text-sm text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-2xs">
                             {item.token}
                           </span>
                           <span className="font-mono text-[10px] text-slate-500 font-bold bg-slate-100/70 px-1.5 py-0.5 rounded">
@@ -1163,7 +1163,7 @@ export const ReceptionDashboard: React.FC = () => {
                       </td>
 
                       <td className="py-4 px-4">
-                        <div className="font-black text-slate-900 text-sm">{item.patient.name}</div>
+                        <div className="font-black text-slate-900 dark:text-white text-sm">{item.patient.name}</div>
                         <div className="text-slate-500 text-[11px] flex items-center gap-1.5 flex-wrap mt-0.5 font-medium">
                           <span className="font-mono">{item.patient.mobile}</span>
                           {item.patient.bloodGroup && (
@@ -1176,7 +1176,7 @@ export const ReceptionDashboard: React.FC = () => {
                       </td>
 
                       <td className="py-4 px-4">
-                        <div className="font-bold text-slate-900">{item.doctor?.displayName || 'Unassigned'}</div>
+                        <div className="font-bold text-slate-900 dark:text-white">{item.doctor?.displayName || 'Unassigned'}</div>
                         <div className="text-sky-700 text-[11px] font-mono font-bold mt-0.5">
                           {item.doctor?.roomNumber || 'Cabin 1'}
                         </div>
@@ -1299,15 +1299,15 @@ export const ReceptionDashboard: React.FC = () => {
       {/* Financial Ledger Audit Modal */}
       {showLedgerModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-3xl w-full shadow-2xl max-h-[85vh] flex flex-col">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-3xl w-full shadow-2xl max-h-[85vh] flex flex-col border border-transparent dark:border-slate-800">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 flex-wrap gap-2">
               <div>
-                <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
                   <FileSpreadsheet className="w-5 h-5 text-emerald-600" />
                   <span>Business Financial Ledger Audit</span>
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Detailed payment breakdown for: <span className="font-bold text-slate-900">{ledgerData?.date || (startDate === endDate ? startDate : `${startDate} to ${endDate}`)}</span>
+                  Detailed payment breakdown for: <span className="font-bold text-slate-900 dark:text-white">{ledgerData?.date || (startDate === endDate ? startDate : `${startDate} to ${endDate}`)}</span>
                 </p>
               </div>
 
@@ -1370,11 +1370,11 @@ export const ReceptionDashboard: React.FC = () => {
                         <th className="py-2.5 px-3">Transaction ID</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                       {ledgerData.ledger.map((row: any) => (
                         <tr key={row.id} className="hover:bg-slate-50">
                           <td className="py-2.5 px-3 font-semibold text-slate-600 whitespace-nowrap">{row.date} • {row.time}</td>
-                          <td className="py-2.5 px-3 font-mono font-bold text-slate-900">{row.token}</td>
+                          <td className="py-2.5 px-3 font-mono font-bold text-slate-900 dark:text-white">{row.token}</td>
                           <td className="py-2.5 px-3 font-bold text-slate-800">{row.patientName}</td>
                           <td className="py-2.5 px-3 text-slate-600">{row.doctorName}</td>
                           <td className="py-2.5 px-3 font-black text-slate-900">
@@ -1402,37 +1402,37 @@ export const ReceptionDashboard: React.FC = () => {
       {/* Add Walk-in Modal */}
       {showWalkInModal && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl">
-            <h2 className="text-base font-black text-slate-900 mb-1">Issue Counter Walk-In Token</h2>
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-transparent dark:border-slate-800">
+            <h2 className="text-base font-black text-slate-900 dark:text-white mb-1">Issue Counter Walk-In Token</h2>
             <p className="text-xs text-slate-500 mb-4">Register patient and record counter payment collection.</p>
 
             <form onSubmit={handleAddWalkIn} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Patient Name</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Patient Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Ramesh Kumar"
                   value={walkInName}
                   onChange={(e) => setWalkInName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Mobile Number</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Mobile Number</label>
                 <input
                   type="tel"
                   required
                   placeholder="10-digit number"
                   value={walkInMobile}
                   onChange={(e) => setWalkInMobile(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Assign Doctor</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Assign Doctor</label>
                 <select
                   value={walkInDoctorId}
                   onChange={(e) => setWalkInDoctorId(e.target.value)}
@@ -1447,7 +1447,7 @@ export const ReceptionDashboard: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Fee Payment Collection Mode</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Fee Payment Collection Mode</label>
                 <select
                   value={walkInPaymentMode}
                   onChange={(e) => setWalkInPaymentMode(e.target.value as any)}
@@ -1460,13 +1460,13 @@ export const ReceptionDashboard: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Visit Reason</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Visit Reason</label>
                 <input
                   type="text"
                   placeholder="e.g. Fever, routine BP check"
                   value={walkInReason}
                   onChange={(e) => setWalkInReason(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 

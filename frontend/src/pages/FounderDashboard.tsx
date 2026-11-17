@@ -754,8 +754,8 @@ export const FounderDashboard: React.FC = () => {
       {/* Top Executive KPI Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4">
         {/* Rating KPI */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs relative overflow-hidden group hover:border-amber-300 transition-all">
-          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs relative overflow-hidden group hover:border-amber-300 dark:hover:border-amber-500 transition-all">
+          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
             <span>Brand Rating</span>
             <span className="text-amber-500 font-black">★★★★★</span>
           </div>
@@ -763,93 +763,93 @@ export const FounderDashboard: React.FC = () => {
             <span>{data?.reviews?.average?.toFixed(1) || '5.0'}</span>
             <Star className="w-5 h-5 fill-amber-400 text-amber-400 shrink-0" />
           </div>
-          <span className="text-[11px] text-slate-500 font-medium block truncate">
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium block truncate">
             From {data?.reviews?.total || 0} verified patients
           </span>
         </div>
 
         {/* Zero-Wait CSAT */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-emerald-300 transition-all">
-          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-emerald-300 dark:hover:border-emerald-500 transition-all">
+          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
             <span>Zero-Wait CSAT</span>
             <Zap className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500" />
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-emerald-600 my-1">
+          <div className="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 my-1">
             {data?.reviews?.zeroWaitScore || 100}%
           </div>
-          <span className="text-[11px] text-slate-500 font-medium block truncate">
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium block truncate">
             4★ & 5★ satisfaction rate
           </span>
         </div>
 
         {/* Total Tokens Generated */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-sky-300 transition-all">
-          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-sky-300 dark:hover:border-sky-500 transition-all">
+          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
             <span>Tokens Issued</span>
             <Users className="w-3.5 h-3.5 text-sky-500" />
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-slate-900 my-1">
+          <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white my-1">
             {data?.platform?.totalTokensIssued || 0}
           </div>
-          <span className="text-[11px] text-sky-600 font-bold block truncate">
+          <span className="text-[11px] text-sky-600 dark:text-sky-400 font-bold block truncate">
             +{data?.platform?.todayTokens || 0} today
           </span>
         </div>
 
         {/* Patient Hours Saved */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-indigo-300 transition-all">
-          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-indigo-300 dark:hover:border-indigo-500 transition-all">
+          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
             <span>Hours Saved</span>
             <Clock className="w-3.5 h-3.5 text-indigo-500" />
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-indigo-600 my-1">
+          <div className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400 my-1">
             ~{data?.platform?.totalHoursSaved || 0}h
           </div>
-          <span className="text-[11px] text-slate-500 font-medium block truncate">
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium block truncate">
             Eliminated lobby wait
           </span>
         </div>
 
         {/* Total Fees / GMV Processed */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-teal-300 transition-all">
-          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-teal-300 dark:hover:border-teal-500 transition-all">
+          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
             <span>Fees Processed</span>
             <TrendingUp className="w-3.5 h-3.5 text-teal-500" />
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-teal-600 my-1">
+          <div className="text-2xl sm:text-3xl font-black text-teal-600 dark:text-teal-400 my-1">
             ₹{data?.platform?.totalGmv?.toLocaleString('en-IN') || 0}
           </div>
-          <span className="text-[11px] text-slate-500 font-medium block truncate">
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium block truncate">
             Digital & cash collections
           </span>
         </div>
 
         {/* Active Clinics */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-sky-300 transition-all">
-          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-sky-300 dark:hover:border-sky-500 transition-all">
+          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
             <span>Clinics Live</span>
             <Building2 className="w-3.5 h-3.5 text-sky-500" />
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-slate-900 my-1">
+          <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white my-1">
             {data?.platform?.totalClinics || 1}
           </div>
-          <span className="text-[11px] text-slate-500 font-medium block truncate">
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium block truncate">
             Active hospital accounts
           </span>
         </div>
       </div>
 
       {/* Founder Tab Navigation */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2">
+      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
         <button
           onClick={() => setActiveTab('CLINICS')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             activeTab === 'CLINICS'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-md'
+              : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Building2 className={`w-4 h-4 ${activeTab === 'CLINICS' ? 'text-amber-400' : 'text-slate-400'}`} />
+          <Building2 className={`w-4 h-4 ${activeTab === 'CLINICS' ? 'text-amber-400 dark:text-amber-600' : 'text-slate-400'}`} />
           <span>🏥 Partner Hospitals & Revenue ({data?.platform?.totalClinics || 5})</span>
         </button>
 
@@ -857,11 +857,11 @@ export const FounderDashboard: React.FC = () => {
           onClick={() => setActiveTab('REVIEWS')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             activeTab === 'REVIEWS'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-md'
+              : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Star className={`w-4 h-4 ${activeTab === 'REVIEWS' ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}`} />
+          <Star className={`w-4 h-4 ${activeTab === 'REVIEWS' ? 'text-amber-400 dark:text-amber-600 fill-amber-400 dark:fill-amber-600' : 'text-slate-400'}`} />
           <span>⭐ Reviews & Feedback ({data?.reviews?.total || 0})</span>
         </button>
 
@@ -869,11 +869,11 @@ export const FounderDashboard: React.FC = () => {
           onClick={() => setActiveTab('LOGINS')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             activeTab === 'LOGINS'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-md'
+              : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <LogIn className={`w-4 h-4 ${activeTab === 'LOGINS' ? 'text-amber-400' : 'text-slate-400'}`} />
+          <LogIn className={`w-4 h-4 ${activeTab === 'LOGINS' ? 'text-amber-400 dark:text-amber-600' : 'text-slate-400'}`} />
           <span>🔐 Staff & Clinic Logins ({data?.platform?.recentLogins?.length || 4})</span>
         </button>
 
@@ -881,11 +881,11 @@ export const FounderDashboard: React.FC = () => {
           onClick={() => setActiveTab('MAP')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             activeTab === 'MAP'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-md'
+              : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Globe className={`w-4 h-4 ${activeTab === 'MAP' ? 'text-teal-400' : 'text-slate-400'}`} />
+          <Globe className={`w-4 h-4 ${activeTab === 'MAP' ? 'text-teal-400 dark:text-teal-600' : 'text-slate-400'}`} />
           <span>🌍 User Inflow & Geo Map</span>
         </button>
 
@@ -893,11 +893,11 @@ export const FounderDashboard: React.FC = () => {
           onClick={() => setActiveTab('DOCTORS')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             activeTab === 'DOCTORS'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-md'
+              : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Stethoscope className={`w-4 h-4 ${activeTab === 'DOCTORS' ? 'text-purple-400' : 'text-slate-400'}`} />
+          <Stethoscope className={`w-4 h-4 ${activeTab === 'DOCTORS' ? 'text-purple-400 dark:text-purple-600' : 'text-slate-400'}`} />
           <span>Global Doctors ({clinicsWithDoctors.reduce((acc, c) => acc + (c.doctors?.length || 0), 0)})</span>
         </button>
 
@@ -905,11 +905,11 @@ export const FounderDashboard: React.FC = () => {
           onClick={() => setActiveTab('PITCH')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             activeTab === 'PITCH'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-md'
+              : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Award className={`w-4 h-4 ${activeTab === 'PITCH' ? 'text-emerald-400' : 'text-slate-400'}`} />
+          <Award className={`w-4 h-4 ${activeTab === 'PITCH' ? 'text-emerald-400 dark:text-emerald-600' : 'text-slate-400'}`} />
           <span>Pitch Deck & ROI Simulator</span>
         </button>
 
@@ -917,11 +917,11 @@ export const FounderDashboard: React.FC = () => {
           onClick={() => setActiveTab('SECURITY')}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer ${
             activeTab === 'SECURITY'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-md'
+              : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <ShieldCheck className={`w-4 h-4 ${activeTab === 'SECURITY' ? 'text-teal-400' : 'text-slate-400'}`} />
+          <ShieldCheck className={`w-4 h-4 ${activeTab === 'SECURITY' ? 'text-teal-400 dark:text-teal-600' : 'text-slate-400'}`} />
           <span>Platform Passkeys & Health</span>
         </button>
       </div>
@@ -942,7 +942,7 @@ export const FounderDashboard: React.FC = () => {
                   <h3 className="text-base font-black text-slate-900 tracking-tight">
                     Hospital Staff & Clinic Logins Activity
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     Live audit of which hospital directors, doctor stations, and reception desks authenticated and accessed their portals.
                   </p>
                 </div>
@@ -951,13 +951,13 @@ export const FounderDashboard: React.FC = () => {
 
             <div className="flex flex-wrap items-center gap-2.5">
               {/* Clinic Filter */}
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-bold text-slate-700">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200">
                 <Building2 className="w-3.5 h-3.5 text-slate-500" />
                 <select
                   aria-label="Filter logins by hospital"
                   value={loginClinicFilter}
                   onChange={(e) => setLoginClinicFilter(e.target.value)}
-                  className="bg-transparent text-slate-800 font-bold focus:outline-none cursor-pointer"
+                  className="bg-transparent text-slate-800 dark:text-slate-200 font-bold focus:outline-none cursor-pointer"
                 >
                   <option value="ALL">All Hospitals</option>
                   {data?.platform?.clinics?.map((c) => (
@@ -969,13 +969,13 @@ export const FounderDashboard: React.FC = () => {
               </div>
 
               {/* Role Filter */}
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-bold text-slate-700">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200">
                 <Filter className="w-3.5 h-3.5 text-slate-500" />
                 <select
                   aria-label="Filter logins by role"
                   value={loginRoleFilter}
                   onChange={(e) => setLoginRoleFilter(e.target.value)}
-                  className="bg-transparent text-slate-800 font-bold focus:outline-none cursor-pointer"
+                  className="bg-transparent text-slate-800 dark:text-slate-200 font-bold focus:outline-none cursor-pointer"
                 >
                   <option value="ALL">All Roles</option>
                   <option value="ADMIN">Director (Admin)</option>
@@ -1005,12 +1005,12 @@ export const FounderDashboard: React.FC = () => {
               {data?.platform?.clinics?.map((c, idx) => {
                 const count = (data?.platform?.loginCountsByClinic && data.platform.loginCountsByClinic[c.name]) || (idx === 0 ? 14 : idx === 1 ? 6 : 2);
                 return (
-                  <div key={c.id} className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-amber-300 transition-all">
+                  <div key={c.id} className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-amber-300 dark:hover:border-amber-500 transition-all">
                     <div className="flex items-center justify-between text-slate-400 mb-1">
                       <span className="text-[10px] font-bold uppercase truncate">{c.name}</span>
                       <Building2 className="w-3.5 h-3.5 text-amber-500" />
                     </div>
-                    <div className="text-2xl font-black text-slate-900">
+                    <div className="text-2xl font-black text-slate-900 dark:text-white">
                       {count} Logins
                     </div>
                     <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-100">
@@ -1026,9 +1026,9 @@ export const FounderDashboard: React.FC = () => {
           </div>
 
           {/* Logins Audit Table */}
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
             <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
-              <h4 className="text-sm font-black text-slate-900">
+              <h4 className="text-sm font-black text-slate-900 dark:text-white">
                 Live Staff Authentication & Session Logs
               </h4>
               <span className="text-xs text-slate-400 font-medium">
@@ -1038,7 +1038,7 @@ export const FounderDashboard: React.FC = () => {
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50/80 text-slate-500 text-[10px] font-black uppercase tracking-wider border-b border-slate-100">
+                <thead className="bg-slate-50/80 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
                   <tr>
                     <th className="py-3.5 px-4">Time & Date</th>
                     <th className="py-3.5 px-4">Hospital / OPD</th>
@@ -1048,7 +1048,7 @@ export const FounderDashboard: React.FC = () => {
                     <th className="py-3.5 px-4 text-right">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {(() => {
                     const fallbackLogins = [
                       {
@@ -1203,7 +1203,7 @@ export const FounderDashboard: React.FC = () => {
           {/* Sentiment Analytics Section */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {/* Star Distribution Breakdown */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-3">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                 <span className="text-xs font-black uppercase tracking-wider text-slate-800">
                   Rating Breakdown
@@ -1249,7 +1249,7 @@ export const FounderDashboard: React.FC = () => {
             </div>
 
             {/* Top Feedback Tags Cloud */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-3 lg:col-span-2">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-3 lg:col-span-2">
               <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                 <span className="text-xs font-black uppercase tracking-wider text-slate-800">
                   What Patients Love Most About Queueless
@@ -1282,7 +1282,7 @@ export const FounderDashboard: React.FC = () => {
           </div>
 
           {/* Today's Peak OPD Rush Traffic Distribution (Visual Animated Curve SVG) */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-emerald-600" />
@@ -1344,7 +1344,7 @@ export const FounderDashboard: React.FC = () => {
           </div>
 
           {/* Reviews List & Controls */}
-          <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden p-6 space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm overflow-hidden p-6 space-y-4">
             {/* Search & Filter Bar */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
               <div className="flex flex-wrap items-center gap-1.5">
@@ -1431,7 +1431,7 @@ export const FounderDashboard: React.FC = () => {
                   return (
                     <div
                       key={rev.id}
-                      className="p-5 rounded-3xl border border-slate-200/80 bg-slate-50/40 hover:bg-white hover:border-amber-300/80 hover:shadow-xl transition-all flex flex-col justify-between space-y-3 relative group"
+                      className="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-700 bg-slate-50/40 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 hover:border-amber-300/80 dark:hover:border-amber-500/80 hover:shadow-xl transition-all flex flex-col justify-between space-y-3 relative group"
                     >
                       <div>
                         {/* Header: Stars, Time, Actions */}
@@ -1536,9 +1536,9 @@ export const FounderDashboard: React.FC = () => {
         <div className="space-y-5 animate-in fade-in duration-200">
           {/* Top SaaS B2B KPI Summary */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <div className="text-[11px] font-bold text-slate-400 uppercase">Total Partner Hospitals</div>
-              <div className="text-2xl font-black text-slate-900 mt-1">
+              <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">
                 {data?.platform?.clinics?.length || 5} Live
               </div>
               <span className="text-[10px] text-emerald-600 font-bold block mt-0.5">
@@ -1546,7 +1546,7 @@ export const FounderDashboard: React.FC = () => {
               </span>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <div className="text-[11px] font-bold text-slate-400 uppercase">Patient Consultation Fees</div>
               <div className="text-2xl font-black text-teal-600 mt-1">
                 ₹{data?.platform?.clinics?.reduce((sum, c) => sum + (c.totalRevenue || 0), 0).toLocaleString('en-IN') || 0}
@@ -1556,7 +1556,7 @@ export const FounderDashboard: React.FC = () => {
               </span>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <div className="text-[11px] font-bold text-slate-400 uppercase">SaaS Contract MRR</div>
               <div className="text-2xl font-black text-amber-500 mt-1">
                 ₹{data?.platform?.clinics?.reduce((sum, c) => sum + (c.monthlyFee || 0), 0).toLocaleString('en-IN') || 0}/mo
@@ -1566,7 +1566,7 @@ export const FounderDashboard: React.FC = () => {
               </span>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <div className="text-[11px] font-bold text-slate-400 uppercase">Network Patient Footfall</div>
               <div className="text-2xl font-black text-sky-600 mt-1">
                 {data?.platform?.totalTokensIssued || 0} Patients
@@ -1577,14 +1577,14 @@ export const FounderDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
               <div>
-                <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                   <Building2 className="w-5 h-5 text-sky-500" />
                   <span>Partner Hospitals: Revenue & Subscription Management</span>
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Track hospital-by-hospital OPD revenue, patient volume, grant/upgrade Premium plans, and manage platform access.
                 </p>
               </div>
@@ -1634,7 +1634,7 @@ export const FounderDashboard: React.FC = () => {
               {data?.platform?.clinics?.map((c) => (
                 <div
                   key={c.id}
-                  className="p-5 rounded-2xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:shadow-md transition-all flex flex-col xl:flex-row xl:items-center justify-between gap-4"
+                  className="p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 hover:shadow-md transition-all flex flex-col xl:flex-row xl:items-center justify-between gap-4"
                 >
                   <div className="flex items-start gap-3.5">
                     <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 shrink-0">
@@ -1642,7 +1642,7 @@ export const FounderDashboard: React.FC = () => {
                     </div>
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <h4 className="text-sm font-black text-slate-900">{c.name}</h4>
+                        <h4 className="text-sm font-black text-slate-900 dark:text-white">{c.name}</h4>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                           c.planStatus === 'ACTIVE'
                             ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
@@ -2072,11 +2072,11 @@ export const FounderDashboard: React.FC = () => {
 
       {activeTab === 'DOCTORS' && (
         <div className="space-y-5">
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 mb-4">
               <div>
-                <h3 className="text-base font-black text-slate-900">Global Consulting Doctors</h3>
-                <p className="text-xs text-slate-500">Live directory of all consulting physicians and surgeons across clinics.</p>
+                <h3 className="text-base font-black text-slate-900 dark:text-white">Global Consulting Doctors</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Live directory of all consulting physicians and surgeons across clinics.</p>
               </div>
               <span className="text-xs font-bold text-purple-700 bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-100">
                 Total Specialists: {clinicsWithDoctors.reduce((acc, c) => acc + (c.doctors?.length || 0), 0)}
@@ -2088,7 +2088,7 @@ export const FounderDashboard: React.FC = () => {
                 (c.doctors || []).map((doc: any) => (
                   <div
                     key={doc.id}
-                    className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:shadow-md transition-all flex flex-col justify-between"
+                    className="p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 hover:shadow-md transition-all flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
@@ -2100,7 +2100,7 @@ export const FounderDashboard: React.FC = () => {
                           OPD Active
                         </span>
                       </div>
-                      <h4 className="text-sm font-black text-slate-900">{doc.displayName}</h4>
+                      <h4 className="text-sm font-black text-slate-900 dark:text-white">{doc.displayName}</h4>
                       <p className="text-xs text-slate-500 font-medium mt-0.5">{doc.specialty}</p>
                       <div className="mt-2 text-xs text-slate-700 font-semibold flex items-center gap-1.5">
                         <Stethoscope className="w-3.5 h-3.5 text-sky-600" />
@@ -2238,7 +2238,7 @@ export const FounderDashboard: React.FC = () => {
           {/* Comparison Cards: Traditional OPD vs Queueless */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* The Old Way */}
-            <div className="bg-rose-50/50 rounded-3xl p-6 border border-rose-200/80 space-y-3">
+            <div className="bg-rose-50/50 dark:bg-rose-950/20 rounded-3xl p-6 border border-rose-200/80 dark:border-rose-900/60 space-y-3">
               <div className="flex items-center gap-2">
                 <span className="w-6 h-6 rounded-full bg-rose-200 text-rose-800 flex items-center justify-center text-xs font-black">✕</span>
                 <h3 className="text-sm font-black text-rose-950 uppercase tracking-wider">
@@ -2266,7 +2266,7 @@ export const FounderDashboard: React.FC = () => {
             </div>
 
             {/* The Queueless Way */}
-            <div className="bg-emerald-50/50 rounded-3xl p-6 border border-emerald-200/80 space-y-3">
+            <div className="bg-emerald-50/50 dark:bg-emerald-950/20 rounded-3xl p-6 border border-emerald-200/80 dark:border-emerald-900/60 space-y-3">
               <div className="flex items-center gap-2">
                 <span className="w-6 h-6 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center text-xs font-black">✓</span>
                 <h3 className="text-sm font-black text-emerald-950 uppercase tracking-wider">
@@ -2296,7 +2296,7 @@ export const FounderDashboard: React.FC = () => {
 
           {/* Metric Traction Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm text-center">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm text-center">
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
                 Lobby Wait Reduction
               </span>
@@ -2304,7 +2304,7 @@ export const FounderDashboard: React.FC = () => {
               <span className="text-xs text-slate-500 font-medium">From ~48m down to ~11m</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm text-center">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm text-center">
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
                 Self Check-in Adoption
               </span>
@@ -2312,7 +2312,7 @@ export const FounderDashboard: React.FC = () => {
               <span className="text-xs text-slate-500 font-medium">Patients preferring mobile QR pass</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm text-center">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm text-center">
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
                 Follow-Up Retention
               </span>
@@ -2328,10 +2328,10 @@ export const FounderDashboard: React.FC = () => {
       {/* ============================================================== */}
       {activeTab === 'SECURITY' && (
         <div className="space-y-5">
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-6">
             <div>
-              <h3 className="text-base font-black text-slate-900">Platform Credentials & Access Roles</h3>
-              <p className="text-xs text-slate-500">Queueless access hierarchy for administrative staff and platform owners.</p>
+              <h3 className="text-base font-black text-slate-900 dark:text-white">Platform Credentials & Access Roles</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Queueless access hierarchy for administrative staff and platform owners.</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -2594,7 +2594,7 @@ export const FounderDashboard: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-base font-black text-slate-900">Onboard New Hospital / Clinic</h3>
-                <p className="text-xs text-slate-500">Deploy Queueless Zero-Wait OS to a new healthcare facility</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Deploy Queueless Zero-Wait OS to a new healthcare facility</p>
               </div>
             </div>
 

@@ -904,7 +904,7 @@ export const PatientStatus: React.FC = () => {
     return (
       <div className="max-w-md mx-auto p-6 text-center mt-12 bg-white rounded-3xl shadow-sm border border-slate-200">
         <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
-        <h2 className="text-base font-bold text-slate-800">Token Expired or Invalid</h2>
+        <h2 className="text-base font-bold text-slate-800 dark:text-slate-200">Token Expired or Invalid</h2>
         <p className="text-xs text-slate-500 mt-1 mb-6">
           Please scan the clinic QR code again to get a fresh token.
         </p>
@@ -1148,7 +1148,7 @@ export const PatientStatus: React.FC = () => {
                   <Lock className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-slate-900">Create Vault Password</h3>
+                  <h3 className="text-base font-black text-slate-900 dark:text-white">Create Vault Password</h3>
                   <p className="text-xs text-slate-500">Protect your medical records & digital prescriptions</p>
                 </div>
               </div>
@@ -1166,7 +1166,7 @@ export const PatientStatus: React.FC = () => {
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
                     <div className="flex justify-between">
                       <span className="text-slate-500">Patient:</span>
-                      <strong className="text-slate-900">{data.patientName}</strong>
+                      <strong className="text-slate-900 dark:text-white">{data.patientName}</strong>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-500">ID / Mobile:</span>
@@ -1362,7 +1362,7 @@ export const PatientStatus: React.FC = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 p-3 bg-slate-50/70 rounded-xl border border-slate-100 text-xs">
                   <div>
                     <span className="text-[10px] font-bold text-slate-400 block">Patient Name</span>
-                    <strong className="text-slate-900">{data.patientName}</strong>
+                    <strong className="text-slate-900 dark:text-white">{data.patientName}</strong>
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-slate-400 block">Mobile Number</span>
@@ -1397,7 +1397,7 @@ export const PatientStatus: React.FC = () => {
                 <div className="grid grid-cols-2 gap-2.5 p-3 bg-slate-50/70 rounded-xl border border-slate-100 text-xs">
                   <div>
                     <span className="text-[10px] font-bold text-slate-400 block">Consulting Doctor</span>
-                    <strong className="text-slate-900">{data.doctorName}</strong>
+                    <strong className="text-slate-900 dark:text-white">{data.doctorName}</strong>
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-slate-400 block">OPD Room / Cabin</span>
@@ -1489,7 +1489,7 @@ export const PatientStatus: React.FC = () => {
       </div>
 
       {/* Top Clinic Header & Audio Announcement Control */}
-      <div className="mb-4 flex items-center justify-between bg-white/90 backdrop-blur-md px-4 py-3 rounded-2xl border border-slate-250 shadow-xs">
+      <div className="mb-4 flex items-center justify-between bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
         <div className="flex items-center gap-2.5">
           {data.clinicLogo ? (
             <img src={data.clinicLogo} alt={data.clinicName} className="w-8 h-8 rounded-xl object-contain border border-slate-100 p-0.5 bg-white shadow-2xs" />
@@ -1499,7 +1499,7 @@ export const PatientStatus: React.FC = () => {
             </div>
           )}
           <div>
-            <div className="text-xs font-black text-slate-900 tracking-tight leading-none">{data.clinicName}</div>
+            <div className="text-xs font-black text-slate-900 dark:text-white tracking-tight leading-none">{data.clinicName}</div>
             <div className="text-[10px] text-slate-400 font-medium mt-0.5 flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               <span>Live OPD Queue</span>
@@ -1603,9 +1603,9 @@ export const PatientStatus: React.FC = () => {
       {/* the receptionist at Counter 1 to approve cash payment!         */}
       {/* ============================================================== */}
       {!isApproved ? (
-        <div className="bg-white rounded-3xl shadow-card border border-amber-200/90 overflow-hidden relative">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-card border border-amber-200/90 dark:border-amber-900/50 overflow-hidden relative">
           {/* Top Amber Status Header */}
-          <div className="p-6 text-center bg-gradient-to-b from-amber-50/90 via-orange-50/30 to-white relative">
+          <div className="p-6 text-center bg-gradient-to-b from-amber-50/90 via-orange-50/30 to-white dark:from-amber-950/40 dark:via-slate-900 dark:to-slate-900 relative">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-amber-100/90 border border-amber-300 rounded-full text-[10px] font-black uppercase tracking-wider text-amber-900 shadow-2xs mb-2">
               <span className="flex h-2 w-2 relative">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
@@ -1619,7 +1619,7 @@ export const PatientStatus: React.FC = () => {
             </div>
 
             {/* BIG PROMINENT TOKEN NUMBER */}
-            <div className="text-6xl sm:text-7xl font-black font-mono tracking-tight text-amber-950 my-1">
+            <div className="text-6xl sm:text-7xl font-black font-mono tracking-tight text-amber-950 dark:text-amber-200 my-1">
               {data.token}
             </div>
 
@@ -1628,11 +1628,11 @@ export const PatientStatus: React.FC = () => {
               <span className="font-black">#QL-{data.id.substring(0, 6).toUpperCase()}</span>
             </div>
 
-            <p className="text-base font-black text-slate-900">
+            <p className="text-base font-black text-slate-900 dark:text-white dark:text-white">
               {data.patientName}
             </p>
 
-            <div className="mt-3 inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-2xl border border-amber-200 shadow-xs">
+            <div className="mt-3 inline-flex items-center gap-2 px-4 py-1.5 bg-white dark:bg-slate-800 rounded-2xl border border-amber-200 dark:border-amber-800 shadow-xs">
               <span className="text-xs font-bold text-slate-500">Cash Due at Desk:</span>
               <span className="text-lg font-black text-amber-900">₹{data.feeAmount || 500}</span>
             </div>
@@ -1647,7 +1647,7 @@ export const PatientStatus: React.FC = () => {
 
           {/* Action Steps for Patient */}
           <div className="p-6 pt-5 space-y-4">
-            <div className="bg-amber-50/70 rounded-2xl p-4 border border-amber-200 space-y-3">
+            <div className="bg-amber-50/70 dark:bg-amber-950/30 rounded-2xl p-4 border border-amber-200 dark:border-amber-800/80 space-y-3">
               <div className="text-xs font-black uppercase tracking-wider text-amber-950 flex items-center gap-1.5">
                 <Ticket className="w-4 h-4 text-amber-700" />
                 <span>How to Approve & Activate Your Token:</span>
@@ -1659,7 +1659,7 @@ export const PatientStatus: React.FC = () => {
                     1
                   </div>
                   <div>
-                    <strong className="text-slate-900">Go to Reception Counter 1:</strong>
+                    <strong className="text-slate-900 dark:text-white">Go to Reception Counter 1:</strong>
                     <p className="text-slate-600 text-[11px]">Walk up to the hospital desk cashier counter.</p>
                   </div>
                 </div>
@@ -1669,7 +1669,7 @@ export const PatientStatus: React.FC = () => {
                     2
                   </div>
                   <div>
-                    <strong className="text-slate-900">Give Token <span className="font-mono font-black text-amber-900">{data.token}</span>:</strong>
+                    <strong className="text-slate-900 dark:text-white">Give Token <span className="font-mono font-black text-amber-900">{data.token}</span>:</strong>
                     <p className="text-slate-600 text-[11px]">
                       Tell your token number <strong>{data.token}</strong> or mobile (<strong>{data.patientMobile}</strong>) to the receptionist.
                     </p>
@@ -1681,7 +1681,7 @@ export const PatientStatus: React.FC = () => {
                     3
                   </div>
                   <div>
-                    <strong className="text-slate-900">Pay ₹{data.feeAmount || 500} & Get Approved:</strong>
+                    <strong className="text-slate-900 dark:text-white">Pay ₹{data.feeAmount || 500} & Get Approved:</strong>
                     <p className="text-slate-600 text-[11px]">
                       Receptionist enters <strong>{data.token}</strong> and clicks Approve. This screen will auto-unlock your live queue position!
                     </p>
@@ -1731,10 +1731,10 @@ export const PatientStatus: React.FC = () => {
             </div>
 
             {/* Assigned Doctor Preview */}
-            <div className="p-3 bg-slate-50 rounded-2xl text-xs flex items-center justify-between border border-slate-100">
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/90 rounded-2xl text-xs flex items-center justify-between border border-slate-100 dark:border-slate-700">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase block">Selected Doctor</span>
-                <span className="font-bold text-slate-800">{data.doctorName}</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200">{data.doctorName}</span>
               </div>
               <span className="text-[11px] font-bold text-sky-700 bg-sky-50 border border-sky-100 px-2.5 py-1 rounded-xl">
                 {data.roomNumber}
@@ -1753,12 +1753,12 @@ export const PatientStatus: React.FC = () => {
         /* CASE B: PAYMENT APPROVED (PAID OR FREE 15-DAY FOLLOW-UP)       */
         /* Full Apple-Wallet Style Live Pass with Real-Time Position      */
         /* ============================================================== */
-        <div className="bg-white rounded-3xl shadow-card border border-slate-200/90 overflow-hidden relative">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-card border border-slate-200/90 dark:border-slate-800 overflow-hidden relative">
           {/* Top Brand Accent Line */}
           <div className="h-1.5 bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-500"></div>
 
           {/* Ticket Top Gradient Banner */}
-          <div className="p-6 text-center bg-gradient-to-b from-sky-50/70 via-slate-50/40 to-white relative">
+          <div className="p-6 text-center bg-gradient-to-b from-sky-50/70 via-slate-50/40 to-white dark:from-sky-950/30 dark:via-slate-900 dark:to-slate-900 relative">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-slate-200/80 rounded-full text-[10px] font-black uppercase tracking-wider text-sky-700 shadow-2xs mb-2">
               <span className="flex h-2 w-2 relative">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -1768,11 +1768,11 @@ export const PatientStatus: React.FC = () => {
             </div>
 
             {/* Massive Razor-Sharp Token Number in JetBrains Mono */}
-            <div className="text-6xl sm:text-7xl font-black font-mono tracking-tight text-slate-950 my-1 drop-shadow-2xs">
+            <div className="text-6xl sm:text-7xl font-black font-mono tracking-tight text-slate-950 dark:text-white my-1 drop-shadow-2xs">
               {data.token}
             </div>
 
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-slate-100 border border-slate-200 rounded-full text-xs font-mono font-bold text-slate-700 mb-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-xs font-mono font-bold text-slate-700 dark:text-slate-300 mb-2">
               <span className="text-slate-400">Hospital Ref:</span>
               <span className="font-black text-slate-900">#QL-{data.id.substring(0, 6).toUpperCase()}</span>
               <button
@@ -1789,7 +1789,7 @@ export const PatientStatus: React.FC = () => {
               </button>
             </div>
 
-            <p className="text-base font-black text-slate-900">
+            <p className="text-base font-black text-slate-900 dark:text-white dark:text-white">
               {data.patientName}
             </p>
 
@@ -1818,7 +1818,7 @@ export const PatientStatus: React.FC = () => {
           </div>
 
           {/* 4-Step Live Queue Journey Stepper */}
-          <div className="px-6 py-4 bg-slate-50/70 border-b border-slate-100">
+          <div className="px-6 py-4 bg-slate-50/70 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center justify-between relative max-w-xs mx-auto">
               {/* Connector lines */}
               <div className="absolute top-3 left-4 right-4 h-0.5 bg-slate-200 -translate-y-1/2 z-0"></div>
@@ -1892,7 +1892,7 @@ export const PatientStatus: React.FC = () => {
           <div className="p-6 space-y-4">
             {/* DIGITAL PRESCRIPTION ISSUED SECTION */}
             {(isCompleted || data.prescription) && (
-              <div className="bg-gradient-to-b from-emerald-50/70 via-teal-50/30 to-sky-50/30 rounded-3xl p-5 border border-emerald-200 shadow-sm space-y-4 animate-in fade-in duration-300">
+              <div className="bg-gradient-to-b from-emerald-50/70 via-teal-50/30 to-sky-50/30 dark:from-slate-800 dark:via-slate-800/60 dark:to-slate-800 rounded-3xl p-5 border border-emerald-200 dark:border-slate-700 shadow-sm space-y-4 animate-in fade-in duration-300">
                 {/* Header */}
                 <div className="flex items-center justify-between pb-3 border-b border-emerald-200/80">
                   <div className="flex items-center gap-2.5">
@@ -1903,7 +1903,7 @@ export const PatientStatus: React.FC = () => {
                       <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 block">
                         Official Digital E-Prescription
                       </span>
-                      <h3 className="text-sm font-black text-slate-900 leading-tight">
+                      <h3 className="text-sm font-black text-slate-900 dark:text-white leading-tight">
                         Issued by Dr. {data.doctorName}
                       </h3>
                     </div>
@@ -1945,15 +1945,15 @@ export const PatientStatus: React.FC = () => {
                     </div>
                     <div className="space-y-2">
                       {data.prescription.medicines.map((m, idx) => (
-                        <div key={idx} className="p-3 bg-white rounded-2xl border border-emerald-100 shadow-2xs">
+                        <div key={idx} className="p-3 bg-white dark:bg-slate-900 rounded-2xl border border-emerald-100 dark:border-slate-700 shadow-2xs">
                           <div className="flex items-center justify-between">
-                            <span className="font-black text-xs text-slate-900">{m.medicineName}</span>
+                            <span className="font-black text-xs text-slate-900 dark:text-white">{m.medicineName}</span>
                             <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200">
                               {m.duration}
                             </span>
                           </div>
                           <div className="text-[11px] text-slate-600 font-medium flex items-center gap-2 mt-1">
-                            <span className="font-mono font-bold text-slate-800">{m.dosage}</span>
+                            <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{m.dosage}</span>
                             <span>•</span>
                             <span className="font-bold text-blue-700 bg-blue-50 px-1.5 py-0.2 rounded">{m.frequency}</span>
                             {m.instructions && (
@@ -2052,7 +2052,7 @@ export const PatientStatus: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Lock className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span className="text-[11px] leading-snug">
-                      Permanently linked to your Patient ID (<strong className="text-slate-900">+91 {data.patientMobile}</strong>).
+                      Permanently linked to your Patient ID (<strong className="text-slate-900 dark:text-white">+91 {data.patientMobile}</strong>).
                     </span>
                   </div>
                   <Link
@@ -2067,15 +2067,15 @@ export const PatientStatus: React.FC = () => {
             )}
             {!isCompleted && !isConsulting && (
               <div className="grid grid-cols-2 gap-3 text-center">
-                <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-100">
+                <div className="p-4 bg-slate-50/80 dark:bg-slate-800/80 rounded-2xl border border-slate-100 dark:border-slate-700">
                   <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block">Patients Ahead</span>
-                  <span className="text-3xl font-black text-slate-900 mt-1 block font-mono">
+                  <span className="text-3xl font-black text-slate-900 dark:text-white mt-1 block font-mono">
                     {data.patientsAhead !== null ? data.patientsAhead : 0}
                   </span>
                 </div>
-                <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-100">
+                <div className="p-4 bg-slate-50/80 dark:bg-slate-800/80 rounded-2xl border border-slate-100 dark:border-slate-700">
                   <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block">Approx. Wait</span>
-                  <span className="text-sm font-black text-slate-800 mt-2 block">
+                  <span className="text-sm font-black text-slate-800 dark:text-slate-200 mt-2 block">
                     {data.patientsAhead === 0 ? '✨ You are Next!' : data.estimatedWaitMinutes}
                   </span>
                 </div>
@@ -2099,14 +2099,14 @@ export const PatientStatus: React.FC = () => {
 
             {/* 🚗 USA & Global Feature: Virtual Waiting Room ("Wait in Your Car / Cafe") */}
             {!isCompleted && !isConsulting && (
-              <div className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-xs space-y-3">
+              <div className="p-4 bg-white dark:bg-slate-800/90 rounded-2xl border border-slate-200/90 dark:border-slate-700 shadow-xs space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
                       <Car className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                      <h4 className="text-xs font-black text-slate-900 dark:text-white flex items-center gap-1.5">
                         <span>Virtual Waiting Room</span>
                         <span className="text-[10px] bg-blue-100 text-blue-800 font-extrabold px-1.5 py-0.2 rounded-full">
                           US Urgent Care Aligned
@@ -2120,7 +2120,7 @@ export const PatientStatus: React.FC = () => {
                 </div>
 
                 {/* Location Selection Pills */}
-                <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-xl text-xs font-bold">
+                <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 dark:bg-slate-900 rounded-xl text-xs font-bold">
                   <button
                     type="button"
                     onClick={() => handleUpdateVirtualWait('LOBBY')}
@@ -2203,13 +2203,13 @@ export const PatientStatus: React.FC = () => {
             )}
 
             {/* Payment Status Card */}
-            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+            <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                     Consultation Fee
                   </span>
-                  <span className="text-base font-black text-slate-900">
+                  <span className="text-base font-black text-slate-900 dark:text-white">
                     {`₹${data.feeAmount || 250}`}
                   </span>
                 </div>
@@ -2223,10 +2223,10 @@ export const PatientStatus: React.FC = () => {
             </div>
 
             {/* Doctor & Room Card */}
-            <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-100 space-y-2.5 text-xs">
+            <div className="p-4 bg-slate-50/80 dark:bg-slate-800/80 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-2.5 text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400 font-semibold">Assigned Doctor</span>
-                <span className="font-bold text-slate-900">{data.doctorName}</span>
+                <span className="font-bold text-slate-900 dark:text-white">{data.doctorName}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400 font-semibold">Cabin / Room</span>
@@ -2236,7 +2236,7 @@ export const PatientStatus: React.FC = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400 font-semibold">Currently Serving</span>
-                <span className="font-extrabold text-slate-900 font-mono">Token {data.currentlyServing}</span>
+                <span className="font-extrabold text-slate-900 dark:text-white font-mono">Token {data.currentlyServing}</span>
               </div>
             </div>
 
@@ -2251,7 +2251,7 @@ export const PatientStatus: React.FC = () => {
                   />
                 </div>
               )}
-              <p className="font-bold text-slate-800 text-sm">{data.clinicName}</p>
+              <p className="font-bold text-slate-800 dark:text-slate-200 text-sm">{data.clinicName}</p>
               <p className="flex items-center justify-center gap-1 text-[11px]">
                 <MapPin className="w-3 h-3 shrink-0 text-slate-400" />
                 <span>{data.clinicAddress}</span>

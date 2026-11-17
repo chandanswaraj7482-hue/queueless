@@ -628,7 +628,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
       {/* ============================================================== */}
       {/* 1. MASTER HOSPITAL CLINICAL HEADER                             */}
       {/* ============================================================== */}
-      <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-xs mb-4 relative overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs mb-4 relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-500"></div>
 
         <div className="flex items-center justify-between gap-3 pt-1">
@@ -646,7 +646,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             )}
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <h1 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                <h1 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
                   {clinic?.name || 'City Health Clinic'}
                 </h1>
                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200">
@@ -654,7 +654,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                   OPD Live
                 </span>
               </div>
-              <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5 font-medium">
+              <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5 font-medium">
                 <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <span className="truncate max-w-[180px] sm:max-w-[240px]">
                   {clinic?.address || 'Suite 402, Metro Towers, Bengaluru'}
@@ -673,7 +673,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
 
         {/* Top Mode Segmented Switcher */}
         {step === 'FORM' && (
-          <div className="mt-4 pt-3 border-t border-slate-100 flex p-1 bg-slate-100 rounded-2xl border border-slate-200/70">
+          <div className="mt-4 pt-3 border-t border-slate-100 flex p-1 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200/70 dark:border-slate-700">
             <button
               type="button"
               onClick={() => {
@@ -682,8 +682,8 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               }}
               className={`flex-1 py-2 px-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
                 activeTab === 'NEW_TOKEN'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-950 text-slate-900 dark:text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Ticket className="w-3.5 h-3.5 text-sky-600" />
@@ -697,8 +697,8 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               }}
               className={`flex-1 py-2 px-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
                 activeTab === 'TRACK_TOKEN'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-950 text-slate-900 dark:text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Search className="w-3.5 h-3.5 text-indigo-600" />
@@ -750,10 +750,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
           )}
 
           {/* CARD 1: CONSULTATION & DOCTOR */}
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-xs space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-4">
             {/* Consultation Service Tiles */}
             <div>
-              <label className="block text-xs font-black text-slate-800 uppercase tracking-wider mb-2 flex items-center justify-between">
+              <label className="block text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-2 flex items-center justify-between">
                 <span>1. Select Consultation Service</span>
                 <span className="text-xs font-black text-emerald-600 font-mono">
                   ₹{consultationFee}
@@ -788,7 +788,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             {/* Doctor Selection */}
             {clinic?.doctors && clinic.doctors.length > 0 && (
               <div className="pt-2 border-t border-slate-100">
-                <label className="block text-xs font-black text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <label className="block text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                   <Stethoscope className="w-3.5 h-3.5 text-sky-600" />
                   <span>Choose Doctor & Cabin</span>
                 </label>
@@ -817,7 +817,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                             <Stethoscope className="w-5 h-5" />
                           </div>
                           <div>
-                            <div className="font-black text-slate-900 text-xs sm:text-sm">
+                            <div className="font-black text-slate-900 dark:text-white text-xs sm:text-sm">
                               {doc.displayName}
                             </div>
                             <div className="text-[11px] text-slate-500 font-medium flex items-center gap-1.5 mt-0.5">
@@ -861,9 +861,9 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
           </div>
 
           {/* CARD 2: PATIENT ESSENTIAL DETAILS */}
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-xs space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-              <span className="text-xs font-black text-slate-800 uppercase tracking-wider">
+              <span className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
                 2. Patient Registration Details
               </span>
               <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100">
@@ -873,7 +873,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
 
             {/* Mobile Number with 15-day check */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 flex items-center justify-between">
                 <span>Mobile Number (10 Digits) *</span>
                 {checkingFollowUp && (
                   <span className="text-[10px] text-sky-600 font-bold flex items-center gap-1">
@@ -893,14 +893,14 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                   placeholder="9876543210"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
-                  className="w-full pl-16 pr-3.5 py-2.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white text-xs font-bold text-slate-900 tracking-wider focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none transition-all"
+                  className="w-full pl-16 pr-3.5 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white tracking-wider focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none transition-all"
                 />
               </div>
             </div>
 
             {/* Patient Name */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                 Patient Full Name *
               </label>
               <input
@@ -909,14 +909,14 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                 placeholder="e.g. Ramesh Kumar"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white text-xs font-bold text-slate-900 focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none transition-all"
+                className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none transition-all"
               />
             </div>
 
             {/* Age & Gender */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Age</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Age</label>
                 <input
                   type="number"
                   min="1"
@@ -924,12 +924,12 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                   placeholder="e.g. 32"
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white text-xs font-bold text-slate-900 focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none transition-all"
+                  className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Gender</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Gender</label>
                 <div className="grid grid-cols-3 gap-1">
                   {(['Male', 'Female', 'Other'] as const).map((g) => (
                     <button
@@ -1169,11 +1169,11 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
       {/* TAB 2: TRACK EXISTING TOKEN                                    */}
       {/* ============================================================== */}
       {step === 'FORM' && activeTab === 'TRACK_TOKEN' && (
-        <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div className="flex items-center gap-2 shrink-0 ml-2">
               <Search className="w-4 h-4 text-sky-600" />
-              <h3 className="text-sm font-black text-slate-900 tracking-tight">
+              <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-tight">
                 Track Live Token Position
               </h3>
             </div>
@@ -1186,7 +1186,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             </Link>
           </div>
 
-          <p className="text-xs text-slate-500 leading-relaxed font-medium">
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
             Enter your <strong>Assigned Token ID</strong> and <strong>Patient Name</strong> to verify identity and view live queue position, wait time & cabin call alert.
           </p>
 
@@ -1232,7 +1232,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                       setTrackPatientName(e.target.value);
                       setTrackError(null);
                     }}
-                    className="w-full pl-10 pr-3 py-2.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white text-xs font-bold text-slate-900 focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none"
+                    className="w-full pl-10 pr-3 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -1265,7 +1265,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
       {/* 2. PAYMENT CHECKOUT SCREEN (WHEN FEE > 0)                      */}
       {/* ============================================================== */}
       {step === 'PAYMENT' && createdEntry && (
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-5">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-5">
           <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
             <button
               onClick={() => setStep('FORM')}
@@ -1273,7 +1273,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
-            <h2 className="text-base font-black text-slate-900 tracking-tight">Consultation Fee & Checkout</h2>
+            <h2 className="text-base font-black text-slate-900 dark:text-white tracking-tight">Consultation Fee & Checkout</h2>
           </div>
 
           {/* Registration & Fee Header */}
@@ -1287,7 +1287,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                   Ref: REF-{createdEntry.queueEntryId.substring(0, 6).toUpperCase()}
                 </span>
               </div>
-              <span className="text-3xl font-black font-mono text-slate-900 mt-0.5 flex items-center gap-2">
+              <span className="text-3xl font-black font-mono text-slate-900 dark:text-white mt-0.5 flex items-center gap-2">
                 <span>{createdEntry.token}</span>
                 <span className="text-[10px] font-bold text-amber-900 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full font-sans">
                   Awaiting Approval
@@ -1296,7 +1296,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             </div>
             <div className="text-right">
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Payable</span>
-              <span className="text-3xl font-black text-slate-900 mt-0.5 block">₹{createdEntry.feeAmount}</span>
+              <span className="text-3xl font-black text-slate-900 dark:text-white mt-0.5 block">₹{createdEntry.feeAmount}</span>
             </div>
           </div>
 
@@ -1309,7 +1309,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
 
           {/* Payment Method Selector */}
           <div className="space-y-3">
-            <label className="block text-xs font-black text-slate-800 uppercase tracking-wider">
+            <label className="block text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
               Choose Payment Method:
             </label>
 
@@ -1326,7 +1326,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                 <Smartphone className="w-5 h-5" />
               </div>
               <div className="flex-1">
-                <div className="text-xs font-extrabold text-slate-900 flex items-center gap-1.5">
+                <div className="text-xs font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
                   <span>Cashfree Real UPI & Cards</span>
                   <span className="text-[9px] bg-emerald-600 text-white font-black px-1.5 py-0.2 rounded-full uppercase tracking-wider">LIVE</span>
                 </div>

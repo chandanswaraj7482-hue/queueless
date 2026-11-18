@@ -123,8 +123,8 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
       <header
         className={`px-3 sm:px-6 py-2.5 sm:py-3.5 transition-all duration-300 border-b ${
           isScrolled
-            ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-2xl backdrop-saturate-150 border-slate-200/70 dark:border-slate-800/70 shadow-[0_4px_25px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_25px_rgba(0,0,0,0.35)]'
-            : 'bg-white/65 dark:bg-slate-950/65 backdrop-blur-xl backdrop-saturate-150 border-slate-200/40 dark:border-slate-800/40'
+            ? 'bg-[#060D1D]/90 backdrop-blur-2xl backdrop-saturate-150 border-slate-800/80 shadow-[0_4px_25px_rgba(0,0,0,0.5)]'
+            : 'bg-[#060D1D]/75 backdrop-blur-xl backdrop-saturate-150 border-slate-800/60'
         }`}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
@@ -143,23 +143,23 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               <img
                 src="/logo.png"
                 alt="Queueless"
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover shadow-sm border border-sky-400/30 dark:border-sky-500/30 group-hover:scale-105 transition-transform"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover shadow-sm border border-sky-400/30 group-hover:scale-105 transition-transform"
               />
-              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-950 animate-pulse"></span>
+              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-950 animate-pulse"></span>
             </div>
             <div>
               <div className="flex items-center gap-1 sm:gap-1.5">
-                <span className="font-black text-lg sm:text-xl text-slate-900 dark:text-white tracking-tight">Queueless</span>
+                <span className="font-black text-lg sm:text-xl text-white tracking-tight">Queueless</span>
                 <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-wider bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 text-white px-1.5 sm:px-2 py-0.5 rounded-full shadow-2xs">
                   HEALTHCARE OS
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold tracking-tight hidden sm:block">Zero-Wait Clinical Queue Operating System</p>
+              <p className="text-[10px] text-slate-400 font-semibold tracking-tight hidden sm:block">Zero-Wait Clinical Queue Operating System</p>
             </div>
           </Link>
 
           {/* Clean Central Nav Links with Exact Dribbble SkyBound Dot Separators & Active Yellow Pill */}
-          <nav className="hidden md:flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300">
+          <nav className="hidden md:flex items-center gap-1.5 text-xs font-semibold text-slate-300">
             {navLinks.map((item, idx) => {
               const isActive =
                 location.pathname === item.href ||
@@ -171,14 +171,14 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                     to={item.href}
                     className={`px-3.5 py-1.5 rounded-full text-xs transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold shadow-xs'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 font-medium'
+                        ? 'bg-white text-slate-950 font-bold shadow-xs'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-800/80 font-medium'
                     }`}
                   >
                     {item.label}
                   </Link>
                   {!isLast && (
-                    <span className="text-slate-300 dark:text-slate-700 select-none font-bold">·</span>
+                    <span className="text-slate-700 select-none font-bold">·</span>
                   )}
                 </React.Fragment>
               );
@@ -187,32 +187,17 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
 
           {/* Right Action Bar */}
           <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Theme Toggle Button (Desktop & Tablet) */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="hidden sm:inline-flex p-2 text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100/80 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700/80 backdrop-blur-md rounded-full transition-all cursor-pointer shadow-2xs shrink-0"
-              aria-label="Toggle Theme"
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400" />
-              ) : (
-                <Moon className="w-4 h-4 text-slate-700 dark:text-slate-200" />
-              )}
-            </button>
-
             {/* Currency Selector Pill (Desktop only) */}
-            <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/70 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 transition-all shadow-2xs">
-              <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0" />
+            <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-200 transition-all shadow-2xs">
+              <Globe className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
               <select
                 aria-label="Currency"
                 value={currentCurrencyCode}
                 onChange={(e) => handleCurrencySelect(e.target.value)}
-                className="bg-transparent text-slate-800 dark:text-slate-100 font-bold cursor-pointer focus:outline-none pr-0.5 text-xs"
+                className="bg-transparent text-slate-100 font-bold cursor-pointer focus:outline-none pr-0.5 text-xs"
               >
                 {Object.values(WORLDWIDE_CURRENCIES).map((curr) => (
-                  <option key={curr.code} value={curr.code} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-medium">
+                  <option key={curr.code} value={curr.code} className="bg-slate-900 text-slate-100 font-medium">
                     {curr.flag} {curr.code}
                   </option>
                 ))}
@@ -225,14 +210,14 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               <button
                 type="button"
                 onClick={onOpenAuditModal}
-                className="hidden md:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-950 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                className="hidden md:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <span>Start Free Pilot</span>
               </button>
             ) : (
               <Link
                 to="/signup"
-                className="hidden md:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-950 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                className="hidden md:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <span>Start Free Pilot</span>
               </Link>
@@ -241,17 +226,17 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             {/* Patient Portal Quick Link (Desktop only: md:inline-flex; on phone it slides into drawer) */}
             <Link
               to="/portal"
-              className="hidden md:inline-flex px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              className="hidden md:inline-flex px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               title="Universal Patient Health Vault — View Prescriptions & Visits"
             >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
               <span>Patient Vault</span>
             </Link>
 
             {/* Log In Button (Desktop only: md:inline-flex; on phone it slides into drawer) */}
             <Link
               to="/login"
-              className="hidden md:inline-flex px-3.5 py-1.5 sm:px-4 sm:py-2 bg-white/70 hover:bg-white/95 text-slate-900 border border-slate-300/70 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              className="hidden md:inline-flex px-3.5 py-1.5 sm:px-4 sm:py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               title="Hospital Director, Doctor & Receptionist Login"
             >
               <span>Log In</span>
@@ -261,7 +246,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl cursor-pointer transition-all border border-slate-200/80 dark:border-slate-800 shadow-2xs shrink-0"
+              className="md:hidden p-2 text-slate-200 hover:text-white bg-slate-900/80 hover:bg-slate-800 rounded-2xl cursor-pointer transition-all border border-slate-800 shadow-2xs shrink-0"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6 stroke-[2.5]" /> : <Menu className="w-6 h-6 stroke-[2.5]" />}
@@ -271,10 +256,10 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
 
         {/* Mobile Navigation Dropdown Full-Screen Native Overlay */}
         {mobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 z-[100] w-full h-screen h-[100dvh] bg-white dark:bg-slate-950 flex flex-col justify-between overflow-y-auto overscroll-contain animate-in fade-in duration-200 text-slate-900 dark:text-slate-100 p-4 sm:p-6">
+          <div className="md:hidden fixed inset-0 z-[100] w-full h-screen h-[100dvh] bg-[#060D1D] flex flex-col justify-between overflow-y-auto overscroll-contain animate-in fade-in duration-200 text-slate-100 p-4 sm:p-6 border-l border-slate-800/80">
             <div className="space-y-4">
-              {/* Drawer Top Header: Logo on left, Theme toggle & Close button on right */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              {/* Drawer Top Header: Logo on left, Close button on right */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                 <Link
                   to="/"
                   onClick={() => setMobileMenuOpen(false)}
@@ -287,33 +272,23 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   />
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <span className="font-black text-base text-slate-900 dark:text-white tracking-tight">
+                      <span className="font-black text-base text-white tracking-tight">
                         Queueless
                       </span>
-                      <span className="text-[8px] font-black uppercase tracking-wider bg-blue-500/10 dark:bg-blue-400/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded-full">
+                      <span className="text-[8px] font-black uppercase tracking-wider bg-blue-400/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded-full">
                         OS
                       </span>
                     </div>
-                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Zero-Wait OPD System</p>
+                    <p className="text-[10px] text-slate-400 font-medium">Zero-Wait OPD System</p>
                   </div>
                 </Link>
 
                 <div className="flex items-center gap-2">
-                  {/* Theme Toggle Button */}
-                  <button
-                    type="button"
-                    onClick={toggleTheme}
-                    className="p-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 transition-all cursor-pointer"
-                    aria-label="Toggle Dark Mode"
-                  >
-                    {theme === 'dark' ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
-                  </button>
-
                   {/* Close 'X' Button */}
                   <button
                     type="button"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 transition-all cursor-pointer shadow-2xs"
+                    className="p-2 text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 rounded-xl border border-slate-800 transition-all cursor-pointer shadow-2xs"
                     aria-label="Close Navigation Menu"
                   >
                     <X className="w-6 h-6 stroke-[2.5]" />
@@ -325,7 +300,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               <Link
                 to="/portal"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 active:scale-[0.99] text-white font-black text-xs rounded-2xl shadow-md flex items-center justify-between transition-all"
+                className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 active:scale-[0.99] text-white font-black text-xs rounded-2xl shadow-md flex items-center justify-between transition-all"
               >
                 <span className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-emerald-200 shrink-0" />
@@ -343,8 +318,8 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold transition-colors ${
                       location.pathname === item.href
-                        ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-extrabold'
-                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+                        ? 'bg-blue-950/60 text-blue-300 font-extrabold'
+                        : 'text-slate-200 hover:bg-slate-900/80 hover:text-white'
                     }`}
                   >
                     <span>{item.label}</span>
@@ -354,7 +329,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               </div>
 
               {/* 3. Action CTAs */}
-              <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <div className="space-y-2 pt-2 border-t border-slate-800">
                 {onOpenAuditModal ? (
                   <button
                     type="button"
@@ -362,16 +337,16 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                       setMobileMenuOpen(false);
                       onOpenAuditModal();
                     }}
-                    className="w-full py-3.5 px-4 bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-black text-sm rounded-xl shadow-md text-center flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] transition-all"
+                    className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-black text-sm rounded-xl shadow-lg shadow-blue-600/30 text-center flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] transition-all"
                   >
-                    <Sparkles className="w-4 h-4 text-cyan-400 dark:text-cyan-600 shrink-0" />
+                    <Sparkles className="w-4 h-4 text-cyan-200 shrink-0" />
                     <span>Start 14-Day Free Pilot ➔</span>
                   </button>
                 ) : (
                   <Link
                     to="/signup"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="w-full text-center py-3.5 px-4 bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-black text-sm rounded-xl shadow-md block active:scale-[0.99] transition-all"
+                    className="w-full text-center py-3.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-black text-sm rounded-xl shadow-lg shadow-blue-600/30 block active:scale-[0.99] transition-all"
                   >
                     Start 14-Day Free Pilot ➔
                   </Link>
@@ -380,7 +355,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl block active:scale-[0.99] transition-all"
+                  className="w-full text-center py-3 px-4 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 font-bold text-xs rounded-xl block active:scale-[0.99] transition-all"
                 >
                   Hospital Staff Sign In (Director / Doctor / Desk) ➔
                 </Link>
@@ -388,10 +363,10 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             </div>
 
             {/* Bottom Utility Drawer: Currency & Compliance info */}
-            <div className="pt-4 pb-2 border-t border-slate-100 dark:border-slate-800 space-y-3">
-              <div className="flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800">
+            <div className="pt-4 pb-2 border-t border-slate-800 space-y-3">
+              <div className="flex items-center justify-between text-xs font-semibold text-slate-300 bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
                 <span className="flex items-center gap-1.5">
-                  <Globe className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                  <Globe className="w-4 h-4 text-cyan-400" />
                   <span>Currency:</span>
                 </span>
                 <select
@@ -400,22 +375,22 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   onChange={(e) => {
                     handleCurrencySelect(e.target.value);
                   }}
-                  className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-bold px-2 py-1 rounded-lg focus:outline-none text-xs"
+                  className="bg-slate-800 border border-slate-700 text-slate-100 font-bold px-2 py-1 rounded-lg focus:outline-none text-xs"
                 >
                   {Object.values(WORLDWIDE_CURRENCIES).map((curr) => (
-                    <option key={curr.code} value={curr.code}>
+                    <option key={curr.code} value={curr.code} className="bg-slate-900 text-slate-100">
                       {curr.flag} {curr.code} ({curr.symbol})
                     </option>
                   ))}
                 </select>
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 px-1">
+              <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
                 <span className="flex items-center gap-1 font-medium">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
                   ABDM & HIPAA Certified
                 </span>
-                <span>v2.4 Production</span>
+                <span>450+ Hospitals</span>
               </div>
             </div>
           </div>

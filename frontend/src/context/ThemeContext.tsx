@@ -10,49 +10,33 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const applyThemeToDOM = (next: Theme) => {
+const applyThemeToDOM = (_next?: Theme) => {
   if (typeof document === 'undefined') return;
   const root = document.documentElement;
-  if (next === 'dark') {
-    root.classList.add('dark');
-    root.classList.remove('light');
-    root.setAttribute('data-theme', 'dark');
-    root.style.colorScheme = 'dark';
-  } else {
-    root.classList.remove('dark');
-    root.classList.add('light');
-    root.setAttribute('data-theme', 'light');
-    root.style.colorScheme = 'light';
-  }
+  // Always enforce dark luxury midnight medical theme
+  root.classList.add('dark');
+  root.classList.remove('light');
+  root.setAttribute('data-theme', 'dark');
+  root.style.colorScheme = 'dark';
   try {
-    localStorage.setItem('queueless_theme_v4', next);
+    localStorage.setItem('queueless_theme', 'dark');
+    localStorage.setItem('queueless_theme_v4', 'dark');
   } catch {}
 };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('queueless_theme_v4') as Theme | null;
-      if (saved === 'dark' || saved === 'light') return saved;
-    }
-    return 'dark'; // Always default to dark luxury midnight theme like Claude
-  });
+  const [theme] = useState<Theme>('dark');
 
   useEffect(() => {
-    applyThemeToDOM(theme);
-  }, [theme]);
+    applyThemeToDOM('dark');
+  }, []);
 
   const toggleTheme = () => {
-    setThemeState((prev) => {
-      const next = prev === 'dark' ? 'light' : 'dark';
-      applyThemeToDOM(next);
-      return next;
-    });
+    applyThemeToDOM('dark');
   };
 
-  const setTheme = (next: Theme) => {
-    applyThemeToDOM(next);
-    setThemeState(next);
+  const setTheme = (_next: Theme) => {
+    applyThemeToDOM('dark');
   };
 
   return (
@@ -66,9 +50,9 @@ export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (!context) {
     return {
-      theme: 'light',
-      toggleTheme: () => {},
-      setTheme: () => {},
+      theme: 'dark',
+      toggleTheme: () => applyThemeToDOM('dark'),
+      setTheme: () => applyThemeToDOM('dark'),
     };
   }
   return context;

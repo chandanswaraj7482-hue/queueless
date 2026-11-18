@@ -802,7 +802,7 @@ export const QueuelessWebsite: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans relative overflow-x-hidden transition-colors duration-200">
+    <div className="min-h-screen bg-[#060D1D] text-slate-100 font-sans relative overflow-x-hidden selection:bg-blue-600 selection:text-white transition-colors duration-200">
       <SeoHead
         title="Zero-Wait Clinical Queue Operating System for Hospitals"
         description="Dismantling hospital waiting room congestion. Zero hardware capex, instant vector QR passes, smart TV kiosks, ABDM M1/M2 certification, and 1-tap doctor calling."
@@ -882,26 +882,18 @@ export const QueuelessWebsite: React.FC = () => {
             className="pt-1 flex items-center justify-center gap-2.5 sm:gap-3"
           >
             <div className="flex -space-x-2 overflow-hidden">
-              <img
-                className="inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover shadow-sm"
-                src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=100&auto=format&fit=crop&q=80"
-                alt="Doctor 1"
-              />
-              <img
-                className="inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover shadow-sm"
-                src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&auto=format&fit=crop&q=80"
-                alt="Doctor 2"
-              />
-              <img
-                className="inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover shadow-sm"
-                src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&auto=format&fit=crop&q=80"
-                alt="Doctor 3"
-              />
-              <img
-                className="inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover shadow-sm"
-                src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=100&auto=format&fit=crop&q=80"
-                alt="Doctor 4"
-              />
+              <div className="inline-flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 bg-emerald-600 text-white font-black text-[10px] shadow-sm">
+                RS
+              </div>
+              <div className="inline-flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 bg-blue-600 text-white font-black text-[10px] shadow-sm">
+                PK
+              </div>
+              <div className="inline-flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 bg-purple-600 text-white font-black text-[10px] shadow-sm">
+                AB
+              </div>
+              <div className="inline-flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 bg-amber-600 text-white font-black text-[10px] shadow-sm">
+                ND
+              </div>
             </div>
             <div className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-600 dark:text-slate-300 font-semibold">
               <div className="flex text-amber-400">
@@ -986,20 +978,20 @@ export const QueuelessWebsite: React.FC = () => {
           transition={{ duration: 0.7, delay: 0.48, ease: 'easeOut' }}
           className="mt-8 sm:mt-12 max-w-5xl mx-auto"
         >
-          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl p-4 sm:p-9 rounded-[28px] sm:rounded-[36px] border border-slate-200/90 dark:border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.06)] relative ring-1 ring-slate-900/[0.04]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100 dark:border-slate-800">
+          <div className="bg-[#0B1528] backdrop-blur-2xl p-4 sm:p-9 rounded-2xl sm:rounded-[36px] border border-blue-500/20 shadow-2xl relative">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
               <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse shrink-0"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></div>
                 <div className="text-left">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                    <h3 className="text-xs sm:text-sm font-black text-white uppercase tracking-wider">
                       Interactive Live OPD Synchronizer
                     </h3>
-                    <span className="text-[10px] bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 font-bold px-2 py-0.5 rounded-full border border-blue-200/60 dark:border-blue-800/80 font-mono">
+                    <span className="text-[10px] bg-blue-950/80 text-cyan-300 font-bold px-2 py-0.5 rounded-full border border-blue-800/80 font-mono">
                       0.2s Latency
                     </span>
                   </div>
-                  <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
                     See how doctor cabin calls update patient phones & lobby TV simultaneously in real-time.
                   </p>
                 </div>
@@ -1038,8 +1030,8 @@ export const QueuelessWebsite: React.FC = () => {
                 }}
                 className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
                   heroStep === 1
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-md ring-2 ring-blue-500/25 font-black'
-                    : 'bg-white/80 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                    ? 'bg-blue-600 text-white border-blue-500 shadow-md ring-2 ring-blue-500/25 font-black'
+                    : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
                 }`}
               >
                 <QrCode className="w-3.5 h-3.5 shrink-0" />
@@ -1057,14 +1049,14 @@ export const QueuelessWebsite: React.FC = () => {
                 }}
                 className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
                   heroStep === 2
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-md ring-2 ring-blue-500/25 font-black'
-                    : 'bg-white/80 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                    ? 'bg-emerald-600 text-white border-emerald-500 shadow-md ring-2 ring-emerald-500/25 font-black'
+                    : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
                 }`}
               >
                 <Smartphone className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline">2. 20-Sec Live Token Pass</span>
                 <span className="sm:hidden">2. Live Token</span>
-                <span className={`text-[10px] font-mono hidden sm:inline ${heroStep === 2 ? 'text-blue-200' : 'text-slate-400'}`}>➔</span>
+                <span className={`text-[10px] font-mono hidden sm:inline ${heroStep === 2 ? 'text-emerald-200' : 'text-slate-400'}`}>➔</span>
               </button>
 
               <button
@@ -1084,14 +1076,14 @@ export const QueuelessWebsite: React.FC = () => {
                 }}
                 className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
                   heroStep === 3
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-md ring-2 ring-emerald-500/25 font-black'
-                    : 'bg-white/80 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                    ? 'bg-blue-600 text-white border-blue-500 shadow-md ring-2 ring-blue-500/25 font-black'
+                    : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
                 }`}
               >
                 <Tv className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline">3. 55" TV Chime & Voice</span>
                 <span className="sm:hidden">3. TV Chime</span>
-                <span className={`text-[10px] font-mono hidden sm:inline ${heroStep === 3 ? 'text-emerald-200' : 'text-slate-400'}`}>➔</span>
+                <span className={`text-[10px] font-mono hidden sm:inline ${heroStep === 3 ? 'text-blue-200' : 'text-slate-400'}`}>➔</span>
               </button>
 
               <button
@@ -1103,8 +1095,8 @@ export const QueuelessWebsite: React.FC = () => {
                 }}
                 className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
                   heroStep === 4
-                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-md ring-2 ring-indigo-500/25 font-black'
-                    : 'bg-white/80 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                    ? 'bg-indigo-600 text-white border-indigo-500 shadow-md ring-2 ring-indigo-500/25 font-black'
+                    : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
                 }`}
               >
                 <RefreshCw className="w-3.5 h-3.5 shrink-0" />
@@ -1126,8 +1118,8 @@ export const QueuelessWebsite: React.FC = () => {
                   onClick={() => setAutoSlideHero(!autoSlideHero)}
                   className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all border ${
                     autoSlideHero
-                      ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-700'
+                      ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800'
+                      : 'bg-slate-900 text-slate-400 border-slate-800'
                   }`}
                   title="Toggle Auto Slide"
                 >
@@ -1146,8 +1138,8 @@ export const QueuelessWebsite: React.FC = () => {
                       }}
                       className={`transition-all rounded-full ${
                         heroStep === stepNum
-                          ? 'w-5 h-1.5 bg-blue-600 dark:bg-blue-400 shadow-xs'
-                          : 'w-1.5 h-1.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                          ? 'w-5 h-1.5 bg-blue-500 shadow-xs'
+                          : 'w-1.5 h-1.5 bg-slate-700 hover:bg-slate-500'
                       }`}
                       aria-label={`Go to Step ${stepNum}`}
                     />
@@ -1157,14 +1149,14 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
 
             {/* Mobile View Switcher (Phone vs 55" TV): Cuts 500px of scrolling on phones */}
-            <div className="flex lg:hidden items-center justify-center p-1 bg-slate-100 dark:bg-slate-800/90 rounded-xl max-w-xs mx-auto my-3 border border-slate-200 dark:border-slate-700/80">
+            <div className="flex lg:hidden items-center justify-center p-1 bg-slate-900 rounded-xl max-w-xs mx-auto my-3 border border-slate-800">
               <button
                 type="button"
                 onClick={() => setMobileDemoTab('phone')}
                 className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   mobileDemoTab === 'phone'
-                    ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
-                    : 'text-slate-600 dark:text-slate-400'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
                 }`}
               >
                 <Smartphone className="w-3.5 h-3.5" />
@@ -1175,8 +1167,8 @@ export const QueuelessWebsite: React.FC = () => {
                 onClick={() => setMobileDemoTab('tv')}
                 className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   mobileDemoTab === 'tv'
-                    ? 'bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-xs'
-                    : 'text-slate-600 dark:text-slate-400'
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
                 }`}
               >
                 <Tv className="w-3.5 h-3.5" />
@@ -1530,8 +1522,8 @@ export const QueuelessWebsite: React.FC = () => {
 
           {/* Infinite Smooth Scrolling Hospital Logos Marquee */}
           <div className="relative overflow-hidden w-full py-2">
-            <div className="absolute left-0 inset-y-0 w-16 sm:w-28 bg-gradient-to-r from-[#FAFBFC] dark:from-slate-950 to-transparent z-20 pointer-events-none"></div>
-            <div className="absolute right-0 inset-y-0 w-16 sm:w-28 bg-gradient-to-l from-[#FAFBFC] dark:from-slate-950 to-transparent z-20 pointer-events-none"></div>
+            <div className="absolute left-0 inset-y-0 w-16 sm:w-28 bg-gradient-to-r from-[#060D1D] to-transparent z-20 pointer-events-none"></div>
+            <div className="absolute right-0 inset-y-0 w-16 sm:w-28 bg-gradient-to-l from-[#060D1D] to-transparent z-20 pointer-events-none"></div>
 
             <div className="animate-marquee flex items-center gap-4 sm:gap-6 py-2">
               {[...PARTNER_HOSPITALS, ...PARTNER_HOSPITALS].map((hosp, idx) => (
@@ -1557,6 +1549,19 @@ export const QueuelessWebsite: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Accreditation Badges (Matches Claude Reference Screenshot 3) */}
+          <div className="flex items-center justify-center gap-2.5 flex-wrap pt-2">
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+              NABH Gold
+            </span>
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30">
+              JCI Accredited
+            </span>
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              ABDM M2 Live
+            </span>
           </div>
 
           {/* ============================================================== */}

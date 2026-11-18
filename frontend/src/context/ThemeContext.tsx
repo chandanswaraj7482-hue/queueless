@@ -25,21 +25,17 @@ const applyThemeToDOM = (next: Theme) => {
     root.style.colorScheme = 'light';
   }
   try {
-    localStorage.setItem('queueless_theme', next);
-    localStorage.setItem('queueless_theme_v2', next);
+    localStorage.setItem('queueless_theme_v4', next);
   } catch {}
 };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('queueless_theme') as Theme | null;
+      const saved = localStorage.getItem('queueless_theme_v4') as Theme | null;
       if (saved === 'dark' || saved === 'light') return saved;
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-      }
     }
-    return 'light';
+    return 'dark'; // Always default to dark luxury midnight theme like Claude
   });
 
   useEffect(() => {

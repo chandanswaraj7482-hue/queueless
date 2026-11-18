@@ -191,7 +191,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             <button
               type="button"
               onClick={toggleTheme}
-              className="p-2 text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100/80 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700/80 backdrop-blur-md rounded-full transition-all cursor-pointer shadow-2xs"
+              className="hidden sm:inline-flex p-2 text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100/80 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700/80 backdrop-blur-md rounded-full transition-all cursor-pointer shadow-2xs shrink-0"
               aria-label="Toggle Theme"
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
@@ -257,17 +257,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               <span>Log In</span>
             </Link>
 
-            {/* Patient Vault Mobile Quick Action (Direct 1-tap for mobile patients) */}
-            <Link
-              to="/portal"
-              className="md:hidden inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-500/10 dark:bg-emerald-500/20 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 rounded-full text-[11px] font-bold transition-all shadow-2xs shrink-0"
-              title="Universal Patient Health Vault"
-            >
-              <Sparkles className="w-3 h-3 text-emerald-500 shrink-0" />
-              <span>Vault</span>
-            </Link>
-
-            {/* Mobile Hamburger Toggle */}
+            {/* Mobile Hamburger Toggle (Clean and prominent on mobile right side) */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

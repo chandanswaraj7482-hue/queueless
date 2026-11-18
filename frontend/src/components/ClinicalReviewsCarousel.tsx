@@ -376,22 +376,23 @@ export const ClinicalReviewsCarousel: React.FC = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Header & Clinical Trust Badges */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="text-center md:text-left space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 dark:bg-amber-950/70 border border-amber-200/80 dark:border-amber-800 rounded-full text-xs font-black uppercase tracking-wider text-amber-900 dark:text-amber-300 shadow-2xs">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6 text-center md:text-left">
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider text-amber-300 shadow-2xs">
             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-            <span>Verified Clinical Endorsements • 4.9/5 Rating Across 450+ OPDs</span>
+            <span className="sm:hidden">4.9/5 Across 450+ OPDs</span>
+            <span className="hidden sm:inline">Verified Clinical Endorsements • 4.9/5 Rating Across 450+ OPDs</span>
           </div>
-          <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-            What Hospital Superintendents & Patients Say
+          <h3 className="text-xl sm:text-3xl font-black text-white tracking-tight">
+            What Superintendents & Patients Say
           </h3>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl">
+          <p className="text-xs sm:text-sm text-slate-400 max-w-xl hidden sm:block">
             Real outcomes from Indian multi-specialty hospitals, pediatric clinics, and high-volume daycares operating zero-wait OPDs.
           </p>
         </div>
 
         {/* Live Aggregate Metrics Banner */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="hidden sm:flex items-center gap-2 sm:gap-3 shrink-0">
           <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
             <div className="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-black text-xs">
               -78%
@@ -405,18 +406,18 @@ export const ClinicalReviewsCarousel: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 active:scale-95 text-white font-extrabold text-xs shadow-lg shadow-blue-500/25 transition-all inline-flex items-center gap-2 cursor-pointer hover:scale-105"
+            className="px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-extrabold text-xs shadow-lg shadow-blue-500/25 transition-all inline-flex items-center gap-2 cursor-pointer hover:scale-105"
           >
             <PenSquare className="w-4 h-4 text-cyan-200" />
-            <span>✍️ Write a Review</span>
+            <span>Write a review</span>
           </button>
         </div>
       </div>
 
       {/* Interactive Controls Bar: Filter Tabs & Navigation Arrows */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-        {/* Category Filter Pills */}
-        <div className="flex items-center gap-1.5 p-1 rounded-full bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-xs font-bold">
+        {/* Category Filter Pills (Hidden on mobile for clean non-scrolling UI) */}
+        <div className="hidden sm:flex items-center gap-1.5 p-1 rounded-full bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-xs font-bold">
           <button
             type="button"
             onClick={() => handleCategoryChange('ALL')}
@@ -630,23 +631,25 @@ export const ClinicalReviewsCarousel: React.FC = () => {
           ))}
         </div>
 
-        {/* Subtle Gesture & Autoplay Indicator */}
+        {/* Subtle Gesture & Autoplay Indicator (Matches Claude Reference Screenshot 8) */}
         <div className="flex items-center gap-2 text-[10.5px] font-medium text-slate-400 dark:text-slate-500 pt-0.5">
-          <span className="inline-flex items-center gap-1">
-            <span>👈</span>
-            <span>Swipe or drag to browse</span>
-            <span>👉</span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Auto-sliding • swipe to browse</span>
           </span>
-          {isAutoplay && (
-            <>
-              <span>•</span>
-              <span className="inline-flex items-center gap-1 text-blue-600 dark:text-cyan-400 font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Auto-sliding</span>
-              </span>
-            </>
-          )}
         </div>
+      </div>
+
+      {/* Mobile-Only Action Button */}
+      <div className="sm:hidden pt-1">
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 active:scale-98 text-white font-black text-xs rounded-xl shadow-lg shadow-blue-600/25 transition-all text-center flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <PenSquare className="w-3.5 h-3.5" />
+          <span>Write a review</span>
+        </button>
       </div>
 
       {/* Interactive Modal: Submit Clinical Review */}

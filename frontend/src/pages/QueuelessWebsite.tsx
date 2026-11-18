@@ -1660,22 +1660,73 @@ export const QueuelessWebsite: React.FC = () => {
         {/* ============================================================== */}
         {/* SET UP IN 3 SIMPLE STEPS                                       */}
         {/* ============================================================== */}
-        <div className="mt-20 max-w-5xl mx-auto space-y-9 text-center">
+        <div className="mt-14 sm:mt-20 max-w-5xl mx-auto space-y-6 sm:space-y-9 text-center">
           <div className="space-y-2 max-w-xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 rounded-full text-xs font-bold uppercase tracking-wider">
-              <Zap className="w-3.5 h-3.5 text-indigo-500" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full text-xs font-bold uppercase tracking-wider">
+              <Zap className="w-3.5 h-3.5 text-indigo-400" />
               <span>Instant Cloud Provisioning</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
-              Set Up in 3 Simple Steps
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              Live in 3 Simple Steps
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-normal">
-              Get your entire hospital or clinic up and running in minutes — zero IT overhead.
+            <p className="text-xs sm:text-sm text-slate-300 font-normal">
+              Your whole hospital or clinic running in minutes, with zero IT overhead.
             </p>
           </div>
 
-          {/* 3 Step Cards Connected by Soft Arrows */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-6 relative items-stretch">
+          {/* Mobile Compact 3-Step Stack (Matches Claude Reference Screenshots 5 & 6) */}
+          <div className="md:hidden space-y-3 text-left">
+            {/* Step 1 */}
+            <div className="p-4 rounded-2xl bg-[#0B1528] border border-teal-500/30 flex items-start gap-3.5">
+              <div className="w-8 h-8 rounded-full bg-teal-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                1
+              </div>
+              <div className="space-y-1 min-w-0">
+                <h3 className="text-sm font-black text-white">Create your hospital</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Add departments and doctors with room numbers.
+                </p>
+                <span className="inline-block text-[10px] text-teal-400 font-bold pt-0.5">
+                  Takes about 60 seconds
+                </span>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="p-4 rounded-2xl bg-[#0B1528] border border-blue-500/30 flex items-start gap-3.5">
+              <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                2
+              </div>
+              <div className="space-y-1 min-w-0">
+                <h3 className="text-sm font-black text-white">Configure your OPD flow</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Admission rules, token prefix, 15-day follow-up policy, fees.
+                </p>
+                <span className="inline-block text-[10px] text-blue-400 font-bold pt-0.5">
+                  Custom token policies
+                </span>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="p-4 rounded-2xl bg-[#0B1528] border border-purple-500/30 flex items-start gap-3.5">
+              <div className="w-8 h-8 rounded-full bg-purple-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                3
+              </div>
+              <div className="space-y-1 min-w-0">
+                <h3 className="text-sm font-black text-white">Go live instantly</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Print entrance QR standees, open the lobby TV kiosk, start calling patients.
+                </p>
+                <span className="inline-block text-[10px] text-purple-400 font-bold pt-0.5">
+                  No hardware shipping
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop 3 Step Cards Connected by Soft Arrows */}
+          <div className="hidden md:grid md:grid-cols-3 gap-6 sm:gap-6 relative items-stretch">
             
             {/* Step 1: Create Your Hospital */}
             <motion.div
@@ -2385,12 +2436,12 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
           </div>
 
-          {/* Interactive Dynamic Tab Showcase */}
+          {/* Interactive Dynamic Tab Showcase (Hidden on Mobile to match Claude Compact Reference) */}
           <div
             onTouchStart={onPillarTouchStart}
             onTouchMove={onPillarTouchMove}
             onTouchEnd={onPillarTouchEnd}
-            className="bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-[36px] border border-slate-200/90 dark:border-slate-800 shadow-xl relative overflow-hidden transition-colors duration-200 touch-pan-y select-none"
+            className="hidden sm:block bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-[36px] border border-slate-200/90 dark:border-slate-800 shadow-xl relative overflow-hidden transition-colors duration-200 touch-pan-y select-none"
           >
             {/* PILLAR 1: MOBILE QR PASS */}
             {productTab === 'MOBILE_QR' && (
@@ -2880,8 +2931,10 @@ export const QueuelessWebsite: React.FC = () => {
       <section id="case-studies" className="py-10 sm:py-20 px-3 sm:px-6 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 relative z-10 transition-colors duration-200">
         <div className="max-w-6xl mx-auto space-y-8 sm:space-y-16">
           
-          {/* Dynamic Living Animated OPD Clinical Workflow Reels */}
-          <AnimatedClinicalReels />
+          {/* Dynamic Living Animated OPD Clinical Workflow Reels (Hidden on Mobile for fast non-scrolling UX) */}
+          <div className="hidden sm:block">
+            <AnimatedClinicalReels />
+          </div>
 
           {/* Interactive Clinical Reviews Carousel with Category Filters & Working Animations */}
           <ClinicalReviewsCarousel />

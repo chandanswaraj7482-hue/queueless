@@ -39,6 +39,21 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock background body scrolling when mobile navigation drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    };
+  }, [mobileMenuOpen]);
+
   const selectedCurrency: CurrencyConfig =
     WORLDWIDE_CURRENCIES[currentCurrencyCode] || WORLDWIDE_CURRENCIES.USD;
 
@@ -264,98 +279,129 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
           </div>
         </div>
 
-        {/* Mobile Navigation Dropdown Slider Drawer */}
+        {/* Mobile Navigation Dropdown Full-Screen Native Overlay */}
         {mobileMenuOpen && (
-          <div className="md:hidden pt-4 pb-4 border-t border-slate-200/80 dark:border-slate-800 mt-3 space-y-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl p-4 border border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150 text-slate-800 dark:text-slate-100">
-            {/* 1. Prominent Patient Vault Mobile Button */}
-            <Link
-              to="/portal"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-2xl shadow-md flex items-center justify-between transition-all"
-            >
-              <span className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-200" />
-                <span>✨ Universal Patient Health Vault (Rx & Records)</span>
-              </span>
-              <ArrowRight className="w-4 h-4 text-emerald-200" />
-            </Link>
-
-            {/* 2. Navigation Links */}
-            <div className="space-y-1 py-1">
-              {navLinks.map((item) => (
+          <div className="md:hidden fixed inset-0 z-[100] w-full h-screen h-[100dvh] bg-white dark:bg-slate-950 flex flex-col justify-between overflow-y-auto overscroll-contain animate-in fade-in duration-200 text-slate-900 dark:text-slate-100 p-4 sm:p-6">
+            <div className="space-y-4">
+              {/* Drawer Top Header: Logo on left, Theme toggle & Close button on right */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                 <Link
-                  key={item.href}
-                  to={item.href}
+                  to="/"
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
-                    location.pathname === item.href
-                      ? 'bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-extrabold'
-                      : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
-                  }`}
+                  className="flex items-center gap-2 group cursor-pointer"
                 >
-                  {item.label}
+                  <img
+                    src="/logo.png"
+                    alt="Queueless"
+                    className="w-9 h-9 rounded-xl object-cover shadow-xs border border-blue-500/20"
+                  />
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-black text-base text-slate-900 dark:text-white tracking-tight">
+                        Queueless
+                      </span>
+                      <span className="text-[8px] font-black uppercase tracking-wider bg-blue-500/10 dark:bg-blue-400/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded-full">
+                        OS
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Zero-Wait OPD System</p>
+                  </div>
                 </Link>
-              ))}
-            </div>
 
-            {/* 3. Action Buttons */}
-            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-              {onOpenAuditModal ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenAuditModal();
-                  }}
-                  className="w-full py-3 px-4 bg-slate-950 dark:bg-white dark:text-slate-950 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-sm text-center flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400 dark:text-cyan-600" />
-                  <span>Start 14-Day Free Pilot ➔</span>
-                </button>
-              ) : (
-                <Link
-                  to="/signup"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-3 px-4 bg-slate-950 dark:bg-white dark:text-slate-950 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-sm block"
-                >
-                  Start 14-Day Free Pilot ➔
-                </Link>
-              )}
+                <div className="flex items-center gap-2">
+                  {/* Theme Toggle Button */}
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="p-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 transition-all cursor-pointer"
+                    aria-label="Toggle Dark Mode"
+                  >
+                    {theme === 'dark' ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
+                  </button>
 
+                  {/* Close 'X' Button */}
+                  <button
+                    type="button"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 transition-all cursor-pointer shadow-2xs"
+                    aria-label="Close Navigation Menu"
+                  >
+                    <X className="w-6 h-6 stroke-[2.5]" />
+                  </button>
+                </div>
+              </div>
+
+              {/* 1. Universal Patient Vault Card */}
               <Link
-                to="/login"
+                to="/portal"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-2.5 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl block"
+                className="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 active:scale-[0.99] text-white font-black text-xs rounded-2xl shadow-md flex items-center justify-between transition-all"
               >
-                Hospital Staff Sign In (Director / Doctor / Desk) ➔
+                <span className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-emerald-200 shrink-0" />
+                  <span>Universal Patient Health Vault (Rx & Records)</span>
+                </span>
+                <ArrowRight className="w-4 h-4 text-emerald-200 shrink-0" />
               </Link>
+
+              {/* 2. Navigation Links */}
+              <div className="space-y-1">
+                {navLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold transition-colors ${
+                      location.pathname === item.href
+                        ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-extrabold'
+                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    <ArrowRight className="w-3.5 h-3.5 opacity-40" />
+                  </Link>
+                ))}
+              </div>
+
+              {/* 3. Action CTAs */}
+              <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                {onOpenAuditModal ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenAuditModal();
+                    }}
+                    className="w-full py-3.5 px-4 bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-black text-sm rounded-xl shadow-md text-center flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] transition-all"
+                  >
+                    <Sparkles className="w-4 h-4 text-cyan-400 dark:text-cyan-600 shrink-0" />
+                    <span>Start 14-Day Free Pilot ➔</span>
+                  </button>
+                ) : (
+                  <Link
+                    to="/signup"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full text-center py-3.5 px-4 bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-black text-sm rounded-xl shadow-md block active:scale-[0.99] transition-all"
+                  >
+                    Start 14-Day Free Pilot ➔
+                  </Link>
+                )}
+
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl block active:scale-[0.99] transition-all"
+                >
+                  Hospital Staff Sign In (Director / Doctor / Desk) ➔
+                </Link>
+              </div>
             </div>
 
-            {/* 4. Mobile Theme & Currency Picker in Drawer */}
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  toggleTheme();
-                }}
-                className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-2xl flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200"
-              >
+            {/* Bottom Utility Drawer: Currency & Compliance info */}
+            <div className="pt-4 pb-2 border-t border-slate-100 dark:border-slate-800 space-y-3">
+              <div className="flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800">
                 <span className="flex items-center gap-1.5">
-                  {theme === 'dark' ? (
-                    <Sun className="w-4 h-4 text-amber-400" />
-                  ) : (
-                    <Moon className="w-4 h-4 text-slate-700" />
-                  )}
-                  <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
-                </span>
-                <span className="text-[10px] uppercase font-black px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
-                  {theme}
-                </span>
-              </button>
-
-              <div className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-2xl flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200">
-                <span className="flex items-center gap-1">
-                  <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
+                  <Globe className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
                   <span>Currency:</span>
                 </span>
                 <select
@@ -363,16 +409,23 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   value={currentCurrencyCode}
                   onChange={(e) => {
                     handleCurrencySelect(e.target.value);
-                    setMobileMenuOpen(false);
                   }}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-bold px-1.5 py-1 rounded-lg focus:outline-none text-[11px]"
+                  className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-bold px-2 py-1 rounded-lg focus:outline-none text-xs"
                 >
                   {Object.values(WORLDWIDE_CURRENCIES).map((curr) => (
                     <option key={curr.code} value={curr.code}>
-                      {curr.flag} {curr.code}
+                      {curr.flag} {curr.code} ({curr.symbol})
                     </option>
                   ))}
                 </select>
+              </div>
+
+              <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 px-1">
+                <span className="flex items-center gap-1 font-medium">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                  ABDM & HIPAA Certified
+                </span>
+                <span>v2.4 Production</span>
               </div>
             </div>
           </div>

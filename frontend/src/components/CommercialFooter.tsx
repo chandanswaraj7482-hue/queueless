@@ -40,11 +40,11 @@ export const CommercialFooter: React.FC = () => {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[320px] bg-gradient-to-b from-sky-600/10 via-indigo-600/5 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 space-y-12">
-        {/* Main 5-Column Balanced Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10">
+        {/* Main Footer Grid: 2 Columns on Mobile & Tablet, 6 Columns on Desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-6 gap-x-6 sm:gap-x-8 gap-y-10 lg:gap-10">
           
-          {/* Col 1: Brand & Identity */}
-          <div className="sm:col-span-2 lg:col-span-2 space-y-4">
+          {/* Brand & Identity (Full width across 2 columns on mobile/tablet, 2 cols on desktop) */}
+          <div className="col-span-2 lg:col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-3 group w-fit">
               <div className="relative">
                 <img
@@ -124,51 +124,51 @@ export const CommercialFooter: React.FC = () => {
             </div>
           </div>
 
-          {/* Col 2: Platform Capabilities */}
-          <div className="space-y-3">
+          {/* Col 1 (Mobile Grid): Platform Capabilities */}
+          <div className="col-span-1 space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+              <Sparkles className="w-3.5 h-3.5 text-sky-400 shrink-0" />
               <span>Platform Suite</span>
             </h4>
             <ul className="space-y-2.5 text-xs">
               <li>
                 <Link to="/features" className="hover:text-white transition-colors">
-                  Autonomous Queue Engine
+                  Autonomous Queue
                 </Link>
               </li>
               <li>
                 <Link to="/features" className="hover:text-white transition-colors">
-                  Zero-Scroll TV Wall Display
+                  Zero-Scroll TV Wall
                 </Link>
               </li>
               <li>
                 <Link to="/features" className="hover:text-white transition-colors">
-                  15 Regional Voice Chimes
+                  15 Voice Chimes
                 </Link>
               </li>
               <li>
                 <Link to="/features" className="hover:text-white transition-colors">
-                  WhatsApp Prescription Suite
+                  WhatsApp Rx Suite
                 </Link>
               </li>
               <li>
                 <Link to="/roi-calculator" className="hover:text-white transition-colors">
-                  OPD Revenue Leakage Audit
+                  Revenue Leakage Audit
                 </Link>
               </li>
               <li>
                 <Link to="/pricing" className="text-sky-400 font-bold hover:text-sky-300 flex items-center gap-1">
                   <span>Transparent Pricing</span>
-                  <ArrowRight className="w-3 h-3" />
+                  <ArrowRight className="w-3 h-3 shrink-0" />
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Healthcare Solutions */}
-          <div className="space-y-3">
+          {/* Col 2 (Mobile Grid): Healthcare Solutions */}
+          <div className="col-span-1 space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-indigo-400" />
+              <Building2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
               <span>Solutions</span>
             </h4>
             <ul className="space-y-2.5 text-xs">
@@ -179,43 +179,83 @@ export const CommercialFooter: React.FC = () => {
               </li>
               <li>
                 <Link to="/features" className="hover:text-white transition-colors">
-                  Polyclinics & Daycare OPDs
+                  Polyclinics & Daycare
                 </Link>
               </li>
               <li>
                 <Link to="/features" className="hover:text-white transition-colors">
-                  Diagnostics & Imaging Centers
+                  Diagnostics & Imaging
                 </Link>
               </li>
               <li>
                 <Link to="/features" className="hover:text-white transition-colors">
-                  Enterprise Hospital Chains
+                  Hospital Chains
                 </Link>
               </li>
+              <li>
+                <Link to="/signup" className="hover:text-white transition-colors">
+                  Hospital Onboarding
+                </Link>
+              </li>
+              <li>
+                <Link to="/roi-calculator" className="hover:text-white transition-colors">
+                  ROI Calculator
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 3 (Mobile Grid): Live Operations Portals */}
+          <div className="col-span-1 space-y-3">
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span>Live Portals</span>
+            </h4>
+            <ul className="space-y-2.5 text-xs">
               <li>
                 <Link to="/portal" className="hover:text-white transition-colors">
                   Patient Token Tracker
                 </Link>
               </li>
               <li>
+                <Link to="/doctor" className="hover:text-white transition-colors">
+                  Doctor OPD Station
+                </Link>
+              </li>
+              <li>
+                <Link to="/reception" className="hover:text-white transition-colors">
+                  Reception POS & Desk
+                </Link>
+              </li>
+              <li>
+                <Link to="/display" className="hover:text-white transition-colors">
+                  55" TV Lobby Kiosk
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin" className="hover:text-white transition-colors">
+                  Hospital Admin Desk
+                </Link>
+              </li>
+              <li>
                 <Link to="/login" className="hover:text-white transition-colors flex items-center gap-1">
-                  <Lock className="w-3 h-3 text-slate-500" />
+                  <Lock className="w-3 h-3 text-slate-500 shrink-0" />
                   <span>Hospital Staff Login</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Trust & Compliance */}
-          <div className="space-y-3">
+          {/* Col 4 (Mobile Grid): Trust & Compliance */}
+          <div className="col-span-1 space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <ShieldCheck className="w-3.5 h-3.5 text-teal-400 shrink-0" />
               <span>Trust & Legal</span>
             </h4>
             <ul className="space-y-2.5 text-xs">
               <li>
                 <Link to="/privacy" className="hover:text-white transition-colors">
-                  Privacy Policy (HIPAA / GDPR)
+                  Privacy Policy
                 </Link>
               </li>
               <li>
@@ -230,19 +270,19 @@ export const CommercialFooter: React.FC = () => {
               </li>
               <li>
                 <Link to="/about#something-labs" className="hover:text-white transition-colors flex items-center gap-1.5 text-sky-400 font-bold">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Built by Something Labs</span>
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <span>Something Labs</span>
                 </Link>
               </li>
               <li>
                 <Link to="/refund-policy" className="hover:text-white transition-colors">
-                  Refund & Cancellation Policy
+                  Refund & Cancellation
                 </Link>
               </li>
-              <li className="pt-2">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold">
+              <li className="pt-1">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold">
                   <CheckCircle2 className="w-3 h-3 shrink-0" />
-                  <span>ABDM M1/M2 Certified</span>
+                  <span>ABDM Certified</span>
                 </span>
               </li>
             </ul>

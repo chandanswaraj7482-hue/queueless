@@ -542,8 +542,86 @@ export const QueuelessWebsite: React.FC = () => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
   const [faqCategory, setFaqCategory] = useState<FaqCategory>('ALL');
 
-  // Hero Multi-Step Active State
+  // Hero Multi-Step Active State with Auto-Slide & Touch Swipe Gestures
   const [heroStep, setHeroStep] = useState<number>(3);
+  const [autoSlideHero, setAutoSlideHero] = useState<boolean>(true);
+  const [heroTouchStart, setHeroTouchStart] = useState<number | null>(null);
+  const [heroTouchEnd, setHeroTouchEnd] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!autoSlideHero) return;
+    const interval = setInterval(() => {
+      setHeroStep((prev) => (prev % 4) + 1);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [autoSlideHero]);
+
+  const onHeroTouchStart = (e: React.TouchEvent) => {
+    setHeroTouchEnd(null);
+    setHeroTouchStart(e.targetTouches[0].clientX);
+  };
+  const onHeroTouchMove = (e: React.TouchEvent) => {
+    setHeroTouchEnd(e.targetTouches[0].clientX);
+  };
+  const onHeroTouchEnd = () => {
+    if (!heroTouchStart || !heroTouchEnd) return;
+    const distance = heroTouchStart - heroTouchEnd;
+    if (distance > 45) {
+      setHeroStep((prev) => (prev % 4) + 1);
+      setAutoSlideHero(false);
+    } else if (distance < -45) {
+      setHeroStep((prev) => (prev === 1 ? 4 : prev - 1));
+      setAutoSlideHero(false);
+    }
+  };
+
+  // 5-Pillar Operating System Auto-Slide & Touch Swipe Gestures
+  const PILLARS: Array<'MOBILE_QR' | 'TV_KIOSK' | 'DOCTOR_CABIN' | 'RECEPTION_POS' | 'EXECUTIVE_ANALYTICS'> = [
+    'MOBILE_QR',
+    'TV_KIOSK',
+    'DOCTOR_CABIN',
+    'RECEPTION_POS',
+    'EXECUTIVE_ANALYTICS',
+  ];
+  const [autoSlidePillars, setAutoSlidePillars] = useState<boolean>(true);
+  const [pillarTouchStart, setPillarTouchStart] = useState<number | null>(null);
+  const [pillarTouchEnd, setPillarTouchEnd] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!autoSlidePillars) return;
+    const interval = setInterval(() => {
+      setProductTab((prev) => {
+        const idx = PILLARS.indexOf(prev);
+        return PILLARS[(idx + 1) % PILLARS.length];
+      });
+    }, 6500);
+    return () => clearInterval(interval);
+  }, [autoSlidePillars]);
+
+  const onPillarTouchStart = (e: React.TouchEvent) => {
+    setPillarTouchEnd(null);
+    setPillarTouchStart(e.targetTouches[0].clientX);
+  };
+  const onPillarTouchMove = (e: React.TouchEvent) => {
+    setPillarTouchEnd(e.targetTouches[0].clientX);
+  };
+  const onPillarTouchEnd = () => {
+    if (!pillarTouchStart || !pillarTouchEnd) return;
+    const distance = pillarTouchStart - pillarTouchEnd;
+    if (distance > 45) {
+      setProductTab((prev) => {
+        const idx = PILLARS.indexOf(prev);
+        return PILLARS[(idx + 1) % PILLARS.length];
+      });
+      setAutoSlidePillars(false);
+    } else if (distance < -45) {
+      setProductTab((prev) => {
+        const idx = PILLARS.indexOf(prev);
+        return PILLARS[(idx - 1 + PILLARS.length) % PILLARS.length];
+      });
+      setAutoSlidePillars(false);
+    }
+  };
 
   // Live Activity Social Proof Toast State
   const [currentToastIdx, setCurrentToastIdx] = useState(0);
@@ -946,6 +1024,7 @@ export const QueuelessWebsite: React.FC = () => {
                 onClick={() => {
                   setHeroStep(1);
                   setDemoCalledToken('A-101');
+                  setAutoSlideHero(false);
                 }}
                 className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
                   heroStep === 1
@@ -964,6 +1043,7 @@ export const QueuelessWebsite: React.FC = () => {
                 onClick={() => {
                   setHeroStep(2);
                   setDemoCalledToken('A-108');
+                  setAutoSlideHero(false);
                 }}
                 className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
                   heroStep === 2
@@ -981,6 +1061,7 @@ export const QueuelessWebsite: React.FC = () => {
                 type="button"
                 onClick={() => {
                   setHeroStep(3);
+                  setAutoSlideHero(false);
                   const nextNum = Math.floor(100 + Math.random() * 20);
                   const cabins = ['Cabin 1 (Cardiology)', 'Cabin 2 (Pediatrics)', 'Cabin 204 (Orthopedic)'];
                   const nextCabin = cabins[Math.floor(Math.random() * cabins.length)];
@@ -1008,6 +1089,7 @@ export const QueuelessWebsite: React.FC = () => {
                 onClick={() => {
                   setHeroStep(4);
                   setDemoDoctorCabin('Cabin 1 (Dr. Sharma)');
+                  setAutoSlideHero(false);
                 }}
                 className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
                   heroStep === 4
@@ -1021,8 +1103,56 @@ export const QueuelessWebsite: React.FC = () => {
               </button>
             </div>
 
-            {/* Side-by-Side Realistic Devices: Height-Balanced Apple & OLED Signage Layout */}
-            <div className="pt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Auto-Slide & Touch Gesture Controls Bar */}
+            <div className="flex items-center justify-between sm:justify-center gap-3 pt-2 pb-1 text-xs">
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 font-mono flex items-center gap-1 sm:hidden">
+                <span>↔</span>
+                <span>Swipe left / right</span>
+              </span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setAutoSlideHero(!autoSlideHero)}
+                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all border ${
+                    autoSlideHero
+                      ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-700'
+                  }`}
+                  title="Toggle Auto Slide"
+                >
+                  <span>{autoSlideHero ? 'Auto-Slide: ON' : 'Paused'}</span>
+                </button>
+
+                {/* 4 Dots */}
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4].map((stepNum) => (
+                    <button
+                      key={stepNum}
+                      type="button"
+                      onClick={() => {
+                        setHeroStep(stepNum);
+                        setAutoSlideHero(false);
+                      }}
+                      className={`transition-all rounded-full ${
+                        heroStep === stepNum
+                          ? 'w-5 h-1.5 bg-blue-600 dark:bg-blue-400 shadow-xs'
+                          : 'w-1.5 h-1.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                      }`}
+                      aria-label={`Go to Step ${stepNum}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Side-by-Side Realistic Devices: Height-Balanced Apple & OLED Signage Layout with Swipe Gestures */}
+            <div
+              onTouchStart={onHeroTouchStart}
+              onTouchMove={onHeroTouchMove}
+              onTouchEnd={onHeroTouchEnd}
+              className="pt-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch touch-pan-y relative select-none"
+            >
               {/* Left: Patient Smartphone View (iPhone 16 Pro Style) */}
               <div className="lg:col-span-5 flex justify-center items-center">
                 <div className="w-full max-w-[285px] sm:max-w-[310px] bg-slate-950 rounded-[48px] p-3.5 shadow-2xl border-4 border-slate-700/90 ring-1 ring-slate-900/20 relative overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)]">
@@ -2146,7 +2276,12 @@ export const QueuelessWebsite: React.FC = () => {
           </div>
 
           {/* Interactive Dynamic Tab Showcase */}
-          <div className="bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-[36px] border border-slate-200/90 dark:border-slate-800 shadow-xl relative overflow-hidden transition-colors duration-200">
+          <div
+            onTouchStart={onPillarTouchStart}
+            onTouchMove={onPillarTouchMove}
+            onTouchEnd={onPillarTouchEnd}
+            className="bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-[36px] border border-slate-200/90 dark:border-slate-800 shadow-xl relative overflow-hidden transition-colors duration-200 touch-pan-y select-none"
+          >
             {/* PILLAR 1: MOBILE QR PASS */}
             {productTab === 'MOBILE_QR' && (
               <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center animate-fade-in-up">
@@ -2570,6 +2705,49 @@ export const QueuelessWebsite: React.FC = () => {
                 </div>
               </div>
             )}
+
+            {/* Auto-Slide & Touch Gesture Controls Bar for 5 Pillars */}
+            <div className="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between sm:justify-center gap-4 text-xs">
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 font-mono flex items-center gap-1 sm:hidden">
+                <span>↔</span>
+                <span>Swipe left / right</span>
+              </span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setAutoSlidePillars(!autoSlidePillars)}
+                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all border ${
+                    autoSlidePillars
+                      ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-700'
+                  }`}
+                  title="Toggle Auto Slide"
+                >
+                  <span>{autoSlidePillars ? 'Auto-Slide: ON' : 'Paused'}</span>
+                </button>
+
+                {/* 5 Dots Indicator */}
+                <div className="flex items-center gap-1">
+                  {PILLARS.map((pId) => (
+                    <button
+                      key={pId}
+                      type="button"
+                      onClick={() => {
+                        setProductTab(pId);
+                        setAutoSlidePillars(false);
+                      }}
+                      className={`transition-all rounded-full ${
+                        productTab === pId
+                          ? 'w-6 h-1.5 bg-blue-600 dark:bg-blue-400 shadow-xs'
+                          : 'w-1.5 h-1.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                      }`}
+                      aria-label={`View ${pId}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Link to Full Clinical Features Architecture */}

@@ -38,10 +38,10 @@ export const PrescriptionView: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex items-center justify-center p-4">
         <div className="text-center space-y-3">
           <div className="w-10 h-10 border-4 border-sky-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-xs font-bold text-slate-600">Loading Official Medical Prescription...</p>
+          <p className="text-xs font-bold text-slate-600 dark:text-slate-400">Loading Official Medical Prescription...</p>
         </div>
       </div>
     );
@@ -49,16 +49,16 @@ export const PrescriptionView: React.FC = () => {
 
   if (error || !rx) {
     return (
-      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center border border-slate-200 shadow-xl space-y-4">
-          <div className="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mx-auto">
+      <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 max-w-md w-full text-center border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+          <div className="w-14 h-14 bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 rounded-2xl flex items-center justify-center mx-auto border border-rose-200/50 dark:border-rose-900/50">
             <FileText className="w-7 h-7" />
           </div>
-          <h2 className="text-lg font-black text-slate-900">Prescription Not Available</h2>
-          <p className="text-xs text-slate-500">{error || 'This prescription is still being finalized by the doctor.'}</p>
+          <h2 className="text-lg font-black text-slate-900 dark:text-white">Prescription Not Available</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{error || 'This prescription is still being finalized by the doctor.'}</p>
           <Link
             to={`/token/${publicToken}`}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-600 text-white font-bold text-xs rounded-xl shadow-md"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-md transition-all"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Return to Live Token</span>
@@ -104,12 +104,12 @@ export const PrescriptionView: React.FC = () => {
   const whatsappUrl = `https://wa.me/91${cleanPhone}?text=${whatsappText}`;
 
   return (
-    <div className="min-h-screen bg-slate-100 py-6 px-4 print:p-0 print:bg-white">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 py-6 px-4 print:p-0 print:bg-white transition-colors">
       {/* Floating Action Bar (Hidden when Printing) */}
-      <div className="max-w-3xl mx-auto mb-4 bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-slate-200 shadow-sm flex items-center justify-between gap-3 print:hidden">
+      <div className="max-w-3xl mx-auto mb-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3 print:hidden">
         <Link
           to={`/token/${publicToken}`}
-          className="text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center gap-1.5"
+          className="text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white flex items-center gap-1.5 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Live Token</span>
@@ -127,7 +127,7 @@ export const PrescriptionView: React.FC = () => {
           </a>
           <button
             onClick={() => window.print()}
-            className="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-black text-xs rounded-xl shadow-md flex items-center gap-1.5"
+            className="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-black text-xs rounded-xl shadow-md flex items-center gap-1.5 cursor-pointer transition-all"
           >
             <Printer className="w-4 h-4" />
             <span>Print Official A4 Rx</span>

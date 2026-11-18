@@ -879,20 +879,20 @@ export const ClinicAdmin: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="text-center py-20 text-slate-500">Loading Hospital Admin Panel...</div>;
+    return <div className="text-center py-20 text-slate-500 dark:text-slate-400">Loading Hospital Admin Panel...</div>;
   }
 
   // Password Authentication Screen for Hospital Business Admin
   if (!isAuthenticated) {
     return (
       <div className="max-w-md mx-auto p-4 sm:p-6 mt-12 pb-24">
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl text-center">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl text-center">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-sky-600/25">
             <Lock className="w-7 h-7" />
           </div>
 
-          <h1 className="text-xl font-black text-slate-900 tracking-tight">Hospital Business Admin</h1>
-          <p className="text-xs text-slate-500 mt-1 mb-6">
+          <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Hospital Business Admin</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-6">
             Enter the authorized master password to access hospital settings, doctor cabins, and password controls.
           </p>
 
@@ -905,7 +905,7 @@ export const ClinicAdmin: React.FC = () => {
 
           <form onSubmit={handleAdminLogin} className="space-y-4">
             <div className="text-left">
-              <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5">
+              <label className="text-[11px] font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider block mb-1.5">
                 Master Admin Password
               </label>
               <div className="relative">
@@ -915,12 +915,12 @@ export const ClinicAdmin: React.FC = () => {
                   onChange={(e) => setAdminPasswordInput(e.target.value)}
                   placeholder="Enter admin password"
                   autoFocus
-                  className="w-full px-4 py-3 rounded-2xl border border-slate-300 text-xs font-mono font-bold text-slate-900 pr-10 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white pr-10 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-900"
                 />
                 <button
                   type="button"
                   onClick={() => setShowLoginPassword(!showLoginPassword)}
-                  className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3.5 top-3 text-slate-400 dark:text-slate-500 hover:text-slate-600"
                 >
                   {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -958,7 +958,7 @@ export const ClinicAdmin: React.FC = () => {
             <img
               src={clinicLogo || clinic?.logoUrl}
               alt={clinic?.name}
-              className="w-14 h-14 rounded-2xl border border-slate-200 object-contain p-1 bg-white shadow-sm shrink-0"
+              className="w-14 h-14 rounded-2xl border border-slate-200 dark:border-slate-800 object-contain p-1 bg-white dark:bg-slate-900 shadow-sm shrink-0"
             />
           ) : (
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-sky-600 text-white flex items-center justify-center font-black text-2xl shadow-sm border border-white/20 shrink-0 select-none">
@@ -966,13 +966,13 @@ export const ClinicAdmin: React.FC = () => {
             </div>
           )}
           <div>
-            <h1 className="text-2xl font-black text-slate-900 flex items-center gap-2">
+            <h1 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
               <span>{clinic?.name || 'Hospital Administration'}</span>
               <span className="text-xs px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 font-bold uppercase tracking-wider">
                 Admin Panel
               </span>
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Manage OPD Doctors, Consultation Fees, OPD Timings, Queue Policy & QR Standees.
             </p>
           </div>
@@ -986,7 +986,7 @@ export const ClinicAdmin: React.FC = () => {
 
           <button
             onClick={handleAdminLogout}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition-all"
             title="Lock Console / Logout"
           >
             <LogOut className="w-3.5 h-3.5" />
@@ -1097,13 +1097,13 @@ export const ClinicAdmin: React.FC = () => {
       </div>
 
       {/* Navigation Tabs (Hidden on Print) with Native Horizontal Momentum Scroll on Mobile */}
-      <div className="flex items-center gap-2 border-b border-slate-200 mb-6 overflow-x-auto pb-1.5 scrollbar-none print:hidden -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 mb-6 overflow-x-auto pb-1.5 scrollbar-none print:hidden -mx-4 px-4 sm:mx-0 sm:px-0">
         <button
           onClick={() => setActiveTab('OVERVIEW')}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer shrink-0 ${
             activeTab === 'OVERVIEW'
-              ? 'bg-sky-50 text-sky-700 shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100/70'
+              ? 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 shadow-sm border border-sky-200/60 dark:border-sky-800/60'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <TrendingUp className="w-4 h-4" />
@@ -1115,10 +1115,10 @@ export const ClinicAdmin: React.FC = () => {
             setActiveTab('ANALYTICS');
             fetchExecutiveAnalytics();
           }}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer shrink-0 ${
             activeTab === 'ANALYTICS'
-              ? 'bg-sky-50 text-sky-700 shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100/70'
+              ? 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 shadow-sm border border-sky-200/60 dark:border-sky-800/60'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <BarChart3 className="w-4 h-4" />
@@ -1127,10 +1127,10 @@ export const ClinicAdmin: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('DOCTORS')}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer shrink-0 ${
             activeTab === 'DOCTORS'
-              ? 'bg-sky-50 text-sky-700 shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100/70'
+              ? 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 shadow-sm border border-sky-200/60 dark:border-sky-800/60'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Stethoscope className="w-4 h-4" />
@@ -1139,10 +1139,10 @@ export const ClinicAdmin: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('SERVICES')}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer shrink-0 ${
             activeTab === 'SERVICES'
-              ? 'bg-sky-50 text-sky-700 shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100/70'
+              ? 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 shadow-sm border border-sky-200/60 dark:border-sky-800/60'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <DollarSign className="w-4 h-4" />
@@ -1151,22 +1151,22 @@ export const ClinicAdmin: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('PAYMENTS')}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer shrink-0 ${
             activeTab === 'PAYMENTS'
-              ? 'bg-emerald-50 text-emerald-800 shadow-sm font-black'
-              : 'text-slate-600 hover:bg-slate-100/70'
+              ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 shadow-sm border border-emerald-200/60 dark:border-emerald-800/60 font-black'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <CreditCard className="w-4 h-4 text-emerald-600" />
+          <CreditCard className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           <span>💳 Bank & UPI Gateway</span>
         </button>
 
         <button
           onClick={() => setActiveTab('PROFILE')}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer shrink-0 ${
             activeTab === 'PROFILE'
-              ? 'bg-sky-50 text-sky-700 shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100/70'
+              ? 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 shadow-sm border border-sky-200/60 dark:border-sky-800/60'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Building2 className="w-4 h-4" />
@@ -1175,10 +1175,10 @@ export const ClinicAdmin: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('RULES')}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer shrink-0 ${
             activeTab === 'RULES'
-              ? 'bg-sky-50 text-sky-700 shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100/70'
+              ? 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 shadow-sm border border-sky-200/60 dark:border-sky-800/60'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Sliders className="w-4 h-4" />
@@ -1190,10 +1190,10 @@ export const ClinicAdmin: React.FC = () => {
             setActiveTab('SECURITY');
             fetchSecuritySettings();
           }}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer shrink-0 ${
             activeTab === 'SECURITY'
-              ? 'bg-sky-50 text-sky-700 shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100/70'
+              ? 'bg-rose-50 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 shadow-sm border border-rose-200/60 dark:border-rose-800/60 font-bold'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <KeyRound className="w-4 h-4" />
@@ -1202,10 +1202,10 @@ export const ClinicAdmin: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('STANDEE')}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer shrink-0 ${
             activeTab === 'STANDEE'
-              ? 'bg-sky-50 text-sky-700 shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100/70'
+              ? 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 shadow-sm border border-sky-200/60 dark:border-sky-800/60'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <QrCode className="w-4 h-4" />
@@ -1217,36 +1217,36 @@ export const ClinicAdmin: React.FC = () => {
       {activeTab === 'OVERVIEW' && (
         <div className="space-y-6 print:hidden">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="text-xs font-semibold text-slate-400 block mb-1">Total Revenue Today</span>
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 block mb-1">Total Revenue Today</span>
               <div className="text-3xl font-black text-emerald-600">
                 ₹{summary?.totalRevenue || 0}
               </div>
-              <span className="text-[11px] text-slate-400 mt-1 block">From verified online & cash fees</span>
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 block">From verified online & cash fees</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="text-xs font-semibold text-slate-400 block mb-1">Total Patient Footfall</span>
-              <div className="text-3xl font-black text-slate-800">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 block mb-1">Total Patient Footfall</span>
+              <div className="text-3xl font-black text-slate-800 dark:text-slate-100">
                 {summary?.totalRegistered || 0}
               </div>
-              <span className="text-[11px] text-slate-400 mt-1 block">Registered today via QR & desk</span>
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 block">Registered today via QR & desk</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="text-xs font-semibold text-slate-400 block mb-1">Active Doctors on Duty</span>
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 block mb-1">Active Doctors on Duty</span>
               <div className="text-3xl font-black text-sky-600">
                 {clinic?.doctors?.filter((d: any) => d.active).length || 0}
               </div>
-              <span className="text-[11px] text-slate-400 mt-1 block">Assigned across cabins</span>
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 block">Assigned across cabins</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="text-xs font-semibold text-slate-400 block mb-1">Avg Patient Waiting Time</span>
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 block mb-1">Avg Patient Waiting Time</span>
               <div className="text-3xl font-black text-amber-600">
                 {summary?.avgWaitMinutes || 12} min
               </div>
-              <span className="text-[11px] text-slate-400 mt-1 block">From arrival to doctor cabin</span>
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 block">From arrival to doctor cabin</span>
             </div>
           </div>
 
@@ -1254,39 +1254,39 @@ export const ClinicAdmin: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div
               onClick={() => setActiveTab('DOCTORS')}
-              className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:border-sky-300 transition-all cursor-pointer group"
+              className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-sky-300 transition-all cursor-pointer group"
             >
               <div className="p-3 bg-sky-50 text-sky-600 rounded-2xl w-fit mb-3 group-hover:scale-105 transition-transform">
                 <Stethoscope className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-slate-800">Manage Doctors & Cabins</h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">Manage Doctors & Cabins</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 Add visiting consultants, assign OPD room numbers, and set active status.
               </p>
             </div>
 
             <div
               onClick={() => setActiveTab('SERVICES')}
-              className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:border-emerald-300 transition-all cursor-pointer group"
+              className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-emerald-300 transition-all cursor-pointer group"
             >
               <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl w-fit mb-3 group-hover:scale-105 transition-transform">
                 <DollarSign className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-slate-800">Set Consultation Fees</h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">Set Consultation Fees</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 Configure OPD fees per service (General OPD, Pediatrics, Specialist Checkup).
               </p>
             </div>
 
             <div
               onClick={() => setActiveTab('STANDEE')}
-              className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:border-purple-300 transition-all cursor-pointer group"
+              className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-purple-300 transition-all cursor-pointer group"
             >
               <div className="p-3 bg-purple-50 text-purple-600 rounded-2xl w-fit mb-3 group-hover:scale-105 transition-transform">
                 <QrCode className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-slate-800">Download QR Standee</h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">Download QR Standee</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 Print or download high-resolution QR standee posters for entrance desks.
               </p>
             </div>
@@ -1299,48 +1299,48 @@ export const ClinicAdmin: React.FC = () => {
         <div className="space-y-6 print:hidden">
           {/* Top Metric Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="text-xs font-semibold text-slate-400 block mb-1">Total Patient Footfall</span>
-              <div className="text-3xl font-black text-slate-900">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 block mb-1">Total Patient Footfall</span>
+              <div className="text-3xl font-black text-slate-900 dark:text-white">
                 {analyticsData?.totalPatients ?? summary?.todayPatients ?? 0}
               </div>
-              <span className="text-[11px] text-slate-500 mt-1 block">Registered in Clinic OS</span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 block">Registered in Clinic OS</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="text-xs font-semibold text-slate-400 block mb-1">Collected OPD Revenue</span>
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 block mb-1">Collected OPD Revenue</span>
               <div className="text-3xl font-black text-emerald-600">
                 ₹{analyticsData?.totalRevenue?.toLocaleString() ?? summary?.todayRevenue ?? 0}
               </div>
               <span className="text-[11px] text-emerald-700 font-semibold mt-1 block">Verified Cash & UPI</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="text-xs font-semibold text-slate-400 block mb-1">SLA Compliance Rate</span>
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 block mb-1">SLA Compliance Rate</span>
               <div className="text-3xl font-black text-sky-600">
                 {analyticsData?.slaSuccessRate ?? 85}%
               </div>
               <span className="text-[11px] text-sky-700 font-semibold mt-1 block">Seen under 30 minutes</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="text-xs font-semibold text-slate-400 block mb-1">Active Doctors</span>
-              <div className="text-3xl font-black text-slate-900">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 block mb-1">Active Doctors</span>
+              <div className="text-3xl font-black text-slate-900 dark:text-white">
                 {clinic?.doctors?.length || 0}
               </div>
-              <span className="text-[11px] text-slate-500 mt-1 block">Available across OPD Cabins</span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 block">Available across OPD Cabins</span>
             </div>
           </div>
 
           {/* Hourly Rush Distribution Heatmap Bar Chart */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
             <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
               <div>
-                <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                   <Activity className="w-4 h-4 text-sky-600" />
                   <span>OPD Hourly Rush Distribution (8:00 AM - 8:00 PM)</span>
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Peak hour analysis helps management deploy extra doctors and counter staff during heavy rush hours.
                 </p>
               </div>
@@ -1349,7 +1349,7 @@ export const ClinicAdmin: React.FC = () => {
               </span>
             </div>
 
-            <div className="grid grid-cols-13 gap-1.5 pt-6 pb-2 items-end h-48 border-b border-slate-100">
+            <div className="grid grid-cols-13 gap-1.5 pt-6 pb-2 items-end h-48 border-b border-slate-100 dark:border-slate-800">
               {analyticsData?.hourlyTrend ? (
                 analyticsData.hourlyTrend.map((item: any, idx: number) => {
                   const maxCount = Math.max(...analyticsData.hourlyTrend.map((h: any) => h.count), 1);
@@ -1361,7 +1361,7 @@ export const ClinicAdmin: React.FC = () => {
                         {item.count} patients • ₹{item.revenue}
                       </div>
 
-                      <span className="text-[10px] font-bold text-slate-600">{item.count > 0 ? item.count : ''}</span>
+                      <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300">{item.count > 0 ? item.count : ''}</span>
                       <div
                         style={{ height: `${heightPct}%` }}
                         className={`w-full rounded-t-lg transition-all ${
@@ -1372,28 +1372,28 @@ export const ClinicAdmin: React.FC = () => {
                             : 'bg-slate-100'
                         }`}
                       />
-                      <span className="text-[9px] font-semibold text-slate-400 truncate w-full text-center">
+                      <span className="text-[9px] font-semibold text-slate-400 dark:text-slate-500 truncate w-full text-center">
                         {item.hour.split(':')[0]}h
                       </span>
                     </div>
                   );
                 })
               ) : (
-                <div className="col-span-13 text-center py-12 text-xs text-slate-400">Loading hourly trend data...</div>
+                <div className="col-span-13 text-center py-12 text-xs text-slate-400 dark:text-slate-500">Loading hourly trend data...</div>
               )}
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Doctor Leaderboard */}
-            <div className="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                  <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                     <Award className="w-4 h-4 text-amber-500" />
                     <span>Doctor OPD Performance Leaderboard</span>
                   </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     Consultation velocity and patient throughput per physician.
                   </p>
                 </div>
@@ -1401,7 +1401,7 @@ export const ClinicAdmin: React.FC = () => {
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider font-bold">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">
                     <tr>
                       <th className="py-2.5 px-4">Doctor</th>
                       <th className="py-2.5 px-4">OPD Cabin</th>
@@ -1410,21 +1410,21 @@ export const ClinicAdmin: React.FC = () => {
                       <th className="py-2.5 px-4 text-right">Revenue</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 font-medium">
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
                     {analyticsData?.doctorLeaderboard?.map((doc: any) => (
                       <tr key={doc.id} className="hover:bg-slate-50/70">
-                        <td className="py-3 px-4 font-bold text-slate-900">
+                        <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">
                           {doc.name}
-                          <span className="text-[11px] text-slate-400 block font-normal">{doc.specialty}</span>
+                          <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-normal">{doc.specialty}</span>
                         </td>
-                        <td className="py-3 px-4 text-slate-600 font-mono font-semibold">{doc.roomNumber}</td>
-                        <td className="py-3 px-4 text-center font-bold text-slate-800">{doc.patientsCount}</td>
+                        <td className="py-3 px-4 text-slate-600 dark:text-slate-300 font-mono font-semibold">{doc.roomNumber}</td>
+                        <td className="py-3 px-4 text-center font-bold text-slate-800 dark:text-slate-100">{doc.patientsCount}</td>
                         <td className="py-3 px-4 text-center">
                           <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
                             {doc.completedCount} Seen
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-right font-black text-slate-900">₹{doc.revenue}</td>
+                        <td className="py-3 px-4 text-right font-black text-slate-900 dark:text-white">₹{doc.revenue}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -1434,28 +1434,28 @@ export const ClinicAdmin: React.FC = () => {
 
             {/* Demographics & Blood Group Registry */}
             <div className="space-y-6">
-              <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <h4 className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider mb-3">
                   Patient Demographics
                 </h4>
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-600 font-semibold">Male Patients:</span>
-                    <span className="font-black text-slate-900">{analyticsData?.genderSplit?.Male || 0}</span>
+                    <span className="text-slate-600 dark:text-slate-300 font-semibold">Male Patients:</span>
+                    <span className="font-black text-slate-900 dark:text-white">{analyticsData?.genderSplit?.Male || 0}</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-600 font-semibold">Female Patients:</span>
-                    <span className="font-black text-slate-900">{analyticsData?.genderSplit?.Female || 0}</span>
+                    <span className="text-slate-600 dark:text-slate-300 font-semibold">Female Patients:</span>
+                    <span className="font-black text-slate-900 dark:text-white">{analyticsData?.genderSplit?.Female || 0}</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-600 font-semibold">Other / Unspecified:</span>
-                    <span className="font-black text-slate-900">{analyticsData?.genderSplit?.Other || 0}</span>
+                    <span className="text-slate-600 dark:text-slate-300 font-semibold">Other / Unspecified:</span>
+                    <span className="font-black text-slate-900 dark:text-white">{analyticsData?.genderSplit?.Other || 0}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <h4 className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider mb-3">
                   Blood Group Distribution
                 </h4>
                 <div className="flex flex-wrap gap-2">
@@ -1467,7 +1467,7 @@ export const ClinicAdmin: React.FC = () => {
                       </span>
                     ))
                   ) : (
-                    <span className="text-xs text-slate-400">No blood group records recorded yet</span>
+                    <span className="text-xs text-slate-400 dark:text-slate-500">No blood group records recorded yet</span>
                   )}
                 </div>
               </div>
@@ -1481,8 +1481,8 @@ export const ClinicAdmin: React.FC = () => {
         <div className="space-y-6 print:hidden">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-slate-900">Hospital Doctors & Assigned Cabins</h2>
-              <p className="text-xs text-slate-500">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Hospital Doctors & Assigned Cabins</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Patients will see these doctors during self check-in and queue token issuance.
               </p>
             </div>
@@ -1502,12 +1502,12 @@ export const ClinicAdmin: React.FC = () => {
             {clinic?.doctors?.map((doc: Doctor) => (
               <div
                 key={doc.id}
-                className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between"
+                className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="text-base font-bold text-slate-900">{doc.displayName}</h3>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white">{doc.displayName}</h3>
                       <p className="text-xs text-sky-700 font-semibold">{doc.specialty}</p>
                     </div>
                     <span
@@ -1519,16 +1519,16 @@ export const ClinicAdmin: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="mt-4 p-3 bg-slate-50 rounded-2xl border border-slate-100 text-xs">
-                    <span className="text-slate-400 block text-[10px] uppercase font-bold">Assigned Cabin / Room</span>
-                    <span className="font-extrabold text-slate-800">{doc.roomNumber || 'General OPD'}</span>
+                  <div className="mt-4 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800 text-xs">
+                    <span className="text-slate-400 dark:text-slate-500 block text-[10px] uppercase font-bold">Assigned Cabin / Room</span>
+                    <span className="font-extrabold text-slate-800 dark:text-slate-100">{doc.roomNumber || 'General OPD'}</span>
                   </div>
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
                   <button
                     onClick={() => openEditDoctor(doc)}
-                    className="p-2 text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+                    className="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
                     title="Edit Doctor"
                   >
                     <Edit2 className="w-4 h-4" />
@@ -1552,8 +1552,8 @@ export const ClinicAdmin: React.FC = () => {
         <div className="space-y-6 print:hidden">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-slate-900">OPD Services & Consultation Fees</h2>
-              <p className="text-xs text-slate-500">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">OPD Services & Consultation Fees</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Set fees that patients pay online via UPI or at the reception counter.
               </p>
             </div>
@@ -1569,9 +1569,9 @@ export const ClinicAdmin: React.FC = () => {
             </button>
           </div>
 
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-semibold">
+              <thead className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
                 <tr>
                   <th className="py-3.5 px-6">Service Name</th>
                   <th className="py-3.5 px-6">Consultation Fee</th>
@@ -1580,14 +1580,14 @@ export const ClinicAdmin: React.FC = () => {
                   <th className="py-3.5 px-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {clinic?.services?.map((srv: Service) => (
                   <tr key={srv.id} className="hover:bg-slate-50/70">
-                    <td className="py-3.5 px-6 font-bold text-slate-900 text-sm">{srv.name}</td>
+                    <td className="py-3.5 px-6 font-bold text-slate-900 dark:text-white text-sm">{srv.name}</td>
                     <td className="py-3.5 px-6 font-extrabold text-emerald-600 text-sm">
                       ₹{srv.fee}
                     </td>
-                    <td className="py-3.5 px-6 text-slate-600 font-medium">{srv.durationMinutes} minutes</td>
+                    <td className="py-3.5 px-6 text-slate-600 dark:text-slate-300 font-medium">{srv.durationMinutes} minutes</td>
                     <td className="py-3.5 px-6">
                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
                         Active
@@ -1597,7 +1597,7 @@ export const ClinicAdmin: React.FC = () => {
                       <div className="inline-flex items-center gap-2">
                         <button
                           onClick={() => openEditService(srv)}
-                          className="p-1.5 text-slate-600 hover:bg-slate-100 rounded-lg"
+                          className="p-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
@@ -1619,11 +1619,11 @@ export const ClinicAdmin: React.FC = () => {
 
       {/* TAB 4: HOSPITAL PROFILE & BRANDING */}
       {activeTab === 'PROFILE' && (
-        <div className="max-w-3xl bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm print:hidden">
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+        <div className="max-w-3xl bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm print:hidden">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
-              <h2 className="text-lg font-bold text-slate-900">Hospital Profile & Custom Branding</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Hospital Profile & Custom Branding</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Each hospital can upload its own custom logo, address, and OPD consultation policy.
               </p>
             </div>
@@ -1634,13 +1634,13 @@ export const ClinicAdmin: React.FC = () => {
 
           <form onSubmit={handleSaveProfile} className="space-y-6">
             {/* 1. Custom Hospital Logo Section */}
-            <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-4">
+            <div className="p-5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200/80 space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <label className="block text-xs font-bold text-slate-800">
+                  <label className="block text-xs font-bold text-slate-800 dark:text-slate-100">
                     Hospital / Clinic Official Logo & Identity
                   </label>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                     This logo appears on your entrance standees, patient mobile check-in screen, TV kiosk banner, and digital Rx letterhead.
                   </p>
                 </div>
@@ -1672,10 +1672,10 @@ export const ClinicAdmin: React.FC = () => {
                       <Lock className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="font-black text-slate-900 text-xs">
+                      <h4 className="font-black text-slate-900 dark:text-white text-xs">
                         Custom Hospital Logo & White-Labeling (Separate Add-On Required)
                       </h4>
-                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                      <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
                         By default, your OPD passes, TV kiosks, and print standees show the verified <strong>Queueless Healthcare OS Emblem</strong>. 
                         If your hospital wants to upload and display its own official logo, custom brand colors, and remove Queueless branding, a separate add-on payout is required.
                       </p>
@@ -1684,9 +1684,9 @@ export const ClinicAdmin: React.FC = () => {
 
                   <div className="p-3 bg-white/95 rounded-xl border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                     <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Add-On Pricing</span>
-                      <strong className="text-base font-black text-slate-900">
-                        ₹1,999 / mo <span className="text-xs font-normal text-slate-500">($29/mo)</span>
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Add-On Pricing</span>
+                      <strong className="text-base font-black text-slate-900 dark:text-white">
+                        ₹1,999 / mo <span className="text-xs font-normal text-slate-500 dark:text-slate-400">($29/mo)</span>
                       </strong>
                       <span className="text-[10px] text-emerald-700 font-bold block mt-0.5">
                         ✓ Included free in Enterprise & White-Label Tier
@@ -1709,7 +1709,7 @@ export const ClinicAdmin: React.FC = () => {
               <div className={`flex flex-col sm:flex-row items-center gap-5 ${!hasCustomBrandingAddon ? 'opacity-40 pointer-events-none filter grayscale' : ''}`}>
                 {/* Logo Preview */}
                 <div className="relative group shrink-0">
-                  <div className="w-24 h-24 rounded-2xl bg-white border-2 border-dashed border-slate-300 p-1 flex items-center justify-center overflow-hidden shadow-inner">
+                  <div className="w-24 h-24 rounded-2xl bg-white dark:bg-slate-900 border-2 border-dashed border-slate-300 dark:border-slate-700 p-1 flex items-center justify-center overflow-hidden shadow-inner">
                     {clinicLogo ? (
                       <img
                         src={clinicLogo}
@@ -1719,7 +1719,7 @@ export const ClinicAdmin: React.FC = () => {
                     ) : (
                       <div className="text-center p-2">
                         <Building2 className="w-8 h-8 text-slate-300 mx-auto mb-1" />
-                        <span className="text-[9px] text-slate-400 font-bold block leading-tight">Default Emblem</span>
+                        <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold block leading-tight">Default Emblem</span>
                       </div>
                     )}
                   </div>
@@ -1758,19 +1758,19 @@ export const ClinicAdmin: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setClinicLogo('')}
-                        className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold rounded-xl transition-colors"
+                        className="px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-xl transition-colors"
                       >
                         Reset to Default
                       </button>
                     )}
                   </div>
-                  <span className="text-[10px] text-slate-400 block">
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500 block">
                     Supported: PNG, JPEG, SVG or WebP (Max 2MB). Transparent background recommended.
                   </span>
 
                   {/* Preset Quick Logos */}
                   <div className="pt-2">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1.5">
                       Or Choose a Medical Preset Logo:
                     </span>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -1779,10 +1779,10 @@ export const ClinicAdmin: React.FC = () => {
                           key={idx}
                           type="button"
                           onClick={() => handleSelectPresetLogo(preset.url)}
-                          className="flex items-center gap-2 p-1.5 bg-white hover:bg-sky-50 rounded-xl border border-slate-200 hover:border-sky-300 text-left transition-all"
+                          className="flex items-center gap-2 p-1.5 bg-white dark:bg-slate-900 hover:bg-sky-50 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-sky-300 text-left transition-all"
                         >
                           <img src={preset.url} alt="" className="w-6 h-6 rounded-md object-contain shrink-0" />
-                          <span className="text-[10px] font-bold text-slate-700 truncate">{preset.name}</span>
+                          <span className="text-[10px] font-bold text-slate-700 dark:text-slate-200 truncate">{preset.name}</span>
                         </button>
                       ))}
                     </div>
@@ -1794,7 +1794,7 @@ export const ClinicAdmin: React.FC = () => {
             {/* 2. Hospital Details */}
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">
                   Hospital / Clinic Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -1802,13 +1802,13 @@ export const ClinicAdmin: React.FC = () => {
                   required
                   value={clinicName}
                   onChange={(e) => setClinicName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"
                   placeholder="e.g. Apollo Multi-Speciality Clinic"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">
                   Full Address / Facility Location <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -1816,44 +1816,44 @@ export const ClinicAdmin: React.FC = () => {
                   required
                   value={clinicAddress}
                   onChange={(e) => setClinicAddress(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"
                   placeholder="e.g. Suite 402, Metro Towers, MG Road, Bengaluru, Karnataka 560001"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Contact Phone Number</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Contact Phone Number</label>
                   <input
                     type="text"
                     value={clinicPhone}
                     onChange={(e) => setClinicPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"
                     placeholder="+91 98765 43210"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">OPD Opening Hours</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">OPD Opening Hours</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. 09:00 AM - 08:00 PM"
                     value={openingHours}
                     onChange={(e) => setOpeningHours(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Free Follow-up Review Window (Days)</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Free Follow-up Review Window (Days)</label>
                   <input
                     type="number"
                     min={1}
                     max={90}
                     value={followUpDays}
                     onChange={(e) => setFollowUpDays(parseInt(e.target.value) || 1)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"
                     placeholder="15"
                   />
                   <p className="text-[10px] text-purple-600 font-semibold mt-1">Configured in detail under Rules tab (₹0 free consultation policy).</p>
@@ -1861,8 +1861,8 @@ export const ClinicAdmin: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-[11px] text-slate-400">
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span className="text-[11px] text-slate-400 dark:text-slate-500">
                 Changes take effect across patient check-in, token passes, standees & kiosk screens.
               </span>
               <button
@@ -1889,16 +1889,16 @@ export const ClinicAdmin: React.FC = () => {
 
       {/* TAB: BANK & UPI GATEWAY (DIRECT HOSPITAL SETTLEMENT) */}
       {activeTab === 'PAYMENTS' && (
-        <div className="max-w-3xl bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm print:hidden space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+        <div className="max-w-3xl bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm print:hidden space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
               <div className="flex items-center gap-2">
                 <span className="p-2 bg-emerald-500/10 text-emerald-600 rounded-xl">
                   <CreditCard className="w-5 h-5" />
                 </span>
                 <div>
-                  <h2 className="text-lg font-black text-slate-900">Hospital Bank & Payment Gateway</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <h2 className="text-lg font-black text-slate-900 dark:text-white">Hospital Bank & Payment Gateway</h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     Connect your hospital's own UPI / Gateway so patient fees transfer directly to your bank account.
                   </p>
                 </div>
@@ -1936,7 +1936,7 @@ export const ClinicAdmin: React.FC = () => {
             </div>
 
             <div className="p-3.5 bg-slate-950/70 rounded-2xl border border-slate-800 text-xs space-y-2">
-              <div className="flex items-center justify-between text-[11px] text-slate-400">
+              <div className="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
                 <span>Billing Frequency: <strong>Monthly Auto-Debit</strong></span>
                 <span>Gateway: <strong>Cashfree UPI AutoPay / Dodo Payments</strong></span>
               </div>
@@ -1965,7 +1965,7 @@ export const ClinicAdmin: React.FC = () => {
 
             {/* Provider Selection */}
             <div>
-              <label className="block text-xs font-black text-slate-800 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-wider mb-2">
                 1. Select Hospital Payment Gateway Provider
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -2012,13 +2012,13 @@ export const ClinicAdmin: React.FC = () => {
 
             {/* Provider Specific Credentials */}
             {(settings.paymentGatewayProvider === 'DIRECT_UPI' || !settings.paymentGatewayProvider) && (
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-                <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                <h4 className="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-wider">
                   Direct Merchant UPI Details
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                    <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
                       Hospital UPI VPA ID *
                     </label>
                     <input
@@ -2026,15 +2026,15 @@ export const ClinicAdmin: React.FC = () => {
                       placeholder="e.g. caremaxhospital@hdfcbank"
                       value={settings.directUpiId || ''}
                       onChange={(e) => setSettings({ ...settings, directUpiId: e.target.value })}
-                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
-                    <span className="text-[10px] text-slate-400 mt-0.5 block">
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 block">
                       Patients scanning token pass will pay directly to this UPI address.
                     </span>
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                    <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
                       Hospital Registered Business Name *
                     </label>
                     <input
@@ -2042,9 +2042,9 @@ export const ClinicAdmin: React.FC = () => {
                       placeholder="e.g. Caremax Healthcare Private Limited"
                       value={settings.bankAccountHolderName || ''}
                       onChange={(e) => setSettings({ ...settings, bankAccountHolderName: e.target.value })}
-                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
-                    <span className="text-[10px] text-slate-400 mt-0.5 block">
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 block">
                       Name shown on patient's UPI app (GPay / PhonePe / Paytm).
                     </span>
                   </div>
@@ -2053,13 +2053,13 @@ export const ClinicAdmin: React.FC = () => {
             )}
 
             {settings.paymentGatewayProvider === 'CASHFREE' && (
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-                <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                <h4 className="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-wider">
                   Cashfree Merchant API Credentials
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                    <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
                       Cashfree App ID (Client ID) *
                     </label>
                     <input
@@ -2067,11 +2067,11 @@ export const ClinicAdmin: React.FC = () => {
                       placeholder="CF_APP_xxxxxxxxxxxxxxxx"
                       value={settings.cashfreeAppId || ''}
                       onChange={(e) => setSettings({ ...settings, cashfreeAppId: e.target.value })}
-                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                    <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
                       Cashfree Secret Key *
                     </label>
                     <input
@@ -2079,7 +2079,7 @@ export const ClinicAdmin: React.FC = () => {
                       placeholder="cfsk_ma_prod_xxxxxxxxxxxxxxxx"
                       value={settings.cashfreeSecretKey || ''}
                       onChange={(e) => setSettings({ ...settings, cashfreeSecretKey: e.target.value })}
-                      className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>
                 </div>
@@ -2087,13 +2087,13 @@ export const ClinicAdmin: React.FC = () => {
             )}
 
             {/* Bank Settlement Account Details */}
-            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-              <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+              <h4 className="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-wider">
                 Hospital Bank Account (For Automated Daily Settlements)
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
                     Bank Account Number
                   </label>
                   <input
@@ -2101,11 +2101,11 @@ export const ClinicAdmin: React.FC = () => {
                     placeholder="e.g. 50200012345678"
                     value={settings.bankAccountNumber || ''}
                     onChange={(e) => setSettings({ ...settings, bankAccountNumber: e.target.value })}
-                    className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
                     Bank IFSC Code
                   </label>
                   <input
@@ -2113,11 +2113,11 @@ export const ClinicAdmin: React.FC = () => {
                     placeholder="e.g. HDFC0001234"
                     value={settings.bankIfscCode || ''}
                     onChange={(e) => setSettings({ ...settings, bankIfscCode: e.target.value.toUpperCase() })}
-                    className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
                     Bank Name & Branch
                   </label>
                   <input
@@ -2125,7 +2125,7 @@ export const ClinicAdmin: React.FC = () => {
                     placeholder="e.g. HDFC Bank, MG Road Branch"
                     value={settings.bankName || ''}
                     onChange={(e) => setSettings({ ...settings, bankName: e.target.value })}
-                    className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
               </div>
@@ -2133,12 +2133,12 @@ export const ClinicAdmin: React.FC = () => {
 
             {/* Payment Feature Switches */}
             <div className="space-y-3 pt-1">
-              <div className="flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+              <div className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800">
                 <div>
-                  <strong className="block text-xs font-bold text-slate-900">
+                  <strong className="block text-xs font-bold text-slate-900 dark:text-white">
                     Accept Direct Online UPI on Patient Pass
                   </strong>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
                     Allow patients to pay their consultation fee via GPay/PhonePe directly from their mobile pass.
                   </span>
                 </div>
@@ -2150,12 +2150,12 @@ export const ClinicAdmin: React.FC = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+              <div className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800">
                 <div>
-                  <strong className="block text-xs font-bold text-slate-900">
+                  <strong className="block text-xs font-bold text-slate-900 dark:text-white">
                     Accept Cash at Reception Counter
                   </strong>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
                     Allow walk-in patients to pay in cash to the receptionist before being admitted to doctor cabin.
                   </span>
                 </div>
@@ -2199,11 +2199,11 @@ export const ClinicAdmin: React.FC = () => {
 
       {/* TAB 5: QUEUE & CASH POLICY SETTINGS */}
       {activeTab === 'RULES' && (
-        <div className="max-w-3xl bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm print:hidden">
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+        <div className="max-w-3xl bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm print:hidden">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
-              <h2 className="text-lg font-bold text-slate-900">Queue Operations & Cashier Desk Rules</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Queue Operations & Cashier Desk Rules</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Hospital admins can customize payment options, cashier gatekeeping, follow-up days, and TV kiosk alerts.
               </p>
             </div>
@@ -2214,19 +2214,19 @@ export const ClinicAdmin: React.FC = () => {
 
           <form onSubmit={handleSaveSettings} className="space-y-6">
             {/* 1. Cash Counter & Gatekeeping Policy */}
-            <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-4">
+            <div className="p-5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200/80 space-y-4">
               <div className="flex items-center gap-2">
                 <Banknote className="w-5 h-5 text-emerald-600" />
-                <h3 className="text-sm font-bold text-slate-900">Cash Payment & Counter Admission Rules</h3>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Cash Payment & Counter Admission Rules</h3>
               </div>
 
               {/* Toggle 1: Require Desk Cash Verification */}
-              <div className="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200">
+              <div className="flex items-center justify-between p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
                 <div className="max-w-md">
-                  <span className="text-xs font-bold text-slate-900 block">
+                  <span className="text-xs font-bold text-slate-900 dark:text-white block">
                     Strict Reception Cash Verification (Gatekeeping)
                   </span>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                     When enabled, cash patients must visit the reception counter and pay before their name appears in the Doctor's OPD queue. Doctors cannot call unpaid patients.
                   </p>
                 </div>
@@ -2242,12 +2242,12 @@ export const ClinicAdmin: React.FC = () => {
               </div>
 
               {/* Toggle 2: Allow Cash at Counter */}
-              <div className="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200">
+              <div className="flex items-center justify-between p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
                 <div className="max-w-md">
-                  <span className="text-xs font-bold text-slate-900 block">
+                  <span className="text-xs font-bold text-slate-900 dark:text-white block">
                     Accept Cash at Reception Counter
                   </span>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                     Allow patients to choose "Pay at Clinic Counter (Cash)" during self check-in.
                   </p>
                 </div>
@@ -2264,18 +2264,18 @@ export const ClinicAdmin: React.FC = () => {
             </div>
 
             {/* 2. Digital UPI Payments Policy */}
-            <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-4">
+            <div className="p-5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200/80 space-y-4">
               <div className="flex items-center gap-2">
                 <CreditCard className="w-5 h-5 text-sky-600" />
-                <h3 className="text-sm font-bold text-slate-900">Online UPI & Digital Gateway</h3>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Online UPI & Digital Gateway</h3>
               </div>
 
-              <div className="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200">
+              <div className="flex items-center justify-between p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
                 <div className="max-w-md">
-                  <span className="text-xs font-bold text-slate-900 block">
+                  <span className="text-xs font-bold text-slate-900 dark:text-white block">
                     Enable Instant UPI / QR Payment at Check-In
                   </span>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                     Patients can pay instantly from their phone via Google Pay, PhonePe, Paytm, or BHIM UPI to skip reception billing lines entirely.
                   </p>
                 </div>
@@ -2299,8 +2299,8 @@ export const ClinicAdmin: React.FC = () => {
                     <Clock className="w-4 h-4" />
                   </span>
                   <div>
-                    <h3 className="text-sm font-black text-slate-900">Hospital 15-Day Free Follow-Up & Review Protocol</h3>
-                    <p className="text-[11px] text-slate-500">Configure automated recognition, validity window, and consultation pricing for returning OPD patients.</p>
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white">Hospital 15-Day Free Follow-Up & Review Protocol</h3>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Configure automated recognition, validity window, and consultation pricing for returning OPD patients.</p>
                   </div>
                 </div>
                 <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200">
@@ -2309,17 +2309,17 @@ export const ClinicAdmin: React.FC = () => {
               </div>
 
               {/* Toggle 1: 100% Free Follow-Up Protocol */}
-              <div className="flex items-center justify-between p-4 bg-white rounded-xl border border-purple-200/90 shadow-2xs">
+              <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl border border-purple-200/90 shadow-2xs">
                 <div className="max-w-md">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-black text-slate-900 block">
+                    <span className="text-xs font-black text-slate-900 dark:text-white block">
                       Enable 100% Free Follow-Up (₹0 Fee)
                     </span>
                     <span className="px-2 py-0.2 bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase rounded-full">
                       Recommended
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-500 mt-1">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
                     When enabled, returning patients within the configured window pay ₹0 consultation fee. They bypass reception billing queues and enter directly into the doctor's waiting lounge.
                   </p>
                 </div>
@@ -2335,13 +2335,13 @@ export const ClinicAdmin: React.FC = () => {
               </div>
 
               {/* Validity Window Selection with Quick Presets */}
-              <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-3">
+              <div className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
-                    <label className="block text-xs font-black text-slate-900">
+                    <label className="block text-xs font-black text-slate-900 dark:text-white">
                       Follow-Up Review Validity Window
                     </label>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
                       Patient phone numbers visiting within these days from their last consult qualify for this policy.
                     </p>
                   </div>
@@ -2352,15 +2352,15 @@ export const ClinicAdmin: React.FC = () => {
                       max={90}
                       value={followUpDays}
                       onChange={(e) => setFollowUpDays(parseInt(e.target.value) || 1)}
-                      className="w-20 px-3 py-1.5 border border-purple-300 rounded-lg text-xs font-bold text-slate-900 text-center focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-20 px-3 py-1.5 border border-purple-300 rounded-lg text-xs font-bold text-slate-900 dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
-                    <span className="text-xs font-bold text-slate-700">Days</span>
+                    <span className="text-xs font-bold text-slate-700 dark:text-slate-200">Days</span>
                   </div>
                 </div>
 
                 {/* Quick Presets Pills */}
                 <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick Presets:</span>
+                  <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Quick Presets:</span>
                   {[
                     { days: 7, label: '7 Days (Post-op)' },
                     { days: 10, label: '10 Days' },
@@ -2394,27 +2394,27 @@ export const ClinicAdmin: React.FC = () => {
                     Charged to returning patients within the review window instead of full consultation rate.
                   </p>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-slate-600">₹</span>
+                    <span className="text-xs font-bold text-slate-600 dark:text-slate-300">₹</span>
                     <input
                       type="number"
                       min={0}
                       value={settings.followUpFeeAmount ?? 250}
                       onChange={(e) => setSettings({ ...settings, followUpFeeAmount: parseInt(e.target.value) || 0 })}
-                      className="w-32 px-3 py-1.5 border border-amber-300 rounded-lg text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
+                      className="w-32 px-3 py-1.5 border border-amber-300 rounded-lg text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-900"
                     />
-                    <span className="text-xs text-slate-500">per follow-up visit</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">per follow-up visit</span>
                   </div>
                 </div>
               )}
 
               {/* Sub-Rules: Doctor Auto-Routing & Priority Queue */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="p-3.5 bg-white rounded-xl border border-slate-200 flex items-center justify-between gap-3">
+                <div className="p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
                   <div>
-                    <span className="text-xs font-bold text-slate-900 block">
+                    <span className="text-xs font-bold text-slate-900 dark:text-white block">
                       Auto-Route to Same Doctor
                     </span>
-                    <p className="text-[10px] text-slate-500 mt-0.5">
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
                       Locks review token to treating physician's cabin.
                     </p>
                   </div>
@@ -2429,12 +2429,12 @@ export const ClinicAdmin: React.FC = () => {
                   </label>
                 </div>
 
-                <div className="p-3.5 bg-white rounded-xl border border-slate-200 flex items-center justify-between gap-3">
+                <div className="p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
                   <div>
-                    <span className="text-xs font-bold text-slate-900 block">
+                    <span className="text-xs font-bold text-slate-900 dark:text-white block">
                       Allow Future Date Pre-Booking
                     </span>
-                    <p className="text-[10px] text-slate-500 mt-0.5">
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
                       Allow patients to pre-book tomorrow or upcoming dates.
                     </p>
                   </div>
@@ -2460,13 +2460,13 @@ export const ClinicAdmin: React.FC = () => {
             </div>
 
             {/* 4. Lobby TV Chime */}
-            <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200/80">
+            <div className="p-5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200/80">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-xs font-bold text-slate-900 block">
+                  <span className="text-xs font-bold text-slate-900 dark:text-white block">
                     Lobby TV Audio Chime Sound
                   </span>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                     Plays sound notification in the reception lobby whenever a doctor calls the next token.
                   </p>
                 </div>
@@ -2482,8 +2482,8 @@ export const ClinicAdmin: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-[11px] text-slate-400">
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span className="text-[11px] text-slate-400 dark:text-slate-500">
                 Rules apply in real time across patient check-in, reception, and doctor OPD consoles.
               </span>
               <button
@@ -2501,16 +2501,16 @@ export const ClinicAdmin: React.FC = () => {
       {/* TAB: STAFF PASSWORDS & SECURITY CONTROL (BUSINESS ADMIN ONLY) */}
       {activeTab === 'SECURITY' && (
         <div className="max-w-4xl space-y-6 print:hidden">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 flex-wrap gap-3">
+          <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800 flex-wrap gap-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-black text-slate-900 tracking-tight">Staff Access & Role Passwords</h2>
+                  <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">Staff Access & Role Passwords</h2>
                   <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 bg-sky-100 text-sky-800 rounded-full">
                     Admin Managed
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Set and update login passwords for Business Admin, Reception Counter, and Doctor Cabins.
                 </p>
               </div>
@@ -2518,7 +2518,7 @@ export const ClinicAdmin: React.FC = () => {
               <button
                 type="button"
                 onClick={fetchSecuritySettings}
-                className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+                className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loadingSecurity ? 'animate-spin' : ''}`} />
                 <span>Reload</span>
@@ -2543,7 +2543,7 @@ export const ClinicAdmin: React.FC = () => {
                   value={samePasswordInput}
                   onChange={(e) => setSamePasswordInput(e.target.value)}
                   placeholder="e.g. hospital123"
-                  className="px-3 py-2 text-xs font-mono font-bold rounded-xl border border-amber-300 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 w-36"
+                  className="px-3 py-2 text-xs font-mono font-bold rounded-xl border border-amber-300 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 w-36"
                 />
                 <button
                   type="button"
@@ -2569,13 +2569,13 @@ export const ClinicAdmin: React.FC = () => {
                     <ShieldCheck className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-extrabold text-slate-900">Hospital Business Admin Master Password</h3>
-                    <p className="text-[11px] text-slate-500">Unlocks this complete Admin & QR configuration console.</p>
+                    <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Hospital Business Admin Master Password</h3>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Unlocks this complete Admin & QR configuration console.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between mt-3 max-w-md">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Admin Master Key</span>
+                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Admin Master Key</span>
                   <button
                     type="button"
                     onClick={() => setSecAdminPassword(generateHardPassword())}
@@ -2590,13 +2590,13 @@ export const ClinicAdmin: React.FC = () => {
                     value={secAdminPassword}
                     onChange={(e) => setSecAdminPassword(e.target.value)}
                     placeholder="Enter Admin Master Password (min 8 chars)"
-                    className="w-full px-4 py-2.5 text-xs font-mono font-bold rounded-xl border border-indigo-200 bg-white pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-4 py-2.5 text-xs font-mono font-bold rounded-xl border border-indigo-200 bg-white dark:bg-slate-900 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowSecPasswords({ ...showSecPasswords, ADMIN: !showSecPasswords['ADMIN'] })}
-                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-2.5 text-slate-400 dark:text-slate-500 hover:text-slate-600"
                   >
                     {showSecPasswords['ADMIN'] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -2610,13 +2610,13 @@ export const ClinicAdmin: React.FC = () => {
                     <Users className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-extrabold text-slate-900">Reception Counter & Cashier Password</h3>
-                    <p className="text-[11px] text-slate-500">Used by receptionist to manage queues, collect cash, and call tokens.</p>
+                    <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Reception Counter & Cashier Password</h3>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Used by receptionist to manage queues, collect cash, and call tokens.</p>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between mt-3 max-w-md">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Reception Counter Key</span>
+                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Reception Counter Key</span>
                   <button
                     type="button"
                     onClick={() => setSecReceptionPassword(generateHardPassword())}
@@ -2631,13 +2631,13 @@ export const ClinicAdmin: React.FC = () => {
                     value={secReceptionPassword}
                     onChange={(e) => setSecReceptionPassword(e.target.value)}
                     placeholder="Enter Reception Password (min 6 chars)"
-                    className="w-full px-4 py-2.5 text-xs font-mono font-bold rounded-xl border border-emerald-200 bg-white pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-4 py-2.5 text-xs font-mono font-bold rounded-xl border border-emerald-200 bg-white dark:bg-slate-900 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowSecPasswords({ ...showSecPasswords, RECEPTION: !showSecPasswords['RECEPTION'] })}
-                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-2.5 text-slate-400 dark:text-slate-500 hover:text-slate-600"
                   >
                     {showSecPasswords['RECEPTION'] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -2651,8 +2651,8 @@ export const ClinicAdmin: React.FC = () => {
                     <Stethoscope className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-extrabold text-slate-900">Doctor OPD Passwords & Quick Login PINs</h3>
-                    <p className="text-[11px] text-slate-500">Each doctor has their own password and 4-digit quick touch PIN.</p>
+                    <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Doctor OPD Passwords & Quick Login PINs</h3>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Each doctor has their own password and 4-digit quick touch PIN.</p>
                   </div>
                 </div>
 
@@ -2660,15 +2660,15 @@ export const ClinicAdmin: React.FC = () => {
                   {secDoctorPasswords.map((doc, idx) => (
                     <div
                       key={doc.doctorId}
-                      className="bg-white p-4 rounded-xl border border-sky-100 grid grid-cols-1 sm:grid-cols-12 gap-3 items-center"
+                      className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-sky-100 grid grid-cols-1 sm:grid-cols-12 gap-3 items-center"
                     >
                       <div className="sm:col-span-5">
-                        <div className="text-xs font-black text-slate-900">{doc.name}</div>
-                        <div className="text-[11px] text-slate-500">{doc.specialty} • <span className="font-semibold text-sky-700">{doc.roomNumber}</span></div>
+                        <div className="text-xs font-black text-slate-900 dark:text-white">{doc.name}</div>
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400">{doc.specialty} • <span className="font-semibold text-sky-700">{doc.roomNumber}</span></div>
                       </div>
 
                       <div className="sm:col-span-4">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Doctor Password</label>
+                        <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1">Doctor Password</label>
                         <div className="relative">
                           <input
                             type={showSecPasswords[doc.doctorId] ? 'text' : 'password'}
@@ -2679,12 +2679,12 @@ export const ClinicAdmin: React.FC = () => {
                               setSecDoctorPasswords(updated);
                             }}
                             placeholder="Password"
-                            className="w-full px-3 py-1.5 text-xs font-mono font-bold rounded-lg border border-slate-200 bg-slate-50 pr-8 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                            className="w-full px-3 py-1.5 text-xs font-mono font-bold rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 pr-8 focus:outline-none focus:ring-1 focus:ring-sky-500"
                           />
                           <button
                             type="button"
                             onClick={() => setShowSecPasswords({ ...showSecPasswords, [doc.doctorId]: !showSecPasswords[doc.doctorId] })}
-                            className="absolute right-2 top-2 text-slate-400 hover:text-slate-600"
+                            className="absolute right-2 top-2 text-slate-400 dark:text-slate-500 hover:text-slate-600"
                           >
                             {showSecPasswords[doc.doctorId] ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                           </button>
@@ -2692,7 +2692,7 @@ export const ClinicAdmin: React.FC = () => {
                       </div>
 
                       <div className="sm:col-span-3">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">4-Digit PIN</label>
+                        <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1">4-Digit PIN</label>
                         <input
                           type={showSecPasswords[doc.doctorId] ? 'text' : 'password'}
                           maxLength={6}
@@ -2703,7 +2703,7 @@ export const ClinicAdmin: React.FC = () => {
                             setSecDoctorPasswords(updated);
                           }}
                           placeholder="••••"
-                          className="w-full px-3 py-1.5 text-xs font-mono font-bold rounded-lg border border-slate-200 bg-slate-50 text-center tracking-widest focus:outline-none focus:ring-1 focus:ring-sky-500"
+                          className="w-full px-3 py-1.5 text-xs font-mono font-bold rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-center tracking-widest focus:outline-none focus:ring-1 focus:ring-sky-500"
                         />
                       </div>
                     </div>
@@ -2731,10 +2731,10 @@ export const ClinicAdmin: React.FC = () => {
       {activeTab === 'STANDEE' && (
         <div>
           {/* Action Banner (Hidden on Print) */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 print:hidden">
+          <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 print:hidden">
             <div>
-              <h2 className="text-base font-bold text-slate-900">Official Hospital QR Standee</h2>
-              <p className="text-xs text-slate-500">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">Official Hospital QR Standee</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Displaying {clinic?.name}'s custom logo and QR code. Download high-res PNG or print directly.
               </p>
             </div>
@@ -2826,72 +2826,72 @@ export const ClinicAdmin: React.FC = () => {
 
       {/* Add / Edit Doctor Modal */}
       {showDoctorModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl">
-            <h2 className="text-base font-bold text-slate-900 mb-1">
+        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800">
+            <h2 className="text-base font-bold text-slate-900 dark:text-white mb-1">
               {editingDoctorId ? 'Edit Doctor Details' : 'Add New OPD Doctor'}
             </h2>
-            <p className="text-xs text-slate-500 mb-4">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
               Enter doctor's full name, medical specialty, and assigned cabin/room.
             </p>
 
             <form onSubmit={handleSaveDoctor} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Doctor Name & Credentials</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Doctor Name & Credentials</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Dr. Rohan Sharma, MD"
                   value={docName}
                   onChange={(e) => setDocName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Medical Specialty</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Medical Specialty</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. General Physician, Pediatrician, Orthopedic"
                   value={docSpecialty}
                   onChange={(e) => setDocSpecialty(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Assigned Cabin / Room Number</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Assigned Cabin / Room Number</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Cabin 101, 1st Floor"
                   value={docRoom}
                   onChange={(e) => setDocRoom(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Doctor 4-Digit PIN</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Doctor 4-Digit PIN</label>
                   <input
                     type="password"
                     maxLength={8}
                     placeholder={editingDoctorId ? 'Leave blank to keep' : 'e.g. 5821'}
                     value={docPin}
                     onChange={(e) => setDocPin(e.target.value)}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Doctor Password</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Doctor Password</label>
                   <input
                     type="password"
                     placeholder={editingDoctorId ? 'Leave blank to keep' : 'Secret password'}
                     value={docPassword}
                     onChange={(e) => setDocPassword(e.target.value)}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
                   />
                 </div>
               </div>
@@ -2904,7 +2904,7 @@ export const ClinicAdmin: React.FC = () => {
                   onChange={(e) => setDocActive(e.target.checked)}
                   className="h-4 w-4 text-sky-600 rounded"
                 />
-                <label htmlFor="docActive" className="text-xs font-semibold text-slate-700">
+                <label htmlFor="docActive" className="text-xs font-semibold text-slate-700 dark:text-slate-200">
                   Currently on Duty / Active for OPD
                 </label>
               </div>
@@ -2913,13 +2913,13 @@ export const ClinicAdmin: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowDoctorModal(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 rounded-xl shadow-sm"
+                  className="px-5 py-2 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 rounded-xl shadow-sm cursor-pointer"
                 >
                   {editingDoctorId ? 'Update Doctor' : 'Save Doctor'}
                 </button>
@@ -2931,48 +2931,48 @@ export const ClinicAdmin: React.FC = () => {
 
       {/* Add / Edit Service Modal */}
       {showServiceModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl">
-            <h2 className="text-base font-bold text-slate-900 mb-1">
+        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800">
+            <h2 className="text-base font-bold text-slate-900 dark:text-white mb-1">
               {editingServiceId ? 'Edit Consultation Service' : 'Add OPD Consultation Service'}
             </h2>
-            <p className="text-xs text-slate-500 mb-4">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
               Define service name and consultation fee charged to patients.
             </p>
 
             <form onSubmit={handleSaveService} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Service Name</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Service Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. General OPD Consultation"
                   value={srvName}
                   onChange={(e) => setSrvName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Consultation Fee (₹)</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Consultation Fee (₹)</label>
                 <input
                   type="number"
                   required
                   placeholder="e.g. 500"
                   value={srvFee}
                   onChange={(e) => setSrvFee(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Estimated Slot Duration (Mins)</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Estimated Slot Duration (Mins)</label>
                 <input
                   type="number"
                   required
                   value={srvDuration}
                   onChange={(e) => setSrvDuration(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
@@ -2980,13 +2980,13 @@ export const ClinicAdmin: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowServiceModal(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-sm"
+                  className="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-sm cursor-pointer"
                 >
                   {editingServiceId ? 'Update Service' : 'Save Service'}
                 </button>
@@ -2999,14 +2999,14 @@ export const ClinicAdmin: React.FC = () => {
       {/* Confirmation Modal (Replaces native browser window.confirm) */}
       {confirmModal && confirmModal.isOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
             <div className="flex items-start gap-3">
               <div className="p-2.5 bg-red-100 text-red-600 rounded-2xl shrink-0">
                 <AlertCircle className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-extrabold text-slate-900 tracking-tight">{confirmModal.title}</h3>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">{confirmModal.message}</p>
+                <h3 className="text-base font-extrabold text-slate-900 dark:text-white tracking-tight">{confirmModal.title}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{confirmModal.message}</p>
               </div>
             </div>
 
@@ -3014,7 +3014,7 @@ export const ClinicAdmin: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setConfirmModal(null)}
-                className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+                className="px-4 py-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
               >
                 Cancel
               </button>

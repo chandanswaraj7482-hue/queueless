@@ -159,7 +159,7 @@ function Navigation() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 glass-panel border-b border-slate-200/80 print:hidden transition-all">
+      <header className="sticky top-0 z-40 glass-panel border-b border-slate-200/80 dark:border-slate-800 dark:bg-slate-900/90 print:hidden transition-all">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
           {/* Brand */}
           <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
@@ -167,24 +167,24 @@ function Navigation() {
               <img
                 src="/logo.png"
                 alt="Queueless"
-                className="h-9 w-9 rounded-full shadow-md border border-slate-200 object-cover group-hover:scale-105 transition-transform"
+                className="h-9 w-9 rounded-full shadow-md border border-slate-200 dark:border-slate-700 object-cover group-hover:scale-105 transition-transform"
               />
               <span className="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 border-2 border-white"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 border-2 border-white dark:border-slate-900"></span>
               </span>
             </div>
 
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-base tracking-tight text-slate-900 group-hover:text-sky-600 transition-colors">
+                <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
                   Queueless
                 </span>
-                <span className="text-[10px] bg-sky-100/80 text-sky-800 font-bold px-1.5 py-0.2 rounded-md uppercase tracking-wider">
+                <span className="text-[10px] bg-sky-100/80 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300 font-bold px-1.5 py-0.2 rounded-md uppercase tracking-wider border border-sky-200/60 dark:border-sky-800/60">
                   PRO
                 </span>
               </div>
-              <span className="text-[10px] text-slate-400 font-semibold block -mt-0.5 tracking-wider uppercase">
+              <span className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold block -mt-0.5 tracking-wider uppercase">
                 Clinic Queue OS
               </span>
             </div>
@@ -195,17 +195,17 @@ function Navigation() {
             {/* Quick Track Token Button */}
             <button
               onClick={() => setShowSearchModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200/80 rounded-xl text-xs font-bold transition-all shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-800 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800 rounded-xl text-xs font-bold transition-all shadow-xs"
               title="Track Token ID e.g. A-108"
             >
-              <Search className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+              <Search className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
               <span>Track Token</span>
             </button>
 
             {/* Back to Home / Commercial SaaS */}
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-900 hover:bg-slate-800 text-white shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white shadow-xs border border-transparent dark:border-slate-700"
             >
               <span>Home</span>
             </Link>
@@ -215,39 +215,39 @@ function Navigation() {
 
       {/* Track Token Modal */}
       {showSearchModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in duration-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 relative animate-in fade-in zoom-in duration-150">
             <button
               onClick={() => setShowSearchModal(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+              className="absolute top-4 right-4 p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div className="flex items-center gap-2.5 mb-2">
-              <div className="p-2 bg-sky-100 text-sky-700 rounded-xl">
+              <div className="p-2 bg-sky-100 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 rounded-xl border border-sky-200/60 dark:border-sky-800/60">
                 <Search className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-black text-slate-900">Track OPD Token</h3>
-                <p className="text-xs text-slate-500">Live queue position, wait time, and cabin status</p>
+                <h3 className="text-base font-black text-slate-900 dark:text-white">Track OPD Token</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Live queue position, wait time, and cabin status</p>
               </div>
             </div>
 
             {trackError && (
-              <div className="my-3 p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-semibold flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <div className="my-3 p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-300 rounded-xl text-xs font-semibold flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
                 <span>{trackError}</span>
               </div>
             )}
 
             <form onSubmit={handleTrackSubmit} className="mt-3 space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Assigned Token ID
                 </label>
                 <div className="relative">
-                  <Ticket className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                  <Ticket className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-3" />
                   <input
                     type="text"
                     autoFocus
@@ -258,17 +258,17 @@ function Navigation() {
                       setTokenInput(e.target.value);
                       setTrackError(null);
                     }}
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-black text-slate-900 uppercase placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-black text-slate-900 dark:text-white uppercase placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Patient Name (Security Verification)
                 </label>
                 <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                  <User className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-3" />
                   <input
                     type="text"
                     required
@@ -278,10 +278,10 @@ function Navigation() {
                       setNameInput(e.target.value);
                       setTrackError(null);
                     }}
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                   />
                 </div>
-                <p className="text-[11px] text-slate-400 mt-1">
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
                   🔒 Required so other people cannot view your private health information.
                 </p>
               </div>
@@ -293,7 +293,7 @@ function Navigation() {
                     setShowSearchModal(false);
                     navigate('/portal');
                   }}
-                  className="text-xs text-sky-700 hover:underline font-bold"
+                  className="text-xs text-sky-700 dark:text-sky-400 hover:underline font-bold"
                 >
                   Patient Login & History ➔
                 </button>
@@ -301,7 +301,7 @@ function Navigation() {
                 <button
                   type="submit"
                   disabled={trackingLoading || !tokenInput.trim() || !nameInput.trim()}
-                  className="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white font-black text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5"
+                  className="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white font-black text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>{trackingLoading ? 'Verifying...' : 'Track Live'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />

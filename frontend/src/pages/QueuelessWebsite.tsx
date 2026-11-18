@@ -443,6 +443,9 @@ export const QueuelessWebsite: React.FC = () => {
   const [roiPatients, setRoiPatients] = useState(120);
   const [roiFee, setRoiFee] = useState(50); // initialized to USD 50
 
+  // Mobile Audit Comparison Switcher State
+  const [auditComparisonTab, setAuditComparisonTab] = useState<'LEGACY' | 'ZERO_WAIT'>('ZERO_WAIT');
+
   // Form State for Instant Checkout / Buy
   const [hospitalName, setHospitalName] = useState('');
   const [slug, setSlug] = useState('');
@@ -2106,9 +2109,39 @@ export const QueuelessWebsite: React.FC = () => {
             </p>
           </div>
 
+          {/* Mobile View Switcher: Cuts 1200px of redundant vertical scrolling on phones */}
+          <div className="flex lg:hidden items-center justify-center p-1 bg-slate-900 rounded-2xl max-w-xs mx-auto border border-slate-800">
+            <button
+              type="button"
+              onClick={() => setAuditComparisonTab('LEGACY')}
+              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                auditComparisonTab === 'LEGACY'
+                  ? 'bg-rose-600/90 text-white shadow-xs'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <AlertTriangle className="w-3.5 h-3.5" />
+              <span>Legacy Chaos</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setAuditComparisonTab('ZERO_WAIT')}
+              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                auditComparisonTab === 'ZERO_WAIT'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Zero-Wait OS</span>
+            </button>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* The Old Chaotic Way: The Cost of Legacy Counter Queues */}
-            <div className="p-7 sm:p-9 rounded-[32px] bg-rose-50/40 dark:bg-slate-950 border border-rose-200 dark:border-rose-500/30 text-slate-900 dark:text-white shadow-xl space-y-6 relative overflow-hidden flex flex-col justify-between transition-colors">
+            <div className={`p-6 sm:p-9 rounded-[32px] bg-rose-50/40 dark:bg-slate-950 border border-rose-200 dark:border-rose-500/30 text-slate-900 dark:text-white shadow-xl space-y-6 relative overflow-hidden flex-col justify-between transition-colors ${
+              auditComparisonTab === 'LEGACY' ? 'flex' : 'hidden lg:flex'
+            }`}>
               <div className="absolute top-0 right-0 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
               <div className="space-y-6 relative z-10">
@@ -2221,7 +2254,9 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
 
             {/* The Queueless Zero-Wait Way: Autonomous Hospital OS */}
-            <div className="p-7 sm:p-9 rounded-[32px] bg-gradient-to-b from-white via-blue-50/25 to-white dark:from-slate-900 dark:via-blue-950/30 dark:to-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-[0_20px_50px_rgba(37,99,235,0.12)] ring-4 ring-blue-500/15 space-y-6 relative overflow-hidden flex flex-col justify-between">
+            <div className={`p-6 sm:p-9 rounded-[32px] bg-gradient-to-b from-white via-blue-50/25 to-white dark:from-slate-900 dark:via-blue-950/30 dark:to-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-[0_20px_50px_rgba(37,99,235,0.12)] ring-4 ring-blue-500/15 space-y-6 relative overflow-hidden flex-col justify-between ${
+              auditComparisonTab === 'ZERO_WAIT' ? 'flex' : 'hidden lg:flex'
+            }`}>
               <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
               <div className="space-y-6 relative z-10">
@@ -4615,6 +4650,38 @@ export const QueuelessWebsite: React.FC = () => {
       )}
 
 
+
+      {/* Floating Sticky Mobile Quick Action Bar (Discreet, Native-feeling Bottom Bar on Phones) */}
+      <div className="fixed bottom-3 inset-x-3 z-40 sm:hidden pointer-events-none">
+        <div className="max-w-md mx-auto p-1.5 rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-slate-800/90 shadow-2xl flex items-center justify-between gap-2 pointer-events-auto">
+          <button
+            type="button"
+            onClick={() => {
+              const nextNum = Math.floor(100 + Math.random() * 20);
+              const cabins = ['Cabin 1 (Cardiology)', 'Cabin 2 (Pediatrics)', 'Cabin 204 (Orthopedic)'];
+              const nextCabin = cabins[Math.floor(Math.random() * cabins.length)];
+              const tokenStr = `A-${nextNum}`;
+              setDemoCalledToken(tokenStr);
+              setDemoDoctorCabin(nextCabin);
+              setSimulatedCallFlash(true);
+              setTimeout(() => setSimulatedCallFlash(false), 3500);
+              playClinicVoiceAnnouncement(tokenStr, nextCabin, 'Dr. Rohan Sharma', true);
+            }}
+            className="flex-1 py-2.5 px-3 bg-gradient-to-r from-emerald-600 to-teal-600 active:scale-95 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+          >
+            <Volume2 className="w-3.5 h-3.5" />
+            <span>Call Token 📢</span>
+          </button>
+
+          <Link
+            to="/signup"
+            className="flex-1 py-2.5 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>Free Pilot ➔</span>
+          </Link>
+        </div>
+      </div>
 
     </div>
   );

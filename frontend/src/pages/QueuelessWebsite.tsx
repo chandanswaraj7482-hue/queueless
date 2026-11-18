@@ -1020,7 +1020,7 @@ export const QueuelessWebsite: React.FC = () => {
                   setTimeout(() => setSimulatedCallFlash(false), 3500);
                   playClinicVoiceAnnouncement(tokenStr, nextCabin, 'Dr. Rohan Sharma', true);
                 }}
-                className="w-full sm:w-auto px-4 py-3 sm:px-5 sm:py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer ring-2 ring-emerald-500/20"
+                className="hidden sm:inline-flex px-4 py-3 sm:px-5 sm:py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/25 transition-all items-center justify-center gap-2 cursor-pointer ring-2 ring-emerald-500/20 shrink-0"
               >
                 <Volume2 className="w-3.5 h-3.5 fill-white shrink-0" />
                 <span>Simulate Doctor "Call Next" (Chime & Dual Voice 📢)</span>
@@ -1482,6 +1482,28 @@ export const QueuelessWebsite: React.FC = () => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Mobile Bottom Action: Simulate Doctor Call Next (Exact Claude Reference) */}
+            <div className="pt-4 sm:hidden">
+              <button
+                type="button"
+                onClick={() => {
+                  const nextNum = Math.floor(100 + Math.random() * 20);
+                  const cabins = ['Cabin 1 (Cardiology)', 'Cabin 2 (Pediatrics)', 'Cabin 204 (Orthopedic)'];
+                  const nextCabin = cabins[Math.floor(Math.random() * cabins.length)];
+                  const tokenStr = `A-${nextNum}`;
+                  setDemoCalledToken(tokenStr);
+                  setDemoDoctorCabin(nextCabin);
+                  setSimulatedCallFlash(true);
+                  setTimeout(() => setSimulatedCallFlash(false), 3500);
+                  playClinicVoiceAnnouncement(tokenStr, nextCabin, 'Dr. Rohan Sharma', true);
+                }}
+                className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
+              >
+                <Volume2 className="w-4 h-4 fill-white shrink-0" />
+                <span>Simulate doctor "Call next"</span>
+              </button>
             </div>
           </div>
 
@@ -2278,8 +2300,8 @@ export const QueuelessWebsite: React.FC = () => {
               From entrance QR admission to doctor cabin consultation, pharmacy billing, and boardroom analytics — all synchronized in under 0.2 seconds.
             </p>
 
-            {/* Segmented 5-Pillar Tabs with Smooth Horizontal Scroll on Mobile */}
-            <div className="pt-4 flex items-center justify-start sm:justify-center gap-2 overflow-x-auto sm:flex-wrap pb-2 sm:pb-0 scrollbar-none">
+            {/* Desktop Segmented 5-Pillar Tabs */}
+            <div className="hidden sm:flex items-center justify-center gap-2 flex-wrap pt-4">
               {[
                 { id: 'MOBILE_QR', icon: Smartphone, label: 'Patient Mobile Pass', sub: '20s Contactless Entry' },
                 { id: 'TV_KIOSK', icon: Tv, label: 'Smart TV Wall Kiosk', sub: '55" OLED & Voice Chime' },
@@ -2307,6 +2329,51 @@ export const QueuelessWebsite: React.FC = () => {
                         {tab.sub}
                       </span>
                     </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Mobile Vertical Stacked Pillar List (Exact Claude Mobile Reference) */}
+            <div className="sm:hidden space-y-2 pt-3 text-left">
+              {[
+                { id: 'MOBILE_QR', icon: Smartphone, label: 'Patient mobile pass', sub: '20-second contactless entry' },
+                { id: 'TV_KIOSK', icon: Tv, label: 'Smart TV wall kiosk', sub: '55" display with voice chime' },
+                { id: 'DOCTOR_CABIN', icon: Stethoscope, label: 'Doctor cabin console', sub: '1-tap call next & clinical presets' },
+                { id: 'RECEPTION_POS', icon: Printer, label: 'Reception cashier POS', sub: '58/80mm thermal slips for walk-ins' },
+                { id: 'EXECUTIVE_ANALYTICS', icon: TrendingUp, label: 'Boardroom analytics', sub: 'Real-time OPD telemetry' },
+              ].map((tab) => {
+                const IconComponent = tab.icon;
+                const isActive = productTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setProductTab(tab.id as any)}
+                    className={`w-full p-3 rounded-2xl border transition-all flex items-center justify-between gap-3 cursor-pointer ${
+                      isActive
+                        ? 'bg-blue-600/10 dark:bg-blue-500/20 border-blue-500 shadow-sm ring-1 ring-blue-500/30'
+                        : 'bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                        isActive
+                          ? 'bg-blue-600 text-white shadow-xs'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                      }`}>
+                        <IconComponent className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0 truncate">
+                        <strong className={`block text-xs font-bold truncate ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-white'}`}>
+                          {tab.label}
+                        </strong>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate block">
+                          {tab.sub}
+                        </span>
+                      </div>
+                    </div>
+                    <ArrowRight className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400'}`} />
                   </button>
                 );
               })}

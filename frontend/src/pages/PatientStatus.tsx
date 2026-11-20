@@ -1732,11 +1732,18 @@ export const PatientStatus: React.FC = () => {
 
             {/* Assigned Doctor Preview */}
             <div className="p-3 bg-slate-50 dark:bg-slate-800/90 rounded-2xl text-xs flex items-center justify-between border border-slate-100 dark:border-slate-700">
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase block">Selected Doctor</span>
-                <span className="font-bold text-slate-800 dark:text-slate-200">{data.doctorName}</span>
+              <div className="flex items-center gap-2.5">
+                <img
+                  src="/assets/avatars/doc-1.jpg"
+                  alt={data.doctorName}
+                  className="w-8 h-8 rounded-full object-cover border border-sky-400 shrink-0 shadow-xs"
+                />
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase block">Selected Doctor</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{data.doctorName}</span>
+                </div>
               </div>
-              <span className="text-[11px] font-bold text-sky-700 bg-sky-50 border border-sky-100 px-2.5 py-1 rounded-xl">
+              <span className="text-[11px] font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/80 border border-sky-100 dark:border-sky-800 px-2.5 py-1 rounded-xl">
                 {data.roomNumber}
               </span>
             </div>
@@ -2226,7 +2233,14 @@ export const PatientStatus: React.FC = () => {
             <div className="p-4 bg-slate-50/80 dark:bg-slate-800/80 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-2.5 text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400 font-semibold">Assigned Doctor</span>
-                <span className="font-bold text-slate-900 dark:text-white">{data.doctorName}</span>
+                <div className="flex items-center gap-2">
+                  <img
+                    src="/assets/avatars/doc-1.jpg"
+                    alt={data.doctorName}
+                    className="w-5 h-5 rounded-full object-cover border border-sky-400 shrink-0"
+                  />
+                  <span className="font-bold text-slate-900 dark:text-white">{data.doctorName}</span>
+                </div>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400 font-semibold">Cabin / Room</span>

@@ -884,19 +884,32 @@ export const QueuelessWebsite: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.28, ease: 'easeOut' }}
             className="pt-1 flex items-center justify-center gap-2.5 sm:gap-3"
           >
-            <div className="flex -space-x-2 overflow-hidden">
-              <div className="inline-flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 bg-emerald-600 text-white font-black text-[10px] shadow-sm">
-                RS
-              </div>
-              <div className="inline-flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 bg-blue-600 text-white font-black text-[10px] shadow-sm">
-                PK
-              </div>
-              <div className="inline-flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 bg-purple-600 text-white font-black text-[10px] shadow-sm">
-                AB
-              </div>
-              <div className="inline-flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 bg-amber-600 text-white font-black text-[10px] shadow-sm">
-                ND
-              </div>
+            <div className="flex -space-x-2.5 overflow-hidden">
+              <img
+                src="/assets/avatars/doc-1.jpg"
+                alt="Dr. Rohan Sharma"
+                className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover shadow-sm"
+              />
+              <img
+                src="/assets/avatars/doc-2.jpg"
+                alt="Dr. Priya Kulkarni"
+                className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover shadow-sm"
+              />
+              <img
+                src="/assets/avatars/doc-3.jpg"
+                alt="Col. R.K. Nair"
+                className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover shadow-sm"
+              />
+              <img
+                src="/assets/avatars/doc-5.jpg"
+                alt="Dr. Ananya Sen"
+                className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover shadow-sm"
+              />
+              <img
+                src="/assets/avatars/pat-1.jpg"
+                alt="Sunita Mehra"
+                className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover shadow-sm"
+              />
             </div>
             <div className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-600 dark:text-slate-300 font-semibold">
               <div className="flex text-amber-400">
@@ -1287,9 +1300,16 @@ export const QueuelessWebsite: React.FC = () => {
                         <span>Assigned Room:</span>
                         <strong className="text-blue-700 font-black">{demoDoctorCabin}</strong>
                       </div>
-                      <div className="flex justify-between text-slate-500 text-[11px]">
+                      <div className="flex items-center justify-between text-slate-500 text-[11px]">
                         <span>Consulting:</span>
-                        <span className="text-slate-800 font-bold">Dr. Rohan Sharma, MD</span>
+                        <div className="flex items-center gap-1.5">
+                          <img
+                            src="/assets/avatars/doc-1.jpg"
+                            alt="Dr. Rohan Sharma"
+                            className="w-4 h-4 rounded-full object-cover border border-blue-400 shrink-0"
+                          />
+                          <span className="text-slate-900 font-bold">Dr. Rohan Sharma, MD</span>
+                        </div>
                       </div>
                       <div className="flex justify-between text-slate-500 text-[11px]">
                         <span>Estimated Wait:</span>
@@ -2546,9 +2566,16 @@ export const QueuelessWebsite: React.FC = () => {
                       </div>
 
                       <div className="space-y-1.5 text-xs text-slate-300 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                        <div className="flex justify-between">
+                        <div className="flex items-center justify-between">
                           <span className="text-slate-400 text-[11px]">Doctor:</span>
-                          <span className="font-bold text-white">Dr. Rohan Sharma</span>
+                          <div className="flex items-center gap-1.5">
+                            <img
+                              src="/assets/avatars/doc-1.jpg"
+                              alt="Dr. Rohan Sharma"
+                              className="w-4 h-4 rounded-full object-cover border border-blue-400 shrink-0"
+                            />
+                            <span className="font-bold text-white">Dr. Rohan Sharma</span>
+                          </div>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-slate-400 text-[11px]">Assigned Cabin:</span>
@@ -2699,11 +2726,18 @@ export const QueuelessWebsite: React.FC = () => {
                 {/* Doctor Tablet Workstation Mockup */}
                 <div className="md:col-span-6 bg-slate-900 p-5 sm:p-6 rounded-3xl border-4 border-slate-700 text-slate-100 shadow-2xl space-y-4">
                   <div className="flex items-center justify-between pb-3 border-b border-slate-800 text-xs">
-                    <div>
-                      <strong className="text-white block">Dr. Rohan Sharma, MD</strong>
-                      <span className="text-[11px] text-purple-300 font-mono">Cabin 1 • General Medicine</span>
+                    <div className="flex items-center gap-2.5">
+                      <img
+                        src="/assets/avatars/doc-1.jpg"
+                        alt="Dr. Rohan Sharma"
+                        className="w-10 h-10 rounded-full object-cover border-2 border-purple-400 shrink-0 shadow-sm"
+                      />
+                      <div>
+                        <strong className="text-white block">Dr. Rohan Sharma, MD</strong>
+                        <span className="text-[11px] text-purple-300 font-mono">Cabin 1 • General Medicine</span>
+                      </div>
                     </div>
-                    <span className="text-xs font-bold text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-full border border-emerald-500/30">
+                    <span className="text-xs font-bold text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-full border border-emerald-500/30 shrink-0">
                       Active In Consultation
                     </span>
                   </div>

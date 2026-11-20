@@ -8,6 +8,7 @@ import {
   Clock,
   Play,
   User,
+  Users,
   HeartPulse,
   Pill,
   Plus,
@@ -332,6 +333,7 @@ export const DoctorView: React.FC = () => {
   const [selectedDoctorId, setSelectedDoctorId] = useState<string>('');
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mobileTab, setMobileTab] = useState<'consultation' | 'queue' | 'history'>('consultation');
 
   // Doctor Authentication & PIN Gate (Strict Session or PIN verification - No URL bypass)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
@@ -1328,9 +1330,54 @@ export const DoctorView: React.FC = () => {
         </div>
       )}
 
+      {/* Mobile Navigation Segment Switcher */}
+      <div className="lg:hidden flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-2xl mb-4 border border-slate-200/90 dark:border-slate-700 shadow-2xs">
+        <button
+          type="button"
+          onClick={() => setMobileTab('consultation')}
+          className={`flex-1 py-2 px-2 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+            mobileTab === 'consultation'
+              ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-300 shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Stethoscope className="w-3.5 h-3.5" />
+          <span>Consult</span>
+          {activePatient && (
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMobileTab('queue')}
+          className={`flex-1 py-2 px-2 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+            mobileTab === 'queue'
+              ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-300 shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Users className="w-3.5 h-3.5" />
+          <span>Queue ({waitingPatients.length})</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMobileTab('history')}
+          className={`flex-1 py-2 px-2 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+            mobileTab === 'history'
+              ? 'bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-300 shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <CheckCircle2 className="w-3.5 h-3.5" />
+          <span>Done ({completedPatients.length})</span>
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Consultation / OPD Card */}
-        <div className="lg:col-span-2 space-y-5">
+        <div className={`lg:col-span-2 space-y-5 ${mobileTab !== 'consultation' ? 'hidden lg:block' : ''}`}>
           <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-3xl p-6 sm:p-7 border border-slate-200/90 dark:border-slate-800 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] relative overflow-hidden">
             <div className="flex items-center justify-between mb-5 pb-3.5 border-b border-slate-100 dark:border-slate-800">
               <span className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
@@ -1717,19 +1764,28 @@ export const DoctorView: React.FC = () => {
                             key={index}
                             className="p-3 bg-white dark:bg-slate-800/90 rounded-2xl border border-slate-200/90 dark:border-slate-700 shadow-2xs hover:border-slate-300 dark:hover:border-slate-600 transition-all space-y-2"
                           >
-                            {/* Row 1: Name, Dose, Frequency, Duration, Remove */}
-                            <div className="grid grid-cols-12 gap-2 items-center">
-                              <div className="col-span-12 sm:col-span-5">
-                                <input
-                                  type="text"
-                                  placeholder="Medicine name (e.g. Tab. Dolo 650mg, Syp. Ascoril)..."
-                                  value={med.medicineName}
-                                  onChange={(e) => handleMedicineChange(index, 'medicineName', e.target.value)}
-                                  className="w-full text-xs font-bold text-slate-900 dark:text-white dark:text-white bg-slate-50 dark:bg-slate-900 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                                />
-                              </div>
+                            {/* Row 1: Name and Delete button */}
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="text"
+                                placeholder="Medicine name (e.g. Tab. Dolo 650mg, Syp. Ascoril)..."
+                                value={med.medicineName}
+                                onChange={(e) => handleMedicineChange(index, 'medicineName', e.target.value)}
+                                className="flex-1 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-900 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveMedicine(index)}
+                                className="p-2 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer shrink-0"
+                                title="Remove Medicine"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
 
-                              <div className="col-span-4 sm:col-span-2">
+                            {/* Row 2: Dose, Frequency, Duration in a clean 3-col grid */}
+                            <div className="grid grid-cols-3 gap-2 items-center">
+                              <div>
                                 <input
                                   type="text"
                                   placeholder="Dose (1 Tab)"
@@ -1751,7 +1807,7 @@ export const DoctorView: React.FC = () => {
                                 </datalist>
                               </div>
 
-                              <div className="col-span-4 sm:col-span-2">
+                              <div>
                                 <input
                                   type="text"
                                   placeholder="Freq (1-0-1)"
@@ -1770,7 +1826,7 @@ export const DoctorView: React.FC = () => {
                                 </datalist>
                               </div>
 
-                              <div className="col-span-3 sm:col-span-2">
+                              <div>
                                 <input
                                   type="text"
                                   placeholder="Duration (5d)"
@@ -1788,17 +1844,6 @@ export const DoctorView: React.FC = () => {
                                   <option value="1 Month" />
                                   <option value="Continue" />
                                 </datalist>
-                              </div>
-
-                              <div className="col-span-1 text-right">
-                                <button
-                                  type="button"
-                                  onClick={() => handleRemoveMedicine(index)}
-                                  className="p-2 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 transition-colors cursor-pointer"
-                                  title="Remove Medicine"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
                               </div>
                             </div>
 
@@ -2197,9 +2242,9 @@ export const DoctorView: React.FC = () => {
         </div>
 
         {/* Sidebar: Upcoming Queue & Completed Consultations */}
-        <div className="space-y-5">
-          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-[0_6px_25px_-5px_rgba(0,0,0,0.05)]">
-            <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-3.5 flex items-center justify-between">
+        <div className={`space-y-5 ${mobileTab === 'consultation' ? 'hidden lg:block' : ''}`}>
+          <div className={`bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-[0_6px_25px_-5px_rgba(0,0,0,0.05)] ${mobileTab === 'history' ? 'hidden lg:block' : ''}`}>
+            <h3 className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-3.5 flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
                 <span>Next in Line ({waitingPatients.length})</span>
@@ -2276,9 +2321,9 @@ export const DoctorView: React.FC = () => {
           </div>
 
           {/* Today's Completed OPD Consultations */}
-          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-[0_6px_25px_-5px_rgba(0,0,0,0.05)]">
+          <div className={`bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-[0_6px_25px_-5px_rgba(0,0,0,0.05)] ${mobileTab === 'queue' ? 'hidden lg:block' : ''}`}>
             <div className="flex items-center justify-between mb-3.5">
-              <span className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
+              <span className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 <span>Seen Today</span>
               </span>

@@ -672,19 +672,19 @@ export const ReceptionDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-28">
       {/* Header & Quick Action */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] mb-6 relative overflow-hidden">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-4 sm:p-6 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] mb-6 relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
         
         <div>
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
-              <span>{hospitalDisplayName} • Reception Desk</span>
-              <span className="flex h-2.5 w-2.5 relative">
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+            <h1 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+              <span className="truncate max-w-[260px] sm:max-w-none">{hospitalDisplayName} • Reception</span>
+              <span className="flex h-2.5 w-2.5 relative shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
               </span>
             </h1>
-            <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200">
+            <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200 shrink-0">
               <span>⚡ Counter Active</span>
             </span>
           </div>
@@ -693,42 +693,42 @@ export const ReceptionDashboard: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap w-full sm:w-auto">
           <button
             onClick={openFinancialLedger}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-black rounded-xl transition-all shadow-2xs cursor-pointer active:scale-95"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-black rounded-xl transition-all shadow-2xs cursor-pointer active:scale-95 whitespace-nowrap"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Audit Fee Ledger</span>
+            <span>Ledger</span>
           </button>
 
           <button
             onClick={() => setShowWalkInModal(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-xl transition-all border border-slate-200 dark:border-slate-700 cursor-pointer active:scale-95 shadow-2xs"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-xl transition-all border border-slate-200 dark:border-slate-700 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap"
           >
             <UserPlus className="w-3.5 h-3.5" />
-            <span>Add Walk-In</span>
+            <span>+ Walk-In</span>
           </button>
 
           <button
             onClick={handleCallNext}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-black rounded-xl shadow-lg shadow-emerald-600/30 transition-all group active:scale-95 cursor-pointer ring-2 ring-emerald-200"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-black rounded-xl shadow-lg shadow-emerald-600/30 transition-all group active:scale-95 cursor-pointer ring-2 ring-emerald-200"
             title="Press Alt + N to call next patient"
           >
             <PhoneCall className="w-4 h-4" />
-            <span>CALL NEXT</span>
-            <span className="text-[10px] bg-emerald-900/80 px-1.5 py-0.5 rounded text-emerald-200 font-mono font-normal">
+            <span>CALL NEXT PATIENT</span>
+            <span className="text-[10px] bg-emerald-900/80 px-1.5 py-0.5 rounded text-emerald-200 font-mono font-normal hidden sm:inline">
               Alt+N
             </span>
           </button>
 
           <button
             onClick={handleReceptionLogout}
-            className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl transition-all border border-slate-200 dark:border-slate-700 cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl transition-all border border-slate-200 dark:border-slate-700 cursor-pointer shrink-0"
             title="Lock Desk / Logout"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span>Lock</span>
+            <span className="hidden sm:inline">Lock</span>
           </button>
         </div>
       </div>
@@ -853,13 +853,13 @@ export const ReceptionDashboard: React.FC = () => {
               e.preventDefault();
               handleVerifyCashByToken();
             }}
-            className="flex items-center gap-2 w-full lg:w-auto shrink-0"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto shrink-0"
           >
             <div className="relative flex-1 sm:w-64">
               <input
                 ref={cashInputRef}
                 type="text"
-                placeholder="Enter Token ID (e.g. A-116) or Mobile... [Alt+C]"
+                placeholder="Token ID (e.g. A-116) or Mobile..."
                 value={cashTokenInput}
                 onChange={(e) => setCashTokenInput(e.target.value)}
                 className="w-full px-4 py-3 bg-slate-950/80 border border-slate-600 rounded-2xl text-xs font-mono font-bold text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 uppercase tracking-wider shadow-inner"
@@ -868,10 +868,10 @@ export const ReceptionDashboard: React.FC = () => {
             <button
               type="submit"
               disabled={verifyingCash || !cashTokenInput.trim()}
-              className="px-5 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-slate-950 text-xs font-black rounded-2xl shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-1.5 shrink-0"
+              className="px-5 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-slate-950 text-xs font-black rounded-2xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-1.5 shrink-0 cursor-pointer active:scale-95"
             >
               <CheckCircle2 className="w-4 h-4 text-slate-950" />
-              <span>{verifyingCash ? 'Approving...' : 'Approve Payment & Admit'}</span>
+              <span>{verifyingCash ? 'Approving...' : 'Approve & Admit'}</span>
             </button>
           </form>
         </div>
@@ -1020,7 +1020,7 @@ export const ReceptionDashboard: React.FC = () => {
             <span className="text-slate-400">• Total Entries: {queue.length}</span>
           </div>
 
-          <div className="flex items-center gap-2.5 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
             {/* Doctor Filter */}
             <select
               value={selectedDoctor}
@@ -1038,7 +1038,7 @@ export const ReceptionDashboard: React.FC = () => {
             {/* Financial Ledger Button */}
             <button
               onClick={openFinancialLedger}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-600/20 transition-all whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-600/20 transition-all whitespace-nowrap cursor-pointer active:scale-95"
             >
               <FileSpreadsheet className="w-3.5 h-3.5" />
               <span>Financial Ledger</span>
@@ -1114,7 +1114,8 @@ export const ReceptionDashboard: React.FC = () => {
 
       {/* Main Queue & Financial Ledger Table */}
       <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Desktop View: Full 7-Column Table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-black text-[11px]">
               <tr>
@@ -1293,6 +1294,172 @@ export const ReceptionDashboard: React.FC = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile View: High-Touch Compact Patient Cards */}
+        <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800 p-3 space-y-3">
+          {filteredQueue.length === 0 ? (
+            <div className="py-12 text-center text-slate-400 font-semibold text-xs">
+              No patient entries found for {startDate === endDate ? startDate : `${startDate} to ${endDate}`}.
+            </div>
+          ) : (
+            filteredQueue.map((item) => {
+              const joined = new Date(item.joinedAt);
+              const timeFormatted = joined.toLocaleTimeString('en-IN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+              });
+
+              return (
+                <div
+                  key={item.id}
+                  className="bg-white dark:bg-slate-800/90 rounded-2xl p-4 border border-slate-200/90 dark:border-slate-700 shadow-xs space-y-3"
+                >
+                  {/* Top Bar: Token, Status, Ref */}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-black text-base text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
+                        {item.token}
+                      </span>
+                      <span className="font-mono text-[10px] text-slate-500 font-bold bg-slate-100/70 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+                        #QL-{item.id.substring(0, 6).toUpperCase()}
+                      </span>
+                    </div>
+                    <div>{getStatusBadge(item.status, item.paymentStatus)}</div>
+                  </div>
+
+                  {/* Patient Name & Details */}
+                  <div className="space-y-1">
+                    <div className="font-black text-slate-900 dark:text-white text-sm flex items-center justify-between">
+                      <span>{item.patient.name}</span>
+                      <span className="text-[11px] text-slate-400 font-normal font-mono">{timeFormatted}</span>
+                    </div>
+                    <div className="text-slate-500 dark:text-slate-400 text-xs flex items-center gap-2 flex-wrap">
+                      <a href={`tel:${item.patient.mobile}`} className="font-mono text-sky-600 dark:text-sky-400 font-bold hover:underline">
+                        📞 {item.patient.mobile}
+                      </a>
+                      {item.patient.bloodGroup && (
+                        <span className="font-black text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 px-1.5 py-0.2 rounded text-[10px]">
+                          {item.patient.bloodGroup}
+                        </span>
+                      )}
+                      {item.patient.address && <span>• {item.patient.address}</span>}
+                    </div>
+                  </div>
+
+                  {/* Doctor & Cabin + Visit Reason */}
+                  <div className="p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 block uppercase">Cabin</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">
+                        {item.doctor?.displayName || 'General OPD'}
+                      </span>
+                    </div>
+                    <span className="px-2 py-0.5 bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 font-mono font-bold text-[11px] rounded-lg border border-sky-200 dark:border-sky-800">
+                      {item.doctor?.roomNumber || 'Cabin 1'}
+                    </span>
+                  </div>
+
+                  {/* Fee Status & Approve Button */}
+                  <div className="flex items-center justify-between pt-1 text-xs">
+                    <div>
+                      {item.isFollowUp ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-purple-100 text-purple-900 border border-purple-200">
+                          <Sparkles className="w-3 h-3 text-purple-600" />
+                          <span>₹250 Follow-Up</span>
+                        </span>
+                      ) : item.paymentStatus === 'PAID' ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-900 border border-emerald-200">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          <span>PAID ₹{item.feeAmount} ({item.payment?.provider || 'CASH'})</span>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">
+                          DUE ₹{item.feeAmount}
+                        </span>
+                      )}
+                    </div>
+
+                    {item.paymentStatus !== 'PAID' && !item.isFollowUp && (
+                      <button
+                        onClick={() => handleCollectCash(item.id, 'CASH')}
+                        className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black shadow-xs flex items-center gap-1 transition-all active:scale-95 cursor-pointer"
+                      >
+                        <Banknote className="w-3.5 h-3.5" />
+                        <span>Approve Cash</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Action Buttons for Mobile */}
+                  <div className="pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center gap-2">
+                    {item.status === 'WAITING' && (
+                      <button
+                        onClick={() => handleTransition(item.id, 'CALLED')}
+                        className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-xs transition-all shadow-xs flex items-center justify-center gap-1 active:scale-95 cursor-pointer"
+                      >
+                        <PhoneCall className="w-3.5 h-3.5" />
+                        <span>Call Patient</span>
+                      </button>
+                    )}
+
+                    {item.status === 'CALLED' && (
+                      <>
+                        <button
+                          onClick={() => handleTransition(item.id, 'IN_CONSULTATION')}
+                          className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-colors shadow-xs active:scale-95 text-center cursor-pointer"
+                        >
+                          In Consult
+                        </button>
+                        <button
+                          onClick={() => handleTransition(item.id, 'SKIPPED')}
+                          className="px-3 py-2 bg-orange-50 text-orange-800 hover:bg-orange-100 font-semibold rounded-xl text-xs transition-colors border border-orange-200 cursor-pointer"
+                        >
+                          Skip
+                        </button>
+                        <button
+                          onClick={() => handleTransition(item.id, 'NO_SHOW')}
+                          className="px-3 py-2 bg-red-50 text-red-800 hover:bg-red-100 font-semibold rounded-xl text-xs transition-colors border border-red-200 cursor-pointer"
+                        >
+                          Absent
+                        </button>
+                      </>
+                    )}
+
+                    {item.status === 'IN_CONSULTATION' && (
+                      <button
+                        onClick={() => handleTransition(item.id, 'COMPLETED')}
+                        className="flex-1 py-2 bg-emerald-600 text-white hover:bg-emerald-700 font-bold rounded-xl text-xs shadow-xs cursor-pointer"
+                      >
+                        Complete Visit
+                      </button>
+                    )}
+
+                    {(item.status === 'SKIPPED' || item.status === 'NO_SHOW') && (
+                      <button
+                        onClick={() => handleTransition(item.id, 'WAITING')}
+                        className="flex-1 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold rounded-xl text-xs flex items-center justify-center gap-1 cursor-pointer"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>Recall to Queue</span>
+                      </button>
+                    )}
+
+                    {item.token !== 'PENDING' && (
+                      <button
+                        onClick={() => setThermalSlipItem(item)}
+                        className="p-2 text-slate-500 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
+                        title="Print 58mm/80mm POS Slip"
+                      >
+                        <Printer className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
 

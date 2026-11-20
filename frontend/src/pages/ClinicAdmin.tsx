@@ -942,7 +942,7 @@ export const ClinicAdmin: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-24 print:p-0 print:m-0 print:max-w-none">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-24 print:p-0 print:m-0 print:max-w-none text-slate-900 dark:text-slate-100">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-20 right-6 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2 animate-bounce">

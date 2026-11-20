@@ -663,7 +663,7 @@ export const FounderDashboard: React.FC = () => {
   // VIEW: FOUNDER COMMAND CENTER (LOGGED IN)
   // ==============================================================
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6 pb-28">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6 pb-28 text-slate-900 dark:text-slate-100">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-20 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl border border-emerald-500/40 flex items-center gap-2.5 animate-in slide-in-from-top duration-200">
@@ -932,14 +932,14 @@ export const FounderDashboard: React.FC = () => {
       {activeTab === 'LOGINS' && (
         <div className="space-y-6">
           {/* Header Controls */}
-          <div className="p-4 sm:p-5 bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-4 sm:p-5 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
                 <span className="p-2 bg-amber-500/10 text-amber-600 rounded-xl">
                   <LogIn className="w-5 h-5" />
                 </span>
                 <div>
-                  <h3 className="text-base font-black text-slate-900 tracking-tight">
+                  <h3 className="text-base font-black text-slate-900 dark:text-white tracking-tight">
                     Hospital Staff & Clinic Logins Activity
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -1781,56 +1781,56 @@ export const FounderDashboard: React.FC = () => {
           
           {/* Top Geo Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-sm">
-              <div className="flex items-center justify-between text-slate-500 mb-2">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm">
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
                 <span className="text-[11px] font-bold uppercase tracking-wider">Active Cities</span>
                 <Globe className="w-4 h-4 text-sky-500" />
               </div>
-              <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">18 Metro Hubs</div>
-              <span className="text-[10px] text-emerald-600 font-bold mt-1 block">India & Worldwide Coverage</span>
+              <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-mono">18 Metro Hubs</div>
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold mt-1 block">India & Worldwide Coverage</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-sm">
-              <div className="flex items-center justify-between text-slate-500 mb-2">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm">
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
                 <span className="text-[11px] font-bold uppercase tracking-wider">Live Patients Inflow</span>
                 <Radio className="w-4 h-4 text-emerald-500 animate-pulse" />
               </div>
-              <div className="text-2xl sm:text-3xl font-black text-emerald-600 font-mono">18,420</div>
-              <span className="text-[10px] text-slate-500 font-medium mt-1 block">Total check-ins today</span>
+              <div className="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono">18,420</div>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-1 block">Total check-ins today</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-sm">
-              <div className="flex items-center justify-between text-slate-500 mb-2">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm">
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
                 <span className="text-[11px] font-bold uppercase tracking-wider">Mobile QR Share</span>
                 <QrCode className="w-4 h-4 text-indigo-500" />
               </div>
-              <div className="text-2xl sm:text-3xl font-black text-indigo-600 font-mono">82.4%</div>
-              <span className="text-[10px] text-slate-500 font-medium mt-1 block">Zero-touch phone admissions</span>
+              <div className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400 font-mono">82.4%</div>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-1 block">Zero-touch phone admissions</span>
             </div>
 
-            <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-sm">
-              <div className="flex items-center justify-between text-slate-500 mb-2">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm">
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
                 <span className="text-[11px] font-bold uppercase tracking-wider">Avg Waiting Time</span>
                 <Clock className="w-4 h-4 text-amber-500" />
               </div>
-              <div className="text-2xl sm:text-3xl font-black text-amber-600 font-mono">6.2 Mins</div>
-              <span className="text-[10px] text-emerald-600 font-bold mt-1 block">-76% vs. old paper tokens</span>
+              <div className="text-2xl sm:text-3xl font-black text-amber-600 dark:text-amber-400 font-mono">6.2 Mins</div>
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold mt-1 block">-76% vs. old paper tokens</span>
             </div>
           </div>
 
           {/* Map & City Traffic Hubs Card */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-black text-slate-900 tracking-tight">
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
                     Worldwide Hospital Traffic & Geographic Telemetry
                   </h3>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">
                     Live Stream
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Real-time patient distribution across partner hospital networks and polyclinics.
                 </p>
               </div>

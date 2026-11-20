@@ -624,7 +624,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
   }
 
   return (
-    <div className="max-w-xl mx-auto p-3 sm:p-6 pb-28">
+    <div className="max-w-xl mx-auto p-3 sm:p-6 pb-28 text-slate-900 dark:text-slate-100">
       {/* ============================================================== */}
       {/* 1. MASTER HOSPITAL CLINICAL HEADER                             */}
       {/* ============================================================== */}
@@ -992,16 +992,16 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                 placeholder="Any specific symptoms or health issues..."
                 value={visitReason}
                 onChange={(e) => setVisitReason(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white text-xs font-medium text-slate-800 focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none transition-all"
+                className="w-full px-3.5 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 text-xs font-medium text-slate-800 dark:text-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none transition-all"
               />
             </div>
 
             {/* Collapsible Additional Details (Keeps Primary Flow Super Clean) */}
-            <div className="pt-2 border-t border-slate-100">
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
               <button
                 type="button"
                 onClick={() => setShowOptionalDetails(!showOptionalDetails)}
-                className="w-full py-2 flex items-center justify-between text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
+                className="w-full py-2 flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
               >
                 <span>➕ Additional Details (Emergency Contact, Blood Group, Address)</span>
                 {showOptionalDetails ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -1011,11 +1011,11 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                 <div className="space-y-3 pt-3 animate-in fade-in duration-200">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Blood Group</label>
+                      <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Blood Group</label>
                       <select
                         value={bloodGroup}
                         onChange={(e) => setBloodGroup(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 bg-white"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white bg-white dark:bg-slate-800"
                       >
                         {['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'].map((bg) => (
                           <option key={bg} value={bg}>{bg}</option>
@@ -1024,25 +1024,25 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Emergency Contact</label>
+                      <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Emergency Contact</label>
                       <input
                         type="text"
                         placeholder="Family phone & name"
                         value={emergencyContact}
                         onChange={(e) => setEmergencyContact(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 bg-white"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-800 dark:text-white bg-white dark:bg-slate-800"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-600 mb-1">Residential Address</label>
+                    <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Residential Address</label>
                     <input
                       type="text"
                       placeholder="Street, Area, City"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 bg-white"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-800 dark:text-white bg-white dark:bg-slate-800"
                     />
                   </div>
                 </div>

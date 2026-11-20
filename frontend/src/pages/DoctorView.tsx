@@ -1188,7 +1188,7 @@ export const DoctorView: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-24">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-24 text-slate-900 dark:text-slate-100">
       {/* Header with Doctor Switcher */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] mb-6 relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-48 h-48 bg-sky-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -2372,26 +2372,26 @@ export const DoctorView: React.FC = () => {
       {/* PRINTABLE DIGITAL PRESCRIPTION LETTERHEAD MODAL */}
       {viewingPrescription && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-slate-200 shadow-2xl relative my-8">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-2xl relative my-8 text-slate-900 dark:text-white">
             <button
               onClick={() => setViewingPrescription(null)}
-              className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100"
+              className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Letterhead & Sections Customization Bar (User: "kuch ko remove kv kar skta ha and kuch ka custom add v kar skt ha") */}
-            <div className="mb-4 bg-slate-50 border border-slate-200 rounded-2xl p-3 print:hidden">
+            <div className="mb-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 print:hidden">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="p-1.5 rounded-xl bg-indigo-100 text-indigo-700">
+                  <span className="p-1.5 rounded-xl bg-indigo-100 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300">
                     <Sliders className="w-4 h-4" />
                   </span>
                   <div>
-                    <div className="font-black text-xs text-slate-800">
+                    <div className="font-black text-xs text-slate-800 dark:text-slate-100">
                       Customize Letterhead & Sections
                     </div>
-                    <div className="text-[10px] text-slate-500">
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400">
                       Toggle sections on/off or add custom fields before printing or sharing
                     </div>
                   </div>
@@ -2400,7 +2400,7 @@ export const DoctorView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowRxCustomizer(!showRxCustomizer)}
-                  className="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>{showRxCustomizer ? 'Close Customizer ✕' : '⚙️ Toggle / Add Sections'}</span>
                 </button>
@@ -2408,31 +2408,31 @@ export const DoctorView: React.FC = () => {
 
               {/* Expandable Customizer Controls */}
               {showRxCustomizer && (
-                <div className="mt-3 pt-3 border-t border-slate-200 space-y-3">
+                <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 space-y-3">
                   <div>
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1.5">
+                    <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1.5">
                       1. Show / Hide Standard Sections:
                     </span>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                      <label className="flex items-center gap-2 p-1.5 bg-white dark:bg-slate-800/80 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/60">
                         <input
                           type="checkbox"
                           checked={rxVisibility.showHospitalHeader}
                           onChange={(e) => setRxVisibility({ ...rxVisibility, showHospitalHeader: e.target.checked })}
                           className="rounded text-indigo-600"
                         />
-                        <span className="text-[11px] font-bold text-slate-700">Hospital Letterhead</span>
+                        <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Hospital Letterhead</span>
                       </label>
-                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                      <label className="flex items-center gap-2 p-1.5 bg-white dark:bg-slate-800/80 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/60">
                         <input
                           type="checkbox"
                           checked={rxVisibility.showDoctorInfo}
                           onChange={(e) => setRxVisibility({ ...rxVisibility, showDoctorInfo: e.target.checked })}
                           className="rounded text-indigo-600"
                         />
-                        <span className="text-[11px] font-bold text-slate-700">Doctor Info & Reg No</span>
+                        <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Doctor Info & Reg No</span>
                       </label>
-                      <label className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
+                      <label className="flex items-center gap-2 p-1.5 bg-white dark:bg-slate-800/80 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/60">
                         <input
                           type="checkbox"
                           checked={rxVisibility.showPatientInfo}
@@ -2846,26 +2846,26 @@ export const DoctorView: React.FC = () => {
       {/* Doctor Change PIN / Password Modal */}
       {showChangePinModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-200">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white">
             <div className="flex items-center gap-2.5 mb-2">
-              <div className="p-2 bg-sky-100 text-sky-700 rounded-xl">
+              <div className="p-2 bg-sky-100 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 rounded-xl">
                 <KeyRound className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-black text-slate-900">Change Cabin PIN</h3>
-                <p className="text-xs text-slate-500">Update your individual secret PIN / password</p>
+                <h3 className="text-base font-black text-slate-900 dark:text-white">Change Cabin PIN</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Update your individual secret PIN / password</p>
               </div>
             </div>
 
             {changePinError && (
-              <div className="my-3 p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-semibold flex items-center gap-2">
+              <div className="my-3 p-3 bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 rounded-xl text-xs font-semibold flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
                 <span>{changePinError}</span>
               </div>
             )}
 
             {changePinSuccess && (
-              <div className="my-3 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-semibold flex items-center gap-2">
+              <div className="my-3 p-3 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 rounded-xl text-xs font-semibold flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>{changePinSuccess}</span>
               </div>
@@ -2873,7 +2873,7 @@ export const DoctorView: React.FC = () => {
 
             <form onSubmit={handleChangePinSubmit} className="mt-3 space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Current PIN / Password (Optional)
                 </label>
                 <input
@@ -2881,12 +2881,12 @@ export const DoctorView: React.FC = () => {
                   value={currentPinInput}
                   onChange={(e) => setCurrentPinInput(e.target.value)}
                   placeholder="Enter current PIN"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   New 4-Digit PIN or Password *
                 </label>
                 <input
@@ -2895,12 +2895,12 @@ export const DoctorView: React.FC = () => {
                   value={newPinInput}
                   onChange={(e) => setNewPinInput(e.target.value)}
                   placeholder="e.g. 5821"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Confirm New PIN *
                 </label>
                 <input
@@ -2909,7 +2909,7 @@ export const DoctorView: React.FC = () => {
                   value={confirmPinInput}
                   onChange={(e) => setConfirmPinInput(e.target.value)}
                   placeholder="Re-enter new PIN"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
                 />
               </div>
 
@@ -2917,7 +2917,7 @@ export const DoctorView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowChangePinModal(false)}
-                  className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl"
+                  className="px-4 py-2 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
                 >
                   Cancel
                 </button>
@@ -2937,24 +2937,24 @@ export const DoctorView: React.FC = () => {
       {/* All Doctor Cabin Dedicated Links Modal */}
       {showDoctorLinksModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-2xl border border-slate-200">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
               <div className="flex items-center gap-2.5">
-                <div className="p-2.5 bg-indigo-50 text-indigo-700 rounded-2xl">
+                <div className="p-2.5 bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 rounded-2xl">
                   <Stethoscope className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-slate-900 tracking-tight">
+                  <h3 className="text-base font-black text-slate-900 dark:text-white tracking-tight">
                     Individual Doctor Cabin Links
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     Dedicated direct link for each doctor station in {clinicData?.name || 'Caremax OPD'}
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowDoctorLinksModal(false)}
-                className="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
+                className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>

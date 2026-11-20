@@ -670,7 +670,7 @@ export const ReceptionDashboard: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-28">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-28 text-slate-900 dark:text-slate-100">
       {/* Header & Quick Action */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-4 sm:p-6 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_10px_35px_-10px_rgba(0,0,0,0.06)] mb-6 relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -1603,7 +1603,7 @@ export const ReceptionDashboard: React.FC = () => {
                 <select
                   value={walkInDoctorId}
                   onChange={(e) => setWalkInDoctorId(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                 >
                   {doctors.map((d) => (
                     <option key={d.id} value={d.id}>
@@ -1618,7 +1618,7 @@ export const ReceptionDashboard: React.FC = () => {
                 <select
                   value={walkInPaymentMode}
                   onChange={(e) => setWalkInPaymentMode(e.target.value as any)}
-                  className="w-full px-3 py-2 text-xs font-bold text-slate-800 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                  className="w-full px-3 py-2 text-xs font-bold text-slate-800 dark:text-white rounded-xl border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-800"
                 >
                   <option value="CASH">💵 Paid Cash at Counter (₹500)</option>
                   <option value="UPI">📱 Paid via Counter UPI QR (₹500)</option>
@@ -1661,70 +1661,70 @@ export const ReceptionDashboard: React.FC = () => {
       {/* 58mm / 80mm THERMAL POS COUNTER SLIP MODAL */}
       {thermalSlipItem && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-sm w-full border border-slate-200 shadow-2xl relative text-slate-900">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-sm w-full border border-slate-200 dark:border-slate-800 shadow-2xl relative text-slate-900 dark:text-white">
             <button
               onClick={() => setThermalSlipItem(null)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div className="text-center font-mono text-xs">
-              <div className="border-b-2 border-dashed border-slate-300 pb-3 mb-3">
-                <div className="text-sm font-black uppercase tracking-wider">City Health Clinic</div>
-                <div className="text-[10px] text-slate-500">Suite 402, Metro Towers, MG Road, Bengaluru</div>
-                <div className="text-[10px] text-slate-500">Ph: +91 80 4920 1100</div>
-                <div className="text-[10px] font-bold text-sky-700 mt-1 uppercase tracking-widest">OFFICIAL OPD TOKEN RECEIPT</div>
+              <div className="border-b-2 border-dashed border-slate-300 dark:border-slate-700 pb-3 mb-3">
+                <div className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white">City Health Clinic</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400">Suite 402, Metro Towers, MG Road, Bengaluru</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400">Ph: +91 80 4920 1100</div>
+                <div className="text-[10px] font-bold text-sky-700 dark:text-sky-400 mt-1 uppercase tracking-widest">OFFICIAL OPD TOKEN RECEIPT</div>
               </div>
 
-              <div className="my-3 py-3 bg-slate-50 rounded-2xl border border-slate-200">
+              <div className="my-3 py-3 bg-slate-50 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700">
                 <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-bold">OPD Token Number</span>
-                <span className="text-5xl font-black text-slate-900 tracking-tight my-0.5 block">{thermalSlipItem.token}</span>
+                <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tight my-0.5 block">{thermalSlipItem.token}</span>
                 <div className="flex items-center justify-center gap-2 mt-1">
-                  <span className="text-[10px] font-mono font-bold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
+                  <span className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                     Ref: #QL-{thermalSlipItem.id.substring(0, 6).toUpperCase()}
                   </span>
-                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100 inline-block">
+                  <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/70 px-2.5 py-0.5 rounded-full border border-emerald-100 dark:border-emerald-800 inline-block">
                     {thermalSlipItem.status}
                   </span>
                 </div>
               </div>
 
-              <div className="space-y-1.5 text-left text-[11px] py-2 border-b border-dashed border-slate-300">
+              <div className="space-y-1.5 text-left text-[11px] py-2 border-b border-dashed border-slate-300 dark:border-slate-700">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Date/Time:</span>
-                  <span className="font-bold">{thermalSlipItem.queueDate} {new Date(thermalSlipItem.joinedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Date/Time:</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{thermalSlipItem.queueDate} {new Date(thermalSlipItem.joinedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Patient:</span>
-                  <span className="font-black text-slate-900">{thermalSlipItem.patient.name}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Patient:</span>
+                  <span className="font-black text-slate-900 dark:text-white">{thermalSlipItem.patient.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Doctor:</span>
-                  <span className="font-bold">{thermalSlipItem.doctor?.displayName || 'General OPD'}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Doctor:</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{thermalSlipItem.doctor?.displayName || 'General OPD'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Consultation Room:</span>
-                  <span className="font-black text-sky-700">{thermalSlipItem.doctor?.roomNumber || 'Room 101'}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Consultation Room:</span>
+                  <span className="font-black text-sky-700 dark:text-sky-400">{thermalSlipItem.doctor?.roomNumber || 'Room 101'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Fee Status:</span>
-                  <span className="font-bold text-emerald-700">
+                  <span className="text-slate-500 dark:text-slate-400">Fee Status:</span>
+                  <span className="font-bold text-emerald-700 dark:text-emerald-400">
                     {thermalSlipItem.isFollowUp ? '₹250 PAID (15-Day Follow-Up)' : `₹${thermalSlipItem.feeAmount} PAID (${thermalSlipItem.paymentStatus})`}
                   </span>
                 </div>
               </div>
 
-              <div className="pt-3 text-[10px] text-slate-400">
+              <div className="pt-3 text-[10px] text-slate-400 dark:text-slate-500">
                 Please take a seat in the waiting lounge.<br />
                 Your token will be announced on screen & voice chime.
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+            <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
               <button
                 onClick={() => setThermalSlipItem(null)}
-                className="px-3 py-2 text-xs font-bold text-slate-500 hover:bg-slate-100 rounded-xl"
+                className="px-3 py-2 text-xs font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
               >
                 Close
               </button>

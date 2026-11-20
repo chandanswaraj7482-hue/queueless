@@ -199,8 +199,9 @@
     <script>
       (function() {
         try {
-          var saved = localStorage.getItem('queueless_theme_v5');
-          var isDark = saved === 'light' ? false : true; // Default to dark luxury theme
+          var saved = localStorage.getItem('queueless_theme_v6');
+          // Default to LIGHT mode as requested by user
+          var isDark = saved === 'dark';
           if (isDark) {
             document.documentElement.classList.add('dark');
             document.documentElement.classList.remove('light');

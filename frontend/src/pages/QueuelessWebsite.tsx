@@ -805,7 +805,7 @@ export const QueuelessWebsite: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#060D1D] text-slate-100 font-sans relative overflow-x-hidden selection:bg-blue-600 selection:text-white transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#060D1D] text-slate-900 dark:text-slate-100 font-sans relative overflow-x-hidden selection:bg-blue-600 selection:text-white transition-colors duration-200">
       <SeoHead
         title="Zero-Wait Clinical Queue Operating System for Hospitals"
         description="Dismantling hospital waiting room congestion. Zero hardware capex, instant vector QR passes, smart TV kiosks, ABDM M1/M2 certification, and 1-tap doctor calling."
@@ -1525,8 +1525,8 @@ export const QueuelessWebsite: React.FC = () => {
 
           {/* Infinite Smooth Scrolling Hospital Logos Marquee */}
           <div className="relative overflow-hidden w-full py-2">
-            <div className="absolute left-0 inset-y-0 w-16 sm:w-28 bg-gradient-to-r from-[#060D1D] to-transparent z-20 pointer-events-none"></div>
-            <div className="absolute right-0 inset-y-0 w-16 sm:w-28 bg-gradient-to-l from-[#060D1D] to-transparent z-20 pointer-events-none"></div>
+            <div className="absolute left-0 inset-y-0 w-16 sm:w-28 bg-gradient-to-r from-slate-50 dark:from-[#060D1D] to-transparent z-20 pointer-events-none"></div>
+            <div className="absolute right-0 inset-y-0 w-16 sm:w-28 bg-gradient-to-l from-slate-50 dark:from-[#060D1D] to-transparent z-20 pointer-events-none"></div>
 
             <div className="animate-marquee flex items-center gap-4 sm:gap-6 py-2">
               {[...PARTNER_HOSPITALS, ...PARTNER_HOSPITALS].map((hosp, idx) => (
@@ -1669,10 +1669,10 @@ export const QueuelessWebsite: React.FC = () => {
               <Zap className="w-3.5 h-3.5 text-indigo-400" />
               <span>Instant Cloud Provisioning</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
               Live in 3 Simple Steps
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 font-normal">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-normal">
               Your whole hospital or clinic running in minutes, with zero IT overhead.
             </p>
           </div>
@@ -1680,48 +1680,48 @@ export const QueuelessWebsite: React.FC = () => {
           {/* Mobile Compact 3-Step Stack (Matches Claude Reference Screenshots 5 & 6) */}
           <div className="md:hidden space-y-3 text-left">
             {/* Step 1 */}
-            <div className="p-4 rounded-2xl bg-[#0B1528] border border-teal-500/30 flex items-start gap-3.5">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#0B1528] border border-teal-500/30 shadow-sm flex items-start gap-3.5">
               <div className="w-8 h-8 rounded-full bg-teal-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
                 1
               </div>
               <div className="space-y-1 min-w-0">
-                <h3 className="text-sm font-black text-white">Create your hospital</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <h3 className="text-sm font-black text-slate-900 dark:text-white">Create your hospital</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   Add departments and doctors with room numbers.
                 </p>
-                <span className="inline-block text-[10px] text-teal-400 font-bold pt-0.5">
+                <span className="inline-block text-[10px] text-teal-600 dark:text-teal-400 font-bold pt-0.5">
                   Takes about 60 seconds
                 </span>
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="p-4 rounded-2xl bg-[#0B1528] border border-blue-500/30 flex items-start gap-3.5">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#0B1528] border border-blue-500/30 shadow-sm flex items-start gap-3.5">
               <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
                 2
               </div>
               <div className="space-y-1 min-w-0">
-                <h3 className="text-sm font-black text-white">Configure your OPD flow</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <h3 className="text-sm font-black text-slate-900 dark:text-white">Configure your OPD flow</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   Admission rules, token prefix, 15-day follow-up policy, fees.
                 </p>
-                <span className="inline-block text-[10px] text-blue-400 font-bold pt-0.5">
+                <span className="inline-block text-[10px] text-blue-600 dark:text-blue-400 font-bold pt-0.5">
                   Custom token policies
                 </span>
               </div>
             </div>
 
             {/* Step 3 */}
-            <div className="p-4 rounded-2xl bg-[#0B1528] border border-purple-500/30 flex items-start gap-3.5">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#0B1528] border border-purple-500/30 shadow-sm flex items-start gap-3.5">
               <div className="w-8 h-8 rounded-full bg-purple-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
                 3
               </div>
               <div className="space-y-1 min-w-0">
-                <h3 className="text-sm font-black text-white">Go live instantly</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <h3 className="text-sm font-black text-slate-900 dark:text-white">Go live instantly</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   Print entrance QR standees, open the lobby TV kiosk, start calling patients.
                 </p>
-                <span className="inline-block text-[10px] text-purple-400 font-bold pt-0.5">
+                <span className="inline-block text-[10px] text-purple-600 dark:text-purple-400 font-bold pt-0.5">
                   No hardware shipping
                 </span>
               </div>

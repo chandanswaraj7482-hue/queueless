@@ -29,17 +29,17 @@ const applyThemeToDOM = (next: Theme) => {
     document.body?.classList.add('light');
   }
   try {
-    localStorage.setItem('queueless_theme_v5', next);
+    localStorage.setItem('queueless_theme_v6', next);
   } catch {}
 };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('queueless_theme_v5') as Theme | null;
+      const saved = localStorage.getItem('queueless_theme_v6') as Theme | null;
       if (saved === 'dark' || saved === 'light') return saved;
     }
-    return 'dark'; // Default to dark luxury theme
+    return 'light'; // Default to light mode as requested by user
   });
 
   useEffect(() => {

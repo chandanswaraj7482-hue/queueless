@@ -42,7 +42,7 @@ export const FeaturesPage: React.FC = () => {
 
       <main className="flex-1">
         {/* Features Hero */}
-        <section className="pt-16 pb-14 sm:pt-20 sm:pb-18 px-4 sm:px-6 relative z-10 text-center">
+        <section className="pt-28 pb-14 sm:pt-36 sm:pb-18 px-4 sm:px-6 relative z-10 text-center">
           <div className="max-w-4xl mx-auto space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 rounded-full text-xs font-black uppercase tracking-wider text-blue-900 dark:text-blue-300 shadow-2xs">
               <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />

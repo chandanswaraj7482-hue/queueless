@@ -110,7 +110,7 @@ export const AboutPage: React.FC = () => {
         {/* ============================================================== */}
         {/* 1. HERO SECTION                                                */}
         {/* ============================================================== */}
-        <section className="pt-20 pb-16 sm:pt-28 sm:pb-24 px-4 sm:px-6 relative z-10 text-center overflow-hidden">
+        <section className="pt-28 pb-16 sm:pt-36 sm:pb-24 px-4 sm:px-6 relative z-10 text-center overflow-hidden">
           {/* Subtle Dynamic Ambient Lighting */}
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-blue-500/15 via-indigo-500/10 to-teal-400/15 rounded-full blur-3xl pointer-events-none" />
 

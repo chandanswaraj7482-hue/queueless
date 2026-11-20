@@ -660,14 +660,6 @@ export const ClinicalReviewsCarousel: React.FC = () => {
             />
           ))}
         </div>
-
-        {/* Subtle Gesture & Autoplay Indicator (Matches Claude Reference Screenshot 8) */}
-        <div className="flex items-center gap-2 text-[10.5px] font-medium text-slate-400 dark:text-slate-500 pt-0.5">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Auto-sliding • swipe to browse</span>
-          </span>
-        </div>
       </div>
 
       {/* Mobile-Only Action Button */}

@@ -63,7 +63,7 @@ export const PricingPage: React.FC = () => {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="pt-16 pb-12 sm:pt-20 sm:pb-16 px-4 sm:px-6 relative z-10 text-center">
+        <section className="pt-28 pb-12 sm:pt-36 sm:pb-16 px-4 sm:px-6 relative z-10 text-center">
           <div className="max-w-4xl mx-auto space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 rounded-full text-xs font-black uppercase tracking-wider text-blue-900 dark:text-blue-300 shadow-2xs">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
@@ -332,11 +332,6 @@ export const PricingPage: React.FC = () => {
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                 Compare capabilities across our clinical tiers to match your facility scale.
               </p>
-            </div>
-
-            {/* Mobile Horizontal Swipe Indicator */}
-            <div className="sm:hidden flex items-center justify-center gap-1.5 py-1.5 px-3 bg-blue-50 dark:bg-blue-950/60 rounded-xl border border-blue-200/80 dark:border-blue-800 text-[11px] font-bold text-blue-700 dark:text-blue-300 w-fit mx-auto">
-              <span>👈 Swipe sideways to compare all tiers 👉</span>
             </div>
 
             <div className="overflow-x-auto bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm scrollbar-thin">

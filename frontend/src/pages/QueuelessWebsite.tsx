@@ -832,7 +832,7 @@ export const QueuelessWebsite: React.FC = () => {
       {/* ============================================================== */}
       {/* 2. WORLD-CLASS ENTERPRISE HEALTHCARE SAAS HERO                */}
       {/* ============================================================== */}
-      <section className="relative pt-6 sm:pt-14 pb-12 sm:pb-20 px-3 sm:px-6 z-10 overflow-hidden text-center">
+      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-12 sm:pb-20 px-3 sm:px-6 z-10 overflow-hidden text-center">
         {/* Soft Radial Ambient Lighting */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(56,189,248,0.18),rgba(99,102,241,0.08),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(14,165,233,0.18),rgba(99,102,241,0.08),rgba(0,0,0,0))] pointer-events-none -z-10" />
 
@@ -1121,47 +1121,24 @@ export const QueuelessWebsite: React.FC = () => {
               </button>
             </div>
 
-            {/* Auto-Slide & Touch Gesture Controls Bar */}
-            <div className="flex items-center justify-between sm:justify-center gap-3 pt-2 pb-1 text-xs">
-              <span className="text-[11px] text-slate-400 dark:text-slate-500 font-mono flex items-center gap-1 sm:hidden">
-                <span>↔</span>
-                <span>Swipe left / right</span>
-              </span>
-
-              <div className="flex items-center gap-2">
+            {/* Minimalist 4-Step Progress Dots */}
+            <div className="flex items-center justify-center gap-1.5 pt-2 pb-1">
+              {[1, 2, 3, 4].map((stepNum) => (
                 <button
+                  key={stepNum}
                   type="button"
-                  onClick={() => setAutoSlideHero(!autoSlideHero)}
-                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all border ${
-                    autoSlideHero
-                      ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800'
-                      : 'bg-slate-900 text-slate-400 border-slate-800'
+                  onClick={() => {
+                    setHeroStep(stepNum);
+                    setAutoSlideHero(false);
+                  }}
+                  className={`transition-all duration-300 rounded-full cursor-pointer ${
+                    heroStep === stepNum
+                      ? 'w-6 h-1.5 bg-blue-500 shadow-xs'
+                      : 'w-1.5 h-1.5 bg-slate-700 hover:bg-slate-500'
                   }`}
-                  title="Toggle Auto Slide"
-                >
-                  <span>{autoSlideHero ? 'Auto-Slide: ON' : 'Paused'}</span>
-                </button>
-
-                {/* 4 Dots */}
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4].map((stepNum) => (
-                    <button
-                      key={stepNum}
-                      type="button"
-                      onClick={() => {
-                        setHeroStep(stepNum);
-                        setAutoSlideHero(false);
-                      }}
-                      className={`transition-all rounded-full ${
-                        heroStep === stepNum
-                          ? 'w-5 h-1.5 bg-blue-500 shadow-xs'
-                          : 'w-1.5 h-1.5 bg-slate-700 hover:bg-slate-500'
-                      }`}
-                      aria-label={`Go to Step ${stepNum}`}
-                    />
-                  ))}
-                </div>
-              </div>
+                  aria-label={`Go to Step ${stepNum}`}
+                />
+              ))}
             </div>
 
             {/* Mobile View Switcher (Phone vs 55" TV): Cuts 500px of scrolling on phones */}
@@ -2936,47 +2913,24 @@ export const QueuelessWebsite: React.FC = () => {
               </div>
             )}
 
-            {/* Auto-Slide & Touch Gesture Controls Bar for 5 Pillars */}
-            <div className="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between sm:justify-center gap-4 text-xs">
-              <span className="text-[11px] text-slate-400 dark:text-slate-500 font-mono flex items-center gap-1 sm:hidden">
-                <span>↔</span>
-                <span>Swipe left / right</span>
-              </span>
-
-              <div className="flex items-center gap-2">
+            {/* Minimalist 5-Pillar Progress Dots */}
+            <div className="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-1.5 text-xs">
+              {PILLARS.map((pId) => (
                 <button
+                  key={pId}
                   type="button"
-                  onClick={() => setAutoSlidePillars(!autoSlidePillars)}
-                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all border ${
-                    autoSlidePillars
-                      ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-700'
+                  onClick={() => {
+                    setProductTab(pId);
+                    setAutoSlidePillars(false);
+                  }}
+                  className={`transition-all duration-300 rounded-full cursor-pointer ${
+                    productTab === pId
+                      ? 'w-6 h-1.5 bg-blue-600 dark:bg-blue-400 shadow-xs'
+                      : 'w-1.5 h-1.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
                   }`}
-                  title="Toggle Auto Slide"
-                >
-                  <span>{autoSlidePillars ? 'Auto-Slide: ON' : 'Paused'}</span>
-                </button>
-
-                {/* 5 Dots Indicator */}
-                <div className="flex items-center gap-1">
-                  {PILLARS.map((pId) => (
-                    <button
-                      key={pId}
-                      type="button"
-                      onClick={() => {
-                        setProductTab(pId);
-                        setAutoSlidePillars(false);
-                      }}
-                      className={`transition-all rounded-full ${
-                        productTab === pId
-                          ? 'w-6 h-1.5 bg-blue-600 dark:bg-blue-400 shadow-xs'
-                          : 'w-1.5 h-1.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
-                      }`}
-                      aria-label={`View ${pId}`}
-                    />
-                  ))}
-                </div>
-              </div>
+                  aria-label={`View ${pId}`}
+                />
+              ))}
             </div>
           </div>
 

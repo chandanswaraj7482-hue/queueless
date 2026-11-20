@@ -478,12 +478,13 @@ export const AnimatedClinicalReels: React.FC = () => {
           <span className="h-px w-12 bg-slate-300 dark:bg-slate-700"></span>
         </span>
 
-        {/* Mobile Swipe / Gesture Slider Controls */}
+        {/* Mobile Reel Counter & Navigation Controls */}
         <div className="flex sm:hidden items-center justify-between w-full px-2 pt-1 pb-1">
-          <div className="flex items-center gap-1.5 text-[11px] font-extrabold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-800 px-3 py-1 rounded-full shadow-2xs">
-            <span className="animate-pulse">👈 Swipe Reels 👉</span>
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-800 px-3 py-1 rounded-full shadow-2xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
+            <span>Clinical Studio</span>
             <span className="text-slate-400 dark:text-slate-500">•</span>
-            <span className="text-slate-600 dark:text-slate-300 font-mono font-bold">{activeReelIndex + 1}/4</span>
+            <span className="text-slate-600 dark:text-slate-300 font-mono font-bold">{activeReelIndex + 1} / 4</span>
           </div>
 
           <div className="flex items-center gap-1">
@@ -1069,7 +1070,7 @@ export const AnimatedClinicalReels: React.FC = () => {
 
       </div>
 
-      {/* Mobile Swipe Navigation Dots & Pill (Below Reels) */}
+      {/* Mobile Swipe Navigation Dots */}
       <div className="flex sm:hidden flex-col items-center justify-center gap-2 pt-1 pb-2">
         <div className="flex items-center gap-1.5">
           {[0, 1, 2, 3].map((dot) => (
@@ -1086,9 +1087,6 @@ export const AnimatedClinicalReels: React.FC = () => {
             />
           ))}
         </div>
-        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-          Swipe horizontally to explore all 4 OPD studio simulators
-        </p>
       </div>
 
       {/* Bottom Subtitle / Instruction */}

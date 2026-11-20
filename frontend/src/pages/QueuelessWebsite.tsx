@@ -2110,14 +2110,14 @@ export const QueuelessWebsite: React.FC = () => {
           </div>
 
           {/* Mobile View Switcher: Cuts 1200px of redundant vertical scrolling on phones */}
-          <div className="flex lg:hidden items-center justify-center p-1 bg-slate-900 rounded-2xl max-w-xs mx-auto border border-slate-800">
+          <div className="flex lg:hidden items-center justify-center p-1 bg-slate-200 dark:bg-slate-900 rounded-2xl max-w-xs mx-auto border border-slate-300 dark:border-slate-800">
             <button
               type="button"
               onClick={() => setAuditComparisonTab('LEGACY')}
               className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 auditComparisonTab === 'LEGACY'
                   ? 'bg-rose-600/90 text-white shadow-xs'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <AlertTriangle className="w-3.5 h-3.5" />
@@ -2129,7 +2129,7 @@ export const QueuelessWebsite: React.FC = () => {
               className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 auditComparisonTab === 'ZERO_WAIT'
                   ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />

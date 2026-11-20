@@ -10,33 +10,53 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const applyThemeToDOM = (_next?: Theme) => {
+const applyThemeToDOM = (next: Theme) => {
   if (typeof document === 'undefined') return;
   const root = document.documentElement;
-  // Always enforce dark luxury midnight medical theme
-  root.classList.add('dark');
-  root.classList.remove('light');
-  root.setAttribute('data-theme', 'dark');
-  root.style.colorScheme = 'dark';
+  if (next === 'dark') {
+    root.classList.add('dark');
+    root.classList.remove('light');
+    root.setAttribute('data-theme', 'dark');
+    root.style.colorScheme = 'dark';
+    document.body?.classList.add('dark');
+    document.body?.classList.remove('light');
+  } else {
+    root.classList.remove('dark');
+    root.classList.add('light');
+    root.setAttribute('data-theme', 'light');
+    root.style.colorScheme = 'light';
+    document.body?.classList.remove('dark');
+    document.body?.classList.add('light');
+  }
   try {
-    localStorage.setItem('queueless_theme', 'dark');
-    localStorage.setItem('queueless_theme_v4', 'dark');
+    localStorage.setItem('queueless_theme_v5', next);
   } catch {}
 };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme] = useState<Theme>('dark');
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('queueless_theme_v5') as Theme | null;
+      if (saved === 'dark' || saved === 'light') return saved;
+    }
+    return 'dark'; // Default to dark luxury theme
+  });
 
   useEffect(() => {
-    applyThemeToDOM('dark');
-  }, []);
+    applyThemeToDOM(theme);
+  }, [theme]);
 
   const toggleTheme = () => {
-    applyThemeToDOM('dark');
+    setThemeState((prev) => {
+      const next: Theme = prev === 'dark' ? 'light' : 'dark';
+      applyThemeToDOM(next);
+      return next;
+    });
   };
 
-  const setTheme = (_next: Theme) => {
-    applyThemeToDOM('dark');
+  const setTheme = (next: Theme) => {
+    applyThemeToDOM(next);
+    setThemeState(next);
   };
 
   return (
@@ -51,8 +71,8 @@ export const useTheme = (): ThemeContextType => {
   if (!context) {
     return {
       theme: 'dark',
-      toggleTheme: () => applyThemeToDOM('dark'),
-      setTheme: () => applyThemeToDOM('dark'),
+      toggleTheme: () => {},
+      setTheme: () => {},
     };
   }
   return context;

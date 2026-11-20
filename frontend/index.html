@@ -199,13 +199,19 @@
     <script>
       (function() {
         try {
-          // Permanently enforce dark midnight luxury clinical palette
-          document.documentElement.classList.add('dark');
-          document.documentElement.classList.remove('light');
-          document.documentElement.setAttribute('data-theme', 'dark');
-          document.documentElement.style.colorScheme = 'dark';
-          localStorage.setItem('queueless_theme', 'dark');
-          localStorage.setItem('queueless_theme_v4', 'dark');
+          var saved = localStorage.getItem('queueless_theme_v5');
+          var isDark = saved === 'light' ? false : true; // Default to dark luxury theme
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.colorScheme = 'light';
+          }
         } catch (e) {}
       })();
     </script>

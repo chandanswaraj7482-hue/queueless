@@ -11,7 +11,11 @@ export interface AuthSession {
 
 export const getAuthSession = (role: 'ADMIN' | 'RECEPTION' | 'DOCTOR'): AuthSession | null => {
   try {
-    const raw = localStorage.getItem(`queueless_session_${role.toLowerCase()}`);
+    // For ADMIN role: strictly require session-based authentication (sessionStorage)
+    // so closing or reopening a browser tab never leaves sensitive hospital revenue unlocked
+    const raw = role === 'ADMIN'
+      ? sessionStorage.getItem(`queueless_session_${role.toLowerCase()}`)
+      : localStorage.getItem(`queueless_session_${role.toLowerCase()}`);
     if (!raw) return null;
     const session: AuthSession = JSON.parse(raw);
     // 24 hour session expiration
@@ -34,10 +38,16 @@ export const setAuthSession = (role: 'ADMIN' | 'RECEPTION' | 'DOCTOR', data: Par
     name: data.name,
     authenticatedAt: Date.now(),
   };
-  localStorage.setItem(`queueless_session_${role.toLowerCase()}`, JSON.stringify(session));
+  if (role === 'ADMIN') {
+    sessionStorage.setItem(`queueless_session_${role.toLowerCase()}`, JSON.stringify(session));
+    localStorage.removeItem(`queueless_session_${role.toLowerCase()}`); // Clear any legacy persistent storage
+  } else {
+    localStorage.setItem(`queueless_session_${role.toLowerCase()}`, JSON.stringify(session));
+  }
 };
 
 export const clearAuthSession = (role: 'ADMIN' | 'RECEPTION' | 'DOCTOR') => {
+  sessionStorage.removeItem(`queueless_session_${role.toLowerCase()}`);
   localStorage.removeItem(`queueless_session_${role.toLowerCase()}`);
 };
 

@@ -134,8 +134,13 @@ export const ClinicAdmin: React.FC = () => {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  // Business Admin Authentication State
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => !!getAuthSession('ADMIN'));
+  // Business Admin Authentication State (Strictly session-based, clear any stale legacy cross-session keys)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    try {
+      localStorage.removeItem('queueless_session_admin');
+    } catch (e) {}
+    return !!getAuthSession('ADMIN');
+  });
   const [adminPasswordInput, setAdminPasswordInput] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loggingIn, setLoggingIn] = useState(false);

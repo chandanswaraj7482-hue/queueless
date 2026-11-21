@@ -345,9 +345,13 @@ export const ReceptionDashboard: React.FC = () => {
       fetchQueue();
     });
 
+    // Resilient Real-Time Fallback Polling (Every 3 seconds)
+    const interval = setInterval(fetchQueue, 3000);
+
     return () => {
       socket.off('queue_updated');
       socket.off('patient_called');
+      clearInterval(interval);
     };
   }, [clinicId, startDate, endDate, datePreset]);
 

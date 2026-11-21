@@ -812,9 +812,13 @@ export const DoctorView: React.FC = () => {
     socket.on('queue_updated', fetchDoctorQueue);
     socket.on('patient_called', fetchDoctorQueue);
 
+    // Resilient Real-Time Fallback Polling (Every 3 seconds)
+    const interval = setInterval(fetchDoctorQueue, 3000);
+
     return () => {
       socket.off('queue_updated');
       socket.off('patient_called');
+      clearInterval(interval);
     };
   }, [selectedDoctorId, clinicId]);
 

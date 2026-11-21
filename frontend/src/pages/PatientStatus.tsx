@@ -557,7 +557,7 @@ export const PatientStatus: React.FC = () => {
       fetchStatus();
     });
 
-    const interval = setInterval(fetchStatus, 5000);
+    const interval = setInterval(fetchStatus, 3000);
 
     return () => {
       socket.off('queue_updated');

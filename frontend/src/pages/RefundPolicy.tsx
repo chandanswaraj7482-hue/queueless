@@ -14,10 +14,18 @@ import {
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
+import { SeoHead } from '../components/SeoHead';
 
 export const RefundPolicy: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans relative overflow-x-clip flex flex-col transition-colors duration-200">
+      <SeoHead
+        title="Cancellation & Refund Policy (14-Day Free Pilot) | Queueless"
+        description="Transparent 14-day risk-free pilot cancellation and refund policy for hospitals and clinics. Zero lock-in, automated mandate cancellation, and immediate refund processing."
+        keywords="queueless refund policy, hospital subscription cancellation, 14 day free pilot terms, cloud refund policy"
+        canonical="https://queueless-os.vercel.app/refund"
+      />
+
       <CommercialNavbar />
 
       <main className="flex-1 py-14 px-4 sm:px-6 relative z-10">

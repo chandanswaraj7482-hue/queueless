@@ -345,6 +345,7 @@ export function App() {
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/security" element={<SecurityPolicy />} />
             <Route path="/compliance" element={<SecurityPolicy />} />
+            <Route path="/refund" element={<RefundPolicy />} />
             <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/cancellation" element={<RefundPolicy />} />
             <Route path="/website" element={<QueuelessWebsite />} />
@@ -353,17 +354,17 @@ export function App() {
             <Route path="/demo" element={<QueuelessWebsite />} />
 
             {/* 2. Hospital Dedicated Link Setup Packages */}
-            <Route path="/check-in" element={<PatientCheckIn />} />
+            <Route path="/check-in" element={<Navigate to="/check-in/city-health" replace />} />
             <Route path="/check-in/:slug" element={<PatientCheckIn />} />
-            <Route path="/checkin" element={<PatientCheckIn />} />
+            <Route path="/checkin" element={<Navigate to="/check-in/city-health" replace />} />
             <Route path="/checkin/:slug" element={<PatientCheckIn />} />
-            <Route path="/reception" element={<ReceptionDashboard />} />
+            <Route path="/reception" element={<Navigate to="/reception/city-health" replace />} />
             <Route path="/reception/:slug" element={<ReceptionDashboard />} />
-            <Route path="/doctor" element={<DoctorView />} />
+            <Route path="/doctor" element={<Navigate to="/doctor/city-health" replace />} />
             <Route path="/doctor/:slug" element={<DoctorView />} />
             <Route path="/doctor/:slug/:doctorId" element={<DoctorView />} />
             <Route path="/doctor/:slug/cabin/:doctorId" element={<DoctorView />} />
-            <Route path="/display" element={<DisplayKiosk />} />
+            <Route path="/display" element={<Navigate to="/display/city-health" replace />} />
             <Route path="/display/:clinicId" element={<DisplayKiosk />} />
             <Route path="/admin" element={<Navigate to="/admin/caremax-opd" replace />} />
             <Route path="/admin/:slug" element={<ClinicAdmin />} />

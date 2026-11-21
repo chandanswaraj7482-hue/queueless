@@ -2851,8 +2851,8 @@ export const FounderDashboard: React.FC = () => {
                 <div className="grid grid-cols-2 gap-2.5">
                   {[
                     { id: 'ENTERPRISE', name: 'Enterprise Unlimited', price: '₹9,999/mo', desc: 'Unlimited Cabins, Priority Voice, ABDM, SLA', badge: '👑 Most Popular' },
-                    { id: 'PRO', name: 'Growth Pro', price: '₹4,999/mo', desc: 'Up to 5 Cabins, TV Display, Audio Chime', badge: '⚡ High Demand' },
-                    { id: 'STARTER', name: 'Starter OPD', price: '₹1,999/mo', desc: 'Up to 2 Cabins, Basic Queue Desk', badge: '🌱 Clinic' },
+                    { id: 'PRO', name: 'Growth Pro', price: '₹4,999/mo', desc: 'Up to 12 Cabins, TV Display, Audio Chime', badge: '⚡ High Demand' },
+                    { id: 'STARTER', name: 'Starter OPD', price: '₹1,999/mo', desc: 'Up to 3 Cabins, Basic Queue Desk', badge: '🌱 Clinic' },
                     { id: 'FREE_TRIAL', name: '14-Day Free Trial', price: '₹0 Evaluation', desc: 'Full evaluation sandbox access', badge: '⏳ Sandbox' },
                   ].map((p) => (
                     <button

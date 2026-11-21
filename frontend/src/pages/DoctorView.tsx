@@ -710,15 +710,22 @@ export const DoctorView: React.FC = () => {
           }
         } catch (e) {}
 
-        const realDocs = data.data?.doctors || [];
+        const DEFAULT_DOCTORS_ROSTER = [
+          { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'General Medicine & OPD', roomNumber: 'Cabin 1' },
+          { id: 'doc-2', displayName: 'Dr. Priya Patel, DNB', specialty: 'Pediatrics & Child Health', roomNumber: 'Cabin 2' },
+          { id: 'doc-3', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology & Heart Care', roomNumber: 'Cabin 3' },
+        ];
+
+        const realDocs = (data.data?.doctors && data.data.doctors.length > 0) ? data.data.doctors : DEFAULT_DOCTORS_ROSTER;
 
         if (data.success && data.data) {
           setClinicData({
             ...data.data,
             name: data.data.name || customHospitalName,
             logoUrl: data.data.logoUrl || customHospitalLogo,
+            doctors: realDocs,
           });
-          setClinicId(data.data.id);
+          setClinicId(data.data.id || activeSlug);
           setDoctors(realDocs);
           const matched = resolveMatchingDoctor(realDocs, targetDoctorIdentifier);
           if (matched) {
@@ -734,13 +741,23 @@ export const DoctorView: React.FC = () => {
             name: customHospitalName,
             logoUrl: customHospitalLogo,
             slug: activeSlug,
-            doctors: [],
+            doctors: DEFAULT_DOCTORS_ROSTER,
           });
-          setDoctors([]);
+          setDoctors(DEFAULT_DOCTORS_ROSTER);
+          const matched = resolveMatchingDoctor(DEFAULT_DOCTORS_ROSTER, targetDoctorIdentifier);
+          if (matched) {
+            setSelectedDoctorId(matched.id);
+            setLoginDoctorId(matched.id);
+          }
         }
       })
       .catch(() => {
-        let customHospitalName = 'Hospital OPD';
+        const DEFAULT_DOCTORS_ROSTER = [
+          { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'General Medicine & OPD', roomNumber: 'Cabin 1' },
+          { id: 'doc-2', displayName: 'Dr. Priya Patel, DNB', specialty: 'Pediatrics & Child Health', roomNumber: 'Cabin 2' },
+          { id: 'doc-3', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology & Heart Care', roomNumber: 'Cabin 3' },
+        ];
+        let customHospitalName = 'Hospital OPD Station';
         let customHospitalLogo = '';
         try {
           const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
@@ -769,9 +786,14 @@ export const DoctorView: React.FC = () => {
           name: customHospitalName,
           logoUrl: customHospitalLogo,
           slug: activeSlug,
-          doctors: [],
+          doctors: DEFAULT_DOCTORS_ROSTER,
         });
-        setDoctors([]);
+        setDoctors(DEFAULT_DOCTORS_ROSTER);
+        const matched = resolveMatchingDoctor(DEFAULT_DOCTORS_ROSTER, targetDoctorIdentifier);
+        if (matched) {
+          setSelectedDoctorId(matched.id);
+          setLoginDoctorId(matched.id);
+        }
       });
   }, [activeSlug]);
 

@@ -93,13 +93,14 @@ export const PatientCheckIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('Male');
-  const [bloodGroup, setBloodGroup] = useState('O+');
+  const [bloodGroup, setBloodGroup] = useState('');
   const [address, setAddress] = useState('');
   const [emergencyContact, setEmergencyContact] = useState('');
   const [doctorId, setDoctorId] = useState('');
   const [serviceId, setServiceId] = useState('');
   const [visitReason, setVisitReason] = useState('');
-  const [consent, setConsent] = useState(true);
+  const [consent, setConsent] = useState(false);
+  const [showPolicyModal, setShowPolicyModal] = useState(false);
   const [appointmentDate, setAppointmentDate] = useState(new Date().toISOString().split('T')[0]);
   const [showOptionalDetails, setShowOptionalDetails] = useState(false);
   const [createVaultAccount, setCreateVaultAccount] = useState<boolean>(false);
@@ -158,8 +159,9 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
   ],
   services: [
     { id: 'srv-1', name: 'General Consultation OPD', fee: 500, durationMinutes: 15, active: true },
-    { id: 'srv-2', name: 'Specialist Consultation OPD', fee: 800, durationMinutes: 20, active: true },
-    { id: 'srv-3', name: '15-Day Free Follow-Up Review', fee: 0, durationMinutes: 10, active: true },
+    { id: 'srv-2', name: 'Pediatric Care & Vaccination', fee: 650, durationMinutes: 20, active: true },
+    { id: 'srv-3', name: 'Specialist Consultation OPD', fee: 800, durationMinutes: 20, active: true },
+    { id: 'srv-4', name: '15-Day Free Follow-Up Review', fee: 0, durationMinutes: 10, active: true },
   ],
 };
 
@@ -398,6 +400,63 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
     } catch (e) {}
 
     navigate(`/token/${generatedPublicToken}`);
+  };
+
+  // Bidirectional Auto-Matching between Services and Doctors
+  const handleSelectService = (srv: { id: string; name: string; fee: number }) => {
+    setServiceId(srv.id);
+    const sName = srv.name.toLowerCase();
+    if (clinic?.doctors && clinic.doctors.length > 0) {
+      if (sName.includes('pediatric') || sName.includes('child') || sName.includes('vaccin')) {
+        const pDoc = clinic.doctors.find((d) => {
+          const spec = (d.specialty || '').toLowerCase();
+          return spec.includes('pediatric') || spec.includes('child');
+        });
+        if (pDoc) setDoctorId(pDoc.id);
+      } else if (sName.includes('cardio') || sName.includes('heart')) {
+        const cDoc = clinic.doctors.find((d) => {
+          const spec = (d.specialty || '').toLowerCase();
+          return spec.includes('cardio') || spec.includes('heart');
+        });
+        if (cDoc) setDoctorId(cDoc.id);
+      } else if (sName.includes('general') || sName.includes('medicine')) {
+        const gDoc = clinic.doctors.find((d) => {
+          const spec = (d.specialty || '').toLowerCase();
+          return spec.includes('general') || spec.includes('medicine');
+        });
+        if (gDoc) setDoctorId(gDoc.id);
+      }
+    }
+  };
+
+  const handleSelectDoctor = (docId: string) => {
+    const nextDoctorId = doctorId === docId ? '' : docId;
+    setDoctorId(nextDoctorId);
+    if (!nextDoctorId) return;
+
+    const matchedDoc = clinic?.doctors?.find((d) => d.id === nextDoctorId);
+    if (matchedDoc && clinic?.services && clinic.services.length > 0) {
+      const spec = (matchedDoc.specialty || '').toLowerCase();
+      if (spec.includes('pediatric') || spec.includes('child')) {
+        const pSrv = clinic.services.find((s) => {
+          const sn = s.name.toLowerCase();
+          return sn.includes('pediatric') || sn.includes('child') || sn.includes('vaccin');
+        });
+        if (pSrv) setServiceId(pSrv.id);
+      } else if (spec.includes('cardio') || spec.includes('heart')) {
+        const cSrv = clinic.services.find((s) => {
+          const sn = s.name.toLowerCase();
+          return sn.includes('cardio') || sn.includes('heart');
+        });
+        if (cSrv) setServiceId(cSrv.id);
+      } else if (spec.includes('general') || spec.includes('medicine')) {
+        const gSrv = clinic.services.find((s) => {
+          const sn = s.name.toLowerCase();
+          return sn.includes('general') || sn.includes('consultation');
+        });
+        if (gSrv) setServiceId(gSrv.id);
+      }
+    }
   };
 
   // Pre-validation before showing the Universal Health Vault Popup
@@ -786,7 +845,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                     <button
                       key={srv.id}
                       type="button"
-                      onClick={() => setServiceId(srv.id)}
+                      onClick={() => handleSelectService(srv)}
                       className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                         isSelected
                           ? 'border-sky-500 bg-sky-50/80 text-slate-900 ring-2 ring-sky-500/20 shadow-xs'
@@ -817,7 +876,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                     return (
                       <div
                         key={doc.id}
-                        onClick={() => setDoctorId(isSelected ? '' : doc.id)}
+                        onClick={() => handleSelectDoctor(doc.id)}
                         className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
                           isSelected
                             ? 'border-sky-500 bg-sky-50/60 ring-2 ring-sky-500/20 shadow-xs'
@@ -1035,6 +1094,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                         onChange={(e) => setBloodGroup(e.target.value)}
                         className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-white bg-white dark:bg-slate-800"
                       >
+                        <option value="">Select Blood Group (Optional)</option>
                         {['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'].map((bg) => (
                           <option key={bg} value={bg}>{bg}</option>
                         ))}
@@ -1067,7 +1127,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               )}
             </div>
 
-            {/* Consent Checkbox */}
+            {/* Consent Checkbox with View Policy */}
             <div className="flex items-start gap-2 pt-1">
               <input
                 type="checkbox"
@@ -1077,7 +1137,14 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                 className="mt-0.5 h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300 rounded cursor-pointer"
               />
               <label htmlFor="consent" className="text-[11px] text-slate-500 leading-tight cursor-pointer">
-                I agree to the hospital queue policy & digital token admission.
+                I agree to the hospital queue policy & digital token admission.{' '}
+                <button
+                  type="button"
+                  onClick={() => setShowPolicyModal(true)}
+                  className="text-sky-600 dark:text-sky-400 font-bold underline hover:text-sky-700 ml-1 inline-flex items-center gap-0.5 cursor-pointer"
+                >
+                  View Policy
+                </button>
               </label>
             </div>
           </div>
@@ -1391,16 +1458,29 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               {showVaultPasswordInput ? (
                 <div className="space-y-2 animate-fade-in">
                   <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
-                    Create Your Vault Account Password:
+                    Create Your Vault Account Password (Min 8 Chars, Letters & Numbers):
                   </label>
                   <input
                     type="password"
                     autoFocus
-                    placeholder="e.g. Health#2026 or 4-digit PIN"
+                    placeholder="e.g. Health@2026 (min 8 chars)"
                     value={vaultPin}
                     onChange={(e) => setVaultPin(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs"
                   />
+                  {vaultPin.length > 0 && (
+                    <div className="text-[11px] font-semibold space-y-1">
+                      {vaultPin.length < 8 || !/[a-zA-Z]/.test(vaultPin) || !/[0-9]/.test(vaultPin) ? (
+                        <p className="text-amber-600 dark:text-amber-400">
+                          ⚠️ Requires at least 8 characters with both letters and numbers.
+                        </p>
+                      ) : (
+                        <p className="text-emerald-600 dark:text-emerald-400">
+                          ✓ Strong password meets clinical safety standards.
+                        </p>
+                      )}
+                    </div>
+                  )}
                   <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                     <span>✓</span> Access permanently anytime at <strong>queueless-os.vercel.app/portal</strong>
                   </p>
@@ -1445,6 +1525,56 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
 
             <div className="text-center pt-2 border-t border-slate-100 dark:border-slate-800">
               <span className="text-[11px] text-slate-400">Want to check in as guest without password? <strong className="text-slate-600 dark:text-slate-300">Not Now (Default)</strong></span>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Hospital Queue Policy & Admission Modal */}
+      {showPolicyModal && typeof document !== 'undefined' && createPortal(
+        <div
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowPolicyModal(false);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4 my-auto text-left relative">
+            <button
+              type="button"
+              onClick={() => setShowPolicyModal(false)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-2xl bg-sky-50 dark:bg-sky-950/70 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-black text-slate-900 dark:text-white">Hospital Queue Policy & Token Admission</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Patient Rights, OPD Rules & Zero-Wait Protocol</p>
+              </div>
+            </div>
+
+            <div className="space-y-3 text-xs text-slate-600 dark:text-slate-300 border-y border-slate-100 dark:border-slate-800 py-3.5 leading-relaxed max-h-[60vh] overflow-y-auto">
+              <p><strong>1. Live Digital Token Entry:</strong> Your digital token will be automatically announced on the OPD 55" TV kiosk and notified on your phone when 2 patients remain ahead.</p>
+              <p><strong>2. 15-Day Free Review Policy:</strong> Follow-up visits within 15 days of consultation for the same symptom are automatically verified for zero consultation fee.</p>
+              <p><strong>3. Transparent Cabin Assignment:</strong> Patients are admitted to doctor cabins in verified sequential order. Emergency triage cases receive immediate medical override.</p>
+              <p><strong>4. Clinical Data Privacy:</strong> We strictly adhere to ABDM and HIPAA data principles. Your medical records and prescriptions are encrypted and never monetized.</p>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={() => {
+                  setConsent(true);
+                  setShowPolicyModal(false);
+                }}
+                className="w-full sm:w-auto px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+              >
+                I Understand & Accept Policy
+              </button>
             </div>
           </div>
         </div>,

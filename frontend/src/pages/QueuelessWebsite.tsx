@@ -539,16 +539,16 @@ export const QueuelessWebsite: React.FC = () => {
 
   // Interactive Live Mockup Queue State & Cabin Configuration
   const SIMULATED_OPD_CABINS = [
-    { name: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', cabin: 'Cabin 1 (Orthopedics)' },
-    { name: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology & Heart Care', cabin: 'Cabin 2 (Cardiology)' },
-    { name: 'Dr. Priya Patel, MBBS', specialty: 'Pediatrics & Child Health', cabin: 'Cabin 3 (Pediatrics)' },
-    { name: 'Dr. Amit Roy, MS', specialty: 'General Medicine & OPD', cabin: 'Cabin 4 (General Medicine)' },
+    { name: 'Dr. Rohan Sharma, MD', specialty: 'General Medicine & OPD', cabin: 'Cabin 1 (General OPD)' },
+    { name: 'Dr. Priya Patel, DNB', specialty: 'Pediatrics & Child Care', cabin: 'Cabin 2 (Pediatrics)' },
+    { name: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology & Heart Care', cabin: 'Cabin 3 (Cardiology)' },
+    { name: 'Dr. Amit Roy, MS', specialty: 'Orthopedics & Joint Care', cabin: 'Cabin 4 (Orthopedics)' },
   ];
 
   const [demoCalledToken, setDemoCalledToken] = useState('A-108');
-  const [demoDoctorCabin, setDemoDoctorCabin] = useState('Cabin 1 (Orthopedics)');
+  const [demoDoctorCabin, setDemoDoctorCabin] = useState('Cabin 1 (General OPD)');
   const [demoDoctorName, setDemoDoctorName] = useState('Dr. Rohan Sharma, MD');
-  const [demoDoctorSpecialty, setDemoDoctorSpecialty] = useState('Orthopedics & Joint Care');
+  const [demoDoctorSpecialty, setDemoDoctorSpecialty] = useState('General Medicine & OPD');
   const [simulatedCallFlash, setSimulatedCallFlash] = useState(false);
 
   const triggerSimulatedDoctorCall = () => {
@@ -676,6 +676,13 @@ export const QueuelessWebsite: React.FC = () => {
   const [auditDailyPatients, setAuditDailyPatients] = useState(120);
   const [auditFee, setAuditFee] = useState(WORLDWIDE_CURRENCIES[selectedCurrencyCode]?.defaultFee || 25);
   const [auditDoctors, setAuditDoctors] = useState(4);
+
+  // Auto-sync audit fee when selected currency changes
+  useEffect(() => {
+    if (selectedCurrency?.defaultFee) {
+      setAuditFee(selectedCurrency.defaultFee);
+    }
+  }, [selectedCurrencyCode, selectedCurrency?.defaultFee]);
 
   // Category Strip Horizontal Scroll Controller (Dribbble Navigation)
   const categoryScrollRef = React.useRef<HTMLDivElement>(null);
@@ -959,11 +966,17 @@ export const QueuelessWebsite: React.FC = () => {
               className="w-full sm:w-auto"
             >
               <Link
-                to="/signup"
+                to={`/signup?plan=${selectedPlanTemplate.id.toLowerCase()}&currency=${selectedCurrencyCode}&cycle=${billingCycle.toLowerCase()}`}
                 className="w-full sm:w-auto px-5 py-3.5 sm:px-7 sm:py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl shadow-xl shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Zap className="w-4 h-4 fill-white shrink-0" />
-                <span>Activate Queueless OS (From {selectedCurrency.symbol}{selectedCurrency.rates.STARTER.monthly}/mo) ➔</span>
+                <span>
+                  Activate Queueless OS ({selectedCurrency.symbol}
+                  {billingCycle === 'ANNUAL'
+                    ? Math.round(selectedCurrency.rates[selectedPlanTemplate.id as keyof typeof selectedCurrency.rates]?.annual / 12)
+                    : selectedCurrency.rates[selectedPlanTemplate.id as keyof typeof selectedCurrency.rates]?.monthly}
+                  /mo {billingCycle === 'ANNUAL' ? '• Billed Annually' : '• Monthly'}) ➔
+                </span>
               </Link>
             </motion.div>
 
@@ -1288,10 +1301,10 @@ export const QueuelessWebsite: React.FC = () => {
                         <div className="flex items-center gap-1.5">
                           <img
                             src="/assets/avatars/doc-1.jpg"
-                            alt="Dr. Rohan Sharma"
+                            alt={demoDoctorName}
                             className="w-4 h-4 rounded-full object-cover border border-blue-400 shrink-0"
                           />
-                          <span className="text-slate-900 font-bold">Dr. Rohan Sharma, MD</span>
+                          <span className="text-slate-900 font-bold">{demoDoctorName}</span>
                         </div>
                       </div>
                       <div className="flex justify-between text-slate-500 text-[11px]">
@@ -4576,8 +4589,9 @@ export const QueuelessWebsite: React.FC = () => {
                     <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Avg Fee ({selectedCurrency.symbol})</label>
                     <input
                       type="number"
-                      min="50"
-                      max="10000"
+                      min={selectedCurrency.feeMin || 10}
+                      max={selectedCurrency.feeMax || 5000}
+                      step={selectedCurrency.feeStep || 5}
                       value={auditFee}
                       onChange={(e) => setAuditFee(parseInt(e.target.value) || 0)}
                       className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 font-mono font-bold bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -4677,7 +4691,7 @@ export const QueuelessWebsite: React.FC = () => {
           </button>
 
           <Link
-            to="/signup"
+            to={`/signup?plan=${selectedPlanTemplate.id.toLowerCase()}&currency=${selectedCurrencyCode}&cycle=${billingCycle.toLowerCase()}`}
             className="flex-1 py-2.5 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer"
           >
             <Zap className="w-3.5 h-3.5" />

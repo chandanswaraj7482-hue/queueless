@@ -249,7 +249,11 @@ export const PricingPage: React.FC = () => {
                       ) : (
                         <>
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          <span>14-Day Free Pilot • Pay ₹0 / $0 Today • Auto-Renews Day 15</span>
+                          <span>
+                            {billingCycle === 'ANNUAL'
+                              ? `14-Day Free Pilot • Pay ${selectedCurrency.symbol}0 Today • First Annual Charge on Day 15 (${selectedCurrency.symbol}${rates.annual.toLocaleString()}/yr)`
+                              : `14-Day Free Pilot • Pay ${selectedCurrency.symbol}0 Today • Auto-renews monthly on Day 15 (${selectedCurrency.symbol}${rates.monthly}/mo)`}
+                          </span>
                         </>
                       )}
                     </p>
@@ -433,12 +437,16 @@ export const PricingPage: React.FC = () => {
                       <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal mt-0.5">Zero payment today; auto-activates premium when trial ends</div>
                     </td>
                     <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">
-                      <span className="block">Pay ₹0 / $0 Today</span>
-                      <span className="text-[9px] text-slate-500 dark:text-slate-400 font-normal block">Auto-debits on Day 15</span>
+                      <span className="block">Pay {selectedCurrency.symbol}0 Today</span>
+                      <span className="text-[9px] text-slate-500 dark:text-slate-400 font-normal block">
+                        {billingCycle === 'ANNUAL' ? 'Annual charge on Day 15' : 'Monthly AutoPay on Day 15'}
+                      </span>
                     </td>
                     <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400 bg-blue-50/30 dark:bg-blue-950/30">
-                      <span className="block">Pay ₹0 / $0 Today</span>
-                      <span className="text-[9px] text-blue-600/90 dark:text-blue-300 font-normal block">Auto-buys premium on Day 15</span>
+                      <span className="block">Pay {selectedCurrency.symbol}0 Today</span>
+                      <span className="text-[9px] text-blue-600/90 dark:text-blue-300 font-normal block">
+                        {billingCycle === 'ANNUAL' ? 'Annual charge on Day 15' : 'Monthly AutoPay on Day 15'}
+                      </span>
                     </td>
                     <td className="p-4 sm:p-5 text-center font-bold text-emerald-600 dark:text-emerald-400">
                       <span className="block">14-Day Pilot Available</span>

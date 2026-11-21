@@ -110,6 +110,16 @@ export const PatientPortal: React.FC = () => {
   const [signupSuccessMsg, setSignupSuccessMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loginFailedCount, setLoginFailedCount] = useState<number>(0);
+  const [lockoutSeconds, setLockoutSeconds] = useState<number>(0);
+
+  // Rate Limiting Countdown
+  useEffect(() => {
+    if (lockoutSeconds > 0) {
+      const timer = setTimeout(() => setLockoutSeconds((s) => s - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [lockoutSeconds]);
   const [portalData, setPortalData] = useState<any>(null);
   const [viewingRx, setViewingRx] = useState<any | null>(null);
   const [viewingReceipt, setViewingReceipt] = useState<any | null>(null);
@@ -329,6 +339,10 @@ export const PatientPortal: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (lockoutSeconds > 0) {
+      setError(`Account security lockout active. Please wait ${lockoutSeconds}s before retrying.`);
+      return;
+    }
     if (!mobile.trim()) {
       setError('Please enter your registered mobile number or email.');
       return;
@@ -349,12 +363,21 @@ export const PatientPortal: React.FC = () => {
       }));
       if (data.success && data.data) {
         setPortalData(data.data);
+        setLoginFailedCount(0);
         localStorage.setItem(
           'queueless_patient_session',
           JSON.stringify({ mobile: mobile.trim(), password: password.trim() || '1234' })
         );
       } else {
-        setError(data.error || 'No records found for this account. Try tracking token or registering for OPD!');
+        const nextFailed = loginFailedCount + 1;
+        setLoginFailedCount(nextFailed);
+        if (nextFailed >= 5) {
+          setLockoutSeconds(30);
+          setLoginFailedCount(0);
+          setError('Security Lockout: 5 consecutive failed login attempts. Account temporarily locked for 30 seconds.');
+        } else {
+          setError(data.error || `Invalid credentials. (${5 - nextFailed} attempts remaining before security lockout)`);
+        }
       }
     } catch (err) {
       setError('Could not connect to clinic server. Please try again.');
@@ -370,8 +393,14 @@ export const PatientPortal: React.FC = () => {
       setError('Please enter your mobile number or email address.');
       return;
     }
-    if (!signupPassword || signupPassword.trim().length < 4) {
-      setError('Password must be at least 4 characters long.');
+    if (!signupPassword || signupPassword.trim().length < 8) {
+      setError('Password must be at least 8 characters long for clinical vault security.');
+      return;
+    }
+    const hasLetters = /[a-zA-Z]/.test(signupPassword);
+    const hasNumbers = /[0-9]/.test(signupPassword);
+    if (!hasLetters || !hasNumbers) {
+      setError('Password must contain both letters and numbers for secure medical record protection.');
       return;
     }
     if (signupPassword !== signupConfirmPassword) {
@@ -678,7 +707,7 @@ export const PatientPortal: React.FC = () => {
                     <input
                       type={showSignupPassword ? 'text' : 'password'}
                       required
-                      placeholder="Create secure password (min 4 characters)"
+                      placeholder="Create secure password (min 8 chars, letters & numbers)"
                       value={signupPassword}
                       onChange={(e) => setSignupPassword(e.target.value)}
                       className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
@@ -691,6 +720,22 @@ export const PatientPortal: React.FC = () => {
                       {showSignupPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
+                  {signupPassword.length > 0 && (
+                    <div className="mt-1.5 space-y-1">
+                      <div className="flex items-center gap-1.5">
+                        <div className={`h-1.5 flex-1 rounded-full transition-all ${signupPassword.length >= 8 ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
+                        <div className={`h-1.5 flex-1 rounded-full transition-all ${/[a-zA-Z]/.test(signupPassword) && /[0-9]/.test(signupPassword) ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-700'}`}></div>
+                        <div className={`h-1.5 flex-1 rounded-full transition-all ${signupPassword.length >= 10 && /[^a-zA-Z0-9]/.test(signupPassword) ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-700'}`}></div>
+                      </div>
+                      <p className="text-[10px] text-slate-500 font-medium">
+                        {signupPassword.length < 8
+                          ? '❌ Minimum 8 characters required'
+                          : !/[a-zA-Z]/.test(signupPassword) || !/[0-9]/.test(signupPassword)
+                          ? '⚠️ Must include both letters and numbers'
+                          : '✓ Strong HIPAA/ABDM clinical password'}
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div>

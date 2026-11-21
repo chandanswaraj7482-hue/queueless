@@ -16,10 +16,18 @@ import {
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
+import { SeoHead } from '../components/SeoHead';
 
 export const SecurityPolicy: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans relative overflow-x-clip flex flex-col transition-colors duration-200">
+      <SeoHead
+        title="Security Architecture & HIPAA/ABDM Compliance | Queueless"
+        description="Enterprise-grade healthcare security, zero PHI persistence on central servers, 256-bit TLS encryption, role-based access control, and ABDM M1/M2 compliant architecture."
+        keywords="queueless security architecture, hipaa compliance, abdm security, healthcare data encryption, hospital cyber security"
+        canonical="https://queueless-os.vercel.app/security"
+      />
+
       <CommercialNavbar />
 
       <main className="flex-1 py-14 px-4 sm:px-6 relative z-10">

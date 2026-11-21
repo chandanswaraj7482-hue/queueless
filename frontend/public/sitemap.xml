@@ -133,6 +133,42 @@
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/nabh-5th-edition-opd-waiting-time-compliance</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/digital-prescription-emr-legal-validity-telemedicine-india</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/hospital-thermal-receipt-pos-printer-opd-tokens</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/cashfree-upi-counter-reception-leakage-prevention</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/multi-specialty-opd-queue-routing-pediatrics-ortho</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/cloud-clinic-os-vs-legacy-on-premise-his</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
 
   <!-- Legal & Trust Policies -->
   <url>

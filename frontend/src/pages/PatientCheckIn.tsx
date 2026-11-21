@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { API_BASE_URL } from '../config/api';
 import {
@@ -1344,9 +1345,14 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
       )}
 
       {/* 🔐 UNIVERSAL HEALTH VAULT POPUP MODAL (Triggers when Proceed to Live is clicked) */}
-      {showVaultPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden text-left space-y-4">
+      {showVaultPopup && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-md overflow-y-auto animate-fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) executeSubmission('');
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden text-left space-y-4 my-auto max-h-[90vh] overflow-y-auto">
             {/* Top Banner Gradient */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-sky-500 via-indigo-600 to-emerald-500" />
 
@@ -1441,7 +1447,8 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               <span className="text-[11px] text-slate-400">Want to check in as guest without password? <strong className="text-slate-600 dark:text-slate-300">Not Now (Default)</strong></span>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Powered by Queueless Footer */}

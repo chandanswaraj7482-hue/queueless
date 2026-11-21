@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { QRCodeCanvas } from 'qrcode.react';
@@ -3589,15 +3590,23 @@ export const QueuelessWebsite: React.FC = () => {
       {/* ============================================================== */}
       {/* MODAL 2: EXECUTIVE 1-ON-1 HOSPITAL DEMO BOOKING MODAL           */}
       {/* ============================================================== */}
-      {showDemoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-[32px] p-6 sm:p-8 max-w-lg w-full border border-slate-200 dark:border-slate-800 shadow-2xl relative">
+      {showDemoModal && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowDemoModal(false);
+              setDemoConfirmed(false);
+            }
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-[32px] p-6 sm:p-8 max-w-lg w-full border border-slate-200 dark:border-slate-800 shadow-2xl relative my-auto max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => {
                 setShowDemoModal(false);
                 setDemoConfirmed(false);
               }}
-              className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors z-10 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -3725,16 +3734,21 @@ export const QueuelessWebsite: React.FC = () => {
               </form>
             )}
           </div>
-        </div>
-
+        </div>,
+        document.body
       )}
 
       {/* ============================================================== */}
       {/* MODAL 3: EXECUTIVE BOARDROOM PROCUREMENT ONE-PAGER (PDF BRIEF)  */}
       {/* ============================================================== */}
-      {showPitchDeckModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-[32px] p-6 sm:p-8 max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      {showPitchDeckModal && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowPitchDeckModal(false);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-[32px] p-6 sm:p-8 max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl relative max-h-[90vh] overflow-y-auto my-auto">
             <button
               onClick={() => setShowPitchDeckModal(false)}
               className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -3828,18 +3842,24 @@ export const QueuelessWebsite: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
-
+        </div>,
+        document.body
       )}
-
-
 
       {/* ============================================================== */}
       {/* 10. MODAL: SELF-SERVE BUY CHECKOUT & INSTANT PROVISIONING      */}
       {/* ============================================================== */}
-      {showCheckoutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
-          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-[32px] max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative my-8">
+      {showCheckoutModal && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowCheckoutModal(false);
+              setSubscribedResult(null);
+            }
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-[32px] max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative my-auto max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => {
                 setShowCheckoutModal(false);
@@ -4277,15 +4297,20 @@ export const QueuelessWebsite: React.FC = () => {
               </div>
             )}
           </div>
-        </div>
-
+        </div>,
+        document.body
       )}
       {/* ============================================================== */}
       {/* 9. HOSPITAL CLIENT PORTALS & DEDICATED SETUP ARCHITECTURE MODAL */}
       {/* ============================================================== */}
-      {showClientPortalModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 relative max-h-[92vh] overflow-y-auto">
+      {showClientPortalModal && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowClientPortalModal(false);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 relative max-h-[90vh] overflow-y-auto my-auto">
             {/* Close Button */}
             <button
               onClick={() => setShowClientPortalModal(false)}
@@ -4486,16 +4511,21 @@ export const QueuelessWebsite: React.FC = () => {
               </Link>
             </div>
           </div>
-        </div>
-
+        </div>,
+        document.body
       )}
 
       {/* ============================================================== */}
       {/* MODAL 4: FREE 60-SECOND OPD CONGESTION & REVENUE AUDIT         */}
       {/* ============================================================== */}
-      {showAuditModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative max-h-[92vh] overflow-y-auto">
+      {showAuditModal && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowAuditModal(false);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative max-h-[90vh] overflow-y-auto my-auto">
             <button
               onClick={() => setShowAuditModal(false)}
               className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
@@ -4628,8 +4658,8 @@ export const QueuelessWebsite: React.FC = () => {
               })()}
             </div>
           </div>
-        </div>
-
+        </div>,
+        document.body
       )}
 
 

@@ -455,8 +455,14 @@ patientRouter.post(['/set-pin', '/set-password'], async (req, res) => {
       return res.status(400).json({ success: false, error: 'Mobile number or Email and Password are required.' });
     }
 
-    if (rawSecret.length < 4) {
-      return res.status(400).json({ success: false, error: 'Password must be at least 4 characters long.' });
+    if (rawSecret.length < 8) {
+      return res.status(400).json({ success: false, error: 'Password must be at least 8 characters long for HIPAA/ABDM clinical health record security.' });
+    }
+
+    const hasLetters = /[a-zA-Z]/.test(rawSecret);
+    const hasNumbers = /[0-9]/.test(rawSecret);
+    if (!hasLetters || !hasNumbers) {
+      return res.status(400).json({ success: false, error: 'Password must contain both letters and numbers for secure medical record protection.' });
     }
 
     const weakSecrets = ['1234', '0000', '1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888', '9999', '1212', '4321', '2580', '0123', 'password', '123456'];

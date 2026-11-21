@@ -55,8 +55,12 @@ export const RoiCalculatorPage: React.FC = () => {
   const monthlySoftwareCost = selectedCurrency.rates[softwarePlan.id].monthly;
   const annualSoftwareCost = selectedCurrency.rates[softwarePlan.id].annual;
 
-  // ROI Multiplier
-  const roiMultiplier = Math.max(1, Math.round(annualRevenueRecovered / annualSoftwareCost));
+  // Net Recovered Profit (Subtracting Software Cost from Walkout Recovery)
+  const monthlyNetRevenue = Math.max(0, monthlyRevenueRecovered - monthlySoftwareCost);
+  const annualNetRevenue = Math.max(0, annualRevenueRecovered - (monthlySoftwareCost * 12));
+
+  // ROI Multiplier: Exact ratio of monthly revenue recovered to software cost (e.g. ₹1,91,500 / ₹18,999 = 10x)
+  const roiMultiplier = Math.max(1, Math.round(monthlyRevenueRecovered / monthlySoftwareCost));
 
   // Consultation time saved: 4 minutes saved per patient
   const monthlyHoursSaved = Math.round((dailyPatients * 30 * 4) / 60);
@@ -206,13 +210,13 @@ export const RoiCalculatorPage: React.FC = () => {
 
               {/* Master Metric: Annual Gain */}
               <div className="space-y-1">
-                <span className="text-xs text-slate-400">Net Recovered Annual Revenue</span>
+                <span className="text-xs text-slate-400">Net Recovered Annual Revenue (After Software Cost)</span>
                 <div className="text-4xl sm:text-5xl font-black text-emerald-400 tracking-tight font-mono">
                   {selectedCurrency.symbol}
-                  {annualRevenueRecovered.toLocaleString()}
+                  {annualNetRevenue.toLocaleString()}
                 </div>
                 <p className="text-[11px] text-slate-400">
-                  That's <strong>{selectedCurrency.symbol}{monthlyRevenueRecovered.toLocaleString()}/month</strong> in protected patient fees.
+                  That's <strong>{selectedCurrency.symbol}{monthlyNetRevenue.toLocaleString()}/month</strong> in net protected profit (Gross Recovered: {selectedCurrency.symbol}{monthlyRevenueRecovered.toLocaleString()} minus software cost).
                 </p>
               </div>
 

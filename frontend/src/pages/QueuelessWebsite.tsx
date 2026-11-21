@@ -684,6 +684,11 @@ export const QueuelessWebsite: React.FC = () => {
     }
   }, [selectedCurrencyCode, selectedCurrency?.defaultFee]);
 
+  const handleOpenAuditModal = () => {
+    setAuditFee(selectedCurrency?.defaultFee || (selectedCurrencyCode === 'INR' ? 500 : 50));
+    setShowAuditModal(true);
+  };
+
   // Category Strip Horizontal Scroll Controller (Dribbble Navigation)
   const categoryScrollRef = React.useRef<HTMLDivElement>(null);
   const scrollCategory = (direction: 'left' | 'right') => {
@@ -857,7 +862,7 @@ export const QueuelessWebsite: React.FC = () => {
       <CommercialNavbar
         currentCurrencyCode={selectedCurrencyCode}
         onCurrencyChange={(code) => handleSelectCurrency(code)}
-        onOpenAuditModal={() => setShowAuditModal(true)}
+        onOpenAuditModal={handleOpenAuditModal}
       />
 
       {/* ============================================================== */}
@@ -3076,7 +3081,7 @@ export const QueuelessWebsite: React.FC = () => {
               </Link>
               <button
                 type="button"
-                onClick={() => setShowAuditModal(true)}
+                onClick={handleOpenAuditModal}
                 className="px-5 sm:px-6 py-2.5 sm:py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl sm:rounded-2xl border border-white/15 transition-all text-center cursor-pointer"
               >
                 Instant 60-Sec OPD Audit

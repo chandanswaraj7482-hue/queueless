@@ -157,6 +157,12 @@ export const CommercialFooter: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/blog" className="text-blue-400 font-bold hover:text-blue-300 flex items-center gap-1">
+                  <span>Clinical Insights & Blog</span>
+                  <ArrowRight className="w-3 h-3 shrink-0" />
+                </Link>
+              </li>
+              <li>
                 <Link to="/pricing" className="text-sky-400 font-bold hover:text-sky-300 flex items-center gap-1">
                   <span>Transparent Pricing</span>
                   <ArrowRight className="w-3 h-3 shrink-0" />

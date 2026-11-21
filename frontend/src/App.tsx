@@ -13,6 +13,8 @@ import { FeaturesPage } from './pages/FeaturesPage';
 import { PricingPage } from './pages/PricingPage';
 import { RoiCalculatorPage } from './pages/RoiCalculatorPage';
 import { AboutPage } from './pages/AboutPage';
+import { BlogPage } from './pages/BlogPage';
+import { BlogPostPage } from './pages/BlogPostPage';
 import { HospitalLogin } from './pages/HospitalLogin';
 import { HospitalOnboarding } from './pages/HospitalOnboarding';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
@@ -78,6 +80,8 @@ function Navigation() {
     location.pathname === '/pricing' ||
     location.pathname === '/roi-calculator' ||
     location.pathname === '/about' ||
+    location.pathname === '/blog' ||
+    location.pathname.startsWith('/blog') ||
     location.pathname === '/login' ||
     location.pathname === '/signup' ||
     location.pathname === '/get-started' ||
@@ -328,6 +332,8 @@ export function App() {
             <Route path="/features" element={<FeaturesPage />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/roi-calculator" element={<RoiCalculatorPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPostPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/login" element={<HospitalLogin />} />
             <Route path="/signup" element={<HospitalOnboarding />} />

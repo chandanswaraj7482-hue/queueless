@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { PatientCheckIn } from './pages/PatientCheckIn';
 import { PatientStatus } from './pages/PatientStatus';
@@ -218,12 +219,17 @@ function Navigation() {
       </header>
 
       {/* Track Token Modal */}
-      {showSearchModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 relative animate-in fade-in zoom-in duration-150">
+      {showSearchModal && typeof document !== 'undefined' && createPortal(
+        <div
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowSearchModal(false);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 relative my-auto animate-in fade-in zoom-in duration-150">
             <button
               onClick={() => setShowSearchModal(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="absolute top-4 right-4 p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -297,7 +303,7 @@ function Navigation() {
                     setShowSearchModal(false);
                     navigate('/portal');
                   }}
-                  className="text-xs text-sky-700 dark:text-sky-400 hover:underline font-bold"
+                  className="text-xs text-sky-700 dark:text-sky-400 hover:underline font-bold cursor-pointer"
                 >
                   Patient Login & History ➔
                 </button>
@@ -313,7 +319,8 @@ function Navigation() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

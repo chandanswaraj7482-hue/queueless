@@ -4230,8 +4230,8 @@ export const QueuelessWebsite: React.FC = () => {
             )}
 
             {/* Quick Interactive Payment Simulator Modal */}
-            {showQuickSimulationPrompt && (
-              <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200">
+            {showQuickSimulationPrompt && typeof document !== 'undefined' && createPortal(
+              <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200">
                 <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 animate-in zoom-in-95 text-slate-900 dark:text-slate-100">
                   <div className="text-center space-y-2">
                     <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-800 flex items-center justify-center mx-auto text-blue-600 dark:text-blue-400 shadow-sm">
@@ -4291,7 +4291,8 @@ export const QueuelessWebsite: React.FC = () => {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div>,
+              document.body
             )}
           </div>
         </div>,

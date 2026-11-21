@@ -169,6 +169,54 @@
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/ai-doctor-dictation-speech-to-prescription-emr</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/whatsapp-patient-queue-tracking-zero-app-download</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/nabh-opd-audit-checklist-patient-wait-time-benchmarks</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/hospital-walkout-rate-calculator-opd-revenue-leakage</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/pediatric-opd-queue-management-emergency-triage</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/abha-address-qr-code-counter-scan-benefits-hospitals</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/tv-kiosk-display-hardware-setup-guide-hospitals</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://queueless-os.vercel.app/blog/orthopedic-physiotherapy-opd-workflow-optimization</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
 
   <!-- Legal & Trust Policies -->
   <url>

@@ -2,10 +2,22 @@ import React, { useState, Suspense, lazy } from 'react';
 import { createPortal } from 'react-dom';
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { QueuelessWebsite } from './pages/QueuelessWebsite';
+import { FeaturesPage } from './pages/FeaturesPage';
+import { PricingPage } from './pages/PricingPage';
+import { RoiCalculatorPage } from './pages/RoiCalculatorPage';
+import { AboutPage } from './pages/AboutPage';
+import { BlogPage } from './pages/BlogPage';
+import { BlogPostPage } from './pages/BlogPostPage';
+import { HospitalLogin } from './pages/HospitalLogin';
+import { HospitalOnboarding } from './pages/HospitalOnboarding';
+import { PrivacyPolicy } from './pages/PrivacyPolicy';
+import { TermsOfService } from './pages/TermsOfService';
+import { SecurityPolicy } from './pages/SecurityPolicy';
+import { RefundPolicy } from './pages/RefundPolicy';
 import { API_BASE_URL } from './config/api';
 import { ScrollToTop } from './components/ScrollToTop';
 
-// Lazy loaded routes for extreme performance and sub-second initial load
+// Lazy loaded heavy hospital clinical and doctor consoles for lightning-fast initial marketing visits
 const PatientCheckIn = lazy(() => import('./pages/PatientCheckIn').then(m => ({ default: m.PatientCheckIn })));
 const PatientStatus = lazy(() => import('./pages/PatientStatus').then(m => ({ default: m.PatientStatus })));
 const ReceptionDashboard = lazy(() => import('./pages/ReceptionDashboard').then(m => ({ default: m.ReceptionDashboard })));
@@ -14,18 +26,6 @@ const DisplayKiosk = lazy(() => import('./pages/DisplayKiosk').then(m => ({ defa
 const ClinicAdmin = lazy(() => import('./pages/ClinicAdmin').then(m => ({ default: m.ClinicAdmin })));
 const PatientPortal = lazy(() => import('./pages/PatientPortal').then(m => ({ default: m.PatientPortal })));
 const FounderDashboard = lazy(() => import('./pages/FounderDashboard').then(m => ({ default: m.FounderDashboard })));
-const FeaturesPage = lazy(() => import('./pages/FeaturesPage').then(m => ({ default: m.FeaturesPage })));
-const PricingPage = lazy(() => import('./pages/PricingPage').then(m => ({ default: m.PricingPage })));
-const RoiCalculatorPage = lazy(() => import('./pages/RoiCalculatorPage').then(m => ({ default: m.RoiCalculatorPage })));
-const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
-const BlogPage = lazy(() => import('./pages/BlogPage').then(m => ({ default: m.BlogPage })));
-const BlogPostPage = lazy(() => import('./pages/BlogPostPage').then(m => ({ default: m.BlogPostPage })));
-const HospitalLogin = lazy(() => import('./pages/HospitalLogin').then(m => ({ default: m.HospitalLogin })));
-const HospitalOnboarding = lazy(() => import('./pages/HospitalOnboarding').then(m => ({ default: m.HospitalOnboarding })));
-const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(m => ({ default: m.PrivacyPolicy })));
-const TermsOfService = lazy(() => import('./pages/TermsOfService').then(m => ({ default: m.TermsOfService })));
-const SecurityPolicy = lazy(() => import('./pages/SecurityPolicy').then(m => ({ default: m.SecurityPolicy })));
-const RefundPolicy = lazy(() => import('./pages/RefundPolicy').then(m => ({ default: m.RefundPolicy })));
 const PrescriptionView = lazy(() => import('./pages/PrescriptionView').then(m => ({ default: m.PrescriptionView })));
 import {
   Users,

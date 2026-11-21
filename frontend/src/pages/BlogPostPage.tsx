@@ -48,6 +48,36 @@ export const BlogPostPage: React.FC = () => {
         description={post.metaDescription}
         keywords={post.tags.join(', ')}
         canonical={`https://queueless-os.vercel.app/blog/${post.slug}`}
+        ogImage={post.featuredImage}
+        ogType="article"
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          'headline': post.title,
+          'description': post.metaDescription,
+          'image': post.featuredImage,
+          'datePublished': post.publishedAt,
+          'dateModified': post.updatedAt,
+          'author': {
+            '@type': 'Person',
+            'name': post.author.name,
+            'jobTitle': post.author.role,
+          },
+          'publisher': {
+            '@type': 'Organization',
+            'name': 'Queueless Healthcare Technologies',
+            'url': 'https://queueless-os.vercel.app',
+            'logo': {
+              '@type': 'ImageObject',
+              'url': 'https://queueless-os.vercel.app/logo.png',
+            },
+          },
+          'mainEntityOfPage': {
+            '@type': 'WebPage',
+            '@id': `https://queueless-os.vercel.app/blog/${post.slug}`,
+          },
+          'keywords': post.tags.join(', '),
+        }}
       />
 
       <div className="fixed inset-0 pointer-events-none z-0 bg-dot-matrix opacity-70" />

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams } from 'react-router-dom';
 import { QRCodeCanvas } from 'qrcode.react';
 import {
@@ -2928,9 +2929,14 @@ export const ClinicAdmin: React.FC = () => {
       )}
 
       {/* Add / Edit Doctor Modal */}
-      {showDoctorModal && (
-        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800">
+      {showDoctorModal && typeof document !== 'undefined' && createPortal(
+        <div
+          className="fixed inset-0 bg-slate-950/75 backdrop-blur-md z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowDoctorModal(false);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 my-auto text-left relative">
             <h2 className="text-base font-bold text-slate-900 dark:text-white mb-1">
               {editingDoctorId ? 'Edit Doctor Details' : 'Add New OPD Doctor'}
             </h2>
@@ -3029,13 +3035,19 @@ export const ClinicAdmin: React.FC = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Add / Edit Service Modal */}
-      {showServiceModal && (
-        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800">
+      {showServiceModal && typeof document !== 'undefined' && createPortal(
+        <div
+          className="fixed inset-0 bg-slate-950/75 backdrop-blur-md z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowServiceModal(false);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 my-auto text-left relative">
             <h2 className="text-base font-bold text-slate-900 dark:text-white mb-1">
               {editingServiceId ? 'Edit Consultation Service' : 'Add OPD Consultation Service'}
             </h2>
@@ -3096,15 +3108,21 @@ export const ClinicAdmin: React.FC = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Confirmation Modal (Replaces native browser window.confirm) */}
-      {confirmModal && confirmModal.isOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+      {confirmModal && confirmModal.isOpen && typeof document !== 'undefined' && createPortal(
+        <div
+          className="fixed inset-0 z-[99999] bg-slate-900/75 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setConfirmModal(null);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 my-auto text-left relative">
             <div className="flex items-start gap-3">
-              <div className="p-2.5 bg-red-100 text-red-600 rounded-2xl shrink-0">
+              <div className="p-2.5 bg-red-100 dark:bg-red-950/70 text-red-600 dark:text-red-400 rounded-2xl shrink-0">
                 <AlertCircle className="w-5 h-5" />
               </div>
               <div>
@@ -3117,20 +3135,21 @@ export const ClinicAdmin: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setConfirmModal(null)}
-                className="px-4 py-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+                className="px-4 py-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={confirmModal.onConfirm}
-                className="px-5 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-md transition-all active:scale-95"
+                className="px-5 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-md transition-all active:scale-95 cursor-pointer"
               >
                 {confirmModal.confirmLabel || 'Confirm'}
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

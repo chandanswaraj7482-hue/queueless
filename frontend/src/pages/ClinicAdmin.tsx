@@ -951,6 +951,8 @@ export const ClinicAdmin: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowLoginPassword(!showLoginPassword)}
+                  aria-label={showLoginPassword ? 'Hide password' : 'Show password'}
+                  title={showLoginPassword ? 'Hide password' : 'Show password'}
                   className="absolute right-3.5 top-3 text-slate-400 dark:text-slate-500 hover:text-slate-600"
                 >
                   {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

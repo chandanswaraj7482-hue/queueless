@@ -359,7 +359,7 @@ export const HospitalOnboarding: React.FC = () => {
                         placeholder="e.g. Apex Multispecialty Hospital"
                         value={hospitalName}
                         onChange={(e) => handleNameChange(e.target.value)}
-                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -379,7 +379,7 @@ export const HospitalOnboarding: React.FC = () => {
                         placeholder="apex-multispecialty"
                         value={slug}
                         onChange={(e) => setSlug(cleanSlug(e.target.value))}
-                        className="w-full pl-7 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-mono font-bold text-blue-700 dark:text-blue-400 placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full pl-7 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-mono font-bold text-blue-700 dark:text-blue-400 placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
                     <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
@@ -400,7 +400,7 @@ export const HospitalOnboarding: React.FC = () => {
                       placeholder="e.g. London / Mumbai / Dubai / New York"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
@@ -416,7 +416,7 @@ export const HospitalOnboarding: React.FC = () => {
                         placeholder="+1 (555) 000-0000 or 9876543210"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -442,7 +442,7 @@ export const HospitalOnboarding: React.FC = () => {
                           placeholder="director@apexhealth.com"
                           value={adminEmail}
                           onChange={(e) => setAdminEmail(e.target.value)}
-                          className="w-full pl-10 pr-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                          className="w-full pl-10 pr-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -459,7 +459,7 @@ export const HospitalOnboarding: React.FC = () => {
                           placeholder="••••••••••••"
                           value={adminPassword}
                           onChange={(e) => setAdminPassword(e.target.value)}
-                          className="w-full pl-10 pr-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                          className="w-full pl-10 pr-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -483,7 +483,7 @@ export const HospitalOnboarding: React.FC = () => {
                         placeholder="Dr. R. K. Sharma, MD"
                         value={initialDoctorName}
                         onChange={(e) => setInitialDoctorName(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
 
@@ -496,7 +496,7 @@ export const HospitalOnboarding: React.FC = () => {
                         placeholder="General Medicine"
                         value={initialDoctorSpecialty}
                         onChange={(e) => setInitialDoctorSpecialty(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
 
@@ -509,7 +509,7 @@ export const HospitalOnboarding: React.FC = () => {
                         placeholder="Cabin 101"
                         value={initialDoctorRoom}
                         onChange={(e) => setInitialDoctorRoom(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -841,7 +841,7 @@ export const HospitalOnboarding: React.FC = () => {
                         placeholder="Dr. John Smith / Hospital Director"
                         value={cardHolder}
                         onChange={(e) => setCardHolder(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
 
@@ -857,7 +857,7 @@ export const HospitalOnboarding: React.FC = () => {
                           placeholder="4242 •••• •••• 4242"
                           value={cardNumber}
                           onChange={(e) => setCardNumber(e.target.value)}
-                          className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                          className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -873,7 +873,7 @@ export const HospitalOnboarding: React.FC = () => {
                           placeholder="12/28"
                           value={cardExpiry}
                           onChange={(e) => setCardExpiry(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center"
                         />
                       </div>
 
@@ -888,7 +888,7 @@ export const HospitalOnboarding: React.FC = () => {
                           maxLength={4}
                           value={cardCvc}
                           onChange={(e) => setCardCvc(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center"
                         />
                       </div>
                     </div>

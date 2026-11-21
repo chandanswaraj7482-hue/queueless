@@ -868,11 +868,11 @@ export const QueuelessWebsite: React.FC = () => {
       {/* ============================================================== */}
       {/* 2. WORLD-CLASS ENTERPRISE HEALTHCARE SAAS HERO                */}
       {/* ============================================================== */}
-      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-12 sm:pb-20 px-3 sm:px-6 z-10 overflow-hidden text-center">
+      <section className="relative pt-20 sm:pt-24 lg:pt-28 pb-8 sm:pb-12 px-3 sm:px-6 z-10 overflow-hidden text-center">
         {/* Soft Radial Ambient Lighting */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(56,189,248,0.18),rgba(99,102,241,0.08),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(14,165,233,0.18),rgba(99,102,241,0.08),rgba(0,0,0,0))] pointer-events-none -z-10" />
 
-        <div className="max-w-5xl mx-auto space-y-5 sm:space-y-8">
+        <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6">
           
           {/* Eyebrow Trust Badge */}
           <motion.div
@@ -895,7 +895,7 @@ export const QueuelessWebsite: React.FC = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-            className="text-2xl xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-950 dark:text-white tracking-[-0.03em] sm:tracking-tight leading-[1.14] sm:leading-tight px-1"
+            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-tight leading-tight px-1"
           >
             Autonomous Zero-Wait <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
@@ -908,7 +908,7 @@ export const QueuelessWebsite: React.FC = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-            className="text-xs sm:text-base md:text-lg text-slate-600 dark:text-slate-300 font-medium max-w-2xl mx-auto leading-relaxed px-2"
+            className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 font-medium max-w-2xl mx-auto leading-relaxed px-2"
           >
             Dismantle crowded reception waiting halls with zero hardware capex. 95% of patients scan a QR pass on mobile, track their live waiting position in real-time, and walk directly into the doctor's cabin when called.
           </motion.p>

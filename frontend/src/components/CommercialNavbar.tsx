@@ -155,12 +155,12 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   HEALTHCARE OS
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold tracking-tight hidden sm:block">Zero-Wait Clinical Queue Operating System</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold tracking-tight hidden xl:block">Zero-Wait Clinical Queue Operating System</p>
             </div>
           </Link>
 
-          {/* Clean Central Nav Links with Exact Dribbble SkyBound Dot Separators & Active Yellow Pill */}
-          <nav className="hidden md:flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300">
+          {/* Clean Central Nav Links - Visible on Wide Desktops (>= 1280px) to prevent Tablet Clipping */}
+          <nav className="hidden xl:flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300">
             {navLinks.map((item, idx) => {
               const isActive =
                 location.pathname === item.href ||
@@ -203,8 +203,8 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               )}
             </button>
 
-            {/* Currency Selector Pill (Desktop only) */}
-            <div className="hidden md:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/90 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-200/90 dark:border-slate-700/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 transition-all shadow-2xs">
+            {/* Currency Selector Pill (Desktop only >= 1280px; on tablet/mobile available in drawer) */}
+            <div className="hidden xl:flex items-center gap-1 px-2.5 py-1.5 bg-slate-100/90 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-200/90 dark:border-slate-700/60 backdrop-blur-md rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 transition-all shadow-2xs">
               <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0" />
               <select
                 aria-label="Currency"
@@ -221,48 +221,48 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             </div>
 
 
-            {/* Start Free Pilot Button (Desktop only: md:inline-flex; on phone it slides into drawer) */}
+            {/* Start Free Pilot Button (Visible on Tablet sm: and Desktop) */}
             {onOpenAuditModal ? (
               <button
                 type="button"
                 onClick={onOpenAuditModal}
-                className="hidden md:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                className="hidden sm:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <span>Start Free Pilot</span>
               </button>
             ) : (
               <Link
                 to="/signup"
-                className="hidden md:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                className="hidden sm:inline-flex px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] sm:text-xs rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <span>Start Free Pilot</span>
               </Link>
             )}
 
-            {/* Patient Portal Quick Link (Desktop only: md:inline-flex; on phone it slides into drawer) */}
+            {/* Patient Portal Quick Link (Desktop >= 1280px; on tablet/phone available in drawer) */}
             <Link
               to="/portal"
-              className="hidden md:inline-flex px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-500/15 dark:hover:bg-emerald-500/25 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              className="hidden xl:inline-flex px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-500/15 dark:hover:bg-emerald-500/25 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               title="Universal Patient Health Vault — View Prescriptions & Visits"
             >
               <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>Patient Vault</span>
             </Link>
 
-            {/* Log In Button (Desktop only: md:inline-flex; on phone it slides into drawer) */}
+            {/* Log In Button (Visible on Tablet sm: and Desktop) */}
             <Link
               to="/login"
-              className="hidden md:inline-flex px-3.5 py-1.5 sm:px-4 sm:py-2 bg-white/90 hover:bg-white dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white border border-slate-200/90 dark:border-slate-700 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              className="hidden sm:inline-flex px-3.5 py-1.5 sm:px-4 sm:py-2 bg-white/90 hover:bg-white dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white border border-slate-200/90 dark:border-slate-700 backdrop-blur-md font-bold text-xs rounded-full shadow-2xs hover:scale-105 active:scale-95 transition-all items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               title="Hospital Director, Doctor & Receptionist Login"
             >
               <span>Log In</span>
             </Link>
 
-            {/* Mobile Hamburger Toggle (Clean and prominent on mobile right side) */}
+            {/* Mobile/Tablet Hamburger Toggle (Clean and prominent on mobile and tablet <= 1280px) */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white bg-slate-100 dark:bg-slate-900/80 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-2xl cursor-pointer transition-all border border-slate-200 dark:border-slate-800 shadow-2xs shrink-0"
+              className="xl:hidden p-2 text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white bg-slate-100 dark:bg-slate-900/80 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-2xl cursor-pointer transition-all border border-slate-200 dark:border-slate-800 shadow-2xs shrink-0"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6 stroke-[2.5]" /> : <Menu className="w-6 h-6 stroke-[2.5]" />}
@@ -272,7 +272,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
 
         {/* Mobile Navigation Dropdown Full-Screen Native Overlay */}
         {mobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 z-[100] w-full h-screen h-[100dvh] bg-white dark:bg-[#060D1D] flex flex-col justify-between overflow-y-auto overscroll-contain animate-in fade-in duration-200 text-slate-900 dark:text-slate-100 p-4 sm:p-6 border-l border-slate-200 dark:border-slate-800/80">
+          <div className="xl:hidden fixed inset-0 z-[100] w-full h-screen h-[100dvh] bg-white dark:bg-[#060D1D] flex flex-col justify-between overflow-y-auto overscroll-contain animate-in fade-in duration-200 text-slate-900 dark:text-slate-100 p-4 sm:p-6 border-l border-slate-200 dark:border-slate-800/80">
             <div className="space-y-4">
               {/* Drawer Top Header: Logo on left, Theme toggle & Close button on right */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
@@ -349,8 +349,8 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold transition-colors ${
                       location.pathname === item.href
-                        ? 'bg-blue-950/60 text-blue-300 font-extrabold'
-                        : 'text-slate-200 hover:bg-slate-900/80 hover:text-white'
+                        ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-extrabold'
+                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900/80 hover:text-slate-950 dark:hover:text-white'
                     }`}
                   >
                     <span>{item.label}</span>
@@ -360,7 +360,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               </div>
 
               {/* 3. Action CTAs */}
-              <div className="space-y-2 pt-2 border-t border-slate-800">
+              <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                 {onOpenAuditModal ? (
                   <button
                     type="button"
@@ -386,7 +386,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-3 px-4 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 font-bold text-xs rounded-xl block active:scale-[0.99] transition-all"
+                  className="w-full text-center py-3 px-4 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl block active:scale-[0.99] transition-all"
                 >
                   Hospital Staff Sign In (Director / Doctor / Desk) ➔
                 </Link>
@@ -394,10 +394,10 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             </div>
 
             {/* Bottom Utility Drawer: Currency & Compliance info */}
-            <div className="pt-4 pb-2 border-t border-slate-800 space-y-3">
-              <div className="flex items-center justify-between text-xs font-semibold text-slate-300 bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+            <div className="pt-4 pb-2 border-t border-slate-200 dark:border-slate-800 space-y-3">
+              <div className="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900/90 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800">
                 <span className="flex items-center gap-1.5">
-                  <Globe className="w-4 h-4 text-cyan-400" />
+                  <Globe className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                   <span>Currency:</span>
                 </span>
                 <select
@@ -406,10 +406,10 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   onChange={(e) => {
                     handleCurrencySelect(e.target.value);
                   }}
-                  className="bg-slate-800 border border-slate-700 text-slate-100 font-bold px-2 py-1 rounded-lg focus:outline-none text-xs"
+                  className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-bold px-2 py-1 rounded-lg focus:outline-none text-xs"
                 >
                   {Object.values(WORLDWIDE_CURRENCIES).map((curr) => (
-                    <option key={curr.code} value={curr.code} className="bg-slate-900 text-slate-100">
+                    <option key={curr.code} value={curr.code} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">
                       {curr.flag} {curr.code} ({curr.symbol})
                     </option>
                   ))}

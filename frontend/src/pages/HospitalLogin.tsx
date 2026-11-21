@@ -253,7 +253,7 @@ export const HospitalLogin: React.FC = () => {
                       setIdentifier(e.target.value);
                       setError(null);
                     }}
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
                 <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">
@@ -276,7 +276,7 @@ export const HospitalLogin: React.FC = () => {
                       setPassword(e.target.value);
                       setError(null);
                     }}
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>

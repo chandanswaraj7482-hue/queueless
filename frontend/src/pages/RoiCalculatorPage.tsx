@@ -125,7 +125,7 @@ export const RoiCalculatorPage: React.FC = () => {
                   onChange={(e) => setDoctors(Number(e.target.value))}
                   className="w-full accent-blue-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
                 />
-                <div className="flex justify-between text-[10px] text-slate-400 dark:text-slate-500">
+                <div className="flex justify-between text-xs font-semibold text-slate-600 dark:text-slate-300">
                   <span>1 Solo Practice</span>
                   <span>15 Polyclinic</span>
                   <span>30 Multispecialty</span>
@@ -153,7 +153,7 @@ export const RoiCalculatorPage: React.FC = () => {
                   onChange={(e) => setDailyPatients(Number(e.target.value))}
                   className="w-full accent-blue-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
                 />
-                <div className="flex justify-between text-[10px] text-slate-400 dark:text-slate-500">
+                <div className="flex justify-between text-xs font-semibold text-slate-600 dark:text-slate-300">
                   <span>20 Patients</span>
                   <span>600 Patients</span>
                   <span>1,200 Patients</span>
@@ -181,7 +181,7 @@ export const RoiCalculatorPage: React.FC = () => {
                   onChange={(e) => setConsultationFee(Number(e.target.value))}
                   className="w-full accent-emerald-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-800 rounded-lg"
                 />
-                <div className="flex justify-between text-[10px] text-slate-400 dark:text-slate-500">
+                <div className="flex justify-between text-xs font-semibold text-slate-600 dark:text-slate-300">
                   <span>{selectedCurrency.symbol}{selectedCurrency.feeMin}</span>
                   <span>{selectedCurrency.symbol}{Math.round((selectedCurrency.feeMin + selectedCurrency.feeMax) / 2)}</span>
                   <span>{selectedCurrency.symbol}{selectedCurrency.feeMax}</span>
@@ -189,8 +189,8 @@ export const RoiCalculatorPage: React.FC = () => {
               </div>
 
               {/* Research Methodology Callout */}
-              <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 space-y-1">
-                <p className="font-bold text-slate-700 dark:text-slate-300">🔬 Research Methodology & Assumptions:</p>
+              <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                <p className="font-bold text-slate-800 dark:text-slate-200">🔬 Research Methodology & Assumptions:</p>
                 <p>
                   Based on healthcare queue data from 450+ hospitals, ~8.5% of patients leave without completing consultations when waiting room crowding exceeds 45 minutes. Queueless recovers 85% of these walkouts by giving patients live digital tokens on their phones.
                 </p>

@@ -1,30 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { createPortal } from 'react-dom';
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
-import { PatientCheckIn } from './pages/PatientCheckIn';
-import { PatientStatus } from './pages/PatientStatus';
-import { ReceptionDashboard } from './pages/ReceptionDashboard';
-import { DoctorView } from './pages/DoctorView';
-import { DisplayKiosk } from './pages/DisplayKiosk';
-import { ClinicAdmin } from './pages/ClinicAdmin';
-import { PatientPortal } from './pages/PatientPortal';
-import { FounderDashboard } from './pages/FounderDashboard';
 import { QueuelessWebsite } from './pages/QueuelessWebsite';
-import { FeaturesPage } from './pages/FeaturesPage';
-import { PricingPage } from './pages/PricingPage';
-import { RoiCalculatorPage } from './pages/RoiCalculatorPage';
-import { AboutPage } from './pages/AboutPage';
-import { BlogPage } from './pages/BlogPage';
-import { BlogPostPage } from './pages/BlogPostPage';
-import { HospitalLogin } from './pages/HospitalLogin';
-import { HospitalOnboarding } from './pages/HospitalOnboarding';
-import { PrivacyPolicy } from './pages/PrivacyPolicy';
-import { TermsOfService } from './pages/TermsOfService';
-import { SecurityPolicy } from './pages/SecurityPolicy';
-import { RefundPolicy } from './pages/RefundPolicy';
 import { API_BASE_URL } from './config/api';
-import { PrescriptionView } from './pages/PrescriptionView';
 import { ScrollToTop } from './components/ScrollToTop';
+
+// Lazy loaded routes for extreme performance and sub-second initial load
+const PatientCheckIn = lazy(() => import('./pages/PatientCheckIn').then(m => ({ default: m.PatientCheckIn })));
+const PatientStatus = lazy(() => import('./pages/PatientStatus').then(m => ({ default: m.PatientStatus })));
+const ReceptionDashboard = lazy(() => import('./pages/ReceptionDashboard').then(m => ({ default: m.ReceptionDashboard })));
+const DoctorView = lazy(() => import('./pages/DoctorView').then(m => ({ default: m.DoctorView })));
+const DisplayKiosk = lazy(() => import('./pages/DisplayKiosk').then(m => ({ default: m.DisplayKiosk })));
+const ClinicAdmin = lazy(() => import('./pages/ClinicAdmin').then(m => ({ default: m.ClinicAdmin })));
+const PatientPortal = lazy(() => import('./pages/PatientPortal').then(m => ({ default: m.PatientPortal })));
+const FounderDashboard = lazy(() => import('./pages/FounderDashboard').then(m => ({ default: m.FounderDashboard })));
+const FeaturesPage = lazy(() => import('./pages/FeaturesPage').then(m => ({ default: m.FeaturesPage })));
+const PricingPage = lazy(() => import('./pages/PricingPage').then(m => ({ default: m.PricingPage })));
+const RoiCalculatorPage = lazy(() => import('./pages/RoiCalculatorPage').then(m => ({ default: m.RoiCalculatorPage })));
+const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
+const BlogPage = lazy(() => import('./pages/BlogPage').then(m => ({ default: m.BlogPage })));
+const BlogPostPage = lazy(() => import('./pages/BlogPostPage').then(m => ({ default: m.BlogPostPage })));
+const HospitalLogin = lazy(() => import('./pages/HospitalLogin').then(m => ({ default: m.HospitalLogin })));
+const HospitalOnboarding = lazy(() => import('./pages/HospitalOnboarding').then(m => ({ default: m.HospitalOnboarding })));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(m => ({ default: m.PrivacyPolicy })));
+const TermsOfService = lazy(() => import('./pages/TermsOfService').then(m => ({ default: m.TermsOfService })));
+const SecurityPolicy = lazy(() => import('./pages/SecurityPolicy').then(m => ({ default: m.SecurityPolicy })));
+const RefundPolicy = lazy(() => import('./pages/RefundPolicy').then(m => ({ default: m.RefundPolicy })));
+const PrescriptionView = lazy(() => import('./pages/PrescriptionView').then(m => ({ default: m.PrescriptionView })));
 import {
   Users,
   Stethoscope,
@@ -326,6 +328,20 @@ function Navigation() {
   );
 }
 
+const ClinicalLoadingFallback = () => (
+  <div className="min-h-[50vh] flex flex-col items-center justify-center p-6 space-y-3">
+    <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400">
+      <Activity className="w-6 h-6 animate-spin" />
+    </div>
+    <div className="text-center space-y-0.5">
+      <p className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+        Loading Queueless Clinical OS
+      </p>
+      <p className="text-[11px] text-slate-400">Synchronizing clinical modules...</p>
+    </div>
+  </div>
+);
+
 export function App() {
   return (
     <BrowserRouter>
@@ -333,70 +349,72 @@ export function App() {
       <div className="min-h-screen bg-slate-50/60 dark:bg-slate-950 flex flex-col font-sans transition-colors duration-200">
         <Navigation />
         <main className="flex-1">
-          <Routes>
-            {/* 1. Official Commercial B2B SaaS Modular Routes */}
-            <Route path="/" element={<QueuelessWebsite />} />
-            <Route path="/features" element={<FeaturesPage />} />
-            <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/roi-calculator" element={<RoiCalculatorPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:slug" element={<BlogPostPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/login" element={<HospitalLogin />} />
-            <Route path="/signup" element={<HospitalOnboarding />} />
-            <Route path="/get-started" element={<HospitalOnboarding />} />
-            <Route path="/buy" element={<HospitalOnboarding />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-            <Route path="/security" element={<SecurityPolicy />} />
-            <Route path="/compliance" element={<SecurityPolicy />} />
-            <Route path="/refund" element={<RefundPolicy />} />
-            <Route path="/refund-policy" element={<RefundPolicy />} />
-            <Route path="/cancellation" element={<RefundPolicy />} />
-            <Route path="/website" element={<QueuelessWebsite />} />
-            <Route path="/landing" element={<QueuelessWebsite />} />
-            <Route path="/commercial" element={<QueuelessWebsite />} />
-            <Route path="/demo" element={<QueuelessWebsite />} />
+          <Suspense fallback={<ClinicalLoadingFallback />}>
+            <Routes>
+              {/* 1. Official Commercial B2B SaaS Modular Routes */}
+              <Route path="/" element={<QueuelessWebsite />} />
+              <Route path="/features" element={<FeaturesPage />} />
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/roi-calculator" element={<RoiCalculatorPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:slug" element={<BlogPostPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/login" element={<HospitalLogin />} />
+              <Route path="/signup" element={<HospitalOnboarding />} />
+              <Route path="/get-started" element={<HospitalOnboarding />} />
+              <Route path="/buy" element={<HospitalOnboarding />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/security" element={<SecurityPolicy />} />
+              <Route path="/compliance" element={<SecurityPolicy />} />
+              <Route path="/refund" element={<RefundPolicy />} />
+              <Route path="/refund-policy" element={<RefundPolicy />} />
+              <Route path="/cancellation" element={<RefundPolicy />} />
+              <Route path="/website" element={<QueuelessWebsite />} />
+              <Route path="/landing" element={<QueuelessWebsite />} />
+              <Route path="/commercial" element={<QueuelessWebsite />} />
+              <Route path="/demo" element={<QueuelessWebsite />} />
 
-            {/* 2. Hospital Dedicated Link Setup Packages (HIPAA & ABDM notranslate Shielded) */}
-            <Route path="/check-in" element={<Navigate to="/check-in/city-health" replace />} />
-            <Route path="/check-in/:slug" element={<div className="notranslate" translate="no"><PatientCheckIn /></div>} />
-            <Route path="/checkin" element={<Navigate to="/check-in/city-health" replace />} />
-            <Route path="/checkin/:slug" element={<div className="notranslate" translate="no"><PatientCheckIn /></div>} />
-            <Route path="/reception" element={<Navigate to="/reception/city-health" replace />} />
-            <Route path="/reception/:slug" element={<div className="notranslate" translate="no"><ReceptionDashboard /></div>} />
-            <Route path="/doctor" element={<Navigate to="/doctor/city-health" replace />} />
-            <Route path="/doctor/:slug" element={<div className="notranslate" translate="no"><DoctorView /></div>} />
-            <Route path="/doctor/:slug/:doctorId" element={<div className="notranslate" translate="no"><DoctorView /></div>} />
-            <Route path="/doctor/:slug/cabin/:doctorId" element={<div className="notranslate" translate="no"><DoctorView /></div>} />
-            <Route path="/display" element={<Navigate to="/display/city-health" replace />} />
-            <Route path="/display/:clinicId" element={<DisplayKiosk />} />
-            <Route path="/admin" element={<Navigate to="/admin/caremax-opd" replace />} />
-            <Route path="/admin/:slug" element={<div className="notranslate" translate="no"><ClinicAdmin /></div>} />
-            <Route path="/hospital-admin" element={<Navigate to="/admin/caremax-opd" replace />} />
-            <Route path="/hospital-admin/:slug" element={<div className="notranslate" translate="no"><ClinicAdmin /></div>} />
-            <Route path="/founder" element={<FounderDashboard />} />
-            <Route path="/owner" element={<FounderDashboard />} />
+              {/* 2. Hospital Dedicated Link Setup Packages (HIPAA & ABDM notranslate Shielded) */}
+              <Route path="/check-in" element={<Navigate to="/check-in/city-health" replace />} />
+              <Route path="/check-in/:slug" element={<div className="notranslate" translate="no"><PatientCheckIn /></div>} />
+              <Route path="/checkin" element={<Navigate to="/check-in/city-health" replace />} />
+              <Route path="/checkin/:slug" element={<div className="notranslate" translate="no"><PatientCheckIn /></div>} />
+              <Route path="/reception" element={<Navigate to="/reception/city-health" replace />} />
+              <Route path="/reception/:slug" element={<div className="notranslate" translate="no"><ReceptionDashboard /></div>} />
+              <Route path="/doctor" element={<Navigate to="/doctor/city-health" replace />} />
+              <Route path="/doctor/:slug" element={<div className="notranslate" translate="no"><DoctorView /></div>} />
+              <Route path="/doctor/:slug/:doctorId" element={<div className="notranslate" translate="no"><DoctorView /></div>} />
+              <Route path="/doctor/:slug/cabin/:doctorId" element={<div className="notranslate" translate="no"><DoctorView /></div>} />
+              <Route path="/display" element={<Navigate to="/display/city-health" replace />} />
+              <Route path="/display/:clinicId" element={<DisplayKiosk />} />
+              <Route path="/admin" element={<Navigate to="/admin/caremax-opd" replace />} />
+              <Route path="/admin/:slug" element={<div className="notranslate" translate="no"><ClinicAdmin /></div>} />
+              <Route path="/hospital-admin" element={<Navigate to="/admin/caremax-opd" replace />} />
+              <Route path="/hospital-admin/:slug" element={<div className="notranslate" translate="no"><ClinicAdmin /></div>} />
+              <Route path="/founder" element={<FounderDashboard />} />
+              <Route path="/owner" element={<FounderDashboard />} />
 
-            {/* 3. Patient Tracking & History (Protected Health Information - notranslate) */}
-            <Route path="/portal" element={<div className="notranslate" translate="no"><PatientPortal /></div>} />
-            <Route path="/track" element={<div className="notranslate" translate="no"><PatientPortal /></div>} />
-            <Route path="/patient-portal" element={<div className="notranslate" translate="no"><PatientPortal /></div>} />
-            <Route path="/token/:publicToken" element={<div className="notranslate" translate="no"><PatientStatus /></div>} />
-            <Route path="/status/:publicToken" element={<div className="notranslate" translate="no"><PatientStatus /></div>} />
-            <Route path="/prescription/:publicToken" element={<div className="notranslate" translate="no"><PrescriptionView /></div>} />
-            <Route path="/rx/:publicToken" element={<div className="notranslate" translate="no"><PrescriptionView /></div>} />
+              {/* 3. Patient Tracking & History (Protected Health Information - notranslate) */}
+              <Route path="/portal" element={<div className="notranslate" translate="no"><PatientPortal /></div>} />
+              <Route path="/track" element={<div className="notranslate" translate="no"><PatientPortal /></div>} />
+              <Route path="/patient-portal" element={<div className="notranslate" translate="no"><PatientPortal /></div>} />
+              <Route path="/token/:publicToken" element={<div className="notranslate" translate="no"><PatientStatus /></div>} />
+              <Route path="/status/:publicToken" element={<div className="notranslate" translate="no"><PatientStatus /></div>} />
+              <Route path="/prescription/:publicToken" element={<div className="notranslate" translate="no"><PrescriptionView /></div>} />
+              <Route path="/rx/:publicToken" element={<div className="notranslate" translate="no"><PrescriptionView /></div>} />
 
-            {/* 4. Queueless Master SuperAdmin & Hospital Onboarding Console */}
-            <Route path="/queueless-admin" element={<FounderDashboard />} />
-            <Route path="/super-admin" element={<FounderDashboard />} />
-            <Route path="/platform-admin" element={<FounderDashboard />} />
-            <Route path="/business" element={<FounderDashboard />} />
-            <Route path="/founder" element={<FounderDashboard />} />
-            <Route path="/hq" element={<FounderDashboard />} />
-          </Routes>
+              {/* 4. Queueless Master SuperAdmin & Hospital Onboarding Console */}
+              <Route path="/queueless-admin" element={<FounderDashboard />} />
+              <Route path="/super-admin" element={<FounderDashboard />} />
+              <Route path="/platform-admin" element={<FounderDashboard />} />
+              <Route path="/business" element={<FounderDashboard />} />
+              <Route path="/founder" element={<FounderDashboard />} />
+              <Route path="/hq" element={<FounderDashboard />} />
+            </Routes>
+          </Suspense>
         </main>
       </div>
     </BrowserRouter>

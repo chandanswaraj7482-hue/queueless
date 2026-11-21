@@ -353,34 +353,34 @@ export function App() {
             <Route path="/commercial" element={<QueuelessWebsite />} />
             <Route path="/demo" element={<QueuelessWebsite />} />
 
-            {/* 2. Hospital Dedicated Link Setup Packages */}
+            {/* 2. Hospital Dedicated Link Setup Packages (HIPAA & ABDM notranslate Shielded) */}
             <Route path="/check-in" element={<Navigate to="/check-in/city-health" replace />} />
-            <Route path="/check-in/:slug" element={<PatientCheckIn />} />
+            <Route path="/check-in/:slug" element={<div className="notranslate" translate="no"><PatientCheckIn /></div>} />
             <Route path="/checkin" element={<Navigate to="/check-in/city-health" replace />} />
-            <Route path="/checkin/:slug" element={<PatientCheckIn />} />
+            <Route path="/checkin/:slug" element={<div className="notranslate" translate="no"><PatientCheckIn /></div>} />
             <Route path="/reception" element={<Navigate to="/reception/city-health" replace />} />
-            <Route path="/reception/:slug" element={<ReceptionDashboard />} />
+            <Route path="/reception/:slug" element={<div className="notranslate" translate="no"><ReceptionDashboard /></div>} />
             <Route path="/doctor" element={<Navigate to="/doctor/city-health" replace />} />
-            <Route path="/doctor/:slug" element={<DoctorView />} />
-            <Route path="/doctor/:slug/:doctorId" element={<DoctorView />} />
-            <Route path="/doctor/:slug/cabin/:doctorId" element={<DoctorView />} />
+            <Route path="/doctor/:slug" element={<div className="notranslate" translate="no"><DoctorView /></div>} />
+            <Route path="/doctor/:slug/:doctorId" element={<div className="notranslate" translate="no"><DoctorView /></div>} />
+            <Route path="/doctor/:slug/cabin/:doctorId" element={<div className="notranslate" translate="no"><DoctorView /></div>} />
             <Route path="/display" element={<Navigate to="/display/city-health" replace />} />
             <Route path="/display/:clinicId" element={<DisplayKiosk />} />
             <Route path="/admin" element={<Navigate to="/admin/caremax-opd" replace />} />
-            <Route path="/admin/:slug" element={<ClinicAdmin />} />
+            <Route path="/admin/:slug" element={<div className="notranslate" translate="no"><ClinicAdmin /></div>} />
             <Route path="/hospital-admin" element={<Navigate to="/admin/caremax-opd" replace />} />
-            <Route path="/hospital-admin/:slug" element={<ClinicAdmin />} />
+            <Route path="/hospital-admin/:slug" element={<div className="notranslate" translate="no"><ClinicAdmin /></div>} />
             <Route path="/founder" element={<FounderDashboard />} />
             <Route path="/owner" element={<FounderDashboard />} />
 
-            {/* 3. Patient Tracking & History */}
-            <Route path="/portal" element={<PatientPortal />} />
-            <Route path="/track" element={<PatientPortal />} />
-            <Route path="/patient-portal" element={<PatientPortal />} />
-            <Route path="/token/:publicToken" element={<PatientStatus />} />
-            <Route path="/status/:publicToken" element={<PatientStatus />} />
-            <Route path="/prescription/:publicToken" element={<PrescriptionView />} />
-            <Route path="/rx/:publicToken" element={<PrescriptionView />} />
+            {/* 3. Patient Tracking & History (Protected Health Information - notranslate) */}
+            <Route path="/portal" element={<div className="notranslate" translate="no"><PatientPortal /></div>} />
+            <Route path="/track" element={<div className="notranslate" translate="no"><PatientPortal /></div>} />
+            <Route path="/patient-portal" element={<div className="notranslate" translate="no"><PatientPortal /></div>} />
+            <Route path="/token/:publicToken" element={<div className="notranslate" translate="no"><PatientStatus /></div>} />
+            <Route path="/status/:publicToken" element={<div className="notranslate" translate="no"><PatientStatus /></div>} />
+            <Route path="/prescription/:publicToken" element={<div className="notranslate" translate="no"><PrescriptionView /></div>} />
+            <Route path="/rx/:publicToken" element={<div className="notranslate" translate="no"><PrescriptionView /></div>} />
 
             {/* 4. Queueless Master SuperAdmin & Hospital Onboarding Console */}
             <Route path="/queueless-admin" element={<FounderDashboard />} />

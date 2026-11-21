@@ -506,7 +506,7 @@ export const QueuelessWebsite: React.FC = () => {
       setUnmutedReelId(id);
       if (videoRefs.current[id]) {
         videoRefs.current[id]!.muted = false;
-        videoRefs.current[id]!.play().catch(() => {});
+        videoRefs.current[id]!.play().catch(() => { });
       }
     }
   };
@@ -539,14 +539,15 @@ export const QueuelessWebsite: React.FC = () => {
 
   // Interactive Live Mockup Queue State & Cabin Configuration
   const SIMULATED_OPD_CABINS = [
-    { name: 'Dr. Rohan Sharma, MD', specialty: 'General Medicine & OPD', cabin: 'Cabin 1 (General OPD)' },
-    { name: 'Dr. Priya Patel, DNB', specialty: 'Pediatrics & Child Care', cabin: 'Cabin 2 (Pediatrics)' },
-    { name: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology & Heart Care', cabin: 'Cabin 3 (Cardiology)' },
-    { name: 'Dr. Amit Roy, MS', specialty: 'Orthopedics & Joint Care', cabin: 'Cabin 4 (Orthopedics)' },
+    { name: 'Dr. Rohan Sharma, MD', specialty: 'General Medicine & OPD', cabin: 'Cabin 1 (General OPD)', location: 'Ground Floor • Room 101' },
+    { name: 'Dr. Priya Patel, DNB', specialty: 'Pediatrics & Child Care', cabin: 'Cabin 2 (Pediatrics)', location: '1st Floor • Room 202' },
+    { name: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology & Heart Care', cabin: 'Cabin 3 (Cardiology)', location: '2nd Floor • Room 303' },
+    { name: 'Dr. Amit Roy, MS', specialty: 'Orthopedics & Joint Care', cabin: 'Cabin 4 (Orthopedics)', location: 'Ground Floor • Room 104' },
   ];
 
   const [demoCalledToken, setDemoCalledToken] = useState('A-108');
   const [demoDoctorCabin, setDemoDoctorCabin] = useState('Cabin 1 (General OPD)');
+  const [demoDoctorLocation, setDemoDoctorLocation] = useState('Ground Floor • Room 101');
   const [demoDoctorName, setDemoDoctorName] = useState('Dr. Rohan Sharma, MD');
   const [demoDoctorSpecialty, setDemoDoctorSpecialty] = useState('General Medicine & OPD');
   const [simulatedCallFlash, setSimulatedCallFlash] = useState(false);
@@ -557,6 +558,7 @@ export const QueuelessWebsite: React.FC = () => {
     const tokenStr = `A-${nextNum}`;
     setDemoCalledToken(tokenStr);
     setDemoDoctorCabin(chosen.cabin);
+    setDemoDoctorLocation(chosen.location);
     setDemoDoctorName(chosen.name);
     setDemoDoctorSpecialty(chosen.specialty);
     setSimulatedCallFlash(true);
@@ -873,7 +875,7 @@ export const QueuelessWebsite: React.FC = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(56,189,248,0.18),rgba(99,102,241,0.08),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(14,165,233,0.18),rgba(99,102,241,0.08),rgba(0,0,0,0))] pointer-events-none -z-10" />
 
         <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6">
-          
+
           {/* Eyebrow Trust Badge */}
           <motion.div
             initial={{ opacity: 0, y: -14 }}
@@ -1027,499 +1029,490 @@ export const QueuelessWebsite: React.FC = () => {
           </motion.div>
 
           {/* ============================================================== */}
-        {/* INTERACTIVE DUAL-DEVICE HARDWARE MOCKUP (PHONE + LOBBY TV)     */}
-        {/* ============================================================== */}
-        <motion.div
-          id="interactive-demo"
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.48, ease: 'easeOut' }}
-          className="mt-8 sm:mt-12 max-w-5xl mx-auto"
-        >
-          <div className="bg-[#0B1528] backdrop-blur-2xl p-4 sm:p-9 rounded-2xl sm:rounded-[36px] border border-blue-500/20 shadow-2xl relative">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></div>
-                <div className="text-left">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-xs sm:text-sm font-black text-white uppercase tracking-wider">
-                      Interactive Live OPD Synchronizer
-                    </h3>
-                    <span className="text-[10px] bg-blue-950/80 text-cyan-300 font-bold px-2 py-0.5 rounded-full border border-blue-800/80 font-mono">
-                      0.2s Latency
-                    </span>
+          {/* INTERACTIVE DUAL-DEVICE HARDWARE MOCKUP (PHONE + LOBBY TV)     */}
+          {/* ============================================================== */}
+          <motion.div
+            id="interactive-demo"
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.48, ease: 'easeOut' }}
+            className="mt-8 sm:mt-12 max-w-5xl mx-auto"
+          >
+            <div className="bg-[#0B1528] backdrop-blur-2xl p-4 sm:p-9 rounded-2xl sm:rounded-[36px] border border-blue-500/20 shadow-2xl relative">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
+                <div className="flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></div>
+                  <div className="text-left">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-xs sm:text-sm font-black text-white uppercase tracking-wider">
+                        Interactive Live OPD Synchronizer
+                      </h3>
+                      <span className="text-[10px] bg-blue-950/80 text-cyan-300 font-bold px-2 py-0.5 rounded-full border border-blue-800/80 font-mono">
+                        0.2s Latency
+                      </span>
+                    </div>
+                    <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
+                      See how doctor cabin calls update patient phones & lobby TV simultaneously in real-time.
+                    </p>
                   </div>
-                  <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
-                    See how doctor cabin calls update patient phones & lobby TV simultaneously in real-time.
-                  </p>
                 </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                  onClick={triggerSimulatedDoctorCall}
+                  className="hidden sm:inline-flex px-4 py-3 sm:px-5 sm:py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/25 transition-all items-center justify-center gap-2 cursor-pointer ring-2 ring-emerald-500/20 shrink-0"
+                >
+                  <Volume2 className="w-3.5 h-3.5 fill-white shrink-0" />
+                  <span>Simulate Doctor "Call Next" (Chime & Dual Voice 📢)</span>
+                </motion.button>
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                onClick={triggerSimulatedDoctorCall}
-                className="hidden sm:inline-flex px-4 py-3 sm:px-5 sm:py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/25 transition-all items-center justify-center gap-2 cursor-pointer ring-2 ring-emerald-500/20 shrink-0"
-              >
-                <Volume2 className="w-3.5 h-3.5 fill-white shrink-0" />
-                <span>Simulate Doctor "Call Next" (Chime & Dual Voice 📢)</span>
-              </motion.button>
-            </div>
-
-            {/* 4-Step Interactive Workflow Indicator (Responsive 2x2 Grid on Mobile, Flex on Desktop) */}
-            <div className="pt-4 pb-2 grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-2 text-[11px] font-bold">
-              <button
-                type="button"
-                onClick={() => {
-                  setHeroStep(1);
-                  setDemoCalledToken('A-101');
-                  setAutoSlideHero(false);
-                }}
-                className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
-                  heroStep === 1
-                    ? 'bg-blue-600 text-white border-blue-500 shadow-md ring-2 ring-blue-500/25 font-black'
-                    : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
-                }`}
-              >
-                <QrCode className="w-3.5 h-3.5 shrink-0" />
-                <span className="hidden sm:inline">1. Patient Scans QR</span>
-                <span className="sm:hidden">1. Scan QR</span>
-                <span className={`text-[10px] font-mono hidden sm:inline ${heroStep === 1 ? 'text-blue-200' : 'text-slate-400'}`}>➔</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setHeroStep(2);
-                  setDemoCalledToken('A-108');
-                  setAutoSlideHero(false);
-                }}
-                className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
-                  heroStep === 2
-                    ? 'bg-emerald-600 text-white border-emerald-500 shadow-md ring-2 ring-emerald-500/25 font-black'
-                    : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
-                }`}
-              >
-                <Smartphone className="w-3.5 h-3.5 shrink-0" />
-                <span className="hidden sm:inline">2. 20-Sec Live Token Pass</span>
-                <span className="sm:hidden">2. Live Token</span>
-                <span className={`text-[10px] font-mono hidden sm:inline ${heroStep === 2 ? 'text-emerald-200' : 'text-slate-400'}`}>➔</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setHeroStep(3);
-                  setAutoSlideHero(false);
-                  triggerSimulatedDoctorCall();
-                }}
-                className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
-                  heroStep === 3
-                    ? 'bg-blue-600 text-white border-blue-500 shadow-md ring-2 ring-blue-500/25 font-black'
-                    : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
-                }`}
-              >
-                <Tv className="w-3.5 h-3.5 shrink-0" />
-                <span className="hidden sm:inline">3. 55" TV Chime & Voice</span>
-                <span className="sm:hidden">3. TV Chime</span>
-                <span className={`text-[10px] font-mono hidden sm:inline ${heroStep === 3 ? 'text-blue-200' : 'text-slate-400'}`}>➔</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setHeroStep(4);
-                  setDemoDoctorCabin('Cabin 1 (Dr. Sharma)');
-                  setAutoSlideHero(false);
-                }}
-                className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
-                  heroStep === 4
-                    ? 'bg-indigo-600 text-white border-indigo-500 shadow-md ring-2 ring-indigo-500/25 font-black'
-                    : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
-                }`}
-              >
-                <RefreshCw className="w-3.5 h-3.5 shrink-0" />
-                <span className="hidden sm:inline">4. 15-Day Follow-Up Sync</span>
-                <span className="sm:hidden">4. Follow-Up</span>
-              </button>
-            </div>
-
-            {/* Minimalist 4-Step Progress Dots */}
-            <div className="flex items-center justify-center gap-1.5 pt-2 pb-1">
-              {[1, 2, 3, 4].map((stepNum) => (
+              {/* 4-Step Interactive Workflow Indicator (Responsive 2x2 Grid on Mobile, Flex on Desktop) */}
+              <div className="pt-4 pb-2 grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-2 text-[11px] font-bold">
                 <button
-                  key={stepNum}
                   type="button"
                   onClick={() => {
-                    setHeroStep(stepNum);
+                    setHeroStep(1);
+                    setDemoCalledToken('A-101');
                     setAutoSlideHero(false);
                   }}
-                  className={`transition-all duration-300 rounded-full cursor-pointer ${
-                    heroStep === stepNum
-                      ? 'w-6 h-1.5 bg-blue-500 shadow-xs'
-                      : 'w-1.5 h-1.5 bg-slate-700 hover:bg-slate-500'
-                  }`}
-                  aria-label={`Go to Step ${stepNum}`}
-                />
-              ))}
-            </div>
-
-            {/* Mobile View Switcher (Phone vs 55" TV): Cuts 500px of scrolling on phones */}
-            <div className="flex lg:hidden items-center justify-center p-1 bg-slate-900 rounded-xl max-w-xs mx-auto my-3 border border-slate-800">
-              <button
-                type="button"
-                onClick={() => setMobileDemoTab('phone')}
-                className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  mobileDemoTab === 'phone'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <Smartphone className="w-3.5 h-3.5" />
-                <span>Patient Phone</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setMobileDemoTab('tv')}
-                className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  mobileDemoTab === 'tv'
-                    ? 'bg-emerald-600 text-white shadow-xs'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <Tv className="w-3.5 h-3.5" />
-                <span>55" Lobby TV</span>
-              </button>
-            </div>
-
-            {/* Side-by-Side Realistic Devices: Height-Balanced Apple & OLED Signage Layout with Swipe Gestures */}
-            <div
-              onTouchStart={onHeroTouchStart}
-              onTouchMove={onHeroTouchMove}
-              onTouchEnd={onHeroTouchEnd}
-              className="pt-4 sm:pt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch touch-pan-y relative select-none"
-            >
-              {/* Left: Patient Smartphone View (iPhone 16 Pro Style) */}
-              <div className={`lg:col-span-5 flex justify-center items-center ${mobileDemoTab === 'tv' ? 'hidden lg:flex' : 'flex'}`}>
-                <div className="w-full max-w-[285px] sm:max-w-[310px] bg-slate-950 rounded-[48px] p-3.5 shadow-2xl border-4 border-slate-700/90 ring-1 ring-slate-900/20 relative overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)]">
-                  {/* Subtle Titanium Side Reflection */}
-                  <div className="absolute inset-y-0 left-0 w-0.5 bg-white/20"></div>
-
-                  {/* Realistic iOS Dynamic Island Notch (Fluidly Expands on Call without Overlap) */}
-                  <div
-                    className={`absolute top-3.5 left-1/2 -translate-x-1/2 transition-all duration-300 z-30 ${
-                      simulatedCallFlash
-                        ? 'w-[92%] bg-black text-white rounded-[22px] p-2.5 px-3 border border-emerald-500/60 shadow-[0_8px_24px_rgba(16,185,129,0.35)] ring-1 ring-emerald-400/40'
-                        : 'w-24 h-5 bg-black rounded-full flex items-center justify-between px-2.5 border border-white/10 shadow-md'
+                  className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${heroStep === 1
+                      ? 'bg-blue-600 text-white border-blue-500 shadow-md ring-2 ring-blue-500/25 font-black'
+                      : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
                     }`}
-                  >
-                    {simulatedCallFlash ? (
-                      <div className="flex items-center justify-between gap-2 w-full">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className="relative flex h-2 w-2 shrink-0">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                          </div>
-                          <div className="text-left min-w-0 truncate">
-                            <div className="text-[10px] font-black text-white truncate">
-                              Proceed to {demoDoctorCabin}
-                            </div>
-                            <div className="text-[8px] font-mono text-emerald-400 font-bold truncate">
-                              Ref: #QL-84920 • Token #{demoCalledToken}
-                            </div>
-                          </div>
-                        </div>
-                        <span className="text-[10px] font-mono font-black text-amber-300 bg-amber-400/20 border border-amber-400/40 px-1.5 py-0.5 rounded shrink-0 animate-pulse">
-                          {demoCalledToken}
-                        </span>
-                      </div>
-                    ) : (
-                      <>
-                        <span className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-700"></span>
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 animate-pulse"></span>
-                      </>
-                    )}
-                  </div>
+                >
+                  <QrCode className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">1. Patient Scans QR</span>
+                  <span className="sm:hidden">1. Scan QR</span>
+                  <span className={`text-[10px] font-mono hidden sm:inline ${heroStep === 1 ? 'text-blue-200' : 'text-slate-400'}`}>➔</span>
+                </button>
 
-                  {/* Screen Content */}
-                  <div className="bg-[#F8FAFC] text-slate-900 rounded-[38px] pt-7 p-4 border border-slate-200 space-y-3 relative">
-                    {/* iOS Top Status Row */}
-                    <div className="flex items-center justify-between text-[10px] font-bold text-slate-700 px-1 pt-1 pb-1">
-                      <span>9:41</span>
-                      <div className="flex items-center gap-1.5">
-                        <div className="flex items-center gap-0.5">
-                          <span className="w-0.5 h-1.5 bg-slate-800 rounded-xs"></span>
-                          <span className="w-0.5 h-2 bg-slate-800 rounded-xs"></span>
-                          <span className="w-0.5 h-2.5 bg-slate-800 rounded-xs"></span>
-                          <span className="w-0.5 h-3 bg-slate-800 rounded-xs"></span>
-                        </div>
-                        <span className="text-[9px] font-bold">5G</span>
-                        <div className="w-4 h-2 border border-slate-800 rounded-xs p-0.5 flex items-center">
-                          <div className="w-full h-full bg-slate-800 rounded-2xs"></div>
-                        </div>
-                      </div>
-                    </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setHeroStep(2);
+                    setDemoCalledToken('A-108');
+                    setAutoSlideHero(false);
+                  }}
+                  className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${heroStep === 2
+                      ? 'bg-emerald-600 text-white border-emerald-500 shadow-md ring-2 ring-emerald-500/25 font-black'
+                      : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
+                    }`}
+                >
+                  <Smartphone className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">2. 20-Sec Live Token Pass</span>
+                  <span className="sm:hidden">2. Live Token</span>
+                  <span className={`text-[10px] font-mono hidden sm:inline ${heroStep === 2 ? 'text-emerald-200' : 'text-slate-400'}`}>➔</span>
+                </button>
 
-                    <div className="text-center pt-0.5">
-                      <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest block">
-                        Live Patient Web Pass
-                      </span>
-                      <strong className="text-xs font-black text-slate-900">City Health Multispecialty</strong>
-                    </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setHeroStep(3);
+                    setAutoSlideHero(false);
+                    triggerSimulatedDoctorCall();
+                  }}
+                  className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${heroStep === 3
+                      ? 'bg-blue-600 text-white border-blue-500 shadow-md ring-2 ring-blue-500/25 font-black'
+                      : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
+                    }`}
+                >
+                  <Tv className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">3. 55" TV Chime & Voice</span>
+                  <span className="sm:hidden">3. TV Chime</span>
+                  <span className={`text-[10px] font-mono hidden sm:inline ${heroStep === 3 ? 'text-blue-200' : 'text-slate-400'}`}>➔</span>
+                </button>
 
-                    {/* Token Big Card with Reference Number */}
-                    <div className="p-4 rounded-2xl bg-gradient-to-b from-blue-50/80 via-indigo-50/40 to-white border border-blue-200 text-center space-y-1.5 shadow-xs">
-                      <div className="flex items-center justify-between px-1">
-                        <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Your Assigned Token</span>
-                        <span className="text-[9px] font-mono font-black text-blue-700 bg-blue-100/90 border border-blue-200 px-1.5 py-0.5 rounded-md">
-                          Ref: #QL-84920
-                        </span>
-                      </div>
-                      <div className="text-4xl font-black text-slate-900 tracking-wider font-mono">
-                        {demoCalledToken}
-                      </div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-black border border-emerald-200">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                        <span>NOW CALLING</span>
-                      </div>
-                    </div>
-
-                    {/* Boarding Pass Ticket Notch Cutouts */}
-                    <div className="relative flex items-center justify-center -my-2 z-10">
-                      <div className="w-4 h-4 rounded-full bg-[#F8FAFC] border border-slate-300 -ml-2 shadow-inner"></div>
-                      <div className="flex-1 border-b border-dashed border-slate-300 mx-1.5"></div>
-                      <div className="w-4 h-4 rounded-full bg-[#F8FAFC] border border-slate-300 -mr-2 shadow-inner"></div>
-                    </div>
-
-                    <div className="p-3 bg-white rounded-xl border border-slate-200/90 shadow-2xs space-y-1 text-xs">
-                      <div className="flex justify-between text-slate-500 text-[11px]">
-                        <span>Hospital Ref No:</span>
-                        <strong className="text-slate-900 font-mono font-black">REF-QL84920</strong>
-                      </div>
-                      <div className="flex justify-between text-slate-500 text-[11px]">
-                        <span>Assigned Room:</span>
-                        <strong className="text-blue-700 font-black">{demoDoctorCabin}</strong>
-                      </div>
-                      <div className="flex items-center justify-between text-slate-500 text-[11px]">
-                        <span>Consulting:</span>
-                        <div className="flex items-center gap-1.5">
-                          <img
-                            src="/assets/avatars/doc-1.jpg"
-                            alt={demoDoctorName}
-                            className="w-4 h-4 rounded-full object-cover border border-blue-400 shrink-0"
-                          />
-                          <span className="text-slate-900 font-bold">{demoDoctorName}</span>
-                        </div>
-                      </div>
-                      <div className="flex justify-between text-slate-500 text-[11px]">
-                        <span>Estimated Wait:</span>
-                        <span className="text-emerald-700 font-black">0 mins (Proceed Inside)</span>
-                      </div>
-                    </div>
-
-                    <p className="text-[10px] text-center text-slate-500 leading-tight font-medium">
-                      Please proceed directly to {demoDoctorCabin}. No counter lines!
-                    </p>
-
-                    {/* iOS Bottom Home Indicator Bar */}
-                    <div className="w-28 h-1 bg-slate-300 rounded-full mx-auto mt-1"></div>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setHeroStep(4);
+                    setDemoDoctorCabin('Cabin 1 (Dr. Sharma)');
+                    setAutoSlideHero(false);
+                  }}
+                  className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${heroStep === 4
+                      ? 'bg-indigo-600 text-white border-indigo-500 shadow-md ring-2 ring-indigo-500/25 font-black'
+                      : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-800'
+                    }`}
+                >
+                  <RefreshCw className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">4. 15-Day Follow-Up Sync</span>
+                  <span className="sm:hidden">4. Follow-Up</span>
+                </button>
               </div>
 
-              {/* Right: Smart TV Lobby OLED Board (55" Wall Kiosk Style - Perfectly Height Balanced) */}
-              <div className={`lg:col-span-7 flex flex-col justify-between ${mobileDemoTab === 'phone' ? 'hidden lg:flex' : 'flex'}`}>
-                <div className="bg-slate-950 rounded-3xl p-5 sm:p-6 border-4 border-slate-800 shadow-[0_25px_60px_-15px_rgba(16,185,129,0.2)] text-white relative overflow-hidden flex flex-col justify-between h-full space-y-4">
-                  {/* Subtle Top Screen Glare */}
-                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"></div>
-
-                  {/* TV Header Bar with Live Clock & Latency Status */}
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                    <div className="flex items-center gap-2">
-                      <Tv className="w-4 h-4 text-blue-400 shrink-0" />
-                      <div>
-                        <span className="text-xs font-black text-white uppercase tracking-wider block">
-                          OPD Lobby 55" TV Display Kiosk
-                        </span>
-                        <span className="text-[9px] text-slate-400 font-mono">
-                          City Health Multi-Specialty • Central Rotation
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="hidden sm:inline-block text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
-                        10:42 AM
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-end gap-0.5 h-3.5 px-1">
-                          <span className={`w-0.5 bg-emerald-400 rounded-full transition-all ${simulatedCallFlash ? 'animate-eq-1' : 'h-1.5'}`}></span>
-                          <span className={`w-0.5 bg-emerald-400 rounded-full transition-all ${simulatedCallFlash ? 'animate-eq-2' : 'h-3'}`}></span>
-                          <span className={`w-0.5 bg-emerald-400 rounded-full transition-all ${simulatedCallFlash ? 'animate-eq-3' : 'h-2'}`}></span>
-                          <span className={`w-0.5 bg-emerald-400 rounded-full transition-all ${simulatedCallFlash ? 'animate-eq-4' : 'h-3.5'}`}></span>
-                          <span className={`w-0.5 bg-emerald-400 rounded-full transition-all ${simulatedCallFlash ? 'animate-eq-5' : 'h-1.5'}`}></span>
-                        </div>
-                        <span className="text-[10px] font-mono text-emerald-400 font-bold tracking-wider">
-                          AUDIO ACTIVE
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Primary Active Call Spotlight (Sonar Pulse + High Contrast Beacon) */}
-                  <div className="p-4 bg-gradient-to-r from-emerald-950/60 via-slate-900 to-emerald-950/40 rounded-2xl border-2 border-emerald-500/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg shadow-emerald-500/10 relative overflow-hidden transition-all duration-300">
-                    {/* Radar Sonar Ping Wave */}
-                    {simulatedCallFlash && (
-                      <div className="absolute right-6 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full border border-emerald-400/40 animate-sonar pointer-events-none"></div>
-                    )}
-
-                    <div className="relative z-10 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                        <span className="text-[10px] font-black text-emerald-300 uppercase tracking-wider">
-                          NOW CALLING • {demoDoctorCabin}
-                        </span>
-                      </div>
-                      <strong className="text-sm sm:text-base font-black text-white block">
-                        {demoDoctorName} ({demoDoctorSpecialty})
-                      </strong>
-                      <div className="flex items-center gap-2 text-[10px] text-slate-300 font-mono">
-                        <span className="text-emerald-400 font-bold">Ground Floor • Room 204</span>
-                        <span>•</span>
-                        <span className="text-slate-400">Ref: #QL-84920</span>
-                      </div>
-                    </div>
-                    <div className="text-right relative z-10 shrink-0 pl-3">
-                      <div className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-wider animate-pulse">
-                        {demoCalledToken}
-                      </div>
-                      <span className="text-[9px] font-mono font-bold text-emerald-300 uppercase bg-emerald-950/90 px-2 py-0.5 rounded border border-emerald-500/40">
-                        Room Entry ➔
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Non-Truncated Voice Broadcast Bar with Dual-Voice Indicator */}
-                  <div className={`p-3 bg-slate-900/95 rounded-xl border text-[11px] flex items-center gap-3 text-slate-200 transition-all duration-300 ${
-                    simulatedCallFlash
-                      ? 'border-emerald-500/80 shadow-[0_0_20px_rgba(16,185,129,0.3)] bg-slate-900 ring-1 ring-emerald-500/30'
-                      : 'border-slate-800'
-                  }`}>
-                    <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                      <Volume2 className={`w-4 h-4 ${simulatedCallFlash ? 'animate-bounce text-emerald-300' : 'animate-pulse text-emerald-400'}`} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-emerald-400 font-black uppercase tracking-wider text-[9px] block">
-                        Dual Voice Announcement (Hindi + English):
-                      </span>
-                      <p className="text-[11px] leading-tight text-white font-medium mt-0.5">
-                        "Attention please. Token <strong className="text-emerald-300 font-mono font-black">{demoCalledToken}</strong>, please proceed to <strong className="text-white font-bold">{demoDoctorCabin}</strong> for {demoDoctorName}."
-                      </p>
-                    </div>
-                    {simulatedCallFlash && (
-                      <div className="flex items-end gap-0.5 h-4 shrink-0 pl-2">
-                        <span className="w-1 bg-emerald-400 rounded-full animate-eq-1"></span>
-                        <span className="w-1 bg-emerald-400 rounded-full animate-eq-3"></span>
-                        <span className="w-1 bg-emerald-400 rounded-full animate-eq-5"></span>
-                        <span className="w-1 bg-emerald-400 rounded-full animate-eq-2"></span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 4 Active Doctor Cabins / Multi-Specialty Queue Roster (Fills TV Kiosk Height Perfectly) */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                    {/* Cabin 101 */}
-                    <div className="p-2.5 bg-slate-900/70 rounded-xl border border-slate-800/80 flex items-center justify-between">
-                      <div className="min-w-0 pr-2">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block truncate">
-                          Cabin 101 • Cardiology
-                        </span>
-                        <strong className="text-xs font-bold text-slate-200 block truncate">Dr. Rajiv Mehra</strong>
-                        <span className="text-[9px] text-blue-400 font-medium">In Consultation</span>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <span className="text-base font-black text-slate-300 font-mono block">A-115</span>
-                      </div>
-                    </div>
-
-                    {/* Cabin 104 */}
-                    <div className="p-2.5 bg-slate-900/70 rounded-xl border border-slate-800/80 flex items-center justify-between">
-                      <div className="min-w-0 pr-2">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block truncate">
-                          Cabin 104 • Pediatrics
-                        </span>
-                        <strong className="text-xs font-bold text-slate-200 block truncate">Dr. Priya Patel</strong>
-                        <span className="text-[9px] text-amber-400 font-medium">Waiting Outside</span>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <span className="text-base font-black text-slate-300 font-mono block">B-204</span>
-                      </div>
-                    </div>
-
-                    {/* Cabin 108 */}
-                    <div className="p-2.5 bg-slate-900/70 rounded-xl border border-slate-800/80 flex items-center justify-between">
-                      <div className="min-w-0 pr-2">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block truncate">
-                          Cabin 108 • General Med
-                        </span>
-                        <strong className="text-xs font-bold text-slate-200 block truncate">Dr. Amit Roy</strong>
-                        <span className="text-[9px] text-emerald-400 font-medium">Next in Line</span>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <span className="text-base font-black text-slate-300 font-mono block">C-112</span>
-                      </div>
-                    </div>
-
-                    {/* Cabin 202 */}
-                    <div className="p-2.5 bg-slate-900/70 rounded-xl border border-slate-800/80 flex items-center justify-between">
-                      <div className="min-w-0 pr-2">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block truncate">
-                          Cabin 202 • ENT & Dental
-                        </span>
-                        <strong className="text-xs font-bold text-slate-200 block truncate">Dr. Sunita Rao</strong>
-                        <span className="text-[9px] text-blue-400 font-medium">In Consultation</span>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <span className="text-base font-black text-slate-300 font-mono block">D-089</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom TV Kiosk Marquee & Compliance Bar */}
-                  <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-400">
-                    <div className="flex items-center gap-1.5 truncate">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
-                      <span className="font-mono text-emerald-400 font-bold shrink-0">CLOUD OPD SYNC ACTIVE:</span>
-                      <span className="truncate">Average Wait: 6.4 Mins • 15-Day Free Follow-Up Direct Bypass Active</span>
-                    </div>
-                    <span className="font-mono text-slate-500 shrink-0 hidden sm:inline pl-2">
-                      Queueless Kiosk OS v2.4
-                    </span>
-                  </div>
-                </div>
+              {/* Minimalist 4-Step Progress Dots */}
+              <div className="flex items-center justify-center gap-1.5 pt-2 pb-1">
+                {[1, 2, 3, 4].map((stepNum) => (
+                  <button
+                    key={stepNum}
+                    type="button"
+                    onClick={() => {
+                      setHeroStep(stepNum);
+                      setAutoSlideHero(false);
+                    }}
+                    className={`transition-all duration-300 rounded-full cursor-pointer ${heroStep === stepNum
+                        ? 'w-6 h-1.5 bg-blue-500 shadow-xs'
+                        : 'w-1.5 h-1.5 bg-slate-700 hover:bg-slate-500'
+                      }`}
+                    aria-label={`Go to Step ${stepNum}`}
+                  />
+                ))}
               </div>
-            </div>
 
-            {/* Mobile Bottom Action: Simulate Doctor Call Next (Exact Claude Reference) */}
-            <div className="pt-4 sm:hidden">
-              <button
-                type="button"
-                onClick={triggerSimulatedDoctorCall}
-                className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
+              {/* Mobile View Switcher (Phone vs 55" TV): Cuts 500px of scrolling on phones */}
+              <div className="flex lg:hidden items-center justify-center p-1 bg-slate-900 rounded-xl max-w-xs mx-auto my-3 border border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setMobileDemoTab('phone')}
+                  className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${mobileDemoTab === 'phone'
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'text-slate-400 hover:text-white'
+                    }`}
+                >
+                  <Smartphone className="w-3.5 h-3.5" />
+                  <span>Patient Phone</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMobileDemoTab('tv')}
+                  className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${mobileDemoTab === 'tv'
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'text-slate-400 hover:text-white'
+                    }`}
+                >
+                  <Tv className="w-3.5 h-3.5" />
+                  <span>55" Lobby TV</span>
+                </button>
+              </div>
+
+              {/* Side-by-Side Realistic Devices: Height-Balanced Apple & OLED Signage Layout with Swipe Gestures */}
+              <div
+                onTouchStart={onHeroTouchStart}
+                onTouchMove={onHeroTouchMove}
+                onTouchEnd={onHeroTouchEnd}
+                className="pt-4 sm:pt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch touch-pan-y relative select-none"
               >
-                <Volume2 className="w-4 h-4 fill-white shrink-0" />
-                <span>Simulate doctor "Call next"</span>
-              </button>
+                {/* Left: Patient Smartphone View (iPhone 16 Pro Style) */}
+                <div className={`lg:col-span-5 flex justify-center items-center ${mobileDemoTab === 'tv' ? 'hidden lg:flex' : 'flex'}`}>
+                  <div className="w-full max-w-[285px] sm:max-w-[310px] bg-slate-950 rounded-[48px] p-3.5 shadow-2xl border-4 border-slate-700/90 ring-1 ring-slate-900/20 relative overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)]">
+                    {/* Subtle Titanium Side Reflection */}
+                    <div className="absolute inset-y-0 left-0 w-0.5 bg-white/20"></div>
+
+                    {/* Realistic iOS Dynamic Island Notch (Fluidly Expands on Call without Overlap) */}
+                    <div
+                      className={`absolute top-3.5 left-1/2 -translate-x-1/2 transition-all duration-300 z-30 ${simulatedCallFlash
+                          ? 'w-[92%] bg-black text-white rounded-[22px] p-2.5 px-3 border border-emerald-500/60 shadow-[0_8px_24px_rgba(16,185,129,0.35)] ring-1 ring-emerald-400/40'
+                          : 'w-24 h-5 bg-black rounded-full flex items-center justify-between px-2.5 border border-white/10 shadow-md'
+                        }`}
+                    >
+                      {simulatedCallFlash ? (
+                        <div className="flex items-center justify-between gap-2 w-full">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <div className="relative flex h-2 w-2 shrink-0">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            </div>
+                            <div className="text-left min-w-0 truncate">
+                              <div className="text-[10px] font-black text-white truncate">
+                                Proceed to {demoDoctorCabin}
+                              </div>
+                              <div className="text-[8px] font-mono text-emerald-400 font-bold truncate">
+                                Ref: #QL-84920 • Token #{demoCalledToken}
+                              </div>
+                            </div>
+                          </div>
+                          <span className="text-[10px] font-mono font-black text-amber-300 bg-amber-400/20 border border-amber-400/40 px-1.5 py-0.5 rounded shrink-0 animate-pulse">
+                            {demoCalledToken}
+                          </span>
+                        </div>
+                      ) : (
+                        <>
+                          <span className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-700"></span>
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 animate-pulse"></span>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Screen Content */}
+                    <div className="bg-[#F8FAFC] text-slate-900 rounded-[38px] pt-7 p-4 border border-slate-200 space-y-3 relative">
+                      {/* iOS Top Status Row */}
+                      <div className="flex items-center justify-between text-[10px] font-bold text-slate-700 px-1 pt-1 pb-1">
+                        <span>9:41</span>
+                        <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-0.5">
+                            <span className="w-0.5 h-1.5 bg-slate-800 rounded-xs"></span>
+                            <span className="w-0.5 h-2 bg-slate-800 rounded-xs"></span>
+                            <span className="w-0.5 h-2.5 bg-slate-800 rounded-xs"></span>
+                            <span className="w-0.5 h-3 bg-slate-800 rounded-xs"></span>
+                          </div>
+                          <span className="text-[9px] font-bold">5G</span>
+                          <div className="w-4 h-2 border border-slate-800 rounded-xs p-0.5 flex items-center">
+                            <div className="w-full h-full bg-slate-800 rounded-2xs"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="text-center pt-0.5">
+                        <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest block">
+                          Live Patient Web Pass
+                        </span>
+                        <strong className="text-xs font-black text-slate-900">City Health Multispecialty</strong>
+                      </div>
+
+                      {/* Token Big Card with Reference Number */}
+                      <div className="p-4 rounded-2xl bg-gradient-to-b from-blue-50/80 via-indigo-50/40 to-white border border-blue-200 text-center space-y-1.5 shadow-xs">
+                        <div className="flex items-center justify-between px-1">
+                          <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Your Assigned Token</span>
+                          <span className="text-[9px] font-mono font-black text-blue-700 bg-blue-100/90 border border-blue-200 px-1.5 py-0.5 rounded-md">
+                            Ref: #QL-84920
+                          </span>
+                        </div>
+                        <div className="text-4xl font-black text-slate-900 tracking-wider font-mono">
+                          {demoCalledToken}
+                        </div>
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[10px] font-black border border-emerald-200">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                          <span>NOW CALLING</span>
+                        </div>
+                      </div>
+
+                      {/* Boarding Pass Ticket Notch Cutouts */}
+                      <div className="relative flex items-center justify-center -my-2 z-10">
+                        <div className="w-4 h-4 rounded-full bg-[#F8FAFC] border border-slate-300 -ml-2 shadow-inner"></div>
+                        <div className="flex-1 border-b border-dashed border-slate-300 mx-1.5"></div>
+                        <div className="w-4 h-4 rounded-full bg-[#F8FAFC] border border-slate-300 -mr-2 shadow-inner"></div>
+                      </div>
+
+                      <div className="p-3 bg-white rounded-xl border border-slate-200/90 shadow-2xs space-y-1 text-xs">
+                        <div className="flex justify-between text-slate-500 text-[11px]">
+                          <span>Hospital Ref No:</span>
+                          <strong className="text-slate-900 font-mono font-black">REF-QL84920</strong>
+                        </div>
+                        <div className="flex justify-between text-slate-500 text-[11px]">
+                          <span>Assigned Room:</span>
+                          <strong className="text-blue-700 font-black">{demoDoctorCabin}</strong>
+                        </div>
+                        <div className="flex items-center justify-between text-slate-500 text-[11px]">
+                          <span>Consulting:</span>
+                          <div className="flex items-center gap-1.5">
+                            <img
+                              src="/assets/avatars/doc-1.jpg"
+                              alt={demoDoctorName}
+                              className="w-4 h-4 rounded-full object-cover border border-blue-400 shrink-0"
+                            />
+                            <span className="text-slate-900 font-bold">{demoDoctorName}</span>
+                          </div>
+                        </div>
+                        <div className="flex justify-between text-slate-500 text-[11px]">
+                          <span>Estimated Wait:</span>
+                          <span className="text-emerald-700 font-black">0 mins (Proceed Inside)</span>
+                        </div>
+                      </div>
+
+                      <p className="text-[10px] text-center text-slate-500 leading-tight font-medium">
+                        Please proceed directly to {demoDoctorCabin}. No counter lines!
+                      </p>
+
+                      {/* iOS Bottom Home Indicator Bar */}
+                      <div className="w-28 h-1 bg-slate-300 rounded-full mx-auto mt-1"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Smart TV Lobby OLED Board (55" Wall Kiosk Style - Perfectly Height Balanced) */}
+                <div className={`lg:col-span-7 flex flex-col justify-between ${mobileDemoTab === 'phone' ? 'hidden lg:flex' : 'flex'}`}>
+                  <div className="bg-slate-950 rounded-3xl p-5 sm:p-6 border-4 border-slate-800 shadow-[0_25px_60px_-15px_rgba(16,185,129,0.2)] text-white relative overflow-hidden flex flex-col justify-between h-full space-y-4">
+                    {/* Subtle Top Screen Glare */}
+                    <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"></div>
+
+                    {/* TV Header Bar with Live Clock & Latency Status */}
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                      <div className="flex items-center gap-2">
+                        <Tv className="w-4 h-4 text-blue-400 shrink-0" />
+                        <div>
+                          <span className="text-xs font-black text-white uppercase tracking-wider block">
+                            OPD Lobby 55" TV Display Kiosk
+                          </span>
+                          <span className="text-[9px] text-slate-400 font-mono">
+                            City Health Multi-Specialty • Central Rotation
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="hidden sm:inline-block text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                          10:42 AM
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-end gap-0.5 h-3.5 px-1">
+                            <span className={`w-0.5 bg-emerald-400 rounded-full transition-all ${simulatedCallFlash ? 'animate-eq-1' : 'h-1.5'}`}></span>
+                            <span className={`w-0.5 bg-emerald-400 rounded-full transition-all ${simulatedCallFlash ? 'animate-eq-2' : 'h-3'}`}></span>
+                            <span className={`w-0.5 bg-emerald-400 rounded-full transition-all ${simulatedCallFlash ? 'animate-eq-3' : 'h-2'}`}></span>
+                            <span className={`w-0.5 bg-emerald-400 rounded-full transition-all ${simulatedCallFlash ? 'animate-eq-4' : 'h-3.5'}`}></span>
+                            <span className={`w-0.5 bg-emerald-400 rounded-full transition-all ${simulatedCallFlash ? 'animate-eq-5' : 'h-1.5'}`}></span>
+                          </div>
+                          <span className="text-[10px] font-mono text-emerald-400 font-bold tracking-wider">
+                            AUDIO ACTIVE
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Primary Active Call Spotlight (Sonar Pulse + High Contrast Beacon) */}
+                    <div className="p-4 bg-gradient-to-r from-emerald-950/60 via-slate-900 to-emerald-950/40 rounded-2xl border-2 border-emerald-500/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg shadow-emerald-500/10 relative overflow-hidden transition-all duration-300">
+                      {/* Radar Sonar Ping Wave */}
+                      {simulatedCallFlash && (
+                        <div className="absolute right-6 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full border border-emerald-400/40 animate-sonar pointer-events-none"></div>
+                      )}
+
+                      <div className="relative z-10 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                          <span className="text-[10px] font-black text-emerald-300 uppercase tracking-wider">
+                            NOW CALLING • {demoDoctorCabin}
+                          </span>
+                        </div>
+                        <strong className="text-sm sm:text-base font-black text-white block">
+                          {demoDoctorName} ({demoDoctorSpecialty})
+                        </strong>
+                        <div className="flex items-center gap-2 text-[10px] text-slate-300 font-mono">
+                          <span className="text-emerald-400 font-bold">{demoDoctorLocation}</span>
+                          <span>•</span>
+                          <span className="text-slate-400">Ref: #QL-84920</span>
+                        </div>
+                      </div>
+                      <div className="text-right relative z-10 shrink-0 pl-3">
+                        <div className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-wider animate-pulse">
+                          {demoCalledToken}
+                        </div>
+                        <span className="text-[9px] font-mono font-bold text-emerald-300 uppercase bg-emerald-950/90 px-2 py-0.5 rounded border border-emerald-500/40">
+                          Room Entry ➔
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Non-Truncated Voice Broadcast Bar with Dual-Voice Indicator */}
+                    <div className={`p-3 bg-slate-900/95 rounded-xl border text-[11px] flex items-center gap-3 text-slate-200 transition-all duration-300 ${simulatedCallFlash
+                        ? 'border-emerald-500/80 shadow-[0_0_20px_rgba(16,185,129,0.3)] bg-slate-900 ring-1 ring-emerald-500/30'
+                        : 'border-slate-800'
+                      }`}>
+                      <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                        <Volume2 className={`w-4 h-4 ${simulatedCallFlash ? 'animate-bounce text-emerald-300' : 'animate-pulse text-emerald-400'}`} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-emerald-400 font-black uppercase tracking-wider text-[9px] block">
+                          Dual Voice Announcement (Hindi + English):
+                        </span>
+                        <p className="text-[11px] leading-tight text-white font-medium mt-0.5">
+                          "Attention please. Token <strong className="text-emerald-300 font-mono font-black">{demoCalledToken}</strong>, please proceed to <strong className="text-white font-bold">{demoDoctorCabin}</strong> for {demoDoctorName}."
+                        </p>
+                      </div>
+                      {simulatedCallFlash && (
+                        <div className="flex items-end gap-0.5 h-4 shrink-0 pl-2">
+                          <span className="w-1 bg-emerald-400 rounded-full animate-eq-1"></span>
+                          <span className="w-1 bg-emerald-400 rounded-full animate-eq-3"></span>
+                          <span className="w-1 bg-emerald-400 rounded-full animate-eq-5"></span>
+                          <span className="w-1 bg-emerald-400 rounded-full animate-eq-2"></span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 4 Active Doctor Cabins / Multi-Specialty Queue Roster (Fills TV Kiosk Height Perfectly) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      {/* Cabin 101 */}
+                      <div className="p-2.5 bg-slate-900/70 rounded-xl border border-slate-800/80 flex items-center justify-between">
+                        <div className="min-w-0 pr-2">
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block truncate">
+                            Cabin 101 • Cardiology
+                          </span>
+                          <strong className="text-xs font-bold text-slate-200 block truncate">Dr. Rajiv Mehra</strong>
+                          <span className="text-[9px] text-blue-400 font-medium">In Consultation</span>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <span className="text-base font-black text-slate-300 font-mono block">A-115</span>
+                        </div>
+                      </div>
+
+                      {/* Cabin 104 */}
+                      <div className="p-2.5 bg-slate-900/70 rounded-xl border border-slate-800/80 flex items-center justify-between">
+                        <div className="min-w-0 pr-2">
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block truncate">
+                            Cabin 104 • Pediatrics
+                          </span>
+                          <strong className="text-xs font-bold text-slate-200 block truncate">Dr. Priya Patel</strong>
+                          <span className="text-[9px] text-amber-400 font-medium">Waiting Outside</span>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <span className="text-base font-black text-slate-300 font-mono block">B-204</span>
+                        </div>
+                      </div>
+
+                      {/* Cabin 108 */}
+                      <div className="p-2.5 bg-slate-900/70 rounded-xl border border-slate-800/80 flex items-center justify-between">
+                        <div className="min-w-0 pr-2">
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block truncate">
+                            Cabin 108 • General Med
+                          </span>
+                          <strong className="text-xs font-bold text-slate-200 block truncate">Dr. Amit Roy</strong>
+                          <span className="text-[9px] text-emerald-400 font-medium">Next in Line</span>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <span className="text-base font-black text-slate-300 font-mono block">C-112</span>
+                        </div>
+                      </div>
+
+                      {/* Cabin 202 */}
+                      <div className="p-2.5 bg-slate-900/70 rounded-xl border border-slate-800/80 flex items-center justify-between">
+                        <div className="min-w-0 pr-2">
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block truncate">
+                            Cabin 202 • ENT & Dental
+                          </span>
+                          <strong className="text-xs font-bold text-slate-200 block truncate">Dr. Sunita Rao</strong>
+                          <span className="text-[9px] text-blue-400 font-medium">In Consultation</span>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <span className="text-base font-black text-slate-300 font-mono block">D-089</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom TV Kiosk Marquee & Compliance Bar */}
+                    <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-400">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+                        <span className="font-mono text-emerald-400 font-bold shrink-0">CLOUD OPD SYNC ACTIVE:</span>
+                        <span className="truncate">Average Wait: 6.4 Mins • 15-Day Free Follow-Up Direct Bypass Active</span>
+                      </div>
+                      <span className="font-mono text-slate-500 shrink-0 hidden sm:inline pl-2">
+                        Queueless Kiosk OS v2.4
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Bottom Action: Simulate Doctor Call Next (Exact Claude Reference) */}
+              <div className="pt-4 sm:hidden">
+                <button
+                  type="button"
+                  onClick={triggerSimulatedDoctorCall}
+                  className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
+                >
+                  <Volume2 className="w-4 h-4 fill-white shrink-0" />
+                  <span>Simulate doctor "Call next"</span>
+                </button>
+              </div>
             </div>
-          </div>
 
           </motion.div>
         </div>
-{/* ============================================================== */}
+        {/* ============================================================== */}
         {/* CLINICAL TRUST, GOVERNMENT ACCREDITATION & HOSPITAL PARTNERS   */}
         {/* ============================================================== */}
         <div className="mt-14 max-w-6xl mx-auto space-y-10 text-center">
-          
+
           {/* Trust Header with Live Badges */}
           <div className="space-y-3 max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-full text-xs font-black uppercase tracking-wider">
@@ -1591,7 +1584,7 @@ export const QueuelessWebsite: React.FC = () => {
             <div className="absolute -right-8 -bottom-8 w-64 h-64 bg-cyan-400/30 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-5 sm:gap-6 text-left">
-              
+
               {/* Left Header with Glowing Squircle Chart Icon */}
               <div className="flex items-center gap-3.5 sm:gap-4 shrink-0 w-full lg:w-auto">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#022557] border border-cyan-400/50 flex items-center justify-center text-cyan-300 shadow-[0_0_24px_rgba(6,182,212,0.45)] shrink-0">
@@ -1609,7 +1602,7 @@ export const QueuelessWebsite: React.FC = () => {
 
               {/* 4 Impact Metric Columns in a Single Fluid Bar with Vertical Dividers */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-2 lg:gap-0 w-full lg:w-auto items-center justify-between">
-                
+
                 {/* Metric 1: 72% Reduction in Waiting Time */}
                 <div className="flex flex-col items-center justify-center text-center px-3 sm:px-5 lg:px-7 lg:border-l border-white/20">
                   <div className="flex items-center justify-center gap-2">
@@ -1671,194 +1664,194 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
           </motion.div>
 
-        {/* ============================================================== */}
-        {/* SET UP IN 3 SIMPLE STEPS                                       */}
-        {/* ============================================================== */}
-        <div className="mt-14 sm:mt-20 max-w-5xl mx-auto space-y-6 sm:space-y-9 text-center">
-          <div className="space-y-2 max-w-xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full text-xs font-bold uppercase tracking-wider">
-              <Zap className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Instant Cloud Provisioning</span>
+          {/* ============================================================== */}
+          {/* SET UP IN 3 SIMPLE STEPS                                       */}
+          {/* ============================================================== */}
+          <div className="mt-14 sm:mt-20 max-w-5xl mx-auto space-y-6 sm:space-y-9 text-center">
+            <div className="space-y-2 max-w-xl mx-auto">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full text-xs font-bold uppercase tracking-wider">
+                <Zap className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Instant Cloud Provisioning</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+                Live in 3 Simple Steps
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-normal">
+                Your whole hospital or clinic running in minutes, with zero IT overhead.
+              </p>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              Live in 3 Simple Steps
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-normal">
-              Your whole hospital or clinic running in minutes, with zero IT overhead.
-            </p>
+
+            {/* Mobile Compact 3-Step Stack (Matches Claude Reference Screenshots 5 & 6) */}
+            <div className="md:hidden space-y-3 text-left">
+              {/* Step 1 */}
+              <div className="p-4 rounded-2xl bg-white dark:bg-[#0B1528] border border-teal-500/30 shadow-sm flex items-start gap-3.5">
+                <div className="w-8 h-8 rounded-full bg-teal-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                  1
+                </div>
+                <div className="space-y-1 min-w-0">
+                  <h3 className="text-sm font-black text-slate-900 dark:text-white">Create your hospital</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Add departments and doctors with room numbers.
+                  </p>
+                  <span className="inline-block text-[10px] text-teal-600 dark:text-teal-400 font-bold pt-0.5">
+                    Takes about 60 seconds
+                  </span>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="p-4 rounded-2xl bg-white dark:bg-[#0B1528] border border-blue-500/30 shadow-sm flex items-start gap-3.5">
+                <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                  2
+                </div>
+                <div className="space-y-1 min-w-0">
+                  <h3 className="text-sm font-black text-slate-900 dark:text-white">Configure your OPD flow</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Admission rules, token prefix, 15-day follow-up policy, fees.
+                  </p>
+                  <span className="inline-block text-[10px] text-blue-600 dark:text-blue-400 font-bold pt-0.5">
+                    Custom token policies
+                  </span>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="p-4 rounded-2xl bg-white dark:bg-[#0B1528] border border-purple-500/30 shadow-sm flex items-start gap-3.5">
+                <div className="w-8 h-8 rounded-full bg-purple-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                  3
+                </div>
+                <div className="space-y-1 min-w-0">
+                  <h3 className="text-sm font-black text-slate-900 dark:text-white">Go live instantly</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Print entrance QR standees, open the lobby TV kiosk, start calling patients.
+                  </p>
+                  <span className="inline-block text-[10px] text-purple-600 dark:text-purple-400 font-bold pt-0.5">
+                    No hardware shipping
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop 3 Step Cards Connected by Soft Arrows */}
+            <div className="hidden md:grid md:grid-cols-3 gap-6 sm:gap-6 relative items-stretch">
+
+              {/* Step 1: Create Your Hospital */}
+              <motion.div
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                className="relative p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/90 dark:border-slate-800 shadow-md hover:border-teal-500/50 hover:shadow-xl transition-all text-center flex flex-col items-center justify-between group cursor-default"
+              >
+                {/* Step Badge (Top-Left) */}
+                <div className="w-8 h-8 rounded-full bg-teal-600 text-white font-black text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
+                  1
+                </div>
+
+                {/* Icon Container */}
+                <div className="w-16 h-16 rounded-2xl bg-teal-50 dark:bg-teal-950/80 border border-teal-200/80 dark:border-teal-700/60 shadow-sm flex items-center justify-center text-teal-600 dark:text-teal-300 mb-4 group-hover:scale-105 transition-transform mt-2">
+                  <BriefcaseMedical className="w-7 h-7 stroke-[2]" />
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
+                    Create Your Hospital
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Add basic hospital details, clinical departments, and consulting doctors with room numbers.
+                  </p>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 w-full flex items-center justify-center gap-1.5 text-[11px] font-bold text-teal-700 dark:text-teal-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Takes ~60 seconds</span>
+                </div>
+              </motion.div>
+
+              {/* Connecting Arrow 1 (Desktop) */}
+              <div className="hidden md:flex absolute left-1/3 -translate-x-1/2 top-1/2 -translate-y-1/2 z-20 pointer-events-none items-center justify-center">
+                <ArrowRight className="w-6 h-6 text-indigo-400 dark:text-indigo-400 stroke-[2.5] animate-pulse" />
+              </div>
+
+              {/* Step 2: Configure OPD Flow */}
+              <motion.div
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                className="relative p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/90 dark:border-slate-800 shadow-md hover:border-blue-500/50 hover:shadow-xl transition-all text-center flex flex-col items-center justify-between group cursor-default"
+              >
+                {/* Step Badge (Top-Left) */}
+                <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-black text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
+                  2
+                </div>
+
+                {/* Icon Container */}
+                <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/80 border border-blue-200/80 dark:border-blue-700/60 shadow-sm flex items-center justify-center text-blue-600 dark:text-blue-300 mb-4 group-hover:scale-105 transition-transform mt-2">
+                  <Users className="w-7 h-7 stroke-[2]" />
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
+                    Configure OPD Flow
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Set counter admission rules, token prefixes, 15-day follow-up policies, and consultation fees.
+                  </p>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 w-full flex items-center justify-center gap-1.5 text-[11px] font-bold text-blue-700 dark:text-blue-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Custom token policies</span>
+                </div>
+              </motion.div>
+
+              {/* Connecting Arrow 2 (Desktop) */}
+              <div className="hidden md:flex absolute left-2/3 -translate-x-1/2 top-1/2 -translate-y-1/2 z-20 pointer-events-none items-center justify-center">
+                <ArrowRight className="w-6 h-6 text-indigo-400 dark:text-indigo-400 stroke-[2.5] animate-pulse" />
+              </div>
+
+              {/* Step 3: Go Live */}
+              <motion.div
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                className="relative p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/90 dark:border-slate-800 shadow-md hover:border-purple-500/50 hover:shadow-xl transition-all text-center flex flex-col items-center justify-between group cursor-default"
+              >
+                {/* Step Badge (Top-Left) */}
+                <div className="w-8 h-8 rounded-full bg-purple-600 text-white font-black text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
+                  3
+                </div>
+
+                {/* Icon Container */}
+                <div className="w-16 h-16 rounded-2xl bg-purple-50 dark:bg-purple-950/80 border border-purple-200/80 dark:border-purple-700/60 shadow-sm flex items-center justify-center text-purple-600 dark:text-purple-300 mb-4 group-hover:scale-105 transition-transform mt-2">
+                  <Rocket className="w-7 h-7 stroke-[2]" />
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
+                    Go Live Instantly
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Print entrance QR standees, open lobby TV kiosk on any smart TV, and start calling patients.
+                  </p>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 w-full flex items-center justify-center gap-1.5 text-[11px] font-bold text-purple-700 dark:text-purple-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Zero hardware shipping</span>
+                </div>
+              </motion.div>
+
+            </div>
           </div>
 
-          {/* Mobile Compact 3-Step Stack (Matches Claude Reference Screenshots 5 & 6) */}
-          <div className="md:hidden space-y-3 text-left">
-            {/* Step 1 */}
-            <div className="p-4 rounded-2xl bg-white dark:bg-[#0B1528] border border-teal-500/30 shadow-sm flex items-start gap-3.5">
-              <div className="w-8 h-8 rounded-full bg-teal-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                1
-              </div>
-              <div className="space-y-1 min-w-0">
-                <h3 className="text-sm font-black text-slate-900 dark:text-white">Create your hospital</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Add departments and doctors with room numbers.
-                </p>
-                <span className="inline-block text-[10px] text-teal-600 dark:text-teal-400 font-bold pt-0.5">
-                  Takes about 60 seconds
-                </span>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="p-4 rounded-2xl bg-white dark:bg-[#0B1528] border border-blue-500/30 shadow-sm flex items-start gap-3.5">
-              <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                2
-              </div>
-              <div className="space-y-1 min-w-0">
-                <h3 className="text-sm font-black text-slate-900 dark:text-white">Configure your OPD flow</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Admission rules, token prefix, 15-day follow-up policy, fees.
-                </p>
-                <span className="inline-block text-[10px] text-blue-600 dark:text-blue-400 font-bold pt-0.5">
-                  Custom token policies
-                </span>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="p-4 rounded-2xl bg-white dark:bg-[#0B1528] border border-purple-500/30 shadow-sm flex items-start gap-3.5">
-              <div className="w-8 h-8 rounded-full bg-purple-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                3
-              </div>
-              <div className="space-y-1 min-w-0">
-                <h3 className="text-sm font-black text-slate-900 dark:text-white">Go live instantly</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Print entrance QR standees, open the lobby TV kiosk, start calling patients.
-                </p>
-                <span className="inline-block text-[10px] text-purple-600 dark:text-purple-400 font-bold pt-0.5">
-                  No hardware shipping
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop 3 Step Cards Connected by Soft Arrows */}
-          <div className="hidden md:grid md:grid-cols-3 gap-6 sm:gap-6 relative items-stretch">
-            
-            {/* Step 1: Create Your Hospital */}
-            <motion.div
-              whileHover={{ y: -6, scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="relative p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/90 dark:border-slate-800 shadow-md hover:border-teal-500/50 hover:shadow-xl transition-all text-center flex flex-col items-center justify-between group cursor-default"
-            >
-              {/* Step Badge (Top-Left) */}
-              <div className="w-8 h-8 rounded-full bg-teal-600 text-white font-black text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
-                1
-              </div>
-
-              {/* Icon Container */}
-              <div className="w-16 h-16 rounded-2xl bg-teal-50 dark:bg-teal-950/80 border border-teal-200/80 dark:border-teal-700/60 shadow-sm flex items-center justify-center text-teal-600 dark:text-teal-300 mb-4 group-hover:scale-105 transition-transform mt-2">
-                <BriefcaseMedical className="w-7 h-7 stroke-[2]" />
-              </div>
-
-              <div className="space-y-2">
-                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
-                  Create Your Hospital
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Add basic hospital details, clinical departments, and consulting doctors with room numbers.
-                </p>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 w-full flex items-center justify-center gap-1.5 text-[11px] font-bold text-teal-700 dark:text-teal-400">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Takes ~60 seconds</span>
-              </div>
-            </motion.div>
-
-            {/* Connecting Arrow 1 (Desktop) */}
-            <div className="hidden md:flex absolute left-1/3 -translate-x-1/2 top-1/2 -translate-y-1/2 z-20 pointer-events-none items-center justify-center">
-              <ArrowRight className="w-6 h-6 text-indigo-400 dark:text-indigo-400 stroke-[2.5] animate-pulse" />
-            </div>
-
-            {/* Step 2: Configure OPD Flow */}
-            <motion.div
-              whileHover={{ y: -6, scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="relative p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/90 dark:border-slate-800 shadow-md hover:border-blue-500/50 hover:shadow-xl transition-all text-center flex flex-col items-center justify-between group cursor-default"
-            >
-              {/* Step Badge (Top-Left) */}
-              <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-black text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
-                2
-              </div>
-
-              {/* Icon Container */}
-              <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/80 border border-blue-200/80 dark:border-blue-700/60 shadow-sm flex items-center justify-center text-blue-600 dark:text-blue-300 mb-4 group-hover:scale-105 transition-transform mt-2">
-                <Users className="w-7 h-7 stroke-[2]" />
-              </div>
-
-              <div className="space-y-2">
-                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
-                  Configure OPD Flow
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Set counter admission rules, token prefixes, 15-day follow-up policies, and consultation fees.
-                </p>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 w-full flex items-center justify-center gap-1.5 text-[11px] font-bold text-blue-700 dark:text-blue-400">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Custom token policies</span>
-              </div>
-            </motion.div>
-
-            {/* Connecting Arrow 2 (Desktop) */}
-            <div className="hidden md:flex absolute left-2/3 -translate-x-1/2 top-1/2 -translate-y-1/2 z-20 pointer-events-none items-center justify-center">
-              <ArrowRight className="w-6 h-6 text-indigo-400 dark:text-indigo-400 stroke-[2.5] animate-pulse" />
-            </div>
-
-            {/* Step 3: Go Live */}
-            <motion.div
-              whileHover={{ y: -6, scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="relative p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/90 dark:border-slate-800 shadow-md hover:border-purple-500/50 hover:shadow-xl transition-all text-center flex flex-col items-center justify-between group cursor-default"
-            >
-              {/* Step Badge (Top-Left) */}
-              <div className="w-8 h-8 rounded-full bg-purple-600 text-white font-black text-xs flex items-center justify-center absolute top-4 left-4 shadow-sm ring-2 ring-white dark:ring-slate-900">
-                3
-              </div>
-
-              {/* Icon Container */}
-              <div className="w-16 h-16 rounded-2xl bg-purple-50 dark:bg-purple-950/80 border border-purple-200/80 dark:border-purple-700/60 shadow-sm flex items-center justify-center text-purple-600 dark:text-purple-300 mb-4 group-hover:scale-105 transition-transform mt-2">
-                <Rocket className="w-7 h-7 stroke-[2]" />
-              </div>
-
-              <div className="space-y-2">
-                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
-                  Go Live Instantly
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  Print entrance QR standees, open lobby TV kiosk on any smart TV, and start calling patients.
-                </p>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 w-full flex items-center justify-center gap-1.5 text-[11px] font-bold text-purple-700 dark:text-purple-400">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Zero hardware shipping</span>
-              </div>
-            </motion.div>
-
-          </div>
-        </div>
-
-{/* Section Heading: Why Hospitals Choose Queueless */}
+          {/* Section Heading: Why Hospitals Choose Queueless */}
           <div id="about" className="text-center pt-6 space-y-3.5 max-w-3xl mx-auto scroll-mt-28">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-teal-500/10 text-blue-700 dark:text-cyan-300 border border-blue-500/25 dark:border-cyan-500/30 rounded-full text-xs font-black uppercase tracking-wider shadow-2xs">
               <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
               <span>CLINICAL EXCELLENCE & HEALTHCARE STANDARDS</span>
             </div>
-            
+
             <h2 className="text-3xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight leading-[1.15]">
               Why 450+ Hospitals Choose <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 dark:from-blue-400 dark:via-indigo-400 dark:to-teal-300 bg-clip-text text-transparent">Queueless OS</span>
             </h2>
-            
+
             <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto">
               Engineered specifically for Indian hospital realities — eliminating reception counter shouting, protecting patient privacy, and saving ₹3.2L+ in hardware costs.
             </p>
@@ -1866,7 +1859,7 @@ export const QueuelessWebsite: React.FC = () => {
 
           {/* High-Impact Asymmetric Clinical Bento Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 text-left pt-4">
-            
+
             {/* Card 1: ABDM & NABH (Large 7-Col Feature) */}
             <div className="lg:col-span-7 p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-white via-emerald-50/25 to-white dark:from-slate-900/90 dark:via-emerald-950/20 dark:to-slate-900/90 border border-emerald-500/30 dark:border-emerald-500/20 shadow-xl shadow-emerald-500/5 hover:shadow-2xl hover:shadow-emerald-500/15 transition-all duration-300 flex flex-col justify-between space-y-6 group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -2125,11 +2118,10 @@ export const QueuelessWebsite: React.FC = () => {
             <button
               type="button"
               onClick={() => setAuditComparisonTab('LEGACY')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                auditComparisonTab === 'LEGACY'
+              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${auditComparisonTab === 'LEGACY'
                   ? 'bg-rose-600/90 text-white shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+                }`}
             >
               <AlertTriangle className="w-3.5 h-3.5" />
               <span>Legacy Chaos</span>
@@ -2137,11 +2129,10 @@ export const QueuelessWebsite: React.FC = () => {
             <button
               type="button"
               onClick={() => setAuditComparisonTab('ZERO_WAIT')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                auditComparisonTab === 'ZERO_WAIT'
+              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${auditComparisonTab === 'ZERO_WAIT'
                   ? 'bg-blue-600 text-white shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+                }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Zero-Wait OS</span>
@@ -2150,9 +2141,8 @@ export const QueuelessWebsite: React.FC = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* The Old Chaotic Way: The Cost of Legacy Counter Queues */}
-            <div className={`p-6 sm:p-9 rounded-[32px] bg-rose-50/40 dark:bg-slate-950 border border-rose-200 dark:border-rose-500/30 text-slate-900 dark:text-white shadow-xl space-y-6 relative overflow-hidden flex-col justify-between transition-colors ${
-              auditComparisonTab === 'LEGACY' ? 'flex' : 'hidden lg:flex'
-            }`}>
+            <div className={`p-6 sm:p-9 rounded-[32px] bg-rose-50/40 dark:bg-slate-950 border border-rose-200 dark:border-rose-500/30 text-slate-900 dark:text-white shadow-xl space-y-6 relative overflow-hidden flex-col justify-between transition-colors ${auditComparisonTab === 'LEGACY' ? 'flex' : 'hidden lg:flex'
+              }`}>
               <div className="absolute top-0 right-0 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
               <div className="space-y-6 relative z-10">
@@ -2265,9 +2255,8 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
 
             {/* The Queueless Zero-Wait Way: Autonomous Hospital OS */}
-            <div className={`p-6 sm:p-9 rounded-[32px] bg-gradient-to-b from-white via-blue-50/25 to-white dark:from-slate-900 dark:via-blue-950/30 dark:to-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-[0_20px_50px_rgba(37,99,235,0.12)] ring-4 ring-blue-500/15 space-y-6 relative overflow-hidden flex-col justify-between ${
-              auditComparisonTab === 'ZERO_WAIT' ? 'flex' : 'hidden lg:flex'
-            }`}>
+            <div className={`p-6 sm:p-9 rounded-[32px] bg-gradient-to-b from-white via-blue-50/25 to-white dark:from-slate-900 dark:via-blue-950/30 dark:to-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-[0_20px_50px_rgba(37,99,235,0.12)] ring-4 ring-blue-500/15 space-y-6 relative overflow-hidden flex-col justify-between ${auditComparisonTab === 'ZERO_WAIT' ? 'flex' : 'hidden lg:flex'
+              }`}>
               <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
               <div className="space-y-6 relative z-10">
@@ -2418,11 +2407,10 @@ export const QueuelessWebsite: React.FC = () => {
                     key={tab.id}
                     type="button"
                     onClick={() => setProductTab(tab.id as any)}
-                    className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer border flex items-center gap-2 sm:gap-2.5 shrink-0 ${
-                      isActive
+                    className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs font-black transition-all cursor-pointer border flex items-center gap-2 sm:gap-2.5 shrink-0 ${isActive
                         ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white border-blue-600 shadow-lg shadow-blue-600/25 ring-2 ring-blue-500/20'
                         : 'bg-white hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                    }`}
+                      }`}
                   >
                     <IconComponent className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-500 dark:text-slate-400'}`} />
                     <div className="text-left">
@@ -2452,18 +2440,16 @@ export const QueuelessWebsite: React.FC = () => {
                     key={tab.id}
                     type="button"
                     onClick={() => setProductTab(tab.id as any)}
-                    className={`w-full p-3 rounded-2xl border transition-all flex items-center justify-between gap-3 cursor-pointer ${
-                      isActive
+                    className={`w-full p-3 rounded-2xl border transition-all flex items-center justify-between gap-3 cursor-pointer ${isActive
                         ? 'bg-blue-600/10 dark:bg-blue-500/20 border-blue-500 shadow-sm ring-1 ring-blue-500/30'
                         : 'bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                        isActive
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${isActive
                           ? 'bg-blue-600 text-white shadow-xs'
                           : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
-                      }`}>
+                        }`}>
                         <IconComponent className="w-4 h-4" />
                       </div>
                       <div className="min-w-0 truncate">
@@ -2937,11 +2923,10 @@ export const QueuelessWebsite: React.FC = () => {
                     setProductTab(pId);
                     setAutoSlidePillars(false);
                   }}
-                  className={`transition-all duration-300 rounded-full cursor-pointer ${
-                    productTab === pId
+                  className={`transition-all duration-300 rounded-full cursor-pointer ${productTab === pId
                       ? 'w-6 h-1.5 bg-blue-600 dark:bg-blue-400 shadow-xs'
                       : 'w-1.5 h-1.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
-                  }`}
+                    }`}
                   aria-label={`View ${pId}`}
                 />
               ))}
@@ -2967,7 +2952,7 @@ export const QueuelessWebsite: React.FC = () => {
       {/* ============================================================== */}
       <section id="case-studies" className="py-10 sm:py-20 px-3 sm:px-6 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 relative z-10 transition-colors duration-200">
         <div className="max-w-6xl mx-auto space-y-8 sm:space-y-16">
-          
+
           {/* Dynamic Living Animated OPD Clinical Workflow Reels (Hidden on Mobile for fast non-scrolling UX) */}
           <div className="hidden sm:block">
             <AnimatedClinicalReels />
@@ -3052,7 +3037,7 @@ export const QueuelessWebsite: React.FC = () => {
           <div className="p-5 sm:p-10 rounded-2xl sm:rounded-[32px] bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 text-white shadow-2xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8 relative overflow-hidden group">
             {/* Ambient Background Glow */}
             <div className="absolute -right-20 -top-20 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none group-hover:bg-blue-600/30 transition-all duration-700" />
-            
+
             <div className="space-y-3 max-w-xl text-left relative z-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-full text-[11px] font-black uppercase tracking-wider">
                 <Zap className="w-3.5 h-3.5 text-amber-400" />
@@ -3328,11 +3313,10 @@ export const QueuelessWebsite: React.FC = () => {
                   key={cat.id}
                   type="button"
                   onClick={() => setFaqCategory(cat.id as FaqCategory)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
-                    faqCategory === cat.id
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all border cursor-pointer ${faqCategory === cat.id
                       ? 'bg-blue-600 text-white border-blue-600 shadow-sm font-black ring-2 ring-blue-500/20'
                       : 'bg-slate-50 dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
-                  }`}
+                    }`}
                 >
                   {cat.label}
                 </button>
@@ -3347,11 +3331,10 @@ export const QueuelessWebsite: React.FC = () => {
                 <div
                   key={idx}
                   onClick={() => setExpandedFaq(isExpanded ? null : idx)}
-                  className={`p-5 rounded-2xl border transition-all cursor-pointer ${
-                    isExpanded
+                  className={`p-5 rounded-2xl border transition-all cursor-pointer ${isExpanded
                       ? 'bg-blue-50/50 dark:bg-blue-950/40 border-blue-300 dark:border-blue-700 shadow-sm'
                       : 'bg-slate-50/70 dark:bg-slate-950/70 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="space-y-1 text-left">
@@ -3364,9 +3347,8 @@ export const QueuelessWebsite: React.FC = () => {
                       </h4>
                     </div>
                     <ChevronDown
-                      className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
-                        isExpanded ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''
-                      }`}
+                      className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''
+                        }`}
                     />
                   </div>
                   {isExpanded && (
@@ -3443,7 +3425,7 @@ export const QueuelessWebsite: React.FC = () => {
       {/* ============================================================== */}
       <section className="py-10 sm:py-16 px-3 sm:px-6 bg-slate-50/70 dark:bg-slate-950/70 border-t border-slate-200/80 dark:border-slate-800 transition-colors duration-200">
         <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
-          
+
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-[11px] font-bold uppercase tracking-wider">
@@ -3466,7 +3448,7 @@ export const QueuelessWebsite: React.FC = () => {
 
           {/* 6 Google-Style Sitelinks Cards in a Clean 2-Column or 3-Column Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            
+
             {/* Card 1: Clinical Security & Standards */}
             <Link
               to="/security"
@@ -3609,7 +3591,7 @@ export const QueuelessWebsite: React.FC = () => {
       {/* MODAL 2: EXECUTIVE 1-ON-1 HOSPITAL DEMO BOOKING MODAL           */}
       {/* ============================================================== */}
       {showDemoModal && typeof document !== 'undefined' && createPortal(
-        <div 
+        <div
           className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
@@ -3760,7 +3742,7 @@ export const QueuelessWebsite: React.FC = () => {
       {/* MODAL 3: EXECUTIVE BOARDROOM PROCUREMENT ONE-PAGER (PDF BRIEF)  */}
       {/* ============================================================== */}
       {showPitchDeckModal && typeof document !== 'undefined' && createPortal(
-        <div 
+        <div
           className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
           onClick={(e) => {
             if (e.target === e.currentTarget) setShowPitchDeckModal(false);
@@ -3868,7 +3850,7 @@ export const QueuelessWebsite: React.FC = () => {
       {/* 10. MODAL: SELF-SERVE BUY CHECKOUT & INSTANT PROVISIONING      */}
       {/* ============================================================== */}
       {showCheckoutModal && typeof document !== 'undefined' && createPortal(
-        <div 
+        <div
           className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
@@ -4129,9 +4111,8 @@ export const QueuelessWebsite: React.FC = () => {
                               return (
                                 <div
                                   key={level}
-                                  className={`h-1.5 flex-1 rounded-full transition-all ${
-                                    active ? strength.color.split(' ')[0] : 'bg-slate-200 dark:bg-slate-700'
-                                  }`}
+                                  className={`h-1.5 flex-1 rounded-full transition-all ${active ? strength.color.split(' ')[0] : 'bg-slate-200 dark:bg-slate-700'
+                                    }`}
                                 />
                               );
                             })}
@@ -4196,11 +4177,10 @@ export const QueuelessWebsite: React.FC = () => {
                             key={method}
                             type="button"
                             onClick={() => setPaymentMethod(method)}
-                            className={`py-2 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold border transition-all text-center truncate ${
-                              paymentMethod === method
+                            className={`py-2 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold border transition-all text-center truncate ${paymentMethod === method
                                 ? 'bg-blue-600 text-white border-blue-600 shadow-sm font-black ring-2 ring-blue-500/20'
                                 : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
-                            }`}
+                              }`}
                           >
                             {method === 'UPI' ? '⚡ UPI QR' : method === 'CARD' ? '💳 RuPay/Card' : '🏦 NetBanking'}
                           </button>
@@ -4211,11 +4191,10 @@ export const QueuelessWebsite: React.FC = () => {
                             key={method}
                             type="button"
                             onClick={() => setPaymentMethod(method as any)}
-                            className={`py-2 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold border transition-all text-center truncate ${
-                              paymentMethod === method
+                            className={`py-2 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold border transition-all text-center truncate ${paymentMethod === method
                                 ? 'bg-blue-600 text-white border-blue-600 shadow-sm font-black ring-2 ring-blue-500/20'
                                 : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
-                            }`}
+                              }`}
                           >
                             {method === 'CARD' ? '💳 Card' : method === 'APPLE_PAY' ? '🍏 Apple / GPay' : '⚡ UPI / Netbanking'}
                           </button>
@@ -4322,7 +4301,7 @@ export const QueuelessWebsite: React.FC = () => {
       {/* 9. HOSPITAL CLIENT PORTALS & DEDICATED SETUP ARCHITECTURE MODAL */}
       {/* ============================================================== */}
       {showClientPortalModal && typeof document !== 'undefined' && createPortal(
-        <div 
+        <div
           className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
           onClick={(e) => {
             if (e.target === e.currentTarget) setShowClientPortalModal(false);
@@ -4537,7 +4516,7 @@ export const QueuelessWebsite: React.FC = () => {
       {/* MODAL 4: FREE 60-SECOND OPD CONGESTION & REVENUE AUDIT         */}
       {/* ============================================================== */}
       {showAuditModal && typeof document !== 'undefined' && createPortal(
-        <div 
+        <div
           className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
           onClick={(e) => {
             if (e.target === e.currentTarget) setShowAuditModal(false);

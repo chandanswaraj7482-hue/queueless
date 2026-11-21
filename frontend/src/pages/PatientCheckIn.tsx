@@ -126,44 +126,44 @@ export const PatientCheckIn: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState<'UPI' | 'PAY_AT_CLINIC'>('UPI');
   const [paymentProcessing, setPaymentProcessing] = useState(false);
 
-const DEFAULT_CLINIC_DATA: ClinicData = {
-  id: 'city-health',
-  name: 'City Health Multi-Specialty Hospital',
-  slug: 'city-health',
-  address: 'Suite 402, Metro Healthcare Towers, MG Road',
-  logoUrl: '',
-  openingHours: '08:30 AM - 08:30 PM',
-  contactPhone: '+91 98765 43210',
-  followUpDays: 15,
-  doctors: [
-    {
-      id: 'doc-1',
-      displayName: 'Dr. Rohan Sharma, MD',
-      specialty: 'General Medicine (Cabin 1)',
-      roomNumber: 'Cabin 1',
-      waitingCount: 0,
-      currentlyServing: undefined,
-      estimatedWaitMinutes: 0,
-      isAvailableNow: true,
-    },
-    {
-      id: 'doc-2',
-      displayName: 'Dr. Priya Patel, DNB',
-      specialty: 'Pediatrics (Cabin 2)',
-      roomNumber: 'Cabin 2',
-      waitingCount: 0,
-      currentlyServing: undefined,
-      estimatedWaitMinutes: 0,
-      isAvailableNow: true,
-    },
-  ],
-  services: [
-    { id: 'srv-1', name: 'General Consultation OPD', fee: 500, durationMinutes: 15, active: true },
-    { id: 'srv-2', name: 'Pediatric Care & Vaccination', fee: 650, durationMinutes: 20, active: true },
-    { id: 'srv-3', name: 'Specialist Consultation OPD', fee: 800, durationMinutes: 20, active: true },
-    { id: 'srv-4', name: '15-Day Free Follow-Up Review', fee: 0, durationMinutes: 10, active: true },
-  ],
-};
+  const DEFAULT_CLINIC_DATA: ClinicData = {
+    id: 'city-health',
+    name: 'City Health Multi-Specialty Hospital',
+    slug: 'city-health',
+    address: 'Suite 402, Metro Healthcare Towers, MG Road',
+    logoUrl: '',
+    openingHours: '08:30 AM - 08:30 PM',
+    contactPhone: '+91 98765 43210',
+    followUpDays: 15,
+    doctors: [
+      {
+        id: 'doc-1',
+        displayName: 'Dr. Rohan Sharma, MD',
+        specialty: 'General Medicine (Cabin 1)',
+        roomNumber: 'Cabin 1',
+        waitingCount: 0,
+        currentlyServing: undefined,
+        estimatedWaitMinutes: 0,
+        isAvailableNow: true,
+      },
+      {
+        id: 'doc-2',
+        displayName: 'Dr. Priya Patel, DNB',
+        specialty: 'Pediatrics (Cabin 2)',
+        roomNumber: 'Cabin 2',
+        waitingCount: 0,
+        currentlyServing: undefined,
+        estimatedWaitMinutes: 0,
+        isAvailableNow: true,
+      },
+    ],
+    services: [
+      { id: 'srv-1', name: 'General Consultation OPD', fee: 500, durationMinutes: 15, active: true },
+      { id: 'srv-2', name: 'Pediatric Care & Vaccination', fee: 650, durationMinutes: 20, active: true },
+      { id: 'srv-3', name: 'Specialist Consultation OPD', fee: 800, durationMinutes: 20, active: true },
+      { id: 'srv-4', name: '15-Day Free Follow-Up Review', fee: 0, durationMinutes: 10, active: true },
+    ],
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -183,7 +183,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             if (!customLogo && clinicSlug) {
               customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';
             }
-          } catch (e) {}
+          } catch (e) { }
 
           setClinic({
             ...data.data,
@@ -217,7 +217,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             if (!customLogo && clinicSlug) {
               customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';
             }
-          } catch (e) {}
+          } catch (e) { }
 
           const activeClinic = {
             ...DEFAULT_CLINIC_DATA,
@@ -256,7 +256,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
           if (!customLogo && clinicSlug) {
             customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';
           }
-        } catch (e) {}
+        } catch (e) { }
 
         const activeClinic = {
           ...DEFAULT_CLINIC_DATA,
@@ -303,8 +303,8 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
   const consultationFee = isFreeFollowUp
     ? 0
     : followUpData?.followUpFee !== undefined
-    ? followUpData.followUpFee
-    : baseServiceFee;
+      ? followUpData.followUpFee
+      : baseServiceFee;
 
   // Toggle symptom chip on/off (click again to unclick / deselect)
   const handleToggleSymptom = (chipText: string) => {
@@ -397,7 +397,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
       const localEntries = JSON.parse(localStorage.getItem('queueless_local_entries') || '{}');
       localEntries[generatedPublicToken] = mockEntry;
       localStorage.setItem('queueless_local_entries', JSON.stringify(localEntries));
-    } catch (e) {}
+    } catch (e) { }
 
     navigate(`/token/${generatedPublicToken}`);
   };
@@ -554,7 +554,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
         const stored = JSON.parse(localStorage.getItem('queueless_local_entries') || '{}');
         stored[generatedPublicToken] = fallbackEntry;
         localStorage.setItem('queueless_local_entries', JSON.stringify(stored));
-      } catch (e) {}
+      } catch (e) { }
 
       setCreatedEntry({
         queueEntryId: fallbackEntry.queueEntryId,
@@ -682,7 +682,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             paymentMethod === 'PAY_AT_CLINIC' ? 'PAY_AT_CLINIC' : 'PAID';
           localStorage.setItem('queueless_local_entries', JSON.stringify(stored));
         }
-      } catch (e) {}
+      } catch (e) { }
       navigate(`/token/${createdEntry.publicToken}`);
     } finally {
       setPaymentProcessing(false);
@@ -762,11 +762,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                 setActiveTab('NEW_TOKEN');
                 setError(null);
               }}
-              className={`flex-1 py-2 px-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                activeTab === 'NEW_TOKEN'
+              className={`flex-1 py-2 px-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${activeTab === 'NEW_TOKEN'
                   ? 'bg-white dark:bg-slate-950 text-slate-900 dark:text-white shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+                }`}
             >
               <Ticket className="w-3.5 h-3.5 text-sky-600" />
               <span>20-Sec Quick Check-In</span>
@@ -777,11 +776,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                 setActiveTab('TRACK_TOKEN');
                 setError(null);
               }}
-              className={`flex-1 py-2 px-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                activeTab === 'TRACK_TOKEN'
+              className={`flex-1 py-2 px-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${activeTab === 'TRACK_TOKEN'
                   ? 'bg-white dark:bg-slate-950 text-slate-900 dark:text-white shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+                }`}
             >
               <Search className="w-3.5 h-3.5 text-indigo-600" />
               <span>Track My Token</span>
@@ -851,11 +849,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                       key={srv.id}
                       type="button"
                       onClick={() => handleSelectService(srv)}
-                      className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
-                        isSelected
+                      className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${isSelected
                           ? 'border-sky-500 bg-sky-50/80 text-slate-900 ring-2 ring-sky-500/20 shadow-xs'
                           : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700'
-                      }`}
+                        }`}
                     >
                       <div className="text-xs font-black text-slate-900 leading-snug">{srv.name}</div>
                       <div className="text-xs font-black text-emerald-600 mt-1.5 font-mono">
@@ -882,19 +879,17 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                       <div
                         key={doc.id}
                         onClick={() => handleSelectDoctor(doc.id)}
-                        className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
-                          isSelected
+                        className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${isSelected
                             ? 'border-sky-500 bg-sky-50/60 ring-2 ring-sky-500/20 shadow-xs'
                             : 'border-slate-200 hover:border-slate-300 bg-white'
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center gap-3 min-w-0 flex-1">
                           <div
-                            className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-xs shrink-0 ${
-                              isSelected
+                            className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-xs shrink-0 ${isSelected
                                 ? 'bg-sky-600 text-white shadow-xs'
                                 : 'bg-slate-100 text-slate-600'
-                            }`}
+                              }`}
                           >
                             <Stethoscope className="w-5 h-5" />
                           </div>
@@ -925,11 +920,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                           )}
 
                           <div
-                            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
-                              isSelected
+                            className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${isSelected
                                 ? 'bg-sky-600 text-white'
                                 : 'border-2 border-slate-300 bg-white'
-                            }`}
+                              }`}
                           >
                             {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                           </div>
@@ -1018,11 +1012,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                       key={g}
                       type="button"
                       onClick={() => setGender(g)}
-                      className={`py-2 text-[11px] font-black rounded-xl border transition-all cursor-pointer ${
-                        gender === g
+                      className={`py-2 text-[11px] font-black rounded-xl border transition-all cursor-pointer ${gender === g
                           ? 'bg-sky-600 text-white border-sky-600 shadow-xs'
                           : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
-                      }`}
+                        }`}
                     >
                       {g}
                     </button>
@@ -1056,11 +1049,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
                       key={symp.label}
                       type="button"
                       onClick={() => handleToggleSymptom(symp.text)}
-                      className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
-                        isActive
+                      className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${isActive
                           ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white border-transparent shadow-xs'
                           : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200/90'
-                      }`}
+                        }`}
                     >
                       <span>{symp.label}</span>
                       {isActive && <span className="text-[10px] ml-0.5">✕</span>}
@@ -1339,11 +1331,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             {/* UPI Option */}
             <div
               onClick={() => setPaymentMethod('UPI')}
-              className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center gap-3.5 ${
-                paymentMethod === 'UPI'
+              className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center gap-3.5 ${paymentMethod === 'UPI'
                   ? 'border-sky-600 bg-sky-50/50 shadow-sm'
                   : 'border-slate-200 hover:border-slate-300'
-              }`}
+                }`}
             >
               <div className="p-3 bg-sky-100 text-sky-700 rounded-2xl">
                 <Smartphone className="w-5 h-5" />
@@ -1367,11 +1358,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
             {/* Pay at Clinic Option */}
             <div
               onClick={() => setPaymentMethod('PAY_AT_CLINIC')}
-              className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center gap-3.5 ${
-                paymentMethod === 'PAY_AT_CLINIC'
+              className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center gap-3.5 ${paymentMethod === 'PAY_AT_CLINIC'
                   ? 'border-amber-600 bg-amber-50/50 shadow-sm'
                   : 'border-slate-200 hover:border-slate-300'
-              }`}
+                }`}
             >
               <div className="p-3 bg-amber-100 text-amber-700 rounded-2xl">
                 <Banknote className="w-5 h-5" />
@@ -1393,11 +1383,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
           <button
             onClick={handleCompletePayment}
             disabled={paymentProcessing}
-            className={`w-full text-white font-black py-4 px-4 rounded-2xl text-sm transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer ${
-              paymentMethod === 'PAY_AT_CLINIC'
+            className={`w-full text-white font-black py-4 px-4 rounded-2xl text-sm transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer ${paymentMethod === 'PAY_AT_CLINIC'
                 ? 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 shadow-amber-600/25'
                 : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-emerald-600/25'
-            }`}
+              }`}
           >
             {paymentProcessing ? (
               <span>Processing...</span>
@@ -1418,7 +1407,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
 
       {/* 🔐 UNIVERSAL HEALTH VAULT POPUP MODAL (Triggers when Proceed to Live is clicked) */}
       {showVaultPopup && typeof document !== 'undefined' && createPortal(
-        <div 
+        <div
           className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-md overflow-y-auto animate-fade-in"
           onClick={(e) => {
             if (e.target === e.currentTarget) executeSubmission('');
@@ -1517,11 +1506,10 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               <button
                 type="button"
                 onClick={() => executeSubmission('')}
-                className={`w-full py-3.5 px-4 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                  showVaultPasswordInput
+                className={`w-full py-3.5 px-4 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${showVaultPasswordInput
                     ? 'text-slate-500 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700'
                     : 'bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-700 hover:from-sky-700 text-white font-black shadow-md shadow-sky-600/25'
-                }`}
+                  }`}
               >
                 <span>{showVaultPasswordInput ? 'Skip & Continue as Guest' : 'Continue as Guest (No Password)'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />

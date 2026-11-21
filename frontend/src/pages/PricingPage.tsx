@@ -88,11 +88,10 @@ export const PricingPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setBillingCycle('MONTHLY')}
-                  className={`px-4 py-1.5 sm:px-6 sm:py-2 rounded-full text-xs font-black transition-all cursor-pointer ${
-                    billingCycle === 'MONTHLY'
+                  className={`px-4 py-1.5 sm:px-6 sm:py-2 rounded-full text-xs font-black transition-all cursor-pointer ${billingCycle === 'MONTHLY'
                       ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-cyan-400 shadow-md scale-100 ring-1 ring-slate-900/5 dark:ring-white/10'
                       : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                  }`}
+                    }`}
                 >
                   Monthly Billing
                 </button>
@@ -101,19 +100,17 @@ export const PricingPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setBillingCycle('ANNUAL')}
-                  className={`px-4 py-1.5 sm:px-6 sm:py-2 rounded-full text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 ${
-                    billingCycle === 'ANNUAL'
+                  className={`px-4 py-1.5 sm:px-6 sm:py-2 rounded-full text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 ${billingCycle === 'ANNUAL'
                       ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 scale-100'
                       : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                  }`}
+                    }`}
                 >
                   <span>Annual Billing</span>
                   <span
-                    className={`px-1.5 py-0.5 sm:px-2 rounded-full text-[9px] font-black uppercase tracking-wider transition-colors ${
-                      billingCycle === 'ANNUAL'
+                    className={`px-1.5 py-0.5 sm:px-2 rounded-full text-[9px] font-black uppercase tracking-wider transition-colors ${billingCycle === 'ANNUAL'
                         ? 'bg-emerald-400 text-slate-950 shadow-2xs'
                         : 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
-                    }`}
+                      }`}
                   >
                     <span className="hidden sm:inline">Save ~17% (2 Mo Free)</span>
                     <span className="sm:hidden">Save 17%</span>
@@ -152,11 +149,10 @@ export const PricingPage: React.FC = () => {
               return (
                 <div
                   key={plan.id}
-                  className={`relative rounded-3xl p-5 sm:p-8 flex flex-col justify-between transition-all card-interactive ${
-                    plan.highlight
+                  className={`relative rounded-3xl p-5 sm:p-8 flex flex-col justify-between transition-all card-interactive ${plan.highlight
                       ? 'bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-2xl shadow-blue-500/15 lg:scale-102 ring-4 ring-blue-500/10'
                       : 'bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 shadow-lg hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl'
-                  }`}
+                    }`}
                 >
                   {plan.badge && (
                     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-[10px] tracking-wider uppercase shadow-md whitespace-nowrap shimmer-sweep">
@@ -208,9 +204,9 @@ export const PricingPage: React.FC = () => {
                           let displayFeature = feature;
                           if (billingCycle === 'ANNUAL') {
                             displayFeature = displayFeature
-                              .replace(/AutoPay Monthly Renewal/g, 'Annual AutoPay Renewal (Save 20% Billed Annually)')
-                              .replace(/Auto-Renews Day 15/g, 'Auto-Renews Annually on Day 15 (Save 20%)')
-                              .replace(/AutoPay Recurring Mandate/g, 'Annual Corporate AutoPay (Billed Annually)');
+                              .replace(/AutoPay Monthly Renewal/g, 'Annual AutoPay Renewal (Save ~17% • 2 Months Free)')
+                              .replace(/Auto-Renews Day 15/g, 'Auto-Renews Annually on Day 15 (Save ~17% • 2 Months Free)')
+                              .replace(/AutoPay Recurring Mandate/g, 'Annual Corporate AutoPay (Save ~17% Billed Annually)');
                           }
                           return (
                             <li key={idx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
@@ -228,13 +224,12 @@ export const PricingPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleSelectPlan(plan)}
-                      className={`w-full py-3.5 px-6 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer btn-physics ${
-                        plan.highlight
+                      className={`w-full py-3.5 px-6 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer btn-physics ${plan.highlight
                           ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/25 ring-2 ring-blue-500/20 active:scale-95 shimmer-sweep hover-glow-blue'
                           : plan.id === 'ENTERPRISE'
-                          ? 'bg-gradient-to-r from-slate-900 to-indigo-950 hover:from-black hover:to-indigo-900 text-white border border-indigo-500/40 active:scale-95 shadow-md'
-                          : 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white active:scale-95'
-                      }`}
+                            ? 'bg-gradient-to-r from-slate-900 to-indigo-950 hover:from-black hover:to-indigo-900 text-white border border-indigo-500/40 active:scale-95 shadow-md'
+                            : 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white active:scale-95'
+                        }`}
                     >
                       <Zap className="w-4 h-4 fill-white" />
                       <span>
@@ -513,18 +508,18 @@ export const PricingPage: React.FC = () => {
                 <ShieldAlert className="w-4 h-4 shrink-0" />
                 <span>
                   {billingCycle === 'ANNUAL'
-                    ? '14-Day Free Pilot, Annual AutoPay Renewal (Save 20%) & Token Expiry Policy'
+                    ? '14-Day Free Pilot, Annual AutoPay Renewal (Save ~17% • 2 Mo Free) & Token Expiry Policy'
                     : '14-Day Free Pilot, AutoPay Recurring Mandate & Strict Token Expiry Policy'}
                 </span>
               </div>
               <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
-                • <strong>14-Day Free Pilot with Upfront AutoPay Mandate:</strong> Clinics start their 14-day evaluation with <strong>₹0 / $0 charged today</strong>. An automated recurring AutoPay mandate (Cashfree UPI AutoPay for India, Dodo Payments for Global) is authorized during onboarding. You will not be charged during the 14-day free trial. When the 14-day trial period finishes, your chosen {billingCycle === 'ANNUAL' ? 'annual plan (billed annually with 20% discount applied)' : 'monthly plan'} will be <strong>automatically purchased and debited</strong> via AutoPay. You may cancel anytime before Day 14 from your dashboard with 1 tap.
+                • <strong>14-Day Free Pilot with Upfront AutoPay Mandate:</strong> Clinics start their 14-day evaluation with <strong>₹0 / $0 charged today</strong>. An automated recurring AutoPay mandate (Cashfree UPI AutoPay for India, Dodo Payments for Global) is authorized during onboarding. You will not be charged during the 14-day free trial. When the 14-day trial period finishes, your chosen {billingCycle === 'ANNUAL' ? 'annual plan (billed annually with ~17% discount applied - 2 months free)' : 'monthly plan'} will be <strong>automatically purchased and debited</strong> via AutoPay. You may cancel anytime before Day 14 from your dashboard with 1 tap.
               </p>
               <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
                 • <strong>Strict Validity Window:</strong> All {billingCycle === 'ANNUAL' ? 'annual' : 'monthly'} token allowances and top-up credits are strictly valid for their specific billing period ({billingCycle === 'ANNUAL' ? '365 days for annual subscriptions' : '30 days for monthly subscriptions'}). Unused tokens expire automatically on plan renewal or expiration and <strong>do not stack or roll over into future plan purchases</strong>.
               </p>
               <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
-                • <strong>{billingCycle === 'ANNUAL' ? 'Annual AutoPay Mandate' : 'AutoPay Mandate'}:</strong> Subscriptions are billed on an {billingCycle === 'ANNUAL' ? 'annual recurring basis (with 20% savings)' : 'automated recurring monthly debit'} (Cashfree UPI AutoPay for Indian Clinics, and Dodo Payments Recurring for Global Cards). Mandates ensure uninterrupted clinic queue operations and direct settlement to platform founder accounts with 0% downtime.
+                • <strong>{billingCycle === 'ANNUAL' ? 'Annual AutoPay Mandate' : 'AutoPay Mandate'}:</strong> Subscriptions are billed on an {billingCycle === 'ANNUAL' ? 'annual recurring basis (with ~17% savings - pay for 10 months, get 12)' : 'automated recurring monthly debit'} (Cashfree UPI AutoPay for Indian Clinics, and Dodo Payments Recurring for Global Cards). Mandates ensure uninterrupted clinic queue operations and direct settlement to platform founder accounts with 0% downtime.
               </p>
             </div>
           </div>
@@ -555,11 +550,10 @@ export const PricingPage: React.FC = () => {
                   key={cat.id}
                   type="button"
                   onClick={() => setFaqCategory(cat.id as FaqCategory)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    faqCategory === cat.id
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${faqCategory === cat.id
                       ? 'bg-blue-600 text-white shadow-xs font-black'
                       : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                  }`}
+                    }`}
                 >
                   {cat.label}
                 </button>

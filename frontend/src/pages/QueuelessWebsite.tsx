@@ -536,10 +536,32 @@ export const QueuelessWebsite: React.FC = () => {
   const [leadPhone, setLeadPhone] = useState('');
   const [leadSubmitted, setLeadSubmitted] = useState(false);
 
-  // Interactive Live Mockup Queue State
+  // Interactive Live Mockup Queue State & Cabin Configuration
+  const SIMULATED_OPD_CABINS = [
+    { name: 'Dr. Rohan Sharma, MD', specialty: 'Orthopedics & Joint Care', cabin: 'Cabin 1 (Orthopedics)' },
+    { name: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology & Heart Care', cabin: 'Cabin 2 (Cardiology)' },
+    { name: 'Dr. Priya Patel, MBBS', specialty: 'Pediatrics & Child Health', cabin: 'Cabin 3 (Pediatrics)' },
+    { name: 'Dr. Amit Roy, MS', specialty: 'General Medicine & OPD', cabin: 'Cabin 4 (General Medicine)' },
+  ];
+
   const [demoCalledToken, setDemoCalledToken] = useState('A-108');
-  const [demoDoctorCabin, setDemoDoctorCabin] = useState('Cabin 1');
+  const [demoDoctorCabin, setDemoDoctorCabin] = useState('Cabin 1 (Orthopedics)');
+  const [demoDoctorName, setDemoDoctorName] = useState('Dr. Rohan Sharma, MD');
+  const [demoDoctorSpecialty, setDemoDoctorSpecialty] = useState('Orthopedics & Joint Care');
   const [simulatedCallFlash, setSimulatedCallFlash] = useState(false);
+
+  const triggerSimulatedDoctorCall = () => {
+    const nextNum = Math.floor(100 + Math.random() * 20);
+    const chosen = SIMULATED_OPD_CABINS[Math.floor(Math.random() * SIMULATED_OPD_CABINS.length)];
+    const tokenStr = `A-${nextNum}`;
+    setDemoCalledToken(tokenStr);
+    setDemoDoctorCabin(chosen.cabin);
+    setDemoDoctorName(chosen.name);
+    setDemoDoctorSpecialty(chosen.specialty);
+    setSimulatedCallFlash(true);
+    setTimeout(() => setSimulatedCallFlash(false), 3500);
+    playClinicVoiceAnnouncement(tokenStr, chosen.cabin, chosen.name, true);
+  };
 
   // FAQ Accordion State
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
@@ -651,7 +673,7 @@ export const QueuelessWebsite: React.FC = () => {
   const [showAuditModal, setShowAuditModal] = useState(false);
   const [auditHospital, setAuditHospital] = useState('');
   const [auditDailyPatients, setAuditDailyPatients] = useState(120);
-  const [auditFee, setAuditFee] = useState(500);
+  const [auditFee, setAuditFee] = useState(WORLDWIDE_CURRENCIES[selectedCurrencyCode]?.defaultFee || 25);
   const [auditDoctors, setAuditDoctors] = useState(4);
 
   // Category Strip Horizontal Scroll Controller (Dribbble Navigation)
@@ -668,6 +690,7 @@ export const QueuelessWebsite: React.FC = () => {
     const curr = WORLDWIDE_CURRENCIES[code];
     if (curr) {
       setRoiFee(curr.defaultFee);
+      setAuditFee(curr.defaultFee);
       if (code === 'INR') {
         setDialCode('+91');
         setPaymentMethod('UPI');
@@ -939,7 +962,7 @@ export const QueuelessWebsite: React.FC = () => {
                 className="w-full sm:w-auto px-5 py-3.5 sm:px-7 sm:py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl shadow-xl shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Zap className="w-4 h-4 fill-white shrink-0" />
-                <span>Activate Queueless OS ({selectedCurrency.symbol}{currentPlanMonthlyRate}/mo) ➔</span>
+                <span>Activate Queueless OS (From {selectedCurrency.symbol}{selectedCurrency.rates.STARTER.monthly}/mo) ➔</span>
               </Link>
             </motion.div>
 
@@ -1017,17 +1040,7 @@ export const QueuelessWebsite: React.FC = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                onClick={() => {
-                  const nextNum = Math.floor(100 + Math.random() * 20);
-                  const cabins = ['Cabin 1 (Cardiology)', 'Cabin 2 (Pediatrics)', 'Cabin 204 (Orthopedic)'];
-                  const nextCabin = cabins[Math.floor(Math.random() * cabins.length)];
-                  const tokenStr = `A-${nextNum}`;
-                  setDemoCalledToken(tokenStr);
-                  setDemoDoctorCabin(nextCabin);
-                  setSimulatedCallFlash(true);
-                  setTimeout(() => setSimulatedCallFlash(false), 3500);
-                  playClinicVoiceAnnouncement(tokenStr, nextCabin, 'Dr. Rohan Sharma', true);
-                }}
+                onClick={triggerSimulatedDoctorCall}
                 className="hidden sm:inline-flex px-4 py-3 sm:px-5 sm:py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/25 transition-all items-center justify-center gap-2 cursor-pointer ring-2 ring-emerald-500/20 shrink-0"
               >
                 <Volume2 className="w-3.5 h-3.5 fill-white shrink-0" />
@@ -1080,15 +1093,7 @@ export const QueuelessWebsite: React.FC = () => {
                 onClick={() => {
                   setHeroStep(3);
                   setAutoSlideHero(false);
-                  const nextNum = Math.floor(100 + Math.random() * 20);
-                  const cabins = ['Cabin 1 (Cardiology)', 'Cabin 2 (Pediatrics)', 'Cabin 204 (Orthopedic)'];
-                  const nextCabin = cabins[Math.floor(Math.random() * cabins.length)];
-                  const tokenStr = `A-${nextNum}`;
-                  setDemoCalledToken(tokenStr);
-                  setDemoDoctorCabin(nextCabin);
-                  setSimulatedCallFlash(true);
-                  setTimeout(() => setSimulatedCallFlash(false), 3500);
-                  playClinicVoiceAnnouncement(tokenStr, nextCabin, 'Dr. Rohan Sharma', true);
+                  triggerSimulatedDoctorCall();
                 }}
                 className={`px-2.5 sm:px-3.5 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 ${
                   heroStep === 3
@@ -1357,7 +1362,7 @@ export const QueuelessWebsite: React.FC = () => {
                         </span>
                       </div>
                       <strong className="text-sm sm:text-base font-black text-white block">
-                        Dr. Rohan Sharma, MD (Orthopedic & Joint Care)
+                        {demoDoctorName} ({demoDoctorSpecialty})
                       </strong>
                       <div className="flex items-center gap-2 text-[10px] text-slate-300 font-mono">
                         <span className="text-emerald-400 font-bold">Ground Floor • Room 204</span>
@@ -1389,7 +1394,7 @@ export const QueuelessWebsite: React.FC = () => {
                         Dual Voice Announcement (Hindi + English):
                       </span>
                       <p className="text-[11px] leading-tight text-white font-medium mt-0.5">
-                        "Attention please. Token <strong className="text-emerald-300 font-mono font-black">{demoCalledToken}</strong>, please proceed to <strong className="text-white font-bold">{demoDoctorCabin}</strong> for Dr. Rohan Sharma."
+                        "Attention please. Token <strong className="text-emerald-300 font-mono font-black">{demoCalledToken}</strong>, please proceed to <strong className="text-white font-bold">{demoDoctorCabin}</strong> for {demoDoctorName}."
                       </p>
                     </div>
                     {simulatedCallFlash && (
@@ -1480,17 +1485,7 @@ export const QueuelessWebsite: React.FC = () => {
             <div className="pt-4 sm:hidden">
               <button
                 type="button"
-                onClick={() => {
-                  const nextNum = Math.floor(100 + Math.random() * 20);
-                  const cabins = ['Cabin 1 (Cardiology)', 'Cabin 2 (Pediatrics)', 'Cabin 204 (Orthopedic)'];
-                  const nextCabin = cabins[Math.floor(Math.random() * cabins.length)];
-                  const tokenStr = `A-${nextNum}`;
-                  setDemoCalledToken(tokenStr);
-                  setDemoDoctorCabin(nextCabin);
-                  setSimulatedCallFlash(true);
-                  setTimeout(() => setSimulatedCallFlash(false), 3500);
-                  playClinicVoiceAnnouncement(tokenStr, nextCabin, 'Dr. Rohan Sharma', true);
-                }}
+                onClick={triggerSimulatedDoctorCall}
                 className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
               >
                 <Volume2 className="w-4 h-4 fill-white shrink-0" />
@@ -3186,7 +3181,7 @@ export const QueuelessWebsite: React.FC = () => {
                   className="px-6 py-3.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl text-xs font-black shadow-lg shadow-blue-500/25 transition-all flex items-center gap-2 cursor-pointer active:scale-98"
                 >
                   <Sparkles className="w-4 h-4 text-amber-300" />
-                  <span>Activate Instant Cloud OS Today ({selectedCurrency.symbol}{currentPlanMonthlyRate}/mo) ➔</span>
+                  <span>Activate Instant Cloud OS Today ({selectedCurrency.symbol}{currentPlanMonthlyRate}/mo {billingCycle === 'ANNUAL' ? '• Billed Annually' : ''}) ➔</span>
                 </button>
               </div>
             </div>
@@ -4644,17 +4639,7 @@ export const QueuelessWebsite: React.FC = () => {
         <div className="max-w-md mx-auto p-1.5 rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-slate-800/90 shadow-2xl flex items-center justify-between gap-2 pointer-events-auto">
           <button
             type="button"
-            onClick={() => {
-              const nextNum = Math.floor(100 + Math.random() * 20);
-              const cabins = ['Cabin 1 (Cardiology)', 'Cabin 2 (Pediatrics)', 'Cabin 204 (Orthopedic)'];
-              const nextCabin = cabins[Math.floor(Math.random() * cabins.length)];
-              const tokenStr = `A-${nextNum}`;
-              setDemoCalledToken(tokenStr);
-              setDemoDoctorCabin(nextCabin);
-              setSimulatedCallFlash(true);
-              setTimeout(() => setSimulatedCallFlash(false), 3500);
-              playClinicVoiceAnnouncement(tokenStr, nextCabin, 'Dr. Rohan Sharma', true);
-            }}
+            onClick={triggerSimulatedDoctorCall}
             className="flex-1 py-2.5 px-3 bg-gradient-to-r from-emerald-600 to-teal-600 active:scale-95 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer"
           >
             <Volume2 className="w-3.5 h-3.5" />

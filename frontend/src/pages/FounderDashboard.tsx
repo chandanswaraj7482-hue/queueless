@@ -184,9 +184,22 @@ export const FounderDashboard: React.FC = () => {
   // Interactive ROI Simulator State
   const [sliderPatients, setSliderPatients] = useState<number>(120);
 
-  // Authentication: Founder Quick Access & Firewall Protection (Strict Password Required - No URL bypass)
+  // Authentication: Strict Session-Based Firewall Protection (Requires PIN on every new browser session - No permanent storage bypass)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return localStorage.getItem('queueless_founder_auth') === 'true';
+    try {
+      localStorage.removeItem('queueless_founder_auth'); // Clear any legacy persistent storage
+      const authTime = sessionStorage.getItem('queueless_founder_session_time');
+      if (!authTime) return false;
+      // 1 hour session expiration
+      if (Date.now() - parseInt(authTime) > 60 * 60 * 1000) {
+        sessionStorage.removeItem('queueless_founder_session_time');
+        sessionStorage.removeItem('queueless_founder_auth');
+        return false;
+      }
+      return sessionStorage.getItem('queueless_founder_auth') === 'true';
+    } catch (e) {
+      return false;
+    }
   });
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
@@ -404,13 +417,16 @@ export const FounderDashboard: React.FC = () => {
     const cleanPwd = passwordInput.trim();
     const cleanLower = cleanPwd.toLowerCase();
 
-    // High-Entropy Hard Enterprise Master Passkey (Strict - No weak passwords allowed)
+    // High-Entropy Hard Enterprise Master Passkey or Founder PIN 7482
     const isValid =
+      cleanPwd === '7482' ||
       cleanPwd === 'Queueless#Founder2026!' ||
       cleanPwd === 'Founder#AlphaSecure2026!';
 
     if (isValid) {
-      localStorage.setItem('queueless_founder_auth', 'true');
+      sessionStorage.setItem('queueless_founder_auth', 'true');
+      sessionStorage.setItem('queueless_founder_session_time', Date.now().toString());
+      localStorage.removeItem('queueless_founder_auth');
       setIsAuthenticated(true);
       setAuthError(null);
       setFailedAttempts(0);
@@ -428,6 +444,8 @@ export const FounderDashboard: React.FC = () => {
   };
 
   const handleLogout = () => {
+    sessionStorage.removeItem('queueless_founder_auth');
+    sessionStorage.removeItem('queueless_founder_session_time');
     localStorage.removeItem('queueless_founder_auth');
     setIsAuthenticated(false);
     setPasswordInput('');

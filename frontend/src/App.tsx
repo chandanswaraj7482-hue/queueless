@@ -355,6 +355,8 @@ export function App() {
             {/* 2. Hospital Dedicated Link Setup Packages */}
             <Route path="/check-in" element={<PatientCheckIn />} />
             <Route path="/check-in/:slug" element={<PatientCheckIn />} />
+            <Route path="/checkin" element={<PatientCheckIn />} />
+            <Route path="/checkin/:slug" element={<PatientCheckIn />} />
             <Route path="/reception" element={<ReceptionDashboard />} />
             <Route path="/reception/:slug" element={<ReceptionDashboard />} />
             <Route path="/doctor" element={<DoctorView />} />
@@ -363,10 +365,11 @@ export function App() {
             <Route path="/doctor/:slug/cabin/:doctorId" element={<DoctorView />} />
             <Route path="/display" element={<DisplayKiosk />} />
             <Route path="/display/:clinicId" element={<DisplayKiosk />} />
-            <Route path="/admin" element={<FounderDashboard />} />
+            <Route path="/admin" element={<Navigate to="/admin/caremax-opd" replace />} />
             <Route path="/admin/:slug" element={<ClinicAdmin />} />
             <Route path="/hospital-admin" element={<Navigate to="/admin/caremax-opd" replace />} />
             <Route path="/hospital-admin/:slug" element={<ClinicAdmin />} />
+            <Route path="/founder" element={<FounderDashboard />} />
             <Route path="/owner" element={<FounderDashboard />} />
 
             {/* 3. Patient Tracking & History */}

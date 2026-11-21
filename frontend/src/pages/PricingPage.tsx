@@ -203,12 +203,21 @@ export const PricingPage: React.FC = () => {
                         Included In This Plan:
                       </p>
                       <ul className="space-y-2">
-                        {plan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
+                        {plan.features.map((feature, idx) => {
+                          let displayFeature = feature;
+                          if (billingCycle === 'ANNUAL') {
+                            displayFeature = displayFeature
+                              .replace(/AutoPay Monthly Renewal/g, 'Annual AutoPay Renewal (Save 20% Billed Annually)')
+                              .replace(/Auto-Renews Day 15/g, 'Auto-Renews Annually on Day 15 (Save 20%)')
+                              .replace(/AutoPay Recurring Mandate/g, 'Annual Corporate AutoPay (Billed Annually)');
+                          }
+                          return (
+                            <li key={idx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                              <span>{displayFeature}</span>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   </div>
@@ -347,8 +356,8 @@ export const PricingPage: React.FC = () => {
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   <tr>
                     <td className="p-4 sm:p-5 font-semibold text-slate-800 dark:text-slate-200">Doctor Cabins Supported</td>
-                    <td className="p-4 sm:p-5 text-center text-slate-600 dark:text-slate-400">Up to 2</td>
-                    <td className="p-4 sm:p-5 text-center font-bold text-blue-700 dark:text-blue-300 bg-blue-50/30 dark:bg-blue-950/30">Up to 8</td>
+                    <td className="p-4 sm:p-5 text-center text-slate-600 dark:text-slate-400">Up to 3</td>
+                    <td className="p-4 sm:p-5 text-center font-bold text-blue-700 dark:text-blue-300 bg-blue-50/30 dark:bg-blue-950/30">Up to 12</td>
                     <td className="p-4 sm:p-5 text-center font-bold text-slate-900 dark:text-white">Unlimited</td>
                   </tr>
                   <tr>
@@ -486,16 +495,20 @@ export const PricingPage: React.FC = () => {
             <div className="mt-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/40 border border-amber-200 dark:border-amber-800 text-xs text-slate-800 dark:text-slate-200 space-y-2">
               <div className="flex items-center gap-2 font-black text-amber-900 dark:text-amber-300">
                 <ShieldAlert className="w-4 h-4 shrink-0" />
-                <span>14-Day Free Pilot, AutoPay Recurring Mandate & Strict Token Expiry Policy</span>
+                <span>
+                  {billingCycle === 'ANNUAL'
+                    ? '14-Day Free Pilot, Annual AutoPay Renewal (Save 20%) & Token Expiry Policy'
+                    : '14-Day Free Pilot, AutoPay Recurring Mandate & Strict Token Expiry Policy'}
+                </span>
               </div>
               <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
-                • <strong>14-Day Free Pilot with Upfront AutoPay Mandate:</strong> Clinics start their 14-day evaluation with <strong>₹0 / $0 charged today</strong>. An automated recurring AutoPay mandate (Cashfree UPI AutoPay for India, Dodo Payments for Global) is authorized during onboarding. You will not be charged during the 14-day free trial. When the 14-day trial period finishes, your chosen premium plan will be <strong>automatically purchased and debited</strong> via AutoPay. You may cancel anytime before Day 14 from your dashboard with 1 tap.
+                • <strong>14-Day Free Pilot with Upfront AutoPay Mandate:</strong> Clinics start their 14-day evaluation with <strong>₹0 / $0 charged today</strong>. An automated recurring AutoPay mandate (Cashfree UPI AutoPay for India, Dodo Payments for Global) is authorized during onboarding. You will not be charged during the 14-day free trial. When the 14-day trial period finishes, your chosen {billingCycle === 'ANNUAL' ? 'annual plan (billed annually with 20% discount applied)' : 'monthly plan'} will be <strong>automatically purchased and debited</strong> via AutoPay. You may cancel anytime before Day 14 from your dashboard with 1 tap.
               </p>
               <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
-                • <strong>Strict Validity Window:</strong> All monthly token allowances and top-up credits are strictly valid for their specific billing period (30 days for monthly subscriptions). Unused tokens expire automatically on plan renewal or expiration and <strong>do not stack or roll over into future plan purchases</strong>.
+                • <strong>Strict Validity Window:</strong> All {billingCycle === 'ANNUAL' ? 'annual' : 'monthly'} token allowances and top-up credits are strictly valid for their specific billing period ({billingCycle === 'ANNUAL' ? '365 days for annual subscriptions' : '30 days for monthly subscriptions'}). Unused tokens expire automatically on plan renewal or expiration and <strong>do not stack or roll over into future plan purchases</strong>.
               </p>
               <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">
-                • <strong>AutoPay Mandate:</strong> Subscriptions and top-up credit packs are billed via automated recurring debit (Cashfree UPI AutoPay for Indian Clinics, and Dodo Payments Recurring for Global Cards). Mandates ensure uninterrupted clinic queue operations and direct settlement to platform founder accounts with 0% downtime.
+                • <strong>{billingCycle === 'ANNUAL' ? 'Annual AutoPay Mandate' : 'AutoPay Mandate'}:</strong> Subscriptions are billed on an {billingCycle === 'ANNUAL' ? 'annual recurring basis (with 20% savings)' : 'automated recurring monthly debit'} (Cashfree UPI AutoPay for Indian Clinics, and Dodo Payments Recurring for Global Cards). Mandates ensure uninterrupted clinic queue operations and direct settlement to platform founder accounts with 0% downtime.
               </p>
             </div>
           </div>

@@ -624,7 +624,7 @@ export const DoctorView: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const queryDoctor = searchParams.get('doctor') || searchParams.get('cabin') || searchParams.get('doc');
+  const queryDoctor = searchParams.get('doctor') || searchParams.get('cabin') || searchParams.get('doc') || searchParams.get('doctorId') || searchParams.get('id');
   const targetDoctorIdentifier = routeDoctorId || queryDoctor;
   const activeSlug = slug || 'caremax-opd';
 
@@ -1127,26 +1127,50 @@ export const DoctorView: React.FC = () => {
           )}
 
           <form onSubmit={handleDoctorLogin} className="space-y-4">
-            <div className="text-left">
-              <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
-                Select Your Doctor Cabin
-              </label>
-              <select
-                value={loginDoctorId || selectedDoctorId}
-                onChange={(e) => setLoginDoctorId(e.target.value)}
-                className="w-full px-4 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 dark:bg-slate-800 shadow-xs cursor-pointer"
-              >
-                {doctors.length === 0 ? (
-                  <option value="">No doctors registered yet (Add in Director Admin)</option>
-                ) : (
-                  doctors.map((d) => (
-                    <option key={d.id} value={d.id} className="dark:bg-slate-900 dark:text-white">
-                      {d.displayName} — {d.specialty} ({d.roomNumber || 'Cabin 1'})
-                    </option>
-                  ))
-                )}
-              </select>
-            </div>
+            {targetDoctorIdentifier && resolveMatchingDoctor(doctors, targetDoctorIdentifier) ? (
+              <div className="p-4 bg-sky-50/80 dark:bg-sky-950/60 rounded-2xl border border-sky-200 dark:border-sky-800 text-left">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center font-black shrink-0 shadow-xs">
+                    <Stethoscope className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-sky-800 dark:text-sky-300 bg-sky-100 dark:bg-sky-900/60 px-2 py-0.5 rounded-full">
+                        {resolveMatchingDoctor(doctors, targetDoctorIdentifier)?.roomNumber || 'Cabin Station'}
+                      </span>
+                      <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400">● Private Station</span>
+                    </div>
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white truncate mt-0.5">
+                      {resolveMatchingDoctor(doctors, targetDoctorIdentifier)?.displayName}
+                    </h3>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate">
+                      {resolveMatchingDoctor(doctors, targetDoctorIdentifier)?.specialty}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-left">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
+                  Select Your Doctor Cabin
+                </label>
+                <select
+                  value={loginDoctorId || selectedDoctorId}
+                  onChange={(e) => setLoginDoctorId(e.target.value)}
+                  className="w-full px-4 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 dark:bg-slate-800 shadow-xs cursor-pointer"
+                >
+                  {doctors.length === 0 ? (
+                    <option value="">No doctors registered yet (Add in Director Admin)</option>
+                  ) : (
+                    doctors.map((d) => (
+                      <option key={d.id} value={d.id} className="dark:bg-slate-900 dark:text-white">
+                        {d.displayName} — {d.specialty} ({d.roomNumber || 'Cabin 1'})
+                      </option>
+                    ))
+                  )}
+                </select>
+              </div>
+            )}
 
             <div className="text-left">
               <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1.5">

@@ -28,6 +28,7 @@ import {
   QrCode,
   FileText,
   Printer,
+  X,
 } from 'lucide-react';
 
 interface ClinicData {
@@ -102,6 +103,8 @@ export const PatientCheckIn: React.FC = () => {
   const [showOptionalDetails, setShowOptionalDetails] = useState(false);
   const [createVaultAccount, setCreateVaultAccount] = useState<boolean>(false);
   const [vaultPin, setVaultPin] = useState<string>('');
+  const [showVaultPopup, setShowVaultPopup] = useState<boolean>(false);
+  const [showVaultPasswordInput, setShowVaultPasswordInput] = useState<boolean>(false);
 
   // 15-Day Follow-up State
   const [followUpData, setFollowUpData] = useState<any>(null);
@@ -392,7 +395,7 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
     navigate(`/token/${generatedPublicToken}`);
   };
 
-  // Submit Check-In
+  // Pre-validation before showing the Universal Health Vault Popup
   const handleProceedToPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanMobile = mobile.replace(/\D/g, '');
@@ -405,11 +408,21 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
       return;
     }
 
+    setError(null);
+    // Show Universal Health Vault popup modal
+    setShowVaultPopup(true);
+  };
+
+  // The actual check-in submission
+  const executeSubmission = async (vaultPasswordInput?: string) => {
+    setShowVaultPopup(false);
     setSubmitting(true);
     setError(null);
+    const cleanMobile = mobile.replace(/\D/g, '');
 
     try {
       const targetClinicId = clinic?.id || clinic?.slug || clinicSlug || 'caremax-opd';
+      const effectivePassword = vaultPasswordInput?.trim() || (createVaultAccount && vaultPin.trim() ? vaultPin.trim() : undefined);
       const res = await fetch(`${API_BASE_URL}/api/v1/queue/public/clinics/${targetClinicId}/check-ins`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -422,8 +435,8 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
           bloodGroup,
           address: address.trim() || null,
           emergencyContact: emergencyContact.trim() || null,
-          vaultPin: createVaultAccount && vaultPin.trim() ? vaultPin.trim() : undefined,
-          vaultPassword: createVaultAccount && vaultPin.trim() ? vaultPin.trim() : undefined,
+          vaultPin: effectivePassword,
+          vaultPassword: effectivePassword,
           doctorId,
           serviceId,
           visitReason: visitReason.trim() || null,
@@ -1049,73 +1062,6 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               )}
             </div>
 
-            {/* 🔐 Save to Universal Health Vault (Optional Account Creation) */}
-            <div className="p-4 bg-gradient-to-r from-sky-50 via-indigo-50 to-emerald-50 rounded-2xl border border-sky-200 text-left space-y-2.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
-                    <Lock className="w-3.5 h-3.5" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-black text-slate-900 flex items-center gap-1.5">
-                      <span>Save Account to Universal Health Vault</span>
-                      <span className="text-[9px] font-black uppercase text-indigo-700 bg-indigo-100 px-1.5 py-0.5 rounded">Optional</span>
-                    </p>
-                    <p className="text-[10px] text-slate-500">
-                      Save all your prescriptions & OPD reports permanently to access from home.
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setCreateVaultAccount(!createVaultAccount)}
-                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                    createVaultAccount
-                      ? 'bg-indigo-600 text-white shadow-xs'
-                      : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  {createVaultAccount ? '✓ Password Enabled' : '+ Create Password'}
-                </button>
-              </div>
-
-              {createVaultAccount ? (
-                <div className="pt-2 border-t border-sky-200/80 space-y-2 animate-fade-in">
-                  <label className="block text-[11px] font-bold text-slate-700">
-                    Set Your Health Vault Account Password:
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="password"
-                      placeholder="e.g. Health#2026 or secret password"
-                      value={vaultPin}
-                      onChange={(e) => setVaultPin(e.target.value)}
-                      className="w-56 px-3 py-1.5 rounded-xl border border-indigo-300 bg-white text-xs font-bold text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCreateVaultAccount(false);
-                        setVaultPin('');
-                      }}
-                      className="text-[11px] font-bold text-slate-500 hover:text-slate-800 underline cursor-pointer"
-                    >
-                      Not Now (Skip)
-                    </button>
-                  </div>
-                  <p className="text-[10px] text-emerald-700 font-medium">
-                    ✓ With this password, you can log into <strong>queueless-os.vercel.app/portal</strong> anytime to download all doctor reports!
-                  </p>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
-                  <span>Want to check in as guest without password?</span>
-                  <span className="text-slate-400 font-semibold">Not Now (Default)</span>
-                </div>
-              )}
-            </div>
-
             {/* Consent Checkbox */}
             <div className="flex items-start gap-2 pt-1">
               <input
@@ -1390,6 +1336,107 @@ const DEFAULT_CLINIC_DATA: ClinicData = {
               </>
             )}
           </button>
+        </div>
+      )}
+
+      {/* 🔐 UNIVERSAL HEALTH VAULT POPUP MODAL (Triggers when Proceed to Live is clicked) */}
+      {showVaultPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden text-left space-y-4">
+            {/* Top Banner Gradient */}
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-sky-500 via-indigo-600 to-emerald-500" />
+
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-xs">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white">Save Account to Universal Health Vault</h3>
+                    <span className="text-[9px] font-black uppercase text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-950/80 px-2 py-0.5 rounded-full border border-indigo-200 dark:border-indigo-800">
+                      Optional
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Save all your prescriptions & OPD reports permanently to access from home.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => executeSubmission('')}
+                className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                title="Skip and continue as guest"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-4 bg-indigo-50/70 dark:bg-slate-800/60 rounded-2xl border border-indigo-100 dark:border-slate-700/80 space-y-3">
+              <p className="text-xs text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                Set a secret password to access your doctor prescriptions, lab orders, and digital follow-ups anytime from home!
+              </p>
+
+              {showVaultPasswordInput ? (
+                <div className="space-y-2 animate-fade-in">
+                  <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                    Create Your Vault Account Password:
+                  </label>
+                  <input
+                    type="password"
+                    autoFocus
+                    placeholder="e.g. Health#2026 or 4-digit PIN"
+                    value={vaultPin}
+                    onChange={(e) => setVaultPin(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs"
+                  />
+                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                    <span>✓</span> Access permanently anytime at <strong>queueless-os.vercel.app/portal</strong>
+                  </p>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowVaultPasswordInput(true)}
+                  className="w-full py-2.5 px-3 bg-white dark:bg-slate-900 hover:bg-indigo-50/80 border border-indigo-200 dark:border-slate-700 text-indigo-700 dark:text-indigo-300 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.99]"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>+ Create Password for Universal Vault</span>
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2 pt-1">
+              {showVaultPasswordInput ? (
+                <button
+                  type="button"
+                  onClick={() => executeSubmission(vaultPin)}
+                  className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-700 hover:to-sky-700 text-white text-xs font-black rounded-xl shadow-md shadow-indigo-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>Save Password & Proceed to Live Token</span>
+                </button>
+              ) : null}
+
+              <button
+                type="button"
+                onClick={() => executeSubmission('')}
+                className={`w-full py-3.5 px-4 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  showVaultPasswordInput
+                    ? 'text-slate-500 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700'
+                    : 'bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-700 hover:from-sky-700 text-white font-black shadow-md shadow-sky-600/25'
+                }`}
+              >
+                <span>{showVaultPasswordInput ? 'Skip & Continue as Guest' : 'Continue as Guest (No Password)'}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <div className="text-center pt-2 border-t border-slate-100 dark:border-slate-800">
+              <span className="text-[11px] text-slate-400">Want to check in as guest without password? <strong className="text-slate-600 dark:text-slate-300">Not Now (Default)</strong></span>
+            </div>
+          </div>
         </div>
       )}
 

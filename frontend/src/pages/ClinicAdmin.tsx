@@ -646,6 +646,32 @@ export const ClinicAdmin: React.FC = () => {
     setShowDoctorModal(true);
   };
 
+  const handleUpdateSingleDoctorPin = async (docId: string, newPin: string) => {
+    if (!clinic?.id || !newPin.trim()) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/clinics/${clinic.id}/doctors/${docId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pin: newPin.trim(),
+          password: newPin.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('✓ Doctor PIN successfully updated by Hospital Admin!');
+        setSecDoctorPasswords((prev) =>
+          prev.map((s) => (s.doctorId === docId ? { ...s, pin: newPin.trim(), password: newPin.trim() } : s))
+        );
+        fetchClinicData();
+      } else {
+        showToast(data.error || 'Failed to update PIN');
+      }
+    } catch (e) {
+      showToast('Error updating doctor PIN');
+    }
+  };
+
   // 3. Service CRUD
   const handleSaveService = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1519,9 +1545,79 @@ export const ClinicAdmin: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="mt-4 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800 text-xs">
-                    <span className="text-slate-400 dark:text-slate-500 block text-[10px] uppercase font-bold">Assigned Cabin / Room</span>
-                    <span className="font-extrabold text-slate-800 dark:text-slate-100">{doc.roomNumber || 'General OPD'}</span>
+                  <div className="mt-4 p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800 text-xs space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400 dark:text-slate-500 block text-[10px] uppercase font-bold">Assigned Cabin / Room</span>
+                      <span className="font-extrabold text-slate-800 dark:text-slate-100">{doc.roomNumber || 'General OPD'}</span>
+                    </div>
+
+                    {/* Dedicated Doctor Direct Console Link */}
+                    <div className="pt-2.5 border-t border-slate-200/60 dark:border-slate-700/60 space-y-1.5">
+                      <span className="text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider block">
+                        Direct Doctor Cabin Link:
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="text"
+                          readOnly
+                          value={`${window.location.origin}/doctor/${clinic?.slug || 'caremax-opd'}/${(doc.roomNumber || doc.id).toLowerCase().replace(/\s+/g, '-')}`}
+                          className="flex-1 px-2.5 py-1 text-[11px] font-mono bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 select-all"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const directUrl = `${window.location.origin}/doctor/${clinic?.slug || 'caremax-opd'}/${(doc.roomNumber || doc.id).toLowerCase().replace(/\s+/g, '-')}`;
+                            navigator.clipboard.writeText(directUrl);
+                            showToast(`✓ Copied direct link for ${doc.displayName}!`);
+                          }}
+                          className="px-2.5 py-1 bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 text-sky-700 dark:text-sky-300 text-[11px] font-bold rounded-lg border border-sky-200 dark:border-sky-800 shrink-0 transition-colors cursor-pointer"
+                          title="Copy direct link"
+                        >
+                          Copy
+                        </button>
+                        <a
+                          href={`/doctor/${clinic?.slug || 'caremax-opd'}/${(doc.roomNumber || doc.id).toLowerCase().replace(/\s+/g, '-')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-2 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-[11px] font-bold rounded-lg shrink-0 transition-colors"
+                          title="Open Console in New Tab"
+                        >
+                          ↗
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Individual Doctor PIN / Password Management */}
+                    <div className="pt-2.5 border-t border-slate-200/60 dark:border-slate-700/60 space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase">Doctor Login PIN:</span>
+                        <span className="text-[11px] font-mono font-black text-indigo-600 dark:text-indigo-400">
+                          PIN: {secDoctorPasswords.find(s => s.doctorId === doc.id)?.pin || '1234'}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 pt-0.5">
+                        <input
+                          type="text"
+                          placeholder="Set new PIN (e.g. 5821)"
+                          maxLength={8}
+                          id={`doc-pin-input-${doc.id}`}
+                          className="flex-1 px-2.5 py-1 text-[11px] font-mono font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-white placeholder:text-slate-400"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const input = document.getElementById(`doc-pin-input-${doc.id}`) as HTMLInputElement;
+                            if (input && input.value.trim()) {
+                              handleUpdateSingleDoctorPin(doc.id, input.value.trim());
+                              input.value = '';
+                            }
+                          }}
+                          className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold rounded-lg shrink-0 transition-colors shadow-2xs cursor-pointer"
+                        >
+                          Save PIN
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 

@@ -360,9 +360,9 @@ export const CommercialFooter: React.FC = () => {
           </div>
         </div>
 
-        {/* Sleek, Low-Opacity Subtle Watermark (Constrained to prevent mobile horizontal scroll) */}
-        <div className="pt-4 pb-2 text-center select-none pointer-events-none w-full max-w-full overflow-hidden flex items-center justify-center opacity-15 hover:opacity-25 transition-opacity">
-          <h2 className="text-4xl sm:text-7xl md:text-9xl font-black tracking-tighter text-slate-700 truncate select-none">
+        {/* Sleek, Ultra-Luxury Gradient Brand Watermark */}
+        <div className="pt-8 pb-3 text-center select-none pointer-events-none w-full max-w-full overflow-hidden flex items-center justify-center relative">
+          <h2 className="text-5xl sm:text-8xl md:text-[10.5rem] lg:text-[13rem] font-black tracking-tighter bg-gradient-to-r from-blue-400 via-indigo-400 to-teal-300 bg-clip-text text-transparent select-none leading-none opacity-45 hover:opacity-70 transition-opacity drop-shadow-sm">
             Queueless
           </h2>
         </div>

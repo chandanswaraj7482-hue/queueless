@@ -1790,7 +1790,7 @@ export const ClinicAdmin: React.FC = () => {
                     <div>
                       <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Add-On Pricing</span>
                       <strong className="text-base font-black text-slate-900 dark:text-white">
-                        ₹1,999 / mo <span className="text-xs font-normal text-slate-500 dark:text-slate-400">($29/mo)</span>
+                        ₹2,999 / mo <span className="text-xs font-normal text-slate-500 dark:text-slate-400">($29/mo)</span>
                       </strong>
                       <span className="text-[10px] text-emerald-700 font-bold block mt-0.5">
                         ✓ Included free in Enterprise & White-Label Tier

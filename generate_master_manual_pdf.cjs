@@ -679,7 +679,7 @@ const htmlContent = `
   </div>
 
   <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 10px 14px; font-size: 8pt; color: #1e40af; margin-top: 10px;">
-    <strong>🎨 Paid White-Label Add-On (₹1,999/month):</strong> Replace default Queueless emblems with your hospital's official high-resolution logo on patient mobile passes, 55" waiting room TV kiosks, printed standees, and doctor prescription letterheads.
+    <strong>🎨 Paid White-Label Add-On (₹2,999/month | $29/mo):</strong> Replace default Queueless emblems with your hospital's official high-resolution logo on patient mobile passes, 55" waiting room TV kiosks, printed standees, and doctor prescription letterheads.
   </div>
 
   <h3 style="margin-top: 14px;">⚡ How Automated Onboarding & Payout Setup Works</h3>

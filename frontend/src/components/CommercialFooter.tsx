@@ -363,9 +363,18 @@ export const CommercialFooter: React.FC = () => {
         {/* Sleek, Ultra-Luxury Gradient Brand Watermark with Interactive Hover Animation */}
         <div className="pt-8 pb-4 text-center select-none w-full max-w-full overflow-hidden flex items-center justify-center relative group">
           {/* Interactive Ambient Radial Glow Behind Watermark */}
-          <div className="absolute inset-0 max-w-4xl mx-auto h-36 bg-gradient-to-r from-blue-600/20 via-sky-500/25 to-teal-400/20 blur-3xl opacity-40 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700 pointer-events-none" />
+          <div className="absolute inset-0 max-w-4xl mx-auto h-36 bg-gradient-to-r from-sky-500/20 via-indigo-500/30 to-emerald-400/20 blur-3xl opacity-40 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700 pointer-events-none" />
 
-          <h2 className="relative text-5xl sm:text-8xl md:text-[10.5rem] lg:text-[13rem] font-black tracking-tighter group-hover:tracking-wide bg-gradient-to-r from-blue-600 via-sky-500 to-teal-500 dark:from-blue-400 dark:via-sky-300 dark:to-teal-300 bg-[length:200%_auto] hover:bg-right bg-clip-text text-transparent select-none leading-none opacity-60 group-hover:opacity-100 transition-all duration-700 ease-out transform group-hover:scale-[1.04] active:scale-95 cursor-pointer drop-shadow-md">
+          <h2
+            className="relative text-5xl sm:text-8xl md:text-[10.5rem] lg:text-[13rem] font-black tracking-tighter group-hover:tracking-wide select-none leading-none opacity-85 group-hover:opacity-100 transition-all duration-700 ease-out transform group-hover:scale-[1.04] active:scale-95 cursor-pointer drop-shadow-md"
+            style={{
+              background: 'linear-gradient(135deg, #38bdf8 0%, #6366f1 45%, #06b6d4 75%, #10b981 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              color: 'transparent',
+            }}
+          >
             Queueless
           </h2>
         </div>

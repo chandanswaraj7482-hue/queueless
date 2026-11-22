@@ -409,15 +409,15 @@ export const ClinicalReviewsCarousel: React.FC = () => {
       {/* Header & Clinical Trust Badges */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6 text-center md:text-left">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider text-amber-300 shadow-2xs">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider text-amber-700 dark:text-amber-300 shadow-2xs">
             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
             <span className="sm:hidden">4.9/5 Across 450+ OPDs</span>
             <span className="hidden sm:inline">Verified Clinical Endorsements • 4.9/5 Rating Across 450+ OPDs</span>
           </div>
-          <h3 className="text-xl sm:text-3xl font-black text-white tracking-tight">
+          <h3 className="text-xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
             What Superintendents & Patients Say
           </h3>
-          <p className="text-xs sm:text-sm text-slate-400 max-w-xl hidden sm:block">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl hidden sm:block">
             Real outcomes from Indian multi-specialty hospitals, pediatric clinics, and high-volume daycares operating zero-wait OPDs.
           </p>
         </div>
@@ -633,7 +633,7 @@ export const ClinicalReviewsCarousel: React.FC = () => {
                       </div>
                     </div>
 
-                    <span className="text-[9px] text-slate-400 font-medium whitespace-nowrap pl-2">
+                    <span className="text-[9px] text-slate-500 dark:text-slate-400 font-medium whitespace-nowrap pl-2">
                       {review.date}
                     </span>
                   </div>

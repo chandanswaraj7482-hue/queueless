@@ -360,9 +360,12 @@ export const CommercialFooter: React.FC = () => {
           </div>
         </div>
 
-        {/* Sleek, Ultra-Luxury Gradient Brand Watermark */}
-        <div className="pt-8 pb-3 text-center select-none pointer-events-none w-full max-w-full overflow-hidden flex items-center justify-center relative">
-          <h2 className="text-5xl sm:text-8xl md:text-[10.5rem] lg:text-[13rem] font-black tracking-tighter bg-gradient-to-r from-blue-400 via-indigo-400 to-teal-300 bg-clip-text text-transparent select-none leading-none opacity-45 hover:opacity-70 transition-opacity drop-shadow-sm">
+        {/* Sleek, Ultra-Luxury Gradient Brand Watermark with Interactive Hover Animation */}
+        <div className="pt-8 pb-4 text-center select-none w-full max-w-full overflow-hidden flex items-center justify-center relative group">
+          {/* Interactive Ambient Radial Glow Behind Watermark */}
+          <div className="absolute inset-0 max-w-4xl mx-auto h-32 bg-gradient-to-r from-blue-600/10 via-indigo-600/20 to-teal-500/10 blur-3xl opacity-30 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 pointer-events-none" />
+
+          <h2 className="relative text-5xl sm:text-8xl md:text-[10.5rem] lg:text-[13rem] font-black tracking-tighter group-hover:tracking-normal bg-gradient-to-r from-blue-400 via-indigo-400 via-sky-300 to-teal-300 bg-[length:200%_auto] hover:bg-right bg-clip-text text-transparent select-none leading-none opacity-50 group-hover:opacity-100 transition-all duration-700 ease-out transform group-hover:scale-[1.03] active:scale-95 cursor-pointer drop-shadow-sm">
             Queueless
           </h2>
         </div>

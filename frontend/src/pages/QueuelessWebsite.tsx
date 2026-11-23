@@ -973,7 +973,7 @@ export const QueuelessWebsite: React.FC = () => {
               className="w-full sm:w-auto"
             >
               <Link
-                to={`/signup?plan=${selectedPlanTemplate.id.toLowerCase()}&currency=${selectedCurrencyCode}&cycle=${billingCycle.toLowerCase()}`}
+                to={`/signup?plan=${selectedPlanTemplate.id}&currency=${selectedCurrencyCode}&cycle=${billingCycle}`}
                 className="w-full sm:w-auto px-5 py-3.5 sm:px-7 sm:py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl shadow-xl shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Zap className="w-4 h-4 fill-white shrink-0" />
@@ -4676,7 +4676,7 @@ export const QueuelessWebsite: React.FC = () => {
           </button>
 
           <Link
-            to={`/signup?plan=${selectedPlanTemplate.id.toLowerCase()}&currency=${selectedCurrencyCode}&cycle=${billingCycle.toLowerCase()}`}
+            to={`/signup?plan=${selectedPlanTemplate.id}&currency=${selectedCurrencyCode}&cycle=${billingCycle}`}
             className="flex-1 py-2.5 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer"
           >
             <Zap className="w-3.5 h-3.5" />

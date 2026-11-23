@@ -155,12 +155,15 @@ clinicRouter.post('/subscribe', async (req, res) => {
       ? `${address?.trim() || 'Central Health Campus'}, ${city.trim()}`
       : (address?.trim() || 'Central Health Campus');
 
+    const normalizedPlanId = (planId || 'GROWTH_OPD').toUpperCase();
     const cycleDays = billingCycle === 'ANNUAL' ? 365 : 30;
-    const initialTokens = planId === 'STARTER' ? 1500 : planId === 'ENTERPRISE' ? 50000 : 10000;
+    const initialTokens = normalizedPlanId === 'STARTER' ? 1500 : normalizedPlanId === 'ENTERPRISE' ? 50000 : 10000;
+    const doctorsLimit = normalizedPlanId === 'STARTER' ? 3 : normalizedPlanId === 'ENTERPRISE' ? 999 : 12;
 
     const subscriptionData = {
-      planId: planId || 'GROWTH_OPD',
-      planName: planName || 'Growth Super OPD',
+      planId: normalizedPlanId,
+      planName: planName || (normalizedPlanId === 'STARTER' ? 'Starter Clinic' : normalizedPlanId === 'ENTERPRISE' ? 'Enterprise Hospital License' : 'Growth Super OPD'),
+      doctorsLimit,
       billingCycle: billingCycle || 'MONTHLY',
       currency: currency || 'INR',
       hardwareAddon: !!hardwareAddon,

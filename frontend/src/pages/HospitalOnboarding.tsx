@@ -46,10 +46,18 @@ export const HospitalOnboarding: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // URL Params
-  const queryPlanId = (searchParams.get('plan') as PlanId) || 'GROWTH_OPD';
-  const queryCurrency = searchParams.get('currency') || 'USD';
-  const queryCycle = (searchParams.get('cycle') as 'MONTHLY' | 'ANNUAL') || 'MONTHLY';
+  // URL Params with Case-Insensitive Normalization
+  const getNormalizedPlan = (raw: string | null): PlanTemplate => {
+    const upper = (raw || '').toUpperCase();
+    if (upper === 'STARTER') return PLAN_TEMPLATES[0];
+    if (upper === 'ENTERPRISE') return PLAN_TEMPLATES[2];
+    return PLAN_TEMPLATES[1]; // Default: GROWTH_OPD
+  };
+
+  const initialPlan = getNormalizedPlan(searchParams.get('plan'));
+  const queryCurrency = (searchParams.get('currency')?.toUpperCase() as string) || localStorage.getItem('queueless_currency') || 'USD';
+  const queryCycle = searchParams.get('cycle')?.toUpperCase() === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
+  const queryAddon = searchParams.get('addon') === 'custom_logo';
 
   // Step Tracker: 1 = Details & Credentials, 2 = Plan & Billing, 3 = Payment (Dodo/Cashfree), 4 = Live Provisioned
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
@@ -59,10 +67,25 @@ export const HospitalOnboarding: React.FC = () => {
   const selectedCurrency: CurrencyConfig =
     WORLDWIDE_CURRENCIES[currencyCode] || WORLDWIDE_CURRENCIES.USD;
   const [billingCycle, setBillingCycle] = useState<'MONTHLY' | 'ANNUAL'>(queryCycle);
-  const [selectedPlan, setSelectedPlan] = useState<PlanTemplate>(
-    PLAN_TEMPLATES.find((p) => p.id === queryPlanId) || PLAN_TEMPLATES[1]
-  );
-  const [hardwareAddon, setHardwareAddon] = useState<boolean>(true);
+  const [selectedPlan, setSelectedPlan] = useState<PlanTemplate>(initialPlan);
+  const [hardwareAddon, setHardwareAddon] = useState<boolean>(queryAddon);
+
+  // Synchronize state dynamically if search params change
+  useEffect(() => {
+    if (searchParams.get('plan')) {
+      setSelectedPlan(getNormalizedPlan(searchParams.get('plan')));
+    }
+    if (searchParams.get('currency')) {
+      const code = searchParams.get('currency')?.toUpperCase() || 'USD';
+      if (WORLDWIDE_CURRENCIES[code]) setCurrencyCode(code);
+    }
+    if (searchParams.get('cycle')) {
+      setBillingCycle(searchParams.get('cycle')?.toUpperCase() === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY');
+    }
+    if (searchParams.get('addon') === 'custom_logo') {
+      setHardwareAddon(true);
+    }
+  }, [searchParams]);
 
   // Step 1: Hospital Details & Master Login Credentials
   const [hospitalName, setHospitalName] = useState('');
@@ -205,10 +228,27 @@ export const HospitalOnboarding: React.FC = () => {
           name: hospitalName.trim(),
           slug: slug.trim(),
           address: address.trim() || 'Main Clinical Campus',
+          plan: selectedPlan.id,
           planId: selectedPlan.id,
+          planName: selectedPlan.name,
           billingCycle,
+          currency: currencyCode,
+          doctorsLimit: selectedPlan.id === 'STARTER' ? 3 : selectedPlan.id === 'ENTERPRISE' ? 999 : 12,
+          tokenCreditsAllocated: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
+          tokenCreditsRemaining: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
           adminEmail: adminEmail.trim(),
           status: 'ACTIVE',
+          isWhiteLabel: hardwareAddon,
+          settings: JSON.stringify({
+            planId: selectedPlan.id,
+            planName: selectedPlan.name,
+            billingCycle,
+            currency: currencyCode,
+            doctorsLimit: selectedPlan.id === 'STARTER' ? 3 : selectedPlan.id === 'ENTERPRISE' ? 999 : 12,
+            tokenCreditsAllocated: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
+            isWhiteLabel: hardwareAddon,
+            autopay: true,
+          }),
         };
         const fallbackData = {
           invoiceId: 'INV-' + Math.floor(100000 + Math.random() * 900000),
@@ -239,10 +279,27 @@ export const HospitalOnboarding: React.FC = () => {
         name: hospitalName.trim(),
         slug: slug.trim(),
         address: address.trim() || 'Main Clinical Campus',
+        plan: selectedPlan.id,
         planId: selectedPlan.id,
+        planName: selectedPlan.name,
         billingCycle,
+        currency: currencyCode,
+        doctorsLimit: selectedPlan.id === 'STARTER' ? 3 : selectedPlan.id === 'ENTERPRISE' ? 999 : 12,
+        tokenCreditsAllocated: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
+        tokenCreditsRemaining: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
         adminEmail: adminEmail.trim(),
         status: 'ACTIVE',
+        isWhiteLabel: hardwareAddon,
+        settings: JSON.stringify({
+          planId: selectedPlan.id,
+          planName: selectedPlan.name,
+          billingCycle,
+          currency: currencyCode,
+          doctorsLimit: selectedPlan.id === 'STARTER' ? 3 : selectedPlan.id === 'ENTERPRISE' ? 999 : 12,
+          tokenCreditsAllocated: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
+          isWhiteLabel: hardwareAddon,
+          autopay: true,
+        }),
       };
       const fallbackData = {
         invoiceId: 'INV-' + Math.floor(100000 + Math.random() * 900000),
@@ -342,6 +399,46 @@ export const HospitalOnboarding: React.FC = () => {
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   These credentials will be used by your Hospital Director and staff to log into the clinic dashboard.
                 </p>
+              </div>
+
+              {/* Dynamic Selected Plan & ID Preview Banner */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-50/90 via-indigo-50/60 to-blue-50/90 dark:from-blue-950/50 dark:via-indigo-950/40 dark:to-blue-950/50 border border-blue-200/90 dark:border-blue-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-500/20">
+                    <Stethoscope className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/60 px-2 py-0.5 rounded-full border border-blue-300/70 dark:border-blue-700">
+                        Selected Plan
+                      </span>
+                      <span className="text-xs font-black text-slate-900 dark:text-white">
+                        {selectedPlan.name}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
+                      {selectedPlan.id === 'STARTER'
+                        ? 'Solo clinics • Up to 3 Consulting Doctors • 1,500 monthly tokens'
+                        : selectedPlan.id === 'ENTERPRISE'
+                        ? 'Hospital facility • Unlimited Consulting Doctors • 50,000+ monthly tokens'
+                        : 'Multi-cabin polyclinics • Up to 12 Consulting Doctors • 10,000 monthly tokens'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex sm:flex-col items-baseline sm:items-end justify-between sm:justify-center border-t sm:border-t-0 pt-2 sm:pt-0 border-blue-200/60 dark:border-blue-800/60 shrink-0">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-base sm:text-lg font-black text-blue-950 dark:text-blue-200 font-mono">
+                      {selectedCurrency.symbol}{planRate.toLocaleString()}
+                    </span>
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                      /{billingCycle === 'ANNUAL' ? 'yr' : 'mo'}
+                    </span>
+                  </div>
+                  <span className="text-[9px] font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">
+                    14-Day Free Pilot (Pay $0 / ₹0 Today)
+                  </span>
+                </div>
               </div>
 
               <form onSubmit={handleStep1Submit} className="space-y-5">

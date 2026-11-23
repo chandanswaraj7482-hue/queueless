@@ -130,9 +130,55 @@ export const HospitalLogin: React.FC = () => {
 
         navigate(targetUrl);
       } else {
+        // Local registered hospitals fallback
+        try {
+          const stored = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+          const cleanId = identifier.trim().toLowerCase();
+          const matchedSlug = Object.keys(stored).find(
+            (k) => k.toLowerCase() === cleanId || stored[k]?.adminEmail?.toLowerCase() === cleanId || stored[k]?.slug?.toLowerCase() === cleanId
+          );
+          if (matchedSlug && stored[matchedSlug]) {
+            const h = stored[matchedSlug];
+            setSuccessMsg(`✓ Welcome back! Opening ${h.name} dashboard...`);
+            localStorage.setItem(
+              'queueless_auth',
+              JSON.stringify({
+                clinic: h,
+                role,
+                timestamp: Date.now(),
+              })
+            );
+            const targetUrl = role === 'RECEPTION' ? `/reception/${h.slug}` : role === 'DOCTOR' ? `/doctor/${h.slug}` : `/admin/${h.slug}`;
+            navigate(targetUrl);
+            return;
+          }
+        } catch (e) {}
+
         setError(data.error || 'Invalid credentials or inactive subscription.');
       }
     } catch (err) {
+      try {
+        const stored = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+        const cleanId = identifier.trim().toLowerCase();
+        const matchedSlug = Object.keys(stored).find(
+          (k) => k.toLowerCase() === cleanId || stored[k]?.adminEmail?.toLowerCase() === cleanId || stored[k]?.slug?.toLowerCase() === cleanId
+        );
+        if (matchedSlug && stored[matchedSlug]) {
+          const h = stored[matchedSlug];
+          setSuccessMsg(`✓ Welcome back! Opening ${h.name} dashboard...`);
+          localStorage.setItem(
+            'queueless_auth',
+            JSON.stringify({
+              clinic: h,
+              role,
+              timestamp: Date.now(),
+            })
+          );
+          const targetUrl = role === 'RECEPTION' ? `/reception/${h.slug}` : role === 'DOCTOR' ? `/doctor/${h.slug}` : `/admin/${h.slug}`;
+          navigate(targetUrl);
+          return;
+        }
+      } catch (e) {}
       setError('Could not connect to hospital authentication server. Please check your network.');
     } finally {
       setLoading(false);

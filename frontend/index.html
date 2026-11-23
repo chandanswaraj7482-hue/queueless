@@ -268,23 +268,27 @@
     </style>
   </head>
   <body class="bg-slate-50 dark:bg-[#060D1D] text-slate-900 dark:text-slate-100 min-h-screen selection:bg-blue-600 selection:text-white transition-colors duration-200 overflow-x-hidden">
-    <!-- Cashfree PG Drop-in Web Checkout SDK (Production) -->
-    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
-    <!-- Google Translate Loader -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Cashfree PG Drop-in Web Checkout SDK (Loaded async so it never delays DOM) -->
+    <script async defer src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+
+    <!-- Google Translate Loader (Non-blocking async defer) -->
     <div id="google_translate_element" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></div>
     <script type="text/javascript">
       window.googleTranslateElementInit = function() {
-        if (window.google && window.google.translate) {
-          new window.google.translate.TranslateElement(
-            { pageLanguage: 'en', autoDisplay: false },
-            'google_translate_element'
-          );
-        }
+        try {
+          if (window.google && window.google.translate) {
+            new window.google.translate.TranslateElement(
+              { pageLanguage: 'en', autoDisplay: false },
+              'google_translate_element'
+            );
+          }
+        } catch (e) {}
       };
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script async defer type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
 </html>
 

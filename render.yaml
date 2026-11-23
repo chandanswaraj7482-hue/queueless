@@ -7,15 +7,14 @@ services:
     rootDir: backend
     buildCommand: npm install && npm run build
     startCommand: npm start
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 5000
       - key: DATABASE_URL
-        value: postgresql://neondb_owner:npg_2XhIVRtx8Wwu@ep-orange-paper-bcwcy672.c-16.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+        value: postgresql://neondb_owner:npg_2XhIVRtx8Wwu@ep-orange-paper-bcwcy672-pooler.c-16.us-east-1.aws.neon.tech/neondb?sslmode=require
       - key: DATABASE_URL_POOLED
-        value: postgresql://neondb_owner:npg_2XhIVRtx8Wwu@ep-orange-paper-bcwcy672-pooler.c-16.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+        value: postgresql://neondb_owner:npg_2XhIVRtx8Wwu@ep-orange-paper-bcwcy672-pooler.c-16.us-east-1.aws.neon.tech/neondb?sslmode=require
       - key: RESEND_API_KEY
         value: re_B5ZnyzJr_H8eeAr7FPNZ5RQCd7rdNJGDc
       - key: FROM_EMAIL
@@ -24,4 +23,3 @@ services:
         value: Queueless Healthcare OS
       - key: CORS_ORIGIN
         value: https://queueless-os.vercel.app
-

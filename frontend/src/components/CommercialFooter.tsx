@@ -361,22 +361,26 @@ export const CommercialFooter: React.FC = () => {
         </div>
 
         {/* Sleek, Ultra-Luxury Gradient Brand Watermark with Interactive Hover Animation */}
-        <div className="pt-8 pb-4 text-center select-none w-full max-w-full overflow-hidden flex items-center justify-center relative group">
+        <div className="pt-10 pb-6 text-center select-none w-full max-w-full overflow-hidden flex flex-col items-center justify-center relative group">
           {/* Interactive Ambient Radial Glow Behind Watermark */}
-          <div className="absolute inset-0 max-w-4xl mx-auto h-36 bg-gradient-to-r from-sky-500/20 via-indigo-500/30 to-emerald-400/20 blur-3xl opacity-40 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700 pointer-events-none" />
+          <div className="absolute inset-0 max-w-5xl mx-auto h-44 bg-gradient-to-r from-sky-500/30 via-indigo-500/40 to-teal-400/30 blur-3xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 pointer-events-none" />
 
           <h2
-            className="relative text-5xl sm:text-8xl md:text-[10.5rem] lg:text-[13rem] font-black tracking-tighter group-hover:tracking-wide select-none leading-none opacity-85 group-hover:opacity-100 transition-all duration-700 ease-out transform group-hover:scale-[1.04] active:scale-95 cursor-pointer drop-shadow-md"
+            className="relative text-6xl sm:text-8xl md:text-[11rem] lg:text-[14rem] font-black tracking-tight group-hover:tracking-normal select-none leading-none transition-all duration-700 ease-out transform group-hover:scale-[1.03] active:scale-95 cursor-pointer"
             style={{
-              background: 'linear-gradient(135deg, #38bdf8 0%, #6366f1 45%, #06b6d4 75%, #10b981 100%)',
+              background: 'linear-gradient(135deg, #0284c7 0%, #38bdf8 25%, #818cf8 50%, #06b6d4 75%, #10b981 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
               color: 'transparent',
+              filter: 'drop-shadow(0 4px 24px rgba(56, 189, 248, 0.3))',
             }}
           >
             Queueless
           </h2>
+          <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-sky-400/70 group-hover:text-sky-300 -mt-2 sm:-mt-4 transition-colors">
+            Autonomous Zero-Wait Clinical Queue Operating System
+          </span>
         </div>
 
       </div>

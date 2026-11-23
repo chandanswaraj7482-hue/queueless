@@ -14,6 +14,9 @@ import {
   Check,
   Award,
   ShieldAlert,
+  MessageSquare,
+  Printer,
+  Coins,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
@@ -259,36 +262,149 @@ export const PricingPage: React.FC = () => {
             })}
           </div>
 
-          {/* Optional Power Add-On: Custom Hospital Logo & White-Label Suite */}
-          <div className="max-w-5xl mx-auto mt-12 p-6 rounded-3xl bg-gradient-to-r from-purple-50 via-indigo-50/60 to-blue-50/80 dark:from-purple-950/40 dark:via-indigo-950/30 dark:to-blue-950/40 border border-purple-200/90 dark:border-purple-800/80 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-purple-500/30">
-                <Sparkles className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/60 px-2.5 py-0.5 rounded-full border border-purple-300/70 dark:border-purple-700">
-                    Paid White-Label Add-On
-                  </span>
-                  <span className="text-xs font-mono font-extrabold text-purple-900 dark:text-purple-200">
-                    {selectedCurrency.code === 'INR' ? '₹2,999/month' : '$29/month'}
-                  </span>
+          {/* Clinical Power Add-Ons Suite Grid */}
+          <div className="max-w-6xl mx-auto mt-16 space-y-6">
+            <div className="text-center space-y-2">
+              <span className="text-[11px] font-black uppercase tracking-wider text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/70 px-3 py-1 rounded-full border border-purple-200 dark:border-purple-800">
+                Hospital Modular Add-Ons
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                Power-Up Your Clinical OPD Infrastructure
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
+                Mix and match modular upgrades anytime. 100% cloud setup with zero disruption to active consultation queues.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+              {/* Card 1: White-Label Suite */}
+              <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-purple-200/90 dark:border-purple-800/80 shadow-md flex flex-col justify-between hover:border-purple-400 transition-all">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold">
+                    <Sparkles className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/80 px-2 py-0.5 rounded-md">
+                      Brand Customization
+                    </span>
+                    <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
+                      Full White-Label Suite
+                    </h4>
+                    <div className="text-base font-black text-purple-600 dark:text-purple-400 font-mono mt-0.5">
+                      {selectedCurrency.code === 'INR' ? '₹2,999' : '$29'}<span className="text-[11px] text-slate-400 font-normal">/month</span>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Custom hospital logo on patient passes, 55" TV kiosks, acrylic counter standees, and doctor Rx letterheads.
+                  </p>
                 </div>
-                <h4 className="text-base font-black text-slate-900 dark:text-white mt-1">
-                  Custom Hospital Logo & Full White-Label Suite
-                </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 max-w-xl leading-relaxed">
-                  Replace default Queueless emblems with your hospital's official high-resolution branding on patient passes, 55" waiting room TV kiosks, printed standees, and doctor prescription letterheads.
-                </p>
+                <div className="pt-4">
+                  <Link
+                    to={`/signup?addon=custom_logo&currency=${currencyCode}`}
+                    className="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
+                  >
+                    <span>Add White-Label</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Card 2: WhatsApp Business Green-Tick */}
+              <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-emerald-200/90 dark:border-emerald-800/80 shadow-md flex flex-col justify-between hover:border-emerald-400 transition-all">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-300 flex items-center justify-center font-bold">
+                    <MessageSquare className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded-md">
+                      Patient Communications
+                    </span>
+                    <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
+                      WhatsApp Alerts & Rx
+                    </h4>
+                    <div className="text-base font-black text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">
+                      {selectedCurrency.code === 'INR' ? '₹1,499' : '$19'}<span className="text-[11px] text-slate-400 font-normal">/month</span>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Live token countdown updates, doctor calling notifications, and 1-tap digital Rx PDFs delivered directly on WhatsApp.
+                  </p>
+                </div>
+                <div className="pt-4">
+                  <Link
+                    to={`/signup?addon=whatsapp&currency=${currencyCode}`}
+                    className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
+                  >
+                    <span>Add WhatsApp Suite</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Card 3: Counter Hardware Kit */}
+              <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-blue-200/90 dark:border-blue-800/80 shadow-md flex flex-col justify-between hover:border-blue-400 transition-all">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-300 flex items-center justify-center font-bold">
+                    <Printer className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/80 px-2 py-0.5 rounded-md">
+                      One-Time Hardware
+                    </span>
+                    <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
+                      Reception Hardware Kit
+                    </h4>
+                    <div className="text-base font-black text-blue-600 dark:text-blue-400 font-mono mt-0.5">
+                      {selectedCurrency.code === 'INR' ? '₹4,999' : '$69'}<span className="text-[11px] text-slate-400 font-normal"> one-time</span>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                    58mm high-speed thermal token printer (USB/BT) + 2 acrylic laser QR check-in standees + 500 paper rolls.
+                  </p>
+                </div>
+                <div className="pt-4">
+                  <Link
+                    to={`/signup?addon=hardware_kit&currency=${currencyCode}`}
+                    className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
+                  >
+                    <span>Order Kit</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Card 4: Surge Token Refills */}
+              <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-amber-200/90 dark:border-amber-800/80 shadow-md flex flex-col justify-between hover:border-amber-400 transition-all">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-300 flex items-center justify-center font-bold">
+                    <Coins className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/80 px-2 py-0.5 rounded-md">
+                      Pay-As-You-Grow
+                    </span>
+                    <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
+                      Surge Token Packs
+                    </h4>
+                    <div className="text-base font-black text-amber-600 dark:text-amber-400 font-mono mt-0.5">
+                      {selectedCurrency.code === 'INR' ? '₹999 - ₹6,999' : '$15 - $89'}
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Instant credit top-ups during seasonal patient surges. 5,000 / 15,000 / 50,000 token bundles available with 1 tap.
+                  </p>
+                </div>
+                <div className="pt-4">
+                  <Link
+                    to={`/signup?addon=token_surge&currency=${currencyCode}`}
+                    className="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
+                  >
+                    <span>View Packs</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
             </div>
-            <Link
-              to={`/signup?addon=custom_logo&currency=${currencyCode}`}
-              className="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-black text-xs shrink-0 shadow-md shadow-purple-600/30 transition-all active:scale-95 whitespace-nowrap cursor-pointer flex items-center gap-2"
-            >
-              <span>Add to Hospital Plan</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
 
           {/* Payment Gateways Bar */}

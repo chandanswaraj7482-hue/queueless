@@ -34,6 +34,7 @@ import {
   FileDown,
   Activity,
   TrendingUp,
+  MessageSquare,
 } from 'lucide-react';
 import { playClinicChime } from '../utils/audio';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
@@ -581,6 +582,32 @@ export const ReceptionDashboard: React.FC = () => {
     } finally {
       setSubmittingWalkIn(false);
     }
+  };
+
+  // WhatsApp Cloud Alert URL Generator (User: WhatsApp Alerts & Calling Notifications)
+  const getPatientWhatsAppUrl = (item: QueueItem) => {
+    const cleanPhone = (item.patient.mobile || '').replace(/\D/g, '').slice(-10);
+    if (!cleanPhone) return '#';
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://queueless-os.vercel.app';
+    const isCalled = item.status === 'CALLED';
+    const msg = isCalled
+      ? `🚨 *OPD CABIN CALLING ALERT - ${hospitalDisplayName}*\n\n` +
+        `Namaste *${item.patient.name}*!\n` +
+        `Your Token *#${item.token}* is being called to:\n` +
+        `👨‍⚕️ *${item.doctor?.displayName || 'Consulting Doctor'}* (${item.doctor?.roomNumber || 'Cabin 1'})\n\n` +
+        `👉 Please enter the doctor cabin immediately.\n` +
+        `📱 Live Pass: ${baseUrl}/token/${item.publicToken || item.token}\n\n` +
+        `_Queueless Clinical OS_`
+      : `🏥 *${hospitalDisplayName} - OPD Token Confirmed*\n\n` +
+        `Namaste *${item.patient.name}*!\n` +
+        `Your Token Number is: *#${item.token}*\n` +
+        `Doctor: *${item.doctor?.displayName || 'On-Duty Doctor'}* (${item.doctor?.roomNumber || 'Cabin'})\n` +
+        `Status: *${item.status}*\n\n` +
+        `📱 *Track your live waiting position & ETA:*\n` +
+        `${baseUrl}/token/${item.publicToken || item.token}\n\n` +
+        `_Please arrive outside the cabin when 2 tokens away._\n` +
+        `_Powered by Queueless Clinical OS_`;
+    return `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(msg)}`;
   };
 
   // Pending Cash Patients at Counter
@@ -1314,13 +1341,26 @@ export const ReceptionDashboard: React.FC = () => {
                           )}
 
                           {item.token !== 'PENDING' && (
-                            <button
-                              onClick={() => setThermalSlipItem(item)}
-                              className="p-1.5 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
-                              title="Print 58mm/80mm POS Slip"
-                            >
-                              <Printer className="w-3.5 h-3.5" />
-                            </button>
+                            <>
+                              {item.patient.mobile && (
+                                <a
+                                  href={getPatientWhatsAppUrl(item)}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="p-1.5 text-emerald-600 hover:text-emerald-700 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-950/60 transition-colors cursor-pointer"
+                                  title="Send Instant WhatsApp Token Alert & Live ETA"
+                                >
+                                  <MessageSquare className="w-3.5 h-3.5" />
+                                </a>
+                              )}
+                              <button
+                                onClick={() => setThermalSlipItem(item)}
+                                className="p-1.5 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                                title="Print 58mm/80mm POS Slip"
+                              >
+                                <Printer className="w-3.5 h-3.5" />
+                              </button>
+                            </>
                           )}
                         </div>
                       </td>
@@ -1483,13 +1523,26 @@ export const ReceptionDashboard: React.FC = () => {
                     )}
 
                     {item.token !== 'PENDING' && (
-                      <button
-                        onClick={() => setThermalSlipItem(item)}
-                        className="p-2 text-slate-500 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
-                        title="Print 58mm/80mm POS Slip"
-                      >
-                        <Printer className="w-4 h-4" />
-                      </button>
+                      <>
+                        {item.patient.mobile && (
+                          <a
+                            href={getPatientWhatsAppUrl(item)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 text-emerald-600 hover:text-emerald-700 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/60 transition-colors cursor-pointer border border-emerald-200 dark:border-emerald-800"
+                            title="Send WhatsApp Token Alert"
+                          >
+                            <MessageSquare className="w-4 h-4" />
+                          </a>
+                        )}
+                        <button
+                          onClick={() => setThermalSlipItem(item)}
+                          className="p-2 text-slate-500 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
+                          title="Print 58mm/80mm POS Slip"
+                        >
+                          <Printer className="w-4 h-4" />
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>

@@ -60,6 +60,7 @@ export const HospitalOnboarding: React.FC = () => {
   const queryCurrency = (searchParams.get('currency')?.toUpperCase() as string) || localStorage.getItem('queueless_currency') || 'USD';
   const queryCycle = searchParams.get('cycle')?.toUpperCase() === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
   const queryAddon = searchParams.get('addon') === 'custom_logo';
+  const querySurge = searchParams.get('addon') === 'token_surge';
 
   // Step Tracker: 1 = Details & Credentials, 2 = Plan & Billing, 3 = Payment (Dodo/Cashfree), 4 = Live Provisioned
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
@@ -72,6 +73,7 @@ export const HospitalOnboarding: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<PlanTemplate>(initialPlan);
   const [hardwareAddon, setHardwareAddon] = useState<boolean>(queryAddon);
   const [whatsappAddon, setWhatsappAddon] = useState<boolean>(searchParams.get('addon') === 'whatsapp');
+  const [tokenSurgeAddon, setTokenSurgeAddon] = useState<boolean>(querySurge);
 
   // Synchronize state dynamically if search params change
   useEffect(() => {
@@ -90,6 +92,9 @@ export const HospitalOnboarding: React.FC = () => {
     }
     if (searchParams.get('addon') === 'whatsapp') {
       setWhatsappAddon(true);
+    }
+    if (searchParams.get('addon') === 'token_surge') {
+      setTokenSurgeAddon(true);
     }
   }, [searchParams]);
 
@@ -153,7 +158,8 @@ export const HospitalOnboarding: React.FC = () => {
   const planRate = billingCycle === 'ANNUAL' ? rates.annual : rates.monthly;
   const whiteLabelCost = hardwareAddon ? (selectedCurrency.code === 'INR' ? 2999 : 29) : 0;
   const whatsappCost = whatsappAddon ? (selectedCurrency.code === 'INR' ? 1499 : 19) : 0;
-  const totalAmount = planRate + whiteLabelCost + whatsappCost;
+  const surgeCost = tokenSurgeAddon ? (selectedCurrency.code === 'INR' ? 999 : 15) : 0;
+  const totalAmount = planRate + whiteLabelCost + whatsappCost + surgeCost;
 
   // Step 1 Validation
   const handleStep1Submit = (e: React.FormEvent) => {
@@ -933,7 +939,7 @@ export const HospitalOnboarding: React.FC = () => {
                   Select Optional Cloud Software Add-Ons:
                 </span>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* Addon 1: White-Label */}
                   <div
                     onClick={() => setHardwareAddon(!hardwareAddon)}
@@ -989,6 +995,35 @@ export const HospitalOnboarding: React.FC = () => {
                     </div>
                     <div className="text-xs font-black text-emerald-600 dark:text-emerald-400 font-mono mt-3">
                       +{selectedCurrency.code === 'INR' ? '₹1,499' : '$19'}/mo
+                    </div>
+                  </div>
+
+                  {/* Addon 3: Seasonal Surge Token Top-Up */}
+                  <div
+                    onClick={() => setTokenSurgeAddon(!tokenSurgeAddon)}
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
+                      tokenSurgeAddon
+                        ? 'border-amber-500 bg-amber-50/50 dark:bg-amber-950/30'
+                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase text-amber-600 dark:text-amber-400">Surge Token Top-Up</span>
+                        <input
+                          type="checkbox"
+                          checked={tokenSurgeAddon}
+                          onChange={() => {}}
+                          className="rounded text-amber-600 focus:ring-amber-500 cursor-pointer"
+                        />
+                      </div>
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">Surge Token Pack (+5,000 Tokens)</h4>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+                        Instant buffer for seasonal patient rushes or flu outbreaks. Valid for 90 days with zero expiration pressure.
+                      </p>
+                    </div>
+                    <div className="text-xs font-black text-amber-600 dark:text-amber-400 font-mono mt-3">
+                      +{selectedCurrency.code === 'INR' ? '₹999' : '$15'}
                     </div>
                   </div>
                 </div>

@@ -17,6 +17,7 @@ import {
   MessageSquare,
   Printer,
   Coins,
+  X,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
@@ -50,6 +51,8 @@ export const PricingPage: React.FC = () => {
   const [billingCycle, setBillingCycle] = useState<'MONTHLY' | 'ANNUAL'>('MONTHLY');
   const [faqCategory, setFaqCategory] = useState<FaqCategory>('ALL');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [showSurgeModal, setShowSurgeModal] = useState(false);
+  const [selectedSurgePack, setSelectedSurgePack] = useState<'5K' | '15K' | '50K'>('15K');
 
   const selectedCurrency: CurrencyConfig =
     WORLDWIDE_CURRENCIES[currencyCode] || WORLDWIDE_CURRENCIES.USD;
@@ -375,17 +378,156 @@ export const PricingPage: React.FC = () => {
                   </p>
                 </div>
                 <div className="pt-4">
-                  <Link
-                    to={`/signup?addon=token_surge&currency=${currencyCode}`}
-                    className="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
+                  <button
+                    type="button"
+                    onClick={() => setShowSurgeModal(true)}
+                    className="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-95"
                   >
+                    <Coins className="w-3.5 h-3.5" />
                     <span>View Packs</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Surge Token Packs Interactive Modal */}
+          {showSurgeModal && (
+            <div
+              className="fixed inset-0 bg-slate-950/75 backdrop-blur-md z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) setShowSurgeModal(false);
+              }}
+            >
+              <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white my-auto text-left relative">
+                <button
+                  type="button"
+                  onClick={() => setShowSurgeModal(false)}
+                  className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-3 bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 rounded-2xl">
+                    <Coins className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                      On-Demand Cloud Top-Up
+                    </span>
+                    <h3 className="text-lg font-black text-slate-950 dark:text-white tracking-tight">
+                      Seasonal Surge Token Packs
+                    </h3>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-600 dark:text-slate-300 mb-5 leading-relaxed">
+                  Experiencing peak patient footfall or seasonal epidemics? Top-up extra patient queue tokens instantly without upgrading your monthly subscription plan.
+                </p>
+
+                <div className="space-y-3 mb-6">
+                  {/* Pack 1: 5,000 */}
+                  <div
+                    onClick={() => setSelectedSurgePack('5K')}
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
+                      selectedSurgePack === '5K'
+                        ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-black text-sm text-slate-900 dark:text-white">5,000 Extra Tokens</span>
+                        <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/60 px-2 py-0.5 rounded-full">Single Clinic</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Valid for 90 days • Instant activation</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
+                        {selectedCurrency.code === 'INR' ? '₹999' : '$15'}
+                      </span>
+                      <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
+                    </div>
+                  </div>
+
+                  {/* Pack 2: 15,000 (Popular) */}
+                  <div
+                    onClick={() => setSelectedSurgePack('15K')}
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between relative ${
+                      selectedSurgePack === '15K'
+                        ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                    }`}
+                  >
+                    <span className="absolute -top-2.5 right-4 px-2 py-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-black uppercase rounded-full shadow-xs">
+                      ★ Most Popular
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-black text-sm text-slate-900 dark:text-white">15,000 Extra Tokens</span>
+                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded-full">Polyclinic</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Valid for 180 days • Zero expiration pressure</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
+                        {selectedCurrency.code === 'INR' ? '₹2,499' : '$39'}
+                      </span>
+                      <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
+                    </div>
+                  </div>
+
+                  {/* Pack 3: 50,000 */}
+                  <div
+                    onClick={() => setSelectedSurgePack('50K')}
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
+                      selectedSurgePack === '50K'
+                        ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-black text-sm text-slate-900 dark:text-white">50,000 Extra Tokens</span>
+                        <span className="text-[10px] font-bold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/60 px-2 py-0.5 rounded-full">Hospital Network</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Full multi-department surge coverage</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
+                        {selectedCurrency.code === 'INR' ? '₹6,999' : '$89'}
+                      </span>
+                      <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowSurgeModal(false)}
+                    className="px-4 py-2.5 text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer"
+                  >
+                    Close
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSurgeModal(false);
+                      navigate(`/signup?addon=token_surge&pack=${selectedSurgePack}&currency=${currencyCode}`);
+                    }}
+                    className="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-black text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                  >
+                    <span>Refill {selectedSurgePack} Tokens</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Payment Gateways Bar */}
           <div className="max-w-4xl mx-auto mt-16 p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-md text-center">

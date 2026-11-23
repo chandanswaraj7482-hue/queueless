@@ -360,27 +360,36 @@ export const CommercialFooter: React.FC = () => {
           </div>
         </div>
 
-        {/* Sleek, Ultra-Luxury Gradient Brand Watermark with Interactive Hover Animation */}
-        <div className="pt-10 pb-6 text-center select-none w-full max-w-full overflow-hidden flex flex-col items-center justify-center relative group">
+        {/* Sleek, Ultra-Luxury Gradient Brand Watermark with Interactive Smooth Scroll-to-Top */}
+        <div
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="pt-10 pb-6 text-center select-none w-full max-w-full overflow-hidden flex flex-col items-center justify-center relative group cursor-pointer"
+          title="Queueless OS • Click to scroll back to top"
+        >
           {/* Interactive Ambient Radial Glow Behind Watermark */}
-          <div className="absolute inset-0 max-w-5xl mx-auto h-44 bg-gradient-to-r from-sky-500/30 via-indigo-500/40 to-teal-400/30 blur-3xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 pointer-events-none" />
+          <div className="absolute inset-0 max-w-4xl mx-auto h-36 bg-gradient-to-r from-sky-500/25 via-indigo-500/35 to-teal-400/25 blur-3xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 pointer-events-none" />
 
           <h2
-            className="relative text-6xl sm:text-8xl md:text-[11rem] lg:text-[14rem] font-black tracking-tight group-hover:tracking-normal select-none leading-none transition-all duration-700 ease-out transform group-hover:scale-[1.03] active:scale-95 cursor-pointer"
+            className="relative text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight select-none leading-none transition-all duration-700 ease-out transform group-hover:scale-[1.02] active:scale-95 cursor-pointer"
             style={{
               background: 'linear-gradient(135deg, #0284c7 0%, #38bdf8 25%, #818cf8 50%, #06b6d4 75%, #10b981 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
               color: 'transparent',
-              filter: 'drop-shadow(0 4px 24px rgba(56, 189, 248, 0.3))',
+              filter: 'drop-shadow(0 4px 20px rgba(56, 189, 248, 0.35))',
             }}
           >
-            Queueless
+            Queueless OS
           </h2>
-          <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-sky-400/70 group-hover:text-sky-300 -mt-2 sm:-mt-4 transition-colors">
-            Autonomous Zero-Wait Clinical Queue Operating System
-          </span>
+          <div className="flex items-center justify-center gap-2 -mt-1 sm:-mt-2 transition-colors">
+            <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-sky-400/80 group-hover:text-sky-300">
+              Autonomous Zero-Wait Clinical Queue Operating System
+            </span>
+            <span className="text-[10px] font-bold text-sky-400/50 group-hover:text-sky-300 transition-colors hidden sm:inline">
+              • Click to scroll to top ↑
+            </span>
+          </div>
         </div>
 
       </div>

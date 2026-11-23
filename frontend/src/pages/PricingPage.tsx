@@ -288,7 +288,7 @@ export const PricingPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {/* Card 1: White-Label Suite */}
               <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-purple-200/90 dark:border-purple-800/80 shadow-md flex flex-col justify-between hover:border-purple-400 transition-all">
                 <div className="space-y-3">
@@ -307,7 +307,7 @@ export const PricingPage: React.FC = () => {
                     </div>
                   </div>
                   <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                    Custom hospital logo on patient passes, 55" TV kiosks, acrylic counter standees, and doctor Rx letterheads.
+                    Custom hospital logo on digital patient passes, 55" waiting TV kiosk displays, printable vector QR kits, and doctor Rx letterheads.
                   </p>
                 </div>
                 <div className="pt-4">
@@ -339,7 +339,7 @@ export const PricingPage: React.FC = () => {
                     </div>
                   </div>
                   <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                    Live token countdown updates, doctor calling notifications, and 1-tap digital Rx PDFs delivered directly on WhatsApp.
+                    Live token countdown updates, doctor calling notifications, and 1-tap digital Rx PDFs delivered directly to patient WhatsApp.
                   </p>
                 </div>
                 <div className="pt-4">
@@ -353,39 +353,7 @@ export const PricingPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Card 3: Counter Hardware Kit */}
-              <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-blue-200/90 dark:border-blue-800/80 shadow-md flex flex-col justify-between hover:border-blue-400 transition-all">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-300 flex items-center justify-center font-bold">
-                    <Printer className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/80 px-2 py-0.5 rounded-md">
-                      One-Time Hardware
-                    </span>
-                    <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
-                      Reception Hardware Kit
-                    </h4>
-                    <div className="text-base font-black text-blue-600 dark:text-blue-400 font-mono mt-0.5">
-                      {selectedCurrency.code === 'INR' ? '₹4,999' : '$69'}<span className="text-[11px] text-slate-400 font-normal"> one-time</span>
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                    58mm high-speed thermal token printer (USB/BT) + 2 acrylic laser QR check-in standees + 500 paper rolls.
-                  </p>
-                </div>
-                <div className="pt-4">
-                  <Link
-                    to={`/signup?addon=hardware_kit&currency=${currencyCode}`}
-                    className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
-                  >
-                    <span>Order Kit</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
-
-              {/* Card 4: Surge Token Refills */}
+              {/* Card 3: Surge Token Refills */}
               <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-amber-200/90 dark:border-amber-800/80 shadow-md flex flex-col justify-between hover:border-amber-400 transition-all">
                 <div className="space-y-3">
                   <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-300 flex items-center justify-center font-bold">
@@ -403,7 +371,7 @@ export const PricingPage: React.FC = () => {
                     </div>
                   </div>
                   <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                    Instant credit top-ups during seasonal patient surges. 5,000 / 15,000 / 50,000 token bundles available with 1 tap.
+                    Instant cloud credit top-ups during seasonal OPD patient surges. 5,000 / 15,000 / 50,000 digital token bundles available with 1 tap.
                   </p>
                 </div>
                 <div className="pt-4">

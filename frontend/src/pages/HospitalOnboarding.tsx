@@ -70,7 +70,6 @@ export const HospitalOnboarding: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<PlanTemplate>(initialPlan);
   const [hardwareAddon, setHardwareAddon] = useState<boolean>(queryAddon);
   const [whatsappAddon, setWhatsappAddon] = useState<boolean>(searchParams.get('addon') === 'whatsapp');
-  const [hardwareKitAddon, setHardwareKitAddon] = useState<boolean>(searchParams.get('addon') === 'hardware_kit');
 
   // Synchronize state dynamically if search params change
   useEffect(() => {
@@ -89,9 +88,6 @@ export const HospitalOnboarding: React.FC = () => {
     }
     if (searchParams.get('addon') === 'whatsapp') {
       setWhatsappAddon(true);
-    }
-    if (searchParams.get('addon') === 'hardware_kit') {
-      setHardwareKitAddon(true);
     }
   }, [searchParams]);
 
@@ -152,8 +148,7 @@ export const HospitalOnboarding: React.FC = () => {
   const planRate = billingCycle === 'ANNUAL' ? rates.annual : rates.monthly;
   const whiteLabelCost = hardwareAddon ? (selectedCurrency.code === 'INR' ? 2999 : 29) : 0;
   const whatsappCost = whatsappAddon ? (selectedCurrency.code === 'INR' ? 1499 : 19) : 0;
-  const hardwareKitCost = hardwareKitAddon ? (selectedCurrency.code === 'INR' ? 4999 : 69) : 0;
-  const totalAmount = planRate + whiteLabelCost + whatsappCost + hardwareKitCost;
+  const totalAmount = planRate + whiteLabelCost + whatsappCost;
 
   // Step 1 Validation
   const handleStep1Submit = (e: React.FormEvent) => {
@@ -758,25 +753,25 @@ export const HospitalOnboarding: React.FC = () => {
                 </div>
               </div>
 
-              {/* Modular Clinical Add-Ons */}
+              {/* Modular Clinical Pure Software Add-Ons */}
               <div className="space-y-3 pt-2">
                 <span className="text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
-                  Select Optional Clinical Add-Ons:
+                  Select Optional Cloud Software Add-Ons:
                 </span>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Addon 1: White-Label */}
                   <div
                     onClick={() => setHardwareAddon(!hardwareAddon)}
-                    className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
                       hardwareAddon
                         ? 'border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
                         : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
                     }`}
                   >
-                    <div className="space-y-1">
+                    <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase text-purple-600 dark:text-purple-400">White-Label</span>
+                        <span className="text-[10px] font-black uppercase text-purple-600 dark:text-purple-400">100% White-Label</span>
                         <input
                           type="checkbox"
                           checked={hardwareAddon}
@@ -784,28 +779,28 @@ export const HospitalOnboarding: React.FC = () => {
                           className="rounded text-purple-600 focus:ring-purple-500 cursor-pointer"
                         />
                       </div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">Custom Hospital Logo</h4>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">
-                        Branding on passes, 55" TV kiosk & prescription headers.
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">Custom Hospital Logo & Branding</h4>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+                        Your hospital branding on patient passes, 55" TV waiting kiosk displays, printable vector QR badges, and doctor Rx letterheads.
                       </p>
                     </div>
-                    <div className="text-xs font-black text-purple-600 dark:text-purple-400 font-mono mt-2">
+                    <div className="text-xs font-black text-purple-600 dark:text-purple-400 font-mono mt-3">
                       +{selectedCurrency.code === 'INR' ? '₹2,999' : '$29'}/mo
                     </div>
                   </div>
 
-                  {/* Addon 2: WhatsApp */}
+                  {/* Addon 2: WhatsApp Alerts & Rx */}
                   <div
                     onClick={() => setWhatsappAddon(!whatsappAddon)}
-                    className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
                       whatsappAddon
                         ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/30'
                         : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
                     }`}
                   >
-                    <div className="space-y-1">
+                    <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase text-emerald-600 dark:text-emerald-400">WhatsApp</span>
+                        <span className="text-[10px] font-black uppercase text-emerald-600 dark:text-emerald-400">WhatsApp Cloud Suite</span>
                         <input
                           type="checkbox"
                           checked={whatsappAddon}
@@ -813,42 +808,13 @@ export const HospitalOnboarding: React.FC = () => {
                           className="rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer"
                         />
                       </div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">WhatsApp Rx & Calling</h4>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">
-                        Token notifications & prescription PDFs sent on WhatsApp.
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">WhatsApp Rx & Calling Notifications</h4>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+                        Real-time token countdown alerts, doctor cabin chimes, and instant digital prescription PDFs delivered to patient WhatsApp.
                       </p>
                     </div>
-                    <div className="text-xs font-black text-emerald-600 dark:text-emerald-400 font-mono mt-2">
+                    <div className="text-xs font-black text-emerald-600 dark:text-emerald-400 font-mono mt-3">
                       +{selectedCurrency.code === 'INR' ? '₹1,499' : '$19'}/mo
-                    </div>
-                  </div>
-
-                  {/* Addon 3: Hardware Kit */}
-                  <div
-                    onClick={() => setHardwareKitAddon(!hardwareKitAddon)}
-                    className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
-                      hardwareKitAddon
-                        ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-950/30'
-                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
-                    }`}
-                  >
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase text-blue-600 dark:text-blue-400">Hardware</span>
-                        <input
-                          type="checkbox"
-                          checked={hardwareKitAddon}
-                          onChange={() => {}}
-                          className="rounded text-blue-600 focus:ring-blue-500 cursor-pointer"
-                        />
-                      </div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white">Counter Hardware Kit</h4>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">
-                        58mm thermal printer + 2 laser acrylic counter standees.
-                      </p>
-                    </div>
-                    <div className="text-xs font-black text-blue-600 dark:text-blue-400 font-mono mt-2">
-                      +{selectedCurrency.code === 'INR' ? '₹4,999' : '$69'} one-time
                     </div>
                   </div>
                 </div>

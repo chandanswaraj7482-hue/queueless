@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { socket } from '../utils/socket';
+import { socket, clinicalSyncChannel } from '../utils/socket';
 import { playClinicVoiceAnnouncement, playClinicChime, SpeechLanguageMode } from '../utils/audio';
 import { API_BASE_URL } from '../config/api';
 import {
@@ -323,10 +323,30 @@ export const DisplayKiosk: React.FC = () => {
     socket.on('patient_called', onCalled);
     socket.on('queue_updated', () => fetchDisplayData());
 
+    const onLocalMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'patient_called') {
+        const callData = event.data.data;
+        if (callData) {
+          lastAnnouncedTokenRef.current = callData.token;
+          setSelectedHeroCabin(callData.roomNumber || 'Cabin 1');
+          triggerCallAnnouncement(callData.token, callData.roomNumber || 'Cabin 1', callData.doctorName);
+          fetchDisplayData();
+        }
+      } else if (event.data?.type === 'queue_updated') {
+        fetchDisplayData();
+      }
+    };
+    if (clinicalSyncChannel) {
+      clinicalSyncChannel.addEventListener('message', onLocalMessage);
+    }
+
     const interval = setInterval(fetchDisplayData, 2500);
     return () => {
       socket.off('patient_called', onCalled);
       socket.off('queue_updated');
+      if (clinicalSyncChannel) {
+        clinicalSyncChannel.removeEventListener('message', onLocalMessage);
+      }
       clearInterval(interval);
     };
   }, [clinicId, data.clinic?.id]);

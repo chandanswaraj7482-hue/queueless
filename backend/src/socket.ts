@@ -33,8 +33,9 @@ export function initSocket(server: HTTPServer) {
         timestamp: payload.timestamp || new Date().toISOString(),
       };
 
-      // Broadcast to all participants in this hospital's room
+      // Broadcast to all participants in this hospital's room and globally with clinicId tag
       io?.to(`clinic_${payload.clinicId}`).emit('intercom_message', messageObj);
+      io?.emit('intercom_message', messageObj);
     });
 
     socket.on('disconnect', () => {});
@@ -45,8 +46,10 @@ export function initSocket(server: HTTPServer) {
 
 export function broadcastQueueUpdate(clinicId: string, event: string, data?: any) {
   if (io) {
-    io.to(`clinic_${clinicId}`).emit(event, data);
-    io.emit('global_queue_change', { clinicId, event, data });
+    const payload = typeof data === 'object' && data !== null ? { ...data, clinicId } : { payload: data, clinicId };
+    io.to(`clinic_${clinicId}`).emit(event, payload);
+    io.emit(event, payload);
+    io.emit('global_queue_change', { clinicId, event, data: payload });
   }
 }
 

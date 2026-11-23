@@ -23,6 +23,7 @@ import { notificationRouter } from './routes/notification';
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', 1);
 const server = http.createServer(app);
 
 // Initialize Socket.io
@@ -75,9 +76,10 @@ app.get('/', (req, res) => {
   });
 });
 
-// Health Check with Firewall Telemetry (supports /health and /healthz)
-app.get(['/health', '/healthz'], (req, res) => {
-  res.json({
+// Health Check with Firewall Telemetry (supports GET & HEAD for Render, Vercel & Uptime monitors)
+app.all(['/health', '/healthz'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.status(200).json({
     status: 'healthy',
     product: 'Queueless Clinic Queue System',
     firewall: {

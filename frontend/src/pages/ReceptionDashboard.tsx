@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { socket } from '../utils/socket';
+import { socket, broadcastLocalSync, clinicalSyncChannel } from '../utils/socket';
 import {
   Users,
   PhoneCall,
@@ -361,12 +361,27 @@ export const ReceptionDashboard: React.FC = () => {
       fetchQueue();
     });
 
+    const onLocalSync = (event: MessageEvent) => {
+      if (event.data?.type === 'patient_called') {
+        playClinicChime();
+        fetchQueue();
+      } else if (event.data?.type === 'queue_updated') {
+        fetchQueue();
+      }
+    };
+    if (clinicalSyncChannel) {
+      clinicalSyncChannel.addEventListener('message', onLocalSync);
+    }
+
     // Resilient Real-Time Fallback Polling (Every 3 seconds)
     const interval = setInterval(fetchQueue, 3000);
 
     return () => {
       socket.off('queue_updated');
       socket.off('patient_called');
+      if (clinicalSyncChannel) {
+        clinicalSyncChannel.removeEventListener('message', onLocalSync);
+      }
       clearInterval(interval);
     };
   }, [clinicId, startDate, endDate, datePreset]);
@@ -555,6 +570,7 @@ export const ReceptionDashboard: React.FC = () => {
         setWalkInName('');
         setWalkInMobile('');
         setWalkInReason('');
+        broadcastLocalSync('queue_updated', { action: 'WALK_IN_ADMITTED' });
         showToast('Walk-in patient admitted successfully!', 'success');
         fetchQueue();
       } else {

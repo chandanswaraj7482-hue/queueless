@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
-import { socket } from '../utils/socket';
+import { socket, broadcastLocalSync } from '../utils/socket';
 import {
   Stethoscope,
   CheckCircle,
@@ -883,10 +883,16 @@ export const DoctorView: React.FC = () => {
             currentDoc?.displayName,
             true
           );
+          broadcastLocalSync('patient_called', {
+            token: targetPatient.token,
+            roomNumber: currentDoc?.roomNumber ? `Cabin ${currentDoc.roomNumber}` : 'Cabin 1',
+            doctorName: currentDoc?.displayName,
+          });
         } else {
           playClinicChime();
         }
       }
+      broadcastLocalSync('queue_updated', { action: 'STATUS_CHANGED', entryId, targetStatus });
       await fetch(`${API_BASE_URL}/api/v1/queue/${entryId}/transition`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

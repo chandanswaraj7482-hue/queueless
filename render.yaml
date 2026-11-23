@@ -5,12 +5,18 @@ services:
     plan: free
     region: oregon # Fast USA Region
     rootDir: backend
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && npx prisma generate && npm run build
     startCommand: npm start
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=450"
+      - key: PORT
+        value: 10000
       - key: DATABASE_URL
         value: postgresql://neondb_owner:npg_2XhIVRtx8Wwu@ep-orange-paper-bcwcy672-pooler.c-16.us-east-1.aws.neon.tech/neondb?sslmode=require
       - key: DATABASE_URL_POOLED

@@ -1,14 +1,23 @@
 import { io } from 'socket.io-client';
 import { SOCKET_BASE_URL } from '../config/api';
 
-const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+// Cross-tab zero-latency local clinical sync bus
+export const clinicalSyncChannel =
+  typeof window !== 'undefined' && 'BroadcastChannel' in window
+    ? new BroadcastChannel('queueless_clinical_sync')
+    : null;
+
+export const broadcastLocalSync = (type: string, data?: any) => {
+  try {
+    clinicalSyncChannel?.postMessage({ type, data, timestamp: Date.now() });
+  } catch (e) {}
+};
 
 export const socket = io(SOCKET_BASE_URL, {
-  autoConnect: isLocal, // Connect automatically on local backend with WebSockets
-  transports: ['websocket'], // Avoid HTTP polling fallback that triggers cross-origin CORS errors on serverless hosts
-  reconnection: isLocal,
-  reconnectionAttempts: 3,
-  timeout: 3000,
+  autoConnect: true,
+  transports: ['websocket', 'polling'],
+  reconnection: true,
+  reconnectionAttempts: 20,
+  reconnectionDelay: 2000,
+  timeout: 8000,
 });
-
-

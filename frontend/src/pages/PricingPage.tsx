@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   CheckCircle2,
   Zap,
@@ -32,9 +32,21 @@ import {
 
 export const PricingPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const queryCurrency = searchParams.get('currency')?.toUpperCase();
+
   const [currencyCode, setCurrencyCode] = useState<string>(() => {
+    if (queryCurrency && WORLDWIDE_CURRENCIES[queryCurrency]) return queryCurrency;
     return localStorage.getItem('queueless_currency') || 'USD';
   });
+
+  useEffect(() => {
+    if (queryCurrency && WORLDWIDE_CURRENCIES[queryCurrency]) {
+      setCurrencyCode(queryCurrency);
+      localStorage.setItem('queueless_currency', queryCurrency);
+    }
+  }, [queryCurrency]);
+
   const [billingCycle, setBillingCycle] = useState<'MONTHLY' | 'ANNUAL'>('MONTHLY');
   const [faqCategory, setFaqCategory] = useState<FaqCategory>('ALL');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);

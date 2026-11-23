@@ -106,12 +106,14 @@ export const HospitalOnboarding: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
-  const [receptionPin, setReceptionPin] = useState('2026');
-  const [doctorPin, setDoctorPin] = useState('1234');
+  const [receptionPin, setReceptionPin] = useState('');
+  const [doctorPin, setDoctorPin] = useState('');
   const [doctorCabinSlug, setDoctorCabinSlug] = useState('cabin-1');
   const [initialDoctorName, setInitialDoctorName] = useState('');
   const [initialDoctorSpecialty, setInitialDoctorSpecialty] = useState('General Medicine');
   const [initialDoctorRoom, setInitialDoctorRoom] = useState('Cabin 1');
+
+  const generateRandomPin = () => Math.floor(1000 + Math.random() * 9000).toString();
 
   // Step 3: Payment Gateway (Dodo Payments, Cashfree)
   const [paymentGateway, setPaymentGateway] = useState<'DODOPAYMENTS' | 'CASHFREE'>(
@@ -171,6 +173,12 @@ export const HospitalOnboarding: React.FC = () => {
     if (!adminEmail.trim() || !adminPassword.trim()) {
       setErrorMsg('Please specify Admin Login Email and Password');
       return;
+    }
+    if (!receptionPin.trim()) {
+      setReceptionPin(generateRandomPin());
+    }
+    if (!doctorPin.trim()) {
+      setDoctorPin(generateRandomPin());
     }
     setErrorMsg(null);
     setCurrentStep(2);
@@ -443,13 +451,28 @@ export const HospitalOnboarding: React.FC = () => {
                     <Stethoscope className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/60 px-2 py-0.5 rounded-full border border-blue-300/70 dark:border-blue-700">
                         Selected Plan
                       </span>
                       <span className="text-xs font-black text-slate-900 dark:text-white">
                         {selectedPlan.name}
                       </span>
+                      {hardwareAddon && (
+                        <span className="text-[10px] font-bold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/50 px-2 py-0.5 rounded-full border border-purple-300">
+                          + Full White-Label Suite
+                        </span>
+                      )}
+                      {whatsappAddon && (
+                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/50 px-2 py-0.5 rounded-full border border-emerald-300">
+                          + WhatsApp Alerts & Rx Suite
+                        </span>
+                      )}
+                      {tokenSurgeAddon && (
+                        <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/50 px-2 py-0.5 rounded-full border border-amber-300">
+                          + Surge Token Pack
+                        </span>
+                      )}
                     </div>
                     <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
                       {selectedPlan.id === 'STARTER'
@@ -670,14 +693,20 @@ export const HospitalOnboarding: React.FC = () => {
                           <Users className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                           <span>Reception Desk PIN *</span>
                         </label>
-                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Counter PIN</span>
+                        <button
+                          type="button"
+                          onClick={() => setReceptionPin(generateRandomPin())}
+                          className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold hover:underline cursor-pointer"
+                        >
+                          🎲 Random PIN
+                        </button>
                       </div>
                       <input
                         type="text"
                         required
                         value={receptionPin}
                         onChange={(e) => setReceptionPin(e.target.value)}
-                        placeholder="e.g. 2026 or rec123"
+                        placeholder="e.g. 5821 (Unique 4-Digit)"
                         className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                       />
                       <p className="text-[10px] text-slate-500 dark:text-slate-400">
@@ -692,14 +721,20 @@ export const HospitalOnboarding: React.FC = () => {
                           <Stethoscope className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                           <span>Doctor Cabin PIN *</span>
                         </label>
-                        <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold">Doctor 4-Digit</span>
+                        <button
+                          type="button"
+                          onClick={() => setDoctorPin(generateRandomPin())}
+                          className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold hover:underline cursor-pointer"
+                        >
+                          🎲 Random PIN
+                        </button>
                       </div>
                       <input
                         type="text"
                         required
                         value={doctorPin}
                         onChange={(e) => setDoctorPin(e.target.value)}
-                        placeholder="e.g. 1234 or 4321"
+                        placeholder="e.g. 3942 (Unique 4-Digit)"
                         className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                       />
                       <p className="text-[10px] text-slate-500 dark:text-slate-400">
@@ -764,7 +799,7 @@ export const HospitalOnboarding: React.FC = () => {
                           <span className="text-[9px] bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold px-1.5 py-0.5 rounded">STAFF</span>
                         </div>
                         <span className="font-mono text-emerald-600 dark:text-emerald-400 text-[10px] block truncate">/reception/{slug || 'clinic'}</span>
-                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 block mt-0.5">PIN: {receptionPin || '2026'}</span>
+                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 block mt-0.5">PIN: {receptionPin || 'Unique PIN (Set Above)'}</span>
                       </div>
 
                       <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
@@ -773,7 +808,7 @@ export const HospitalOnboarding: React.FC = () => {
                           <span className="text-[9px] bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold px-1.5 py-0.5 rounded">DOCTOR</span>
                         </div>
                         <span className="font-mono text-indigo-600 dark:text-indigo-400 text-[10px] block truncate">/doctor/{slug || 'clinic'}/{doctorCabinSlug || 'cabin-1'}</span>
-                        <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 block mt-0.5">PIN: {doctorPin || '1234'}</span>
+                        <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 block mt-0.5">PIN: {doctorPin || 'Unique PIN (Set Above)'}</span>
                       </div>
 
                       <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">

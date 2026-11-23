@@ -427,8 +427,10 @@ const CLINICAL_REELS: ClinicalReel[] = [
 
 export const QueuelessWebsite: React.FC = () => {
   // Global Currency State
-  const [selectedCurrencyCode, setSelectedCurrencyCode] = useState<string>('USD');
-  const selectedCurrency = WORLDWIDE_CURRENCIES[selectedCurrencyCode] || WORLDWIDE_CURRENCIES.USD;
+  const [selectedCurrencyCode, setSelectedCurrencyCode] = useState<string>(
+    () => (typeof window !== 'undefined' ? localStorage.getItem('queueless_currency') || 'INR' : 'INR')
+  );
+  const selectedCurrency = WORLDWIDE_CURRENCIES[selectedCurrencyCode] || WORLDWIDE_CURRENCIES.INR;
 
   // Billing Cycle State
   const [billingCycle, setBillingCycle] = useState<'MONTHLY' | 'ANNUAL'>('ANNUAL');
@@ -679,6 +681,16 @@ export const QueuelessWebsite: React.FC = () => {
   const [auditFee, setAuditFee] = useState(WORLDWIDE_CURRENCIES[selectedCurrencyCode]?.defaultFee || 25);
   const [auditDoctors, setAuditDoctors] = useState(4);
 
+  // Close audit modal on Escape key press
+  useEffect(() => {
+    if (!showAuditModal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowAuditModal(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showAuditModal]);
+
   // Auto-sync audit fee when selected currency changes
   useEffect(() => {
     if (selectedCurrency?.defaultFee) {
@@ -701,6 +713,7 @@ export const QueuelessWebsite: React.FC = () => {
   };
 
   const handleSelectCurrency = (code: string) => {
+    localStorage.setItem('queueless_currency', code);
     setSelectedCurrencyCode(code);
     const curr = WORLDWIDE_CURRENCIES[code];
     if (curr) {
@@ -1645,12 +1658,12 @@ export const QueuelessWebsite: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Metric 4: 50+ Hospitals Onboarded */}
+                {/* Metric 4: 450+ Hospitals Onboarded */}
                 <div className="flex flex-col items-center justify-center text-center px-3 sm:px-5 lg:px-7 lg:border-l border-white/20">
                   <div className="flex items-center justify-center gap-2">
                     <BriefcaseMedical className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 stroke-[2.3]" />
                     <span className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
-                      50+
+                      450+
                     </span>
                   </div>
                   <div className="text-[11px] sm:text-xs text-cyan-100 font-bold leading-tight mt-1.5">
@@ -3525,7 +3538,7 @@ export const QueuelessWebsite: React.FC = () => {
                   </h3>
                 </div>
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Transparent clinical tier plans starting at ₹2,999/mo ($58/mo). ABDM Level 3 certified with zero hidden fees.
+                  Transparent clinical tier plans starting at ₹8,333/mo ($149/mo) with annual savings. ABDM Level 3 certified with zero hidden fees.
                 </p>
               </div>
               <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
@@ -4526,6 +4539,7 @@ export const QueuelessWebsite: React.FC = () => {
           <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative max-h-[90vh] overflow-y-auto my-auto">
             <button
               onClick={() => setShowAuditModal(false)}
+              aria-label="Close OPD Audit Modal"
               className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />

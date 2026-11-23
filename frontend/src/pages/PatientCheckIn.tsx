@@ -298,8 +298,11 @@ export const PatientCheckIn: React.FC = () => {
   }, [mobile, doctorId, clinic?.id]);
 
   const selectedService = clinic?.services?.find((s) => s.id === serviceId);
-  const baseServiceFee = selectedService?.fee && selectedService.fee > 0 ? selectedService.fee : 250;
-  const isFreeFollowUp = !!followUpData?.isFollowUpEligible && (followUpData?.isFreeFollowUp ?? true);
+  const isFollowUpService = selectedService?.fee === 0 || (selectedService?.name?.toLowerCase()?.includes('follow-up') ?? false);
+  const baseServiceFee = selectedService
+    ? (selectedService.fee !== undefined && selectedService.fee !== null ? selectedService.fee : 250)
+    : 250;
+  const isFreeFollowUp = isFollowUpService || (!!followUpData?.isFollowUpEligible && (followUpData?.isFreeFollowUp ?? true));
   const consultationFee = isFreeFollowUp
     ? 0
     : followUpData?.followUpFee !== undefined
@@ -511,6 +514,12 @@ export const PatientCheckIn: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setCreatedEntry(data.data);
+        if (consultationFee === 0) {
+          // Free follow-up: skip payment step completely and navigate to live pass
+          const targetToken = data.data.publicToken || data.data.token;
+          navigate(`/token/${targetToken}`);
+          return;
+        }
         setStep('PAYMENT');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
@@ -555,6 +564,12 @@ export const PatientCheckIn: React.FC = () => {
         stored[generatedPublicToken] = fallbackEntry;
         localStorage.setItem('queueless_local_entries', JSON.stringify(stored));
       } catch (e) { }
+
+      if (consultationFee === 0) {
+        // Free follow-up: skip payment step completely!
+        navigate(`/token/${generatedPublicToken}`);
+        return;
+      }
 
       setCreatedEntry({
         queueEntryId: fallbackEntry.queueEntryId,
@@ -843,7 +858,8 @@ export const PatientCheckIn: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 {clinic?.services?.filter((srv) => srv.active !== false).map((srv) => {
                   const isSelected = serviceId === srv.id;
-                  const displayFee = srv.fee && srv.fee > 0 ? srv.fee : 250;
+                  const isFollowUp = srv.fee === 0 || srv.name?.toLowerCase().includes('follow-up');
+                  const displayFee = isFollowUp ? 0 : (srv.fee !== undefined && srv.fee !== null ? srv.fee : 250);
                   return (
                     <button
                       key={srv.id}
@@ -856,7 +872,7 @@ export const PatientCheckIn: React.FC = () => {
                     >
                       <div className="text-xs font-black text-slate-900 leading-snug">{srv.name}</div>
                       <div className="text-xs font-black text-emerald-600 mt-1.5 font-mono">
-                        ₹{displayFee}
+                        {isFollowUp ? '100% FREE (₹0)' : `₹${displayFee}`}
                       </div>
                     </button>
                   );
@@ -1161,11 +1177,11 @@ export const PatientCheckIn: React.FC = () => {
               <>
                 <div className="flex items-center gap-2 shrink-0 ml-2">
                   <Zap className="w-4 h-4 fill-white text-white" />
-                  <span>Proceed to Live Token & Queue</span>
+                  <span>{consultationFee === 0 ? 'Generate Free OPD Token Pass' : 'Proceed to Live Token & Queue'}</span>
                 </div>
                 <div className="flex items-center gap-1.5 font-mono">
                   <span className="font-black text-white bg-white/20 px-2.5 py-0.5 rounded-lg text-xs">
-                    ₹{consultationFee}
+                    {consultationFee === 0 ? '₹0 FREE' : `₹${consultationFee}`}
                   </span>
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </div>
@@ -1304,23 +1320,45 @@ export const PatientCheckIn: React.FC = () => {
               </div>
               <span className="text-3xl font-black font-mono text-slate-900 dark:text-white mt-0.5 flex items-center gap-2">
                 <span>{createdEntry.token}</span>
-                <span className="text-[10px] font-bold text-amber-900 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full font-sans">
-                  Awaiting Approval
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full font-sans ${createdEntry.feeAmount === 0 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'text-amber-900 bg-amber-100 border border-amber-300'}`}>
+                  {createdEntry.feeAmount === 0 ? '100% Free Follow-Up' : 'Awaiting Approval'}
                 </span>
               </span>
             </div>
             <div className="text-right">
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Payable</span>
-              <span className="text-3xl font-black text-slate-900 dark:text-white mt-0.5 block">₹{createdEntry.feeAmount}</span>
+              <span className="text-3xl font-black text-slate-900 dark:text-white mt-0.5 block">
+                {createdEntry.feeAmount === 0 ? '₹0 FREE' : `₹${createdEntry.feeAmount}`}
+              </span>
             </div>
           </div>
 
-          <div className="p-3.5 bg-amber-50/90 border border-amber-200/90 rounded-2xl flex items-center gap-2.5 text-xs text-amber-900 font-medium">
-            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-            <span>
-              <strong>OPD Approval Policy:</strong> Token <strong>{createdEntry.token}</strong> is reserved for you. Pay via Instant UPI for immediate queue admission, or pay Cash at Counter 1 where receptionist will enter Token <strong>{createdEntry.token}</strong> and approve you!
-            </span>
-          </div>
+          {createdEntry.feeAmount === 0 ? (
+            <div className="p-5 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-3 text-center">
+              <div className="flex items-center justify-center gap-2 text-emerald-800 font-bold text-sm">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                <span>Zero Consultation Fee Applied (15-Day Free Follow-Up Policy)</span>
+              </div>
+              <p className="text-xs text-emerald-700">
+                Token <strong>{createdEntry.token}</strong> is reserved and active. No payment required.
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate(`/token/${createdEntry.publicToken || createdEntry.token}`)}
+                className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Open Live Token Pass Now</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            <div className="p-3.5 bg-amber-50/90 border border-amber-200/90 rounded-2xl flex items-center gap-2.5 text-xs text-amber-900 font-medium">
+              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>
+                <strong>OPD Approval Policy:</strong> Token <strong>{createdEntry.token}</strong> is reserved for you. Pay via Instant UPI for immediate queue admission, or pay Cash at Counter 1 where receptionist will enter Token <strong>{createdEntry.token}</strong> and approve you!
+              </span>
+            </div>
+          )}
 
           {/* Payment Method Selector */}
           <div className="space-y-3">

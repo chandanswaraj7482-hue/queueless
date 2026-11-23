@@ -328,11 +328,17 @@ interface QueueItem {
   };
 }
 
+const DEFAULT_CITY_HEALTH_DOCTORS = [
+  { id: 'doc-1', displayName: 'Dr. Rohan Sharma, MD', specialty: 'General Medicine & OPD', roomNumber: 'Cabin 1' },
+  { id: 'doc-2', displayName: 'Dr. Priya Patel, DNB', specialty: 'Pediatrics & Child Health', roomNumber: 'Cabin 2' },
+  { id: 'doc-3', displayName: 'Dr. Rajiv Mehra, MD', specialty: 'Cardiology & Heart Care', roomNumber: 'Cabin 3' },
+];
+
 export const DoctorView: React.FC = () => {
   const [clinicId, setClinicId] = useState<string>('85234de5-9582-4220-a9c7-e862fa7e742d');
   const [clinicData, setClinicData] = useState<any>(null);
-  const [doctors, setDoctors] = useState<Array<{ id: string; displayName: string; specialty: string; roomNumber: string }>>([]);
-  const [selectedDoctorId, setSelectedDoctorId] = useState<string>('');
+  const [doctors, setDoctors] = useState<Array<{ id: string; displayName: string; specialty: string; roomNumber: string }>>(DEFAULT_CITY_HEALTH_DOCTORS);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string>('doc-1');
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileTab, setMobileTab] = useState<'consultation' | 'queue' | 'history'>('consultation');
@@ -344,7 +350,7 @@ export const DoctorView: React.FC = () => {
       !!getAuthSession('ADMIN')
     );
   });
-  const [loginDoctorId, setLoginDoctorId] = useState<string>('');
+  const [loginDoctorId, setLoginDoctorId] = useState<string>('doc-1');
   const [doctorPasswordInput, setDoctorPasswordInput] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loggingIn, setLoggingIn] = useState(false);

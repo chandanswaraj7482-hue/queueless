@@ -58,10 +58,9 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
     WORLDWIDE_CURRENCIES[currentCurrencyCode] || WORLDWIDE_CURRENCIES.USD;
 
   const handleCurrencySelect = (code: string) => {
+    localStorage.setItem('queueless_currency', code);
     if (onCurrencyChange) {
       onCurrencyChange(code);
-    } else {
-      localStorage.setItem('queueless_currency', code);
     }
   };
 

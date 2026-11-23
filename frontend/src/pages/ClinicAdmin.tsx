@@ -49,6 +49,7 @@ import {
   FileDown,
 } from 'lucide-react';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
+import { playClinicChime } from '../utils/audio';
 
 import { API_BASE_URL } from '../config/api';
 const PRESET_LOGOS = [
@@ -119,9 +120,28 @@ export const ClinicAdmin: React.FC = () => {
   const [clinic, setClinic] = useState<any>(null);
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'ANALYTICS' | 'DOCTORS' | 'SERVICES' | 'PAYMENTS' | 'PROFILE' | 'RULES' | 'SECURITY' | 'STANDEE'>('OVERVIEW');
+  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'ANALYTICS' | 'DOCTORS' | 'SERVICES' | 'PAYMENTS' | 'PROFILE' | 'RULES' | 'SECURITY' | 'STANDEE' | 'ADDONS'>('OVERVIEW');
   const [downloading, setDownloading] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Add-Ons & Upgrades Hub State
+  const [addonWhiteLabelActive, setAddonWhiteLabelActive] = useState<boolean>(() => {
+    return localStorage.getItem('queueless_whitelabel_active_' + activeSlug) !== 'false';
+  });
+  const [addonLogoInput, setAddonLogoInput] = useState<string>(() => {
+    return localStorage.getItem('queueless_clinic_logo_' + activeSlug) || '';
+  });
+  const [addonBrandColor, setAddonBrandColor] = useState<string>('#0284c7');
+  const [addonWhatsappActive, setAddonWhatsappActive] = useState<boolean>(true);
+  const [addonWhatsappNumber, setAddonWhatsappNumber] = useState<string>('+91 98765 43210');
+  const [addonTokenCredits, setAddonTokenCredits] = useState<number>(() => {
+    const saved = localStorage.getItem('queueless_tokens_' + activeSlug);
+    return saved ? parseInt(saved, 10) : 8420;
+  });
+  const [addonTokenMax, setAddonTokenMax] = useState<number>(() => {
+    const saved = localStorage.getItem('queueless_tokens_max_' + activeSlug);
+    return saved ? parseInt(saved, 10) : 10000;
+  });
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -1281,6 +1301,19 @@ export const ClinicAdmin: React.FC = () => {
         >
           <QrCode className="w-4 h-4" />
           <span>Print / Download Standee</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('ADDONS')}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer shrink-0 ${
+            activeTab === 'ADDONS'
+              ? 'bg-amber-50 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 shadow-sm border border-amber-200/60 dark:border-amber-800/60 font-bold'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
+          <span>Add-Ons & Upgrades</span>
+          <span className="text-[9px] bg-gradient-to-r from-amber-500 to-orange-500 text-white px-1.5 py-0.5 rounded-full font-black uppercase tracking-wider">MODULAR</span>
         </button>
       </div>
 
@@ -2991,6 +3024,306 @@ export const ClinicAdmin: React.FC = () => {
               <div className="mt-8 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400 font-medium">
                 <img src="/logo.png" alt="Queueless" className="w-4 h-4 rounded-md object-cover shadow-xs" />
                 <span>Powered by Queueless • Smart Clinic OS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* TAB 10: POWER-UP ADD-ONS & MODULAR UPGRADES                    */}
+      {/* ============================================================== */}
+      {activeTab === 'ADDONS' && (
+        <div className="space-y-6 print:hidden">
+          {/* Header Banner */}
+          <div className="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-indigo-500/10 dark:from-amber-950/40 dark:via-orange-950/30 dark:to-indigo-950/40 p-6 sm:p-8 rounded-3xl border border-amber-200/80 dark:border-amber-800/60 shadow-xs relative overflow-hidden">
+            <div className="relative z-10 max-w-3xl space-y-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 rounded-full text-[10px] font-black uppercase tracking-wider border border-amber-300/80 dark:border-amber-700">
+                <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                <span>Hospital Modular Add-Ons</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                Power-Up Your Clinical OPD Infrastructure
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                Mix and match modular upgrades anytime. 100% cloud setup with zero disruption to active consultation queues.
+              </p>
+              <div className="flex flex-wrap items-center gap-2 pt-2">
+                <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Instant 1-Click Cloud Deployment</span>
+                </span>
+                <span className="text-[11px] font-bold text-sky-700 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/60 border border-sky-200 dark:border-sky-800 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
+                  <span>Zero Downtime Guaranteed</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 3 Modular Upgrade Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Card 1: Full White-Label Suite */}
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-5">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-2xl bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                    <Sparkles className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/60 px-2.5 py-1 rounded-full border border-purple-300/70">
+                    {addonWhiteLabelActive ? 'Active Suite' : 'Ready to Activate'}
+                  </span>
+                </div>
+
+                <div>
+                  <span className="text-[10px] font-black text-purple-600 uppercase tracking-wider">Brand Customization</span>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">Full White-Label Suite</h3>
+                  <div className="text-xs font-black text-slate-700 dark:text-slate-300 font-mono mt-0.5">
+                    ₹2,999<span className="text-[10px] font-normal text-slate-400 font-sans">/mo ($29/mo)</span>
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                    Custom hospital logo and brand colors across patient mobile tokens, 55" waiting TV displays, and print vectors.
+                  </p>
+                </div>
+
+                {/* White-Label Customization Controls */}
+                <div className="p-4 bg-slate-50 dark:bg-slate-950/60 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3 text-left">
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                    Hospital Logo Image URL:
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="https://example.com/logo.png"
+                    value={addonLogoInput}
+                    onChange={(e) => setAddonLogoInput(e.target.value)}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+
+                  {/* Preset Hospital Logos */}
+                  <div>
+                    <span className="text-[10px] text-slate-400 block mb-1.5 font-semibold">Or Pick a Standard Clinical Preset:</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { name: 'City Health', url: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=120&auto=format&fit=crop&q=80' },
+                        { name: 'Metro Multispecialty', url: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=120&auto=format&fit=crop&q=80' },
+                        { name: 'Apex Heart & Ortho', url: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=120&auto=format&fit=crop&q=80' },
+                      ].map((preset) => (
+                        <button
+                          key={preset.name}
+                          type="button"
+                          onClick={() => setAddonLogoInput(preset.url)}
+                          className="px-2 py-1 text-[10px] font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-purple-500 transition-colors"
+                        >
+                          {preset.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Live Mini Preview */}
+                  <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-3">
+                    {addonLogoInput ? (
+                      <img src={addonLogoInput} alt="Preview" className="w-10 h-10 object-contain rounded-lg border border-slate-100" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">
+                        LOGO
+                      </div>
+                    )}
+                    <div className="overflow-hidden">
+                      <span className="text-xs font-black text-slate-900 dark:text-white block truncate">
+                        {clinic?.name || 'City Health OPD'}
+                      </span>
+                      <span className="text-[10px] text-emerald-600 font-bold block">
+                        ✓ Digital Token & 55" TV Branded
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  try {
+                    localStorage.setItem('queueless_clinic_logo_' + activeSlug, addonLogoInput.trim());
+                    localStorage.setItem('queueless_whitelabel_active_' + activeSlug, 'true');
+                    setAddonWhiteLabelActive(true);
+                    if (clinic) {
+                      setClinic({ ...clinic, logoUrl: addonLogoInput.trim() });
+                    }
+                    playClinicChime();
+                    showToast('🎉 White-Label Branding saved and applied across all live portals!');
+                  } catch (e) {
+                    showToast('Saved white-label configuration.');
+                  }
+                }}
+                className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Save & Apply White-Label Branding</span>
+              </button>
+            </div>
+
+            {/* Card 2: WhatsApp Alerts & Rx Suite */}
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-5">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                    <MessageSquare className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-1 rounded-full border border-emerald-300/70">
+                    Live Active
+                  </span>
+                </div>
+
+                <div>
+                  <span className="text-[10px] font-black text-emerald-600 uppercase tracking-wider">Patient Communications</span>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">WhatsApp Alerts & Rx</h3>
+                  <div className="text-xs font-black text-slate-700 dark:text-slate-300 font-mono mt-0.5">
+                    ₹1,499<span className="text-[10px] font-normal text-slate-400 font-sans">/mo ($19/mo)</span>
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                    Live token countdown updates, doctor calling notifications, and 1-tap digital Rx PDFs delivered directly to patient WhatsApp.
+                  </p>
+                </div>
+
+                {/* WhatsApp Dispatcher Interactive Test */}
+                <div className="p-4 bg-slate-50 dark:bg-slate-950/60 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3 text-left">
+                  <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                    Test Patient Mobile Number:
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="+91 98765 43210"
+                    value={addonWhatsappNumber}
+                    onChange={(e) => setAddonWhatsappNumber(e.target.value)}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
+                  />
+
+                  <div className="space-y-1.5 text-[11px] text-slate-600 dark:text-slate-400">
+                    <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-semibold">
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Auto-countdown (3 patients ahead)</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-semibold">
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Doctor Cabin Calling 1-tap summon</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-semibold">
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Doctor Rx PDF link delivery</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const cleanPhone = addonWhatsappNumber.replace(/\D/g, '').slice(-10) || '9876543210';
+                  const text =
+                    `🏥 *${clinic?.name || 'City Health Multi-Specialty Hospital'} - OPD Live Alert*\n\n` +
+                    `Hello Patient! Your turn is approaching.\n\n` +
+                    `🎫 *Token:* A-104\n` +
+                    `👨‍⚕️ *Doctor:* Dr. Rohan Sharma, MD (Cabin 1)\n` +
+                    `⏳ *Estimated Wait:* 4 Minutes (1 Patient Ahead)\n\n` +
+                    `🔗 *Track Live Token on Mobile:*\n` +
+                    `https://queueless-os.vercel.app/check-in/${activeSlug}\n\n` +
+                    `_Powered by Queueless Clinical OS_`;
+                  const waUrl = `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(text)}`;
+                  window.open(waUrl, '_blank');
+                  playClinicChime();
+                  showToast('📲 Dispatched live WhatsApp alert test! Check opened window.');
+                }}
+                className="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Dispatch Test WhatsApp Alert</span>
+              </button>
+            </div>
+
+            {/* Card 3: Surge Token Packs */}
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-5">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                    <Zap className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/60 px-2.5 py-1 rounded-full border border-amber-300/70">
+                    Auto-Refill Available
+                  </span>
+                </div>
+
+                <div>
+                  <span className="text-[10px] font-black text-amber-600 uppercase tracking-wider">Pay-As-You-Grow</span>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">Surge Token Packs</h3>
+                  <div className="text-xs font-black text-slate-700 dark:text-slate-300 font-mono mt-0.5">
+                    ₹999 – ₹6,999<span className="text-[10px] font-normal text-slate-400 font-sans"> ($15 – $89)</span>
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                    Instant cloud credit top-ups during seasonal OPD patient surges. 5,000 / 15,000 / 50,000 digital token bundles available with 1 tap.
+                  </p>
+                </div>
+
+                {/* Quota Meter */}
+                <div className="p-4 bg-slate-50 dark:bg-slate-950/60 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2 text-left">
+                  <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
+                    <span>Monthly OPD Token Quota:</span>
+                    <span className="font-mono text-amber-600 dark:text-amber-400">
+                      {addonTokenCredits.toLocaleString()} / {addonTokenMax.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div
+                      className="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full transition-all duration-500"
+                      style={{ width: `${Math.min(100, Math.round((addonTokenCredits / addonTokenMax) * 100))}%` }}
+                    />
+                  </div>
+                  <span className="text-[10px] text-slate-400 block">
+                    Zero cutoff policy: Token creation is never blocked during peak patient admissions.
+                  </span>
+                </div>
+
+                {/* Refill Pack Buttons */}
+                <div className="space-y-2">
+                  {[
+                    { label: '+5,000 Tokens Pack', price: '₹999 ($15)', amount: 5000 },
+                    { label: '+15,000 Surge Pack (Popular)', price: '₹2,499 ($39)', amount: 15000, highlight: true },
+                    { label: '+50,000 Hospital Pack', price: '₹6,999 ($89)', amount: 50000 },
+                  ].map((pack) => (
+                    <button
+                      key={pack.amount}
+                      type="button"
+                      onClick={() => {
+                        const nextCredits = addonTokenCredits + pack.amount;
+                        const nextMax = addonTokenMax + pack.amount;
+                        setAddonTokenCredits(nextCredits);
+                        setAddonTokenMax(nextMax);
+                        try {
+                          localStorage.setItem('queueless_tokens_' + activeSlug, String(nextCredits));
+                          localStorage.setItem('queueless_tokens_max_' + activeSlug, String(nextMax));
+                        } catch (e) {}
+                        playClinicChime();
+                        showToast(`🎉 Added ${pack.amount.toLocaleString()} Surge Tokens to your clinic quota!`);
+                      }}
+                      className={`w-full py-2 px-3 text-xs font-bold rounded-xl border transition-all flex items-center justify-between cursor-pointer active:scale-95 ${
+                        pack.highlight
+                          ? 'bg-amber-500 hover:bg-amber-600 text-white border-amber-600 shadow-sm'
+                          : 'bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>{pack.label}</span>
+                      </div>
+                      <span className="font-mono text-[11px]">{pack.price}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="text-[10px] text-center text-slate-400">
+                Credits are added immediately with zero downtime or reboot required.
               </div>
             </div>
           </div>

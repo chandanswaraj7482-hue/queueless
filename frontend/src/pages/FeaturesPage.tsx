@@ -25,7 +25,7 @@ import { SeoHead } from '../components/SeoHead';
 import { GLOBAL_COMPLIANCE } from '../data/commercialData';
 
 export const FeaturesPage: React.FC = () => {
-  const [currencyCode, setCurrencyCode] = useState<string>('USD');
+  const [currencyCode, setCurrencyCode] = useState<string>(() => localStorage.getItem('queueless_currency') || 'USD');
 
   return (
     <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans relative overflow-x-clip flex flex-col transition-colors duration-200">
@@ -37,7 +37,10 @@ export const FeaturesPage: React.FC = () => {
       />
       <CommercialNavbar
         currentCurrencyCode={currencyCode}
-        onCurrencyChange={(code) => setCurrencyCode(code)}
+        onCurrencyChange={(code) => {
+          localStorage.setItem('queueless_currency', code);
+          setCurrencyCode(code);
+        }}
       />
 
       <main className="flex-1">

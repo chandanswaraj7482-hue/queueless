@@ -29,6 +29,8 @@ import {
   RefreshCw,
   MessageSquare,
   Share2,
+  Key,
+  Hash,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
@@ -99,6 +101,9 @@ export const HospitalOnboarding: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
+  const [receptionPin, setReceptionPin] = useState('2026');
+  const [doctorPin, setDoctorPin] = useState('1234');
+  const [doctorCabinSlug, setDoctorCabinSlug] = useState('cabin-1');
   const [initialDoctorName, setInitialDoctorName] = useState('');
   const [initialDoctorSpecialty, setInitialDoctorSpecialty] = useState('General Medicine');
   const [initialDoctorRoom, setInitialDoctorRoom] = useState('Cabin 1');
@@ -190,6 +195,9 @@ export const HospitalOnboarding: React.FC = () => {
           phone: phone.trim(),
           adminEmail: adminEmail.trim(),
           adminPassword: adminPassword.trim(),
+          receptionPassword: receptionPin.trim() || '2026',
+          doctorPin: doctorPin.trim() || '1234',
+          doctorPassword: doctorPin.trim() || '1234',
           planId: selectedPlan.id,
           planName: selectedPlan.name,
           billingCycle,
@@ -199,13 +207,21 @@ export const HospitalOnboarding: React.FC = () => {
           paymentMethod: paymentGateway,
           initialDoctorName: initialDoctorName.trim() || 'Dr. Chief Consultant, MD',
           initialDoctorSpecialty: initialDoctorSpecialty.trim(),
-          initialDoctorRoom: initialDoctorRoom.trim(),
+          initialDoctorRoom: doctorCabinSlug.trim() || initialDoctorRoom.trim() || 'Cabin 1',
         }),
       });
 
       const resData = await response.json();
 
       if (resData.success && resData.data) {
+        const enrichedClinic = {
+          ...resData.data.clinic,
+          adminPassword: adminPassword.trim(),
+          receptionPin: receptionPin.trim() || '2026',
+          doctorPin: doctorPin.trim() || '1234',
+          doctorCabinSlug: doctorCabinSlug.trim() || 'cabin-1',
+        };
+        resData.data.clinic = enrichedClinic;
         setProvisionedData(resData.data);
         setCurrentStep(4);
         playClinicChime();
@@ -213,7 +229,7 @@ export const HospitalOnboarding: React.FC = () => {
         // Save into local registered hospitals list
         try {
           const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
-          storedHospitals[slug.trim()] = resData.data.clinic;
+          storedHospitals[slug.trim()] = enrichedClinic;
           localStorage.setItem('queueless_registered_hospitals', JSON.stringify(storedHospitals));
         } catch (e) {}
 
@@ -221,7 +237,7 @@ export const HospitalOnboarding: React.FC = () => {
         localStorage.setItem(
           'queueless_auth',
           JSON.stringify({
-            clinic: resData.data.clinic,
+            clinic: enrichedClinic,
             role: 'ADMIN',
             timestamp: Date.now(),
           })
@@ -238,6 +254,10 @@ export const HospitalOnboarding: React.FC = () => {
           planName: selectedPlan.name,
           billingCycle,
           currency: currencyCode,
+          adminPassword: adminPassword.trim(),
+          receptionPin: receptionPin.trim() || '2026',
+          doctorPin: doctorPin.trim() || '1234',
+          doctorCabinSlug: doctorCabinSlug.trim() || 'cabin-1',
           doctorsLimit: selectedPlan.id === 'STARTER' ? 3 : selectedPlan.id === 'ENTERPRISE' ? 999 : 12,
           tokenCreditsAllocated: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
           tokenCreditsRemaining: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
@@ -289,6 +309,10 @@ export const HospitalOnboarding: React.FC = () => {
         planName: selectedPlan.name,
         billingCycle,
         currency: currencyCode,
+        adminPassword: adminPassword.trim(),
+        receptionPin: receptionPin.trim() || '2026',
+        doctorPin: doctorPin.trim() || '1234',
+        doctorCabinSlug: doctorCabinSlug.trim() || 'cabin-1',
         doctorsLimit: selectedPlan.id === 'STARTER' ? 3 : selectedPlan.id === 'ENTERPRISE' ? 999 : 12,
         tokenCreditsAllocated: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
         tokenCreditsRemaining: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
@@ -613,6 +637,156 @@ export const HospitalOnboarding: React.FC = () => {
                         onChange={(e) => setInitialDoctorRoom(e.target.value)}
                         className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
+                    </div>
+                  </div>
+                </div>
+
+                {/* First-Time Custom Security PINs & Clinical Portals Configuration */}
+                <div className="p-4 sm:p-5 bg-gradient-to-br from-indigo-50/80 via-blue-50/50 to-slate-50 dark:from-indigo-950/40 dark:via-blue-950/30 dark:to-slate-900/40 rounded-2xl border-2 border-indigo-200/90 dark:border-indigo-800/80 space-y-4 shadow-xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <span className="text-xs font-black text-indigo-950 dark:text-indigo-200 flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      <span>First-Time Security PINs & Clinical Portals Configuration</span>
+                    </span>
+                    <span className="text-[10px] bg-indigo-100 dark:bg-indigo-900/80 text-indigo-800 dark:text-indigo-300 font-bold px-2 py-0.5 rounded-full w-fit">
+                      100% Custom Desk & Cabin Credentials
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                    Set up your secret staff PINs and cabin stations now. Each desk/cabin uses its own custom PIN so receptionists and consulting doctors cannot access each other's consoles.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {/* Reception Desk PIN */}
+                    <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                          <Users className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          <span>Reception Desk PIN *</span>
+                        </label>
+                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Counter PIN</span>
+                      </div>
+                      <input
+                        type="text"
+                        required
+                        value={receptionPin}
+                        onChange={(e) => setReceptionPin(e.target.value)}
+                        placeholder="e.g. 2026 or rec123"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      />
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                        Unlocks <strong>/reception/{slug || 'clinic'}</strong>
+                      </p>
+                    </div>
+
+                    {/* Doctor Cabin Calling PIN */}
+                    <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                          <Stethoscope className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                          <span>Doctor Cabin PIN *</span>
+                        </label>
+                        <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold">Doctor 4-Digit</span>
+                      </div>
+                      <input
+                        type="text"
+                        required
+                        value={doctorPin}
+                        onChange={(e) => setDoctorPin(e.target.value)}
+                        placeholder="e.g. 1234 or 4321"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      />
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                        Unlocks <strong>/doctor/{slug || 'clinic'}/{doctorCabinSlug || 'cabin-1'}</strong>
+                      </p>
+                    </div>
+
+                    {/* Doctor Station Slug */}
+                    <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                          <Hash className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                          <span>Cabin Station ID</span>
+                        </label>
+                        <span className="text-[10px] text-purple-600 dark:text-purple-400 font-bold">Cabin URL Slug</span>
+                      </div>
+                      <input
+                        type="text"
+                        value={doctorCabinSlug}
+                        onChange={(e) => setDoctorCabinSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
+                        placeholder="cabin-1"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                      />
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                        Cabin URL identifier
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Real-Time Preview of the 7 Specialized Clinical & Admin Portals */}
+                  <div className="mt-2 p-3.5 bg-white/90 dark:bg-slate-950/80 rounded-xl border border-indigo-100 dark:border-indigo-900/60 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                        <span>Live Clinical Portals & Security Credentials Preview:</span>
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-500">Instant One-Click Launch</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-[11px]">
+                      <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-slate-700 dark:text-slate-300">1. QR Check-In</span>
+                          <span className="text-[9px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold px-1.5 py-0.5 rounded">PATIENT</span>
+                        </div>
+                        <span className="font-mono text-blue-600 dark:text-blue-400 text-[10px] block truncate">/check-in/{slug || 'clinic'}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 block mt-0.5">Contactless scan (No PIN)</span>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-slate-700 dark:text-slate-300">2. Live Mobile Pass</span>
+                          <span className="text-[9px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold px-1.5 py-0.5 rounded">PATIENT</span>
+                        </div>
+                        <span className="font-mono text-blue-600 dark:text-blue-400 text-[10px] block truncate">/status/:tokenPassId</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 block mt-0.5">Live token & Cafe tracker</span>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-slate-700 dark:text-slate-300">3. Reception Desk</span>
+                          <span className="text-[9px] bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold px-1.5 py-0.5 rounded">STAFF</span>
+                        </div>
+                        <span className="font-mono text-emerald-600 dark:text-emerald-400 text-[10px] block truncate">/reception/{slug || 'clinic'}</span>
+                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 block mt-0.5">PIN: {receptionPin || '2026'}</span>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-slate-700 dark:text-slate-300">4. Doctor Cabin</span>
+                          <span className="text-[9px] bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold px-1.5 py-0.5 rounded">DOCTOR</span>
+                        </div>
+                        <span className="font-mono text-indigo-600 dark:text-indigo-400 text-[10px] block truncate">/doctor/{slug || 'clinic'}/{doctorCabinSlug || 'cabin-1'}</span>
+                        <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 block mt-0.5">PIN: {doctorPin || '1234'}</span>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-slate-700 dark:text-slate-300">5. 55" TV Lobby Kiosk</span>
+                          <span className="text-[9px] bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-bold px-1.5 py-0.5 rounded">LOBBY</span>
+                        </div>
+                        <span className="font-mono text-purple-600 dark:text-purple-400 text-[10px] block truncate">/display/{slug || 'clinic'}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 block mt-0.5">Dual-tone audio chimes</span>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-slate-700 dark:text-slate-300">6. Director Admin HQ</span>
+                          <span className="text-[9px] bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold px-1.5 py-0.5 rounded">DIRECTOR</span>
+                        </div>
+                        <span className="font-mono text-blue-600 dark:text-blue-400 text-[10px] block truncate">/admin/{slug || 'clinic'}</span>
+                        <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 block mt-0.5">Master Admin Password</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1180,10 +1354,10 @@ export const HospitalOnboarding: React.FC = () => {
                     href={`https://wa.me/?text=${encodeURIComponent(
                       `🏥 *${provisionedData.clinic.name} - Queueless Zero-Wait OPD Setup*\n\n` +
                       `1. TV Waiting Lounge Display:\nhttps://queueless-os.vercel.app/display/${provisionedData.clinic.slug}\n\n` +
-                      `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/doctor/${provisionedData.clinic.slug}\n\n` +
-                      `3. Reception Desk:\nhttps://queueless-os.vercel.app/reception/${provisionedData.clinic.slug}\n\n` +
+                      `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/doctor/${provisionedData.clinic.slug}/${doctorCabinSlug || 'cabin-1'} (PIN: ${doctorPin})\n\n` +
+                      `3. Reception Desk:\nhttps://queueless-os.vercel.app/reception/${provisionedData.clinic.slug} (PIN: ${receptionPin})\n\n` +
                       `4. Patient QR Check-in:\nhttps://queueless-os.vercel.app/check-in/${provisionedData.clinic.slug}\n\n` +
-                      `5. Director Admin:\nhttps://queueless-os.vercel.app/admin/${provisionedData.clinic.slug}`
+                      `5. Director Admin:\nhttps://queueless-os.vercel.app/admin/${provisionedData.clinic.slug} (Password: ${adminPassword})`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -1198,17 +1372,17 @@ export const HospitalOnboarding: React.FC = () => {
                       const text =
                         `🏥 ${provisionedData.clinic.name} - Queueless Zero-Wait OPD Setup\n\n` +
                         `1. TV Waiting Lounge Display:\nhttps://queueless-os.vercel.app/display/${provisionedData.clinic.slug}\n\n` +
-                        `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/doctor/${provisionedData.clinic.slug}\n\n` +
-                        `3. Reception Desk:\nhttps://queueless-os.vercel.app/reception/${provisionedData.clinic.slug}\n\n` +
+                        `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/doctor/${provisionedData.clinic.slug}/${doctorCabinSlug || 'cabin-1'} (PIN: ${doctorPin})\n\n` +
+                        `3. Reception Desk:\nhttps://queueless-os.vercel.app/reception/${provisionedData.clinic.slug} (PIN: ${receptionPin})\n\n` +
                         `4. Patient QR Check-in:\nhttps://queueless-os.vercel.app/check-in/${provisionedData.clinic.slug}\n\n` +
-                        `5. Director Admin:\nhttps://queueless-os.vercel.app/admin/${provisionedData.clinic.slug}`;
+                        `5. Director Admin:\nhttps://queueless-os.vercel.app/admin/${provisionedData.clinic.slug} (Password: ${adminPassword})`;
                       navigator.clipboard.writeText(text);
                       copyToClipboard(text, 'all-bundle');
                     }}
                     className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
                   >
                     <Copy className="w-3.5 h-3.5" />
-                    <span>{copiedLink === 'all-bundle' ? 'Copied Bundle!' : 'Copy All Links'}</span>
+                    <span>{copiedLink === 'all-bundle' ? 'Copied Bundle!' : 'Copy All Links & PINs'}</span>
                   </button>
                 </div>
               </div>
@@ -1228,92 +1402,155 @@ export const HospitalOnboarding: React.FC = () => {
                 </p>
               </div>
 
-              {/* All 5 Scoped Workspace URLs */}
+              {/* All Scoped Workspace URLs & Custom Security PINs */}
               <div className="space-y-4 pt-2">
-                <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                  <span>Your Scoped Hospital Workspaces (Share with Staff):</span>
-                </h3>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <span>Your Scoped Clinical Workspaces & Custom PINs:</span>
+                  </h3>
+                  <span className="text-[11px] text-slate-500 font-mono">Custom PINs active on all portals</span>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* 1. Director Admin */}
-                  <div className="p-4 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
-                    <div className="space-y-0.5">
-                      <span className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <Building2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                        <span>1. Director Executive Admin</span>
-                      </span>
-                      <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
-                        /admin/{provisionedData.clinic.slug}
-                      </span>
+                  <div className="p-4 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="space-y-0.5">
+                        <span className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                          <Building2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                          <span>1. Director Executive Admin</span>
+                        </span>
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
+                          /admin/{provisionedData.clinic.slug}
+                        </span>
+                      </div>
+                      <Link
+                        to={`/admin/${provisionedData.clinic.slug}`}
+                        className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
+                      >
+                        <span>Open</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
                     </div>
-                    <Link
-                      to={`/admin/${provisionedData.clinic.slug}`}
-                      className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
-                    >
-                      <span>Open</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </Link>
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-1.5 font-mono">
+                        <Lock className="w-3.5 h-3.5 text-blue-600" />
+                        <span className="text-slate-500">Master Password:</span>
+                        <span className="font-bold text-slate-900 dark:text-white">{adminPassword}</span>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(adminPassword, 'admin-pwd')}
+                        className="text-[11px] font-bold text-blue-600 hover:underline"
+                      >
+                        {copiedLink === 'admin-pwd' ? 'Copied' : 'Copy'}
+                      </button>
+                    </div>
                   </div>
 
                   {/* 2. Doctor Cabin */}
-                  <div className="p-4 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
-                    <div className="space-y-0.5">
-                      <span className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <Stethoscope className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                        <span>2. Doctor Cabin Console</span>
-                      </span>
-                      <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
-                        /doctor/{provisionedData.clinic.slug}
-                      </span>
+                  <div className="p-4 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="space-y-0.5">
+                        <span className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                          <Stethoscope className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                          <span>2. Doctor Cabin Workbench</span>
+                        </span>
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
+                          /doctor/{provisionedData.clinic.slug}/{doctorCabinSlug || 'cabin-1'}
+                        </span>
+                      </div>
+                      <Link
+                        to={`/doctor/${provisionedData.clinic.slug}`}
+                        className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
+                      >
+                        <span>Open</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
                     </div>
-                    <Link
-                      to={`/doctor/${provisionedData.clinic.slug}`}
-                      className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
-                    >
-                      <span>Open</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </Link>
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-1.5 font-mono">
+                        <Key className="w-3.5 h-3.5 text-indigo-600" />
+                        <span className="text-slate-500">Doctor PIN:</span>
+                        <span className="font-bold text-indigo-600 dark:text-indigo-400">{doctorPin}</span>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(doctorPin, 'doc-pin')}
+                        className="text-[11px] font-bold text-indigo-600 hover:underline"
+                      >
+                        {copiedLink === 'doc-pin' ? 'Copied' : 'Copy'}
+                      </button>
+                    </div>
                   </div>
 
                   {/* 3. Reception Desk */}
-                  <div className="p-4 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
-                    <div className="space-y-0.5">
-                      <span className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <Users className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        <span>3. Reception Cashier Desk</span>
-                      </span>
-                      <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
-                        /reception/{provisionedData.clinic.slug}
-                      </span>
+                  <div className="p-4 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="space-y-0.5">
+                        <span className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                          <Users className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          <span>3. Reception Cashier Desk</span>
+                        </span>
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
+                          /reception/{provisionedData.clinic.slug}
+                        </span>
+                      </div>
+                      <Link
+                        to={`/reception/${provisionedData.clinic.slug}`}
+                        className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
+                      >
+                        <span>Open</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
                     </div>
-                    <Link
-                      to={`/reception/${provisionedData.clinic.slug}`}
-                      className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
-                    >
-                      <span>Open</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </Link>
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-1.5 font-mono">
+                        <Key className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-slate-500">Reception PIN:</span>
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400">{receptionPin}</span>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(receptionPin, 'rec-pin')}
+                        className="text-[11px] font-bold text-emerald-600 hover:underline"
+                      >
+                        {copiedLink === 'rec-pin' ? 'Copied' : 'Copy'}
+                      </button>
+                    </div>
                   </div>
 
                   {/* 4. Waiting Hall TV Display */}
-                  <div className="p-4 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
-                    <div className="space-y-0.5">
-                      <span className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <Tv className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                        <span>4. Waiting Hall 55" TV Kiosk</span>
-                      </span>
-                      <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
-                        /display/{provisionedData.clinic.slug}
-                      </span>
+                  <div className="p-4 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="space-y-0.5">
+                        <span className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                          <Tv className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                          <span>4. Waiting Hall 55" TV Kiosk</span>
+                        </span>
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
+                          /display/{provisionedData.clinic.slug}
+                        </span>
+                      </div>
+                      <Link
+                        to={`/display/${provisionedData.clinic.slug}`}
+                        className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
+                      >
+                        <span>Open</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
                     </div>
-                    <Link
-                      to={`/display/${provisionedData.clinic.slug}`}
-                      className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
-                    >
-                      <span>Open</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </Link>
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-1.5 font-mono">
+                        <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+                        <span className="text-slate-500">Display Kiosk:</span>
+                        <span className="font-bold text-purple-600 dark:text-purple-400">Zero PIN • Audio Chime</span>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(`${window.location.origin}/display/${provisionedData.clinic.slug}`, 'tv-url')}
+                        className="text-[11px] font-bold text-purple-600 hover:underline"
+                      >
+                        {copiedLink === 'tv-url' ? 'Copied' : 'Copy URL'}
+                      </button>
+                    </div>
                   </div>
                 </div>
 

@@ -51,6 +51,7 @@ import {
 import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
 
 import { API_BASE_URL } from '../config/api';
+import { ClinicalIntercomChatbot } from '../components/ClinicalIntercomChatbot';
 const RATING_LABELS: { [key: number]: string } = {
   5: '🚀 Loved It! Zero Waiting & Super Fast',
   4: '✨ Very Good! Smooth Check-in Experience',
@@ -2511,6 +2512,20 @@ export const PatientStatus: React.FC = () => {
           ● Auto-updates in real time. Please keep this screen open while waiting in the lobby.
         </p>
       </div>
+
+      {/* Patient Live Desk Chatbot Widget */}
+      {data && (
+        <ClinicalIntercomChatbot
+          clinicSlug={data.clinicId || 'city-health'}
+          clinicId={data.clinicId}
+          currentRole="PATIENT"
+          patientInfo={{
+            token: data.token,
+            patientName: data.patientName,
+            publicToken,
+          }}
+        />
+      )}
     </div>
   );
 };

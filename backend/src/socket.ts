@@ -17,6 +17,26 @@ export function initSocket(server: HTTPServer) {
       socket.join(`clinic_${clinicId}`);
     });
 
+    // Real-time Clinical Intercom & Live Desk Messages (Doctor ⇄ Reception ⇄ Patient)
+    socket.on('send_intercom_message', (payload: any) => {
+      if (!payload || !payload.clinicId) return;
+      const messageObj = {
+        id: payload.id || `msg_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        clinicId: payload.clinicId,
+        fromRole: payload.fromRole, // 'RECEPTION' | 'DOCTOR' | 'PATIENT'
+        fromName: payload.fromName || 'Staff',
+        toTarget: payload.toTarget || 'ALL', // 'ALL' | 'DOCTOR_1' | 'RECEPTION' | token ID
+        doctorCabin: payload.doctorCabin,
+        token: payload.token,
+        patientName: payload.patientName,
+        text: payload.text || payload.message || '',
+        timestamp: payload.timestamp || new Date().toISOString(),
+      };
+
+      // Broadcast to all participants in this hospital's room
+      io?.to(`clinic_${payload.clinicId}`).emit('intercom_message', messageObj);
+    });
+
     socket.on('disconnect', () => {});
   });
 

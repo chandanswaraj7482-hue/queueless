@@ -845,9 +845,9 @@ export const QueuelessWebsite: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#060D1D] text-slate-900 dark:text-slate-100 font-sans relative overflow-x-hidden selection:bg-blue-600 selection:text-white transition-colors duration-200">
       <SeoHead
-        title="Zero-Wait Clinical Queue Operating System for Hospitals"
+        title="Queueless OS | Zero-Wait Clinical Queue Operating System for Hospitals"
         description="Dismantling hospital waiting room congestion. Zero hardware capex, instant vector QR passes, smart TV kiosks, ABDM M1/M2 certification, and 1-tap doctor calling."
-        keywords="hospital queue management system, clinic token display, zero wait hospital OS, OPD queue software, ABDM certified clinic software, smart TV token display"
+        keywords="Queueless OS, hospital queue management system, clinic token display, zero wait hospital OS, OPD queue software, ABDM certified clinic software, smart TV token display"
         canonical="https://queueless-os.vercel.app/"
       />
       {/* Modern High-End Dot Matrix Blueprint Pattern */}
@@ -899,7 +899,7 @@ export const QueuelessWebsite: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
             className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-tight leading-tight px-1"
           >
-            Autonomous Zero-Wait <br />
+            Queueless OS: Autonomous Zero-Wait <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
               Clinical Operating System
             </span>

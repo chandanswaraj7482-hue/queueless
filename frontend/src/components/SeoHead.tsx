@@ -11,9 +11,9 @@ interface SeoProps {
   schema?: Record<string, any>;
 }
 
-const DEFAULT_TITLE = 'Queueless | Zero-Wait Clinical Queue Operating System for Hospitals & OPDs';
+const DEFAULT_TITLE = 'Queueless OS | Zero-Wait Clinical Queue Operating System for Hospitals & OPDs';
 const DEFAULT_DESC =
-  'Queueless eliminates hospital waiting room chaos with instant QR check-in, 55" smart TV waiting kiosks, ABDM M1/M2 certification, and 1-tap doctor consoles. Trusted by 450+ hospitals.';
+  'Queueless OS eliminates hospital waiting room chaos with instant QR check-in, 55" smart TV waiting kiosks, ABDM M1/M2 certification, and 1-tap doctor consoles. Trusted by 450+ hospitals.';
 const DEFAULT_IMAGE = 'https://queueless-os.vercel.app/logo.png';
 const BASE_URL = 'https://queueless-os.vercel.app';
 
@@ -30,8 +30,10 @@ export const SeoHead: React.FC<SeoProps> = ({
   const currentUrl = `${BASE_URL}${location.pathname}`;
 
   useEffect(() => {
-    // 1. Update Title
-    const finalTitle = title ? `${title} | Queueless OS` : DEFAULT_TITLE;
+    // 1. Update Title (ensures Queueless OS is the primary site name for Google Site Name extraction)
+    const finalTitle = title
+      ? (title.includes('Queueless OS') ? title : `${title} | Queueless OS`)
+      : DEFAULT_TITLE;
     document.title = finalTitle;
 
     // 2. Update Meta Description
@@ -55,6 +57,9 @@ export const SeoHead: React.FC<SeoProps> = ({
     }
 
     // 5. Update OpenGraph Tags
+    const ogSiteName = document.querySelector('meta[property="og:site_name"]');
+    if (ogSiteName) ogSiteName.setAttribute('content', 'Queueless OS');
+
     const ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) ogTitle.setAttribute('content', finalTitle);
 

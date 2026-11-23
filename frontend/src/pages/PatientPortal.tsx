@@ -465,7 +465,7 @@ export const PatientPortal: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto p-3 sm:p-6 pb-28 text-slate-800 dark:text-slate-100 transition-colors duration-200">
       <SeoHead
-        title="Universal Patient Health Vault & Live OPD Token Tracking"
+        title="Patient Portal & Live Token Tracker | Queueless OS"
         description="Access your digital prescriptions, doctor advice, OPD token status, and 15-day free follow-up passes across all Queueless-powered hospitals."
         keywords="patient portal, OPD token tracker, download digital prescription, hospital queue live status, health vault"
         canonical="https://queueless-os.vercel.app/portal"

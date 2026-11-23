@@ -417,14 +417,21 @@ export const AnimatedClinicalReels: React.FC = () => {
           </div>
         </div>
 
-        {/* Playlist Selector Buttons */}
+        {/* Playlist Selector Buttons - Mobile Horizontal Swipe Carousel & Desktop 5-Col Grid */}
         <div className="mt-4 pt-4 border-t border-slate-200/70 dark:border-slate-800">
-          <div className="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-            <Play className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />
-            <span>Select Hospital Video Review & Walkthrough:</span>
+          <div className="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2.5 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <Play className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />
+              <span>Select Hospital Video Review & Walkthrough:</span>
+            </div>
+            <span className="sm:hidden text-[10px] text-blue-600 dark:text-blue-400 font-bold flex items-center gap-1">
+              Swipe to browse ➔
+            </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            {HOSPITAL_YOUTUBE_VIDEOS.map((vid) => {
+
+          {/* Swipeable track on phone, clean 5-column grid on desktop */}
+          <div className="flex sm:grid overflow-x-auto sm:overflow-visible pb-2.5 sm:pb-0 scrollbar-none snap-x snap-mandatory sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2.5">
+            {HOSPITAL_YOUTUBE_VIDEOS.map((vid, idx) => {
               const isCurrent = vid.id === selectedVideo.id;
               return (
                 <button
@@ -434,20 +441,20 @@ export const AnimatedClinicalReels: React.FC = () => {
                     setSelectedVideo(vid);
                     setIsPlayingVideo(true);
                   }}
-                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-3 ${
+                  className={`p-2.5 sm:p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center sm:items-start gap-2.5 shrink-0 w-[84vw] max-w-[290px] sm:w-auto sm:max-w-none snap-start ${
                     isCurrent
-                      ? 'bg-blue-50/80 dark:bg-blue-950/40 border-blue-500 text-slate-900 dark:text-white shadow-md ring-2 ring-blue-500/20'
+                      ? 'bg-blue-50/90 dark:bg-blue-950/50 border-blue-500 text-slate-900 dark:text-white shadow-md ring-2 ring-blue-500/20'
                       : 'bg-white dark:bg-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
                   }`}
                 >
-                  <div className="relative w-16 h-12 rounded-xl overflow-hidden shrink-0 bg-slate-900 border border-slate-200 dark:border-slate-700">
+                  <div className="relative w-14 sm:w-16 h-11 sm:h-12 rounded-xl overflow-hidden shrink-0 bg-slate-900 border border-slate-200 dark:border-slate-700">
                     <img
                       src={vid.type === 'local' ? (vid.poster || '/assets/hero-hospital-lounge.jpg') : `https://i.ytimg.com/vi/${vid.id}/mqdefault.jpg`}
                       alt={vid.title}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                      <Play className="w-4 h-4 text-white fill-white" />
+                      <Play className="w-3.5 h-3.5 text-white fill-white" />
                     </div>
                   </div>
                   <div className="min-w-0 flex-1">
@@ -465,6 +472,27 @@ export const AnimatedClinicalReels: React.FC = () => {
                     </p>
                   </div>
                 </button>
+              );
+            })}
+          </div>
+
+          {/* Mobile Dot Indicators & Quick Navigation */}
+          <div className="flex sm:hidden items-center justify-center gap-2 mt-2">
+            {HOSPITAL_YOUTUBE_VIDEOS.map((vid, idx) => {
+              const isCurrent = vid.id === selectedVideo.id;
+              return (
+                <button
+                  key={vid.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedVideo(vid);
+                    setIsPlayingVideo(true);
+                  }}
+                  className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                    isCurrent ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 dark:bg-slate-700'
+                  }`}
+                  aria-label={`Select walkthrough video ${idx + 1}`}
+                />
               );
             })}
           </div>

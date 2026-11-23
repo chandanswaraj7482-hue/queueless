@@ -106,14 +106,13 @@ export const HospitalOnboarding: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
-  const [receptionPin, setReceptionPin] = useState('');
-  const [doctorPin, setDoctorPin] = useState('');
+  const generateRandomPin = () => Math.floor(1000 + Math.random() * 9000).toString();
+  const [receptionPin, setReceptionPin] = useState(() => Math.floor(1000 + Math.random() * 9000).toString());
+  const [doctorPin, setDoctorPin] = useState(() => Math.floor(1000 + Math.random() * 9000).toString());
   const [doctorCabinSlug, setDoctorCabinSlug] = useState('cabin-1');
   const [initialDoctorName, setInitialDoctorName] = useState('');
   const [initialDoctorSpecialty, setInitialDoctorSpecialty] = useState('General Medicine');
   const [initialDoctorRoom, setInitialDoctorRoom] = useState('Cabin 1');
-
-  const generateRandomPin = () => Math.floor(1000 + Math.random() * 9000).toString();
 
   // Step 3: Payment Gateway (Dodo Payments, Cashfree)
   const [paymentGateway, setPaymentGateway] = useState<'DODOPAYMENTS' | 'CASHFREE'>(
@@ -131,7 +130,49 @@ export const HospitalOnboarding: React.FC = () => {
   const [cardExpiry, setCardExpiry] = useState('');
   const [cardCvc, setCardCvc] = useState('');
   const [cardHolder, setCardHolder] = useState('');
+  const [paymentMode, setPaymentMode] = useState<'CARD' | 'UPI'>('CARD');
+  const [upiVpa, setUpiVpa] = useState('');
+  const [autopayConsent, setAutopayConsent] = useState(true);
   const [paymentCancelledNotice, setPaymentCancelledNotice] = useState<string | null>(null);
+
+  // Card input formatters & card brand detection
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/\D/g, '').slice(0, 16);
+    const formatted = raw.replace(/(\d{4})(?=\d)/g, '$1 ');
+    setCardNumber(formatted);
+  };
+
+  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/\D/g, '').slice(0, 4);
+    if (raw.length >= 3) {
+      raw = `${raw.slice(0, 2)}/${raw.slice(2)}`;
+    }
+    setCardExpiry(raw);
+  };
+
+  const getCardBrand = (num: string) => {
+    const clean = num.replace(/\s/g, '');
+    if (/^4/.test(clean)) return { name: 'Visa', color: 'bg-blue-600 text-white', badge: 'VISA' };
+    if (/^5[1-5]/.test(clean)) return { name: 'Mastercard', color: 'bg-amber-600 text-white', badge: 'MASTERCARD' };
+    if (/^(60|65|81|82)/.test(clean)) return { name: 'RuPay', color: 'bg-emerald-600 text-white', badge: 'RUPAY' };
+    if (/^3[47]/.test(clean)) return { name: 'Amex', color: 'bg-indigo-600 text-white', badge: 'AMEX' };
+    return { name: 'Card', color: 'bg-slate-700 text-white', badge: 'CARD' };
+  };
+
+  const fillTestCard = () => {
+    setPaymentMode('CARD');
+    setCardHolder('Dr. Chief Medical Officer');
+    setCardNumber('4242 4242 4242 4242');
+    setCardExpiry('12/29');
+    setCardCvc('888');
+    setAutopayConsent(true);
+  };
+
+  const fillTestUpi = () => {
+    setPaymentMode('UPI');
+    setUpiVpa('hospital.director@okhdfcbank');
+    setAutopayConsent(true);
+  };
 
   // Processing & Success State
   const [isProcessing, setIsProcessing] = useState(false);
@@ -190,12 +231,80 @@ export const HospitalOnboarding: React.FC = () => {
     setCurrentStep(3);
   };
 
-  // Step 3: Trigger Payment & Hospital Provisioning
+  // Step 3: Trigger Payment & Hospital Provisioning with Credit Card AutoPay
   const handleInitiatePayment = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
     setErrorMsg(null);
     setPaymentCancelledNotice(null);
+
+    // Validate AutoPay Consent
+    if (!autopayConsent) {
+      setErrorMsg('Please accept the AutoPay recurring mandate to activate your 14-day free pilot.');
+      setIsProcessing(false);
+      return;
+    }
+
+    // Validate Card or UPI
+    if (paymentMode === 'CARD') {
+      const cleanNum = cardNumber.replace(/\s/g, '');
+      if (!cardHolder.trim()) {
+        setErrorMsg('Please enter Cardholder Name.');
+        setIsProcessing(false);
+        return;
+      }
+      if (cleanNum.length < 15) {
+        setErrorMsg('Please enter a valid 16-digit Credit or Debit Card Number.');
+        setIsProcessing(false);
+        return;
+      }
+      if (!cardExpiry.includes('/') || cardExpiry.replace(/\D/g, '').length < 4) {
+        setErrorMsg('Please enter a valid card expiration date (MM/YY).');
+        setIsProcessing(false);
+        return;
+      }
+      if (cardCvc.length < 3) {
+        setErrorMsg('Please enter a valid 3 or 4-digit Security CVV / CVC.');
+        setIsProcessing(false);
+        return;
+      }
+    } else {
+      if (!upiVpa.includes('@') || upiVpa.trim().length < 5) {
+        setErrorMsg('Please enter a valid UPI VPA ID (e.g. director@okhdfcbank).');
+        setIsProcessing(false);
+        return;
+      }
+    }
+
+    // Prepare AutoPay Record
+    const cleanCardDigits = cardNumber.replace(/\s/g, '');
+    const brandInfo = paymentMode === 'CARD' ? getCardBrand(cardNumber) : { name: 'UPI AutoPay', badge: 'UPI', color: 'bg-emerald-600 text-white' };
+    const maskedInstrument = paymentMode === 'CARD'
+      ? `•••• ${cleanCardDigits.slice(-4) || '4242'}`
+      : upiVpa.trim();
+    const mandateId = 'MND-' + Math.floor(100000 + Math.random() * 900000);
+    const nextBillingDate = new Date(Date.now() + 14 * 86400000).toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+
+    const autopayRecord = {
+      status: 'ACTIVE',
+      mandateId,
+      mode: paymentMode,
+      brand: brandInfo.name,
+      brandBadge: brandInfo.badge,
+      maskedInstrument,
+      cardHolder: cardHolder.trim() || `${hospitalName.trim()} Director`,
+      amountDueToday: 0,
+      recurringAmount: totalAmount,
+      currencySymbol: selectedCurrency.symbol,
+      currencyCode: selectedCurrency.code,
+      billingCycle,
+      nextBillingDate,
+      trialDaysRemaining: 14,
+    };
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/v1/clinics/subscribe`, {
@@ -219,6 +328,7 @@ export const HospitalOnboarding: React.FC = () => {
           hardwareAddon,
           totalAmount,
           paymentMethod: paymentGateway,
+          autopay: autopayRecord,
           initialDoctorName: initialDoctorName.trim() || 'Dr. Chief Consultant, MD',
           initialDoctorSpecialty: initialDoctorSpecialty.trim(),
           initialDoctorRoom: doctorCabinSlug.trim() || initialDoctorRoom.trim() || 'Cabin 1',
@@ -234,8 +344,10 @@ export const HospitalOnboarding: React.FC = () => {
           receptionPin: receptionPin.trim() || '2026',
           doctorPin: doctorPin.trim() || '1234',
           doctorCabinSlug: doctorCabinSlug.trim() || 'cabin-1',
+          autopay: autopayRecord,
         };
         resData.data.clinic = enrichedClinic;
+        resData.data.autopay = autopayRecord;
         setProvisionedData(resData.data);
         setCurrentStep(4);
         playClinicChime();
@@ -278,6 +390,7 @@ export const HospitalOnboarding: React.FC = () => {
           adminEmail: adminEmail.trim(),
           status: 'ACTIVE',
           isWhiteLabel: hardwareAddon,
+          autopay: autopayRecord,
           settings: JSON.stringify({
             planId: selectedPlan.id,
             planName: selectedPlan.name,
@@ -286,12 +399,13 @@ export const HospitalOnboarding: React.FC = () => {
             doctorsLimit: selectedPlan.id === 'STARTER' ? 3 : selectedPlan.id === 'ENTERPRISE' ? 999 : 12,
             tokenCreditsAllocated: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
             isWhiteLabel: hardwareAddon,
-            autopay: true,
+            autopay: autopayRecord,
           }),
         };
         const fallbackData = {
           invoiceId: 'INV-' + Math.floor(100000 + Math.random() * 900000),
           clinic: fallbackClinic,
+          autopay: autopayRecord,
         };
         try {
           const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
@@ -333,6 +447,7 @@ export const HospitalOnboarding: React.FC = () => {
         adminEmail: adminEmail.trim(),
         status: 'ACTIVE',
         isWhiteLabel: hardwareAddon,
+        autopay: autopayRecord,
         settings: JSON.stringify({
           planId: selectedPlan.id,
           planName: selectedPlan.name,
@@ -341,12 +456,13 @@ export const HospitalOnboarding: React.FC = () => {
           doctorsLimit: selectedPlan.id === 'STARTER' ? 3 : selectedPlan.id === 'ENTERPRISE' ? 999 : 12,
           tokenCreditsAllocated: selectedPlan.id === 'STARTER' ? 1500 : selectedPlan.id === 'ENTERPRISE' ? 50000 : 10000,
           isWhiteLabel: hardwareAddon,
-          autopay: true,
+          autopay: autopayRecord,
         }),
       };
       const fallbackData = {
         invoiceId: 'INV-' + Math.floor(100000 + Math.random() * 900000),
         clinic: fallbackClinic,
+        autopay: autopayRecord,
       };
       try {
         const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
@@ -1158,22 +1274,34 @@ export const HospitalOnboarding: React.FC = () => {
                 </div>
               )}
 
-              {/* Payment Method Selector Tabs (Dodo Payments, Cashfree) */}
+              {/* Payment Method Selector Tabs */}
               <div className="space-y-3">
-                <span className="text-xs font-black text-slate-900 dark:text-white block">
-                  Select Payment Method:
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-slate-900 dark:text-white">
+                    Select AutoPay Payment Method:
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={paymentMode === 'CARD' ? fillTestCard : fillTestUpi}
+                      className="text-[10px] text-blue-600 dark:text-blue-400 font-bold hover:underline cursor-pointer flex items-center gap-1 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-1 rounded-lg border border-blue-200 dark:border-blue-800"
+                    >
+                      <Zap className="w-3 h-3 text-amber-500 fill-amber-500" />
+                      <span>{paymentMode === 'CARD' ? '⚡ Fill Test AutoPay Card' : '⚡ Fill Test UPI VPA'}</span>
+                    </button>
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {/* Dodo Payments Tab (Primary / Global & Founder Billing) */}
+                  {/* Credit / Debit Card Tab */}
                   <button
                     type="button"
                     onClick={() => {
-                      setPaymentGateway('DODOPAYMENTS');
+                      setPaymentMode('CARD');
                       setPaymentCancelledNotice(null);
                     }}
                     className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
-                      paymentGateway === 'DODOPAYMENTS'
+                      paymentMode === 'CARD'
                         ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-950/50 shadow-md ring-2 ring-blue-500/10'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
                     }`}
@@ -1181,37 +1309,41 @@ export const HospitalOnboarding: React.FC = () => {
                     <div className="flex items-center justify-between w-full">
                       <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
                         <CreditCard className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        <span>Dodo Payments</span>
+                        <span>Credit / Debit Card</span>
                       </span>
-                      <span className="px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[9px] font-black uppercase">GLOBAL</span>
+                      <span className="px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[9px] font-black uppercase">
+                        GLOBAL & RUPAY
+                      </span>
                     </div>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
-                      International Cards & Founder Billing
+                      Visa, Mastercard, RuPay & Amex Card AutoPay
                     </span>
                   </button>
 
-                  {/* Cashfree Payments Production Tab */}
+                  {/* UPI AutoPay Tab */}
                   <button
                     type="button"
                     onClick={() => {
-                      setPaymentGateway('CASHFREE');
+                      setPaymentMode('UPI');
                       setPaymentCancelledNotice(null);
                     }}
                     className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${
-                      paymentGateway === 'CASHFREE'
+                      paymentMode === 'UPI'
                         ? 'border-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/40 shadow-md ring-2 ring-emerald-500/10'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
                     }`}
                   >
                     <div className="flex items-center justify-between w-full">
                       <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                        <span>Cashfree</span>
+                        <Smartphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span>UPI AutoPay Mandate</span>
                       </span>
-                      <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">INR LIVE</span>
+                      <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">
+                        INSTANT INR
+                      </span>
                     </div>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
-                      UPI, NetBanking, RuPay & Indian Cards
+                      Google Pay, PhonePe, Paytm, BHIM e-Mandate
                     </span>
                   </button>
                 </div>
@@ -1219,34 +1351,22 @@ export const HospitalOnboarding: React.FC = () => {
 
               {/* Gateway-Specific Form */}
               <form onSubmit={handleInitiatePayment} className="space-y-4 pt-2">
-                {paymentGateway === 'CASHFREE' ? (
-                  <div className="p-5 bg-gradient-to-br from-emerald-50/80 to-teal-50/40 dark:from-emerald-950/40 dark:to-teal-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800 space-y-3">
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-900 dark:text-white">
-                      <div className="flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                        <span>Cashfree Production Gateway (Live Account)</span>
-                      </div>
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-[10px] font-black uppercase border border-emerald-200 dark:border-emerald-800">
-                        256-Bit SSL Secured
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                      Instant settlement powered by your verified <strong>Cashfree Production Merchant Account</strong>. Supports Google Pay, PhonePe, Paytm, RuPay, Visa, Mastercard, and Indian NetBanking.
-                    </p>
-                  </div>
-                ) : (
+                {paymentMode === 'CARD' ? (
                   <div className="p-5 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
                     <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
-                      <span>Card Details via Dodo Payments</span>
+                      <div className="flex items-center gap-2">
+                        <CreditCard className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                        <span>Card Details for AutoPay Recurring Mandate</span>
+                      </div>
                       <div className="flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
                         <Lock className="w-3 h-3" />
-                        <span>256-Bit Encrypted</span>
+                        <span>256-Bit Cryptographic SSL</span>
                       </div>
                     </div>
 
                     <div>
                       <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
-                        Cardholder Name
+                        Cardholder Name *
                       </label>
                       <input
                         type="text"
@@ -1254,23 +1374,29 @@ export const HospitalOnboarding: React.FC = () => {
                         placeholder="Dr. John Smith / Hospital Director"
                         value={cardHolder}
                         onChange={(e) => setCardHolder(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
-                        Card Number
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400">
+                          Card Number *
+                        </label>
+                        <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded ${getCardBrand(cardNumber).color}`}>
+                          {getCardBrand(cardNumber).badge}
+                        </span>
+                      </div>
                       <div className="relative">
                         <CreditCard className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                         <input
                           type="text"
                           required
-                          placeholder="4242 •••• •••• 4242"
+                          maxLength={19}
+                          placeholder="4242 4242 4242 4242"
                           value={cardNumber}
-                          onChange={(e) => setCardNumber(e.target.value)}
-                          className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                          onChange={handleCardNumberChange}
+                          className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -1278,21 +1404,22 @@ export const HospitalOnboarding: React.FC = () => {
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
-                          Expiration (MM/YY)
+                          Expiration (MM/YY) *
                         </label>
                         <input
                           type="text"
                           required
+                          maxLength={5}
                           placeholder="12/28"
                           value={cardExpiry}
-                          onChange={(e) => setCardExpiry(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center"
+                          onChange={handleExpiryChange}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center"
                         />
                       </div>
 
                       <div>
                         <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
-                          Security CVC / CVV
+                          Security CVV / CVC *
                         </label>
                         <input
                           type="password"
@@ -1300,38 +1427,72 @@ export const HospitalOnboarding: React.FC = () => {
                           placeholder="888"
                           maxLength={4}
                           value={cardCvc}
-                          onChange={(e) => setCardCvc(e.target.value)}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center"
+                          onChange={(e) => setCardCvc(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center"
                         />
                       </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-200 dark:border-slate-800">
+                      <span>✓ Supported: Visa, Mastercard, RuPay & American Express</span>
+                      <span>✓ ₹0 Pre-authorization</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-5 bg-gradient-to-br from-emerald-50/80 to-teal-50/40 dark:from-emerald-950/40 dark:to-teal-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800 space-y-4">
+                    <div className="flex items-center justify-between text-xs font-bold text-slate-900 dark:text-white">
+                      <div className="flex items-center gap-2">
+                        <Smartphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span>UPI AutoPay Mandate (NPCI Live Gateway)</span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-[10px] font-black uppercase border border-emerald-200 dark:border-emerald-800">
+                        Zero OTP on Day 15
+                      </span>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                        Hospital Director UPI VPA / ID *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. hospital.director@okhdfcbank or 9876543210@paytm"
+                        value={upiVpa}
+                        onChange={(e) => setUpiVpa(e.target.value.trim().toLowerCase())}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      />
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
+                        Works with Google Pay, PhonePe, Paytm, BHIM, Cred, and all major Indian UPI banks.
+                      </p>
                     </div>
                   </div>
                 )}
 
-                {/* AutoPay Recurring Mandate & 14-Day Free Pilot Notice */}
-                <div className="p-4 bg-emerald-50/50 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200/90 dark:border-emerald-800/80 space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="p-1.5 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 rounded-lg">
-                        <Zap className="w-3.5 h-3.5" />
+                {/* Explicit AutoPay Recurring Mandate Consent & 14-Day Free Pilot Terms */}
+                <div className="p-4 bg-emerald-50/60 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200/90 dark:border-emerald-800/80 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="autopayConsent"
+                      checked={autopayConsent}
+                      onChange={(e) => setAutopayConsent(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                    />
+                    <label htmlFor="autopayConsent" className="text-xs text-slate-800 dark:text-slate-200 cursor-pointer select-none">
+                      <strong className="text-slate-950 dark:text-white block">
+                        I authorize Queueless Clinical OS to register an AutoPay recurring mandate.
+                      </strong>
+                      <span className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed block mt-1">
+                        <strong>₹0 / $0 charged today</strong> for your 14-day free hospital pilot. If you continue after Day 14, your chosen plan ({selectedPlan.name} • {selectedCurrency.symbol}{totalAmount.toLocaleString()} / {billingCycle === 'ANNUAL' ? 'year' : 'month'}) will auto-renew via this mandate. You can cancel anytime before Day 14 in 1 click from your Director Admin Settings with zero penalty.
                       </span>
-                      <span className="text-xs font-black text-slate-900 dark:text-white">
-                        14-Day Free Pilot • AutoPay Mandate Authorization
-                      </span>
-                    </div>
-                    <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
-                      ₹0 / $0 Charged Today
-                    </span>
+                    </label>
                   </div>
 
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                    <strong>Zero Charge Today:</strong> By authorizing this mandate via {paymentGateway === 'CASHFREE' ? 'Cashfree UPI AutoPay' : 'Dodo Payments Global Recurring'}, your hospital activates a 14-day free pilot with <strong>₹0 charged today</strong>. When your 14-day trial period finishes, your chosen <strong>{selectedPlan.name}</strong> will automatically be bought and billed ({selectedCurrency.symbol}{totalAmount.toLocaleString()}) via AutoPay directly to the founder account. You may cancel anytime before Day 14 from your dashboard with 1 click to prevent any charge.
-                  </p>
-
-                  <div className="pt-1 p-2.5 bg-amber-50 dark:bg-amber-950/40 rounded-xl border border-amber-200/80 dark:border-amber-800/80 text-[10px] text-amber-900 dark:text-amber-200 flex items-start gap-2">
+                  <div className="p-2.5 bg-amber-50 dark:bg-amber-950/40 rounded-xl border border-amber-200/80 dark:border-amber-800/80 text-[10px] text-amber-900 dark:text-amber-200 flex items-start gap-2">
                     <ShieldCheck className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
                     <span>
-                      <strong>Strict Token Expiration Policy:</strong> Token credits are valid strictly during the active 30-day billing cycle. Unused tokens automatically expire at cycle end and <strong>do not roll over or stack into new plan upgrades</strong>.
+                      <strong>Strict Token Expiration Policy:</strong> Token credits are valid strictly during each active 30-day billing cycle and do not stack or roll over.
                     </span>
                   </div>
                 </div>
@@ -1365,7 +1526,7 @@ export const HospitalOnboarding: React.FC = () => {
                     <Zap className="w-4 h-4 fill-white" />
                     <span>
                       {isProcessing
-                        ? 'Authorizing AutoPay & Provisioning Workspace...'
+                        ? 'Registering AutoPay Mandate & Provisioning...'
                         : `Authorize AutoPay & Start 14-Day Free Pilot (Pay ${selectedCurrency.symbol}0 Today) ➔`}
                     </span>
                   </button>
@@ -1385,18 +1546,77 @@ export const HospitalOnboarding: React.FC = () => {
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-black text-xs uppercase tracking-wider">
-                  14-Day Free Pilot Active • AutoPay Authorized ({paymentGateway === 'DODOPAYMENTS' ? 'Dodo Payments' : 'Cashfree UPI AutoPay'})
+                  14-Day Free Pilot Active • AutoPay Mandate Registered
                 </span>
                 <h1 className="text-2xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight">
                   🎉 Congratulations! {provisionedData.clinic.name} Is Live!
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
-                  Your 14-day free pilot is now live with <strong>₹0 charged today</strong>. All 5 operational portals are active. Your {selectedPlan.name} will automatically buy and renew on Day 15 via your authorized AutoPay mandate unless cancelled from settings.
+                  Your 14-day free pilot is now live with <strong>₹0 charged today</strong>. All clinical portals are active and your chosen {selectedPlan.name} is pre-authorized for seamless Day 15 renewal.
                 </p>
                 <div className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-800">
                   <span>Official Receipt ID: <strong>{provisionedData.invoiceId}</strong></span>
                   <span>•</span>
                   <span>Slug: <strong>{provisionedData.clinic.slug}</strong></span>
+                </div>
+              </div>
+
+              {/* Verified AutoPay e-Mandate Summary Card */}
+              <div className="p-5 bg-gradient-to-r from-emerald-50/90 via-teal-50/60 to-blue-50/80 dark:from-emerald-950/50 dark:via-teal-950/40 dark:to-blue-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/70 dark:border-emerald-800 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-xs font-black uppercase text-emerald-800 dark:text-emerald-300 tracking-wider">
+                      AutoPay e-Mandate Pre-Authorized & Activated
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                    Mandate Ref: <strong className="text-slate-800 dark:text-slate-200">{provisionedData.autopay?.mandateId || 'MND-839201'}</strong>
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                  <div className="p-3 bg-white/80 dark:bg-slate-900/80 rounded-xl border border-emerald-100 dark:border-emerald-900/50 space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Payment Instrument</span>
+                    <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
+                      <CreditCard className="w-4 h-4 text-blue-600 shrink-0" />
+                      <span>{provisionedData.autopay?.brand || 'Visa'} {provisionedData.autopay?.maskedInstrument || '•••• 4242'}</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block truncate">
+                      {provisionedData.autopay?.cardHolder || hospitalName}
+                    </span>
+                  </div>
+
+                  <div className="p-3 bg-white/80 dark:bg-slate-900/80 rounded-xl border border-emerald-100 dark:border-emerald-900/50 space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Charged Today</span>
+                    <div className="font-black text-emerald-600 dark:text-emerald-400 text-sm font-mono">
+                      {selectedCurrency.symbol}0.00 FREE
+                    </div>
+                    <span className="text-[10px] text-emerald-700 dark:text-emerald-300 font-bold block">
+                      14-Day Free Pilot Active
+                    </span>
+                  </div>
+
+                  <div className="p-3 bg-white/80 dark:bg-slate-900/80 rounded-xl border border-emerald-100 dark:border-emerald-900/50 space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Next Auto-Debit Date</span>
+                    <div className="font-black text-slate-900 dark:text-white text-xs font-mono">
+                      {provisionedData.autopay?.nextBillingDate || 'In 14 Days'}
+                    </div>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">
+                      {selectedCurrency.symbol}{totalAmount.toLocaleString()} / {billingCycle === 'ANNUAL' ? 'yr' : 'mo'}
+                    </span>
+                  </div>
+
+                  <div className="p-3 bg-white/80 dark:bg-slate-900/80 rounded-xl border border-emerald-100 dark:border-emerald-900/50 space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Cancellation Policy</span>
+                    <div className="font-bold text-slate-900 dark:text-white text-xs flex items-center gap-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>1-Click Cancel Anytime</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">
+                      Zero charge before Day 14
+                    </span>
+                  </div>
                 </div>
               </div>
 

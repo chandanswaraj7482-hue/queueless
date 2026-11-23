@@ -2966,8 +2966,8 @@ export const QueuelessWebsite: React.FC = () => {
       <section id="case-studies" className="py-10 sm:py-20 px-3 sm:px-6 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 relative z-10 transition-colors duration-200">
         <div className="max-w-6xl mx-auto space-y-8 sm:space-y-16">
 
-          {/* Dynamic Living Animated OPD Clinical Workflow Reels (Hidden on Mobile for fast non-scrolling UX) */}
-          <div className="hidden sm:block">
+          {/* Dynamic Living Animated OPD Clinical Workflow Reels (Fully responsive on mobile & desktop) */}
+          <div className="block">
             <AnimatedClinicalReels />
           </div>
 

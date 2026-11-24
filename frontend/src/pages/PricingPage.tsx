@@ -148,8 +148,8 @@ export const PricingPage: React.FC = () => {
         {/* Hero Section */}
         <section className="pt-20 pb-8 sm:pt-24 sm:pb-10 px-4 sm:px-6 relative z-10 text-center">
           <div className="max-w-4xl mx-auto space-y-3.5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 rounded-full text-xs font-black uppercase tracking-wider text-blue-900 dark:text-blue-300 shadow-2xs">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 rounded-full text-[10px] sm:text-xs font-extrabold uppercase tracking-normal sm:tracking-wider text-blue-900 dark:text-blue-300 shadow-2xs max-w-full">
+              <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500 shrink-0" />
               <span>Transparent Healthcare SaaS • Zero Setup Fees</span>
             </div>
 
@@ -172,8 +172,8 @@ export const PricingPage: React.FC = () => {
                   type="button"
                   onClick={() => setBillingCycle('MONTHLY')}
                   className={`px-4 py-1.5 sm:px-6 sm:py-2 rounded-full text-xs font-black transition-all cursor-pointer ${billingCycle === 'MONTHLY'
-                      ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-cyan-400 shadow-md scale-100 ring-1 ring-slate-900/5 dark:ring-white/10'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-cyan-400 shadow-md scale-100 ring-1 ring-slate-900/5 dark:ring-white/10'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                 >
                   Monthly Billing
@@ -184,15 +184,15 @@ export const PricingPage: React.FC = () => {
                   type="button"
                   onClick={() => setBillingCycle('ANNUAL')}
                   className={`px-4 py-1.5 sm:px-6 sm:py-2 rounded-full text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 ${billingCycle === 'ANNUAL'
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 scale-100'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 scale-100'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                 >
                   <span>Annual Billing</span>
                   <span
                     className={`px-1.5 py-0.5 sm:px-2 rounded-full text-[9px] font-black uppercase tracking-wider transition-colors ${billingCycle === 'ANNUAL'
-                        ? 'bg-emerald-400 text-slate-950 shadow-2xs'
-                        : 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
+                      ? 'bg-emerald-400 text-slate-950 shadow-2xs'
+                      : 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
                       }`}
                   >
                     <span className="hidden sm:inline">Save ~17% (2 Mo Free)</span>
@@ -233,8 +233,8 @@ export const PricingPage: React.FC = () => {
                 <div
                   key={plan.id}
                   className={`relative rounded-3xl p-5 sm:p-8 flex flex-col justify-between transition-all card-interactive ${plan.highlight
-                      ? 'bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-2xl shadow-blue-500/15 lg:scale-102 ring-4 ring-blue-500/10'
-                      : 'bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 shadow-lg hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl'
+                    ? 'bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-2xl shadow-blue-500/15 lg:scale-102 ring-4 ring-blue-500/10'
+                    : 'bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 shadow-lg hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl'
                     }`}
                 >
                   {plan.badge && (
@@ -308,10 +308,10 @@ export const PricingPage: React.FC = () => {
                       type="button"
                       onClick={() => handleSelectPlan(plan)}
                       className={`w-full py-3.5 px-6 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer btn-physics ${plan.highlight
-                          ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/25 ring-2 ring-blue-500/20 active:scale-95 shimmer-sweep hover-glow-blue'
-                          : plan.id === 'ENTERPRISE'
-                            ? 'bg-gradient-to-r from-slate-900 to-indigo-950 hover:from-black hover:to-indigo-900 text-white border border-indigo-500/40 active:scale-95 shadow-md'
-                            : 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white active:scale-95'
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/25 ring-2 ring-blue-500/20 active:scale-95 shimmer-sweep hover-glow-blue'
+                        : plan.id === 'ENTERPRISE'
+                          ? 'bg-gradient-to-r from-slate-900 to-indigo-950 hover:from-black hover:to-indigo-900 text-white border border-indigo-500/40 active:scale-95 shadow-md'
+                          : 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white active:scale-95'
                         }`}
                     >
                       <Zap className="w-4 h-4 fill-white" />
@@ -546,11 +546,10 @@ export const PricingPage: React.FC = () => {
                   {/* Pack 1: 5,000 */}
                   <div
                     onClick={() => setSelectedSurgePack('5K')}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
-                      selectedSurgePack === '5K'
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${selectedSurgePack === '5K'
                         ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
-                    }`}
+                      }`}
                   >
                     <div>
                       <div className="flex items-center gap-2">
@@ -570,11 +569,10 @@ export const PricingPage: React.FC = () => {
                   {/* Pack 2: 15,000 (Popular) */}
                   <div
                     onClick={() => setSelectedSurgePack('15K')}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between relative ${
-                      selectedSurgePack === '15K'
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between relative ${selectedSurgePack === '15K'
                         ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
-                    }`}
+                      }`}
                   >
                     <span className="absolute -top-2.5 right-4 px-2 py-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-black uppercase rounded-full shadow-xs">
                       ★ Most Popular
@@ -597,11 +595,10 @@ export const PricingPage: React.FC = () => {
                   {/* Pack 3: 50,000 */}
                   <div
                     onClick={() => setSelectedSurgePack('50K')}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
-                      selectedSurgePack === '50K'
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${selectedSurgePack === '50K'
                         ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
-                    }`}
+                      }`}
                   >
                     <div>
                       <div className="flex items-center gap-2">
@@ -905,8 +902,8 @@ export const PricingPage: React.FC = () => {
                     type="button"
                     onClick={() => setFaqCategory(cat.id as FaqCategory)}
                     className={`whitespace-nowrap shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${faqCategory === cat.id
-                        ? 'bg-blue-600 text-white shadow-xs font-black ring-2 ring-blue-500/20'
-                        : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                      ? 'bg-blue-600 text-white shadow-xs font-black ring-2 ring-blue-500/20'
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                   >
                     {cat.label}

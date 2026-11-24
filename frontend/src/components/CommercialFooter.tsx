@@ -355,6 +355,25 @@ export const CommercialFooter: React.FC = () => {
           </div>
         </div>
 
+        {/* Sleek, Ultra-Luxury Gradient Brand Watermark with Interactive Hover Animation */}
+        <div className="pt-10 pb-6 text-center select-none w-full max-w-full overflow-hidden flex items-center justify-center relative group">
+          {/* Interactive Ambient Radial Glow Behind Watermark */}
+          <div className="absolute inset-0 max-w-4xl mx-auto h-36 bg-gradient-to-r from-sky-500/20 via-indigo-500/30 to-emerald-400/20 blur-3xl opacity-40 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700 pointer-events-none" />
+
+          <h2
+            className="relative text-5xl sm:text-8xl md:text-[10.5rem] lg:text-[13rem] font-black tracking-tighter group-hover:tracking-wide select-none leading-none opacity-85 group-hover:opacity-100 transition-all duration-700 ease-out transform group-hover:scale-[1.03] active:scale-95 cursor-pointer drop-shadow-md"
+            style={{
+              background: 'linear-gradient(135deg, #38bdf8 0%, #6366f1 45%, #06b6d4 75%, #10b981 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              color: 'transparent',
+            }}
+          >
+            Queueless
+          </h2>
+        </div>
+
         {/* Bottom Copyright & Compliance Strip: Completely Center-Aligned on all screens */}
         <div className="pt-8 border-t border-slate-800/60 flex flex-col items-center justify-center text-center gap-3 text-[11px] text-slate-400">
           <p className="text-center text-slate-400 leading-relaxed max-w-xl">

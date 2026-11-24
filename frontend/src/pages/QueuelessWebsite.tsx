@@ -427,6 +427,66 @@ const CLINICAL_REELS: ClinicalReel[] = [
   },
 ];
 
+interface DirectorySitelinkItem {
+  title: string;
+  href: string;
+  isExternal: boolean;
+  isHash: boolean;
+  desc: string;
+  slug: string;
+}
+
+const DIRECTORY_SITELINKS: DirectorySitelinkItem[] = [
+  {
+    title: 'Clinical Security & ABDM Standards',
+    href: '/security',
+    isExternal: false,
+    isHash: false,
+    desc: 'Ayushman Bharat Digital Mission (M1/M2) certified, HIPAA privacy, bank-grade AES-256 data sovereignty and DPDP compliance.',
+    slug: '/security',
+  },
+  {
+    title: 'Interactive Live OPD Simulator',
+    href: '#interactive-demo',
+    isExternal: false,
+    isHash: true,
+    desc: 'Test the live end-to-end patient check-in, 1-tap doctor calling, and 55" smart TV synchronization in real time.',
+    slug: '#interactive-demo',
+  },
+  {
+    title: 'Hospital ROI & Capex Calculator',
+    href: '/roi-calculator',
+    isExternal: false,
+    isHash: false,
+    desc: 'Calculate monthly OPD revenue recovery and hardware maintenance savings by replacing ₹2.5L+ metal kiosk machines.',
+    slug: '/roi-calculator',
+  },
+  {
+    title: 'Queueless OS Pricing & Plans',
+    href: '/pricing',
+    isExternal: false,
+    isHash: false,
+    desc: 'Transparent clinical tier plans starting at ₹8,333/mo ($149/mo) with annual savings. ABDM Level 3 certified with zero hidden fees.',
+    slug: '/pricing',
+  },
+  {
+    title: '55" TV Waiting Room Kiosk',
+    href: '/display/city-health',
+    isExternal: true,
+    isHash: false,
+    desc: 'Zero-scroll 1080p lobby OLED display with multilingual acoustic voice announcements in 5 worldwide languages.',
+    slug: '/display/city-health',
+  },
+  {
+    title: 'Enterprise Features & ABDM Suite',
+    href: '/features',
+    isExternal: false,
+    isHash: false,
+    desc: 'Explore Ayushman Bharat Digital Mission (M1/M2) certified interoperability, HIPAA privacy, and doctor hotkeys.',
+    slug: '/features',
+  },
+];
+
 export const QueuelessWebsite: React.FC = () => {
   // Global Currency State
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState<string>(
@@ -675,6 +735,58 @@ export const QueuelessWebsite: React.FC = () => {
 
     return () => clearInterval(interval);
   }, [isKitAutoSlidePaused]);
+
+  // Directory & Quick Navigation Sitelinks Mobile Auto-Slide State
+  const [activeDirectoryIndex, setActiveDirectoryIndex] = useState<number>(0);
+  const [isDirectoryAutoSlidePaused, setIsDirectoryAutoSlidePaused] = useState<boolean>(false);
+  const directorySliderRef = useRef<HTMLDivElement>(null);
+
+  const handleDirectoryScroll = () => {
+    if (!directorySliderRef.current) return;
+    const { scrollLeft, clientWidth } = directorySliderRef.current;
+    if (clientWidth > 0 && directorySliderRef.current.children.length > 0) {
+      let closestIdx = 0;
+      let minDiff = Infinity;
+      Array.from(directorySliderRef.current.children).forEach((child, i) => {
+        const el = child as HTMLElement;
+        const diff = Math.abs(el.offsetLeft - scrollLeft);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIdx = i;
+        }
+      });
+      setActiveDirectoryIndex(Math.min(Math.max(closestIdx, 0), DIRECTORY_SITELINKS.length - 1));
+    }
+  };
+
+  const scrollToDirectoryCard = (index: number) => {
+    if (!directorySliderRef.current) return;
+    const targetChild = directorySliderRef.current.children[index] as HTMLElement;
+    if (targetChild) {
+      targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    } else {
+      const cardWidth = directorySliderRef.current.clientWidth * 0.86 + 14;
+      directorySliderRef.current.scrollTo({
+        left: index * cardWidth,
+        behavior: 'smooth',
+      });
+    }
+    setActiveDirectoryIndex(index);
+  };
+
+  useEffect(() => {
+    if (isDirectoryAutoSlidePaused) return;
+    const interval = setInterval(() => {
+      if (typeof window !== 'undefined' && window.innerWidth >= 640) return;
+      setActiveDirectoryIndex((prev) => {
+        const next = (prev + 1) % DIRECTORY_SITELINKS.length;
+        scrollToDirectoryCard(next);
+        return next;
+      });
+    }, 3800);
+
+    return () => clearInterval(interval);
+  }, [isDirectoryAutoSlidePaused]);
 
   // FAQ Accordion State
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
@@ -3792,136 +3904,139 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
           </div>
 
-          {/* 6 Google-Style Sitelinks Cards in a Clean 2-Column or 3-Column Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Desktop 2-Column / 3-Column Grid */}
+          <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {DIRECTORY_SITELINKS.map((item) => {
+              const cardContent = (
+                <>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
+                        <span>{item.title}</span>
+                        <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                      </h3>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
+                    {item.slug}
+                  </span>
+                </>
+              );
 
-            {/* Card 1: Clinical Security & Standards */}
-            <Link
-              to="/security"
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
+              const cardClasses = "p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer shadow-xs";
+
+              return item.isHash ? (
+                <a key={item.slug} href={item.href} className={cardClasses}>
+                  {cardContent}
+                </a>
+              ) : (
+                <Link
+                  key={item.slug}
+                  to={item.href}
+                  target={item.isExternal ? '_blank' : undefined}
+                  rel={item.isExternal ? 'noopener noreferrer' : undefined}
+                  className={cardClasses}
+                >
+                  {cardContent}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Mobile Auto-Slide Touch Gesture Carousel */}
+          <div className="sm:hidden space-y-2.5">
+            <div
+              ref={directorySliderRef}
+              onScroll={handleDirectoryScroll}
+              onTouchStart={() => setIsDirectoryAutoSlidePaused(true)}
+              onTouchEnd={() => setTimeout(() => setIsDirectoryAutoSlidePaused(false), 5000)}
+              onMouseEnter={() => setIsDirectoryAutoSlidePaused(true)}
+              onMouseLeave={() => setIsDirectoryAutoSlidePaused(false)}
+              className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-3 pt-1 gap-3.5 text-left touch-pan-x"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
-                    <span>Clinical Security & ABDM Standards</span>
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Ayushman Bharat Digital Mission (M1/M2) certified, HIPAA privacy, bank-grade AES-256 data sovereignty and DPDP compliance.
-                </p>
-              </div>
-              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
-                /security
-              </span>
-            </Link>
+              {DIRECTORY_SITELINKS.map((item) => {
+                const cardContent = (
+                  <>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
+                          <span>{item.title}</span>
+                          <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        </h3>
+                      </div>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                        {item.desc}
+                      </p>
+                    </div>
+                    <span className="text-[10.5px] font-mono font-bold text-blue-600 dark:text-blue-400 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
+                      {item.slug} ➔
+                    </span>
+                  </>
+                );
 
-            {/* Card 2: Live Simulator */}
-            <a
-              href="#interactive-demo"
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
-            >
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
-                    <span>Interactive Live OPD Simulator</span>
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Test the live end-to-end patient check-in, 1-tap doctor calling, and 55" smart TV synchronization in real time.
-                </p>
-              </div>
-              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
-                #interactive-demo
-              </span>
-            </a>
+                const mobileCardClasses = "w-[82vw] max-w-[320px] shrink-0 snap-center p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 shadow-md flex flex-col justify-between group cursor-pointer";
 
-            {/* Card 3: ROI Calculator */}
-            <Link
-              to="/roi-calculator"
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
-            >
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
-                    <span>Hospital ROI & Capex Calculator</span>
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Calculate monthly OPD revenue recovery and hardware maintenance savings by replacing ₹2.5L+ metal kiosk machines.
-                </p>
-              </div>
-              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
-                /roi-calculator
-              </span>
-            </Link>
+                return item.isHash ? (
+                  <a key={item.slug} href={item.href} className={mobileCardClasses}>
+                    {cardContent}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.slug}
+                    to={item.href}
+                    target={item.isExternal ? '_blank' : undefined}
+                    rel={item.isExternal ? 'noopener noreferrer' : undefined}
+                    className={mobileCardClasses}
+                  >
+                    {cardContent}
+                  </Link>
+                );
+              })}
+            </div>
 
-            {/* Card 4: Pricing */}
-            <Link
-              to="/pricing"
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
-            >
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
-                    <span>Queueless OS Pricing & Plans</span>
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </h3>
+            {/* Mobile Controls & Dots */}
+            <div className="flex flex-col items-center justify-center gap-1.5 pt-0.5">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => scrollToDirectoryCard((activeDirectoryIndex - 1 + DIRECTORY_SITELINKS.length) % DIRECTORY_SITELINKS.length)}
+                  className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
+                  aria-label="Previous sitelink card"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </button>
+                <div className="flex items-center gap-1.5">
+                  {DIRECTORY_SITELINKS.map((_, dot) => (
+                    <button
+                      key={dot}
+                      type="button"
+                      onClick={() => scrollToDirectoryCard(dot)}
+                      aria-label={`Go to sitelink card ${dot + 1}`}
+                      className={`h-2 rounded-full transition-all cursor-pointer ${
+                        activeDirectoryIndex === dot
+                          ? 'w-6 bg-blue-600 dark:bg-blue-400 shadow-xs'
+                          : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                      }`}
+                    />
+                  ))}
                 </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Transparent clinical tier plans starting at ₹8,333/mo ($149/mo) with annual savings. ABDM Level 3 certified with zero hidden fees.
-                </p>
+                <button
+                  type="button"
+                  onClick={() => scrollToDirectoryCard((activeDirectoryIndex + 1) % DIRECTORY_SITELINKS.length)}
+                  className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
+                  aria-label="Next sitelink card"
+                >
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
               </div>
-              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
-                /pricing
-              </span>
-            </Link>
-
-            {/* Card 5: Smart TV Kiosk */}
-            <Link
-              to="/display/city-health"
-              target="_blank"
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
-            >
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
-                    <span>55" TV Waiting Room Kiosk</span>
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Zero-scroll 1080p lobby OLED display with multilingual acoustic voice announcements in 5 worldwide languages.
-                </p>
-              </div>
-              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
-                /display/city-health
-              </span>
-            </Link>
-
-            {/* Card 6: Features */}
-            <Link
-              to="/features"
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/50 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
-            >
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 flex items-center gap-1">
-                    <span>Enterprise Features & ABDM Suite</span>
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Explore Ayushman Bharat Digital Mission (M1/M2) certified interoperability, HIPAA privacy, and doctor hotkeys.
-                </p>
-              </div>
-              <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3 block">
-                /features
-              </span>
-            </Link>
-
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1">
+                <span>👈 Swipe or watch auto-slide • Card {activeDirectoryIndex + 1} of {DIRECTORY_SITELINKS.length}</span>
+              </p>
+            </div>
           </div>
 
         </div>

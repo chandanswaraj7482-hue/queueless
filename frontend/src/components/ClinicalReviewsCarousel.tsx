@@ -471,8 +471,8 @@ export const ClinicalReviewsCarousel: React.FC = () => {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider text-amber-700 dark:text-amber-300 shadow-2xs">
             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-            <span className="sm:hidden">4.9/5 Across 450+ OPDs</span>
-            <span className="hidden sm:inline">Verified Clinical Endorsements • 4.9/5 Rating Across 450+ OPDs</span>
+            <span className="sm:hidden">4.9/5 Across 50+ OPDs</span>
+            <span className="hidden sm:inline">Verified Clinical Endorsements • 4.9/5 Rating Across 50+ OPDs</span>
           </div>
           <h3 className="text-xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
             What Superintendents & Patients Say

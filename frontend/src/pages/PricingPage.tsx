@@ -40,7 +40,7 @@ export const PricingPage: React.FC = () => {
 
   const [currencyCode, setCurrencyCode] = useState<string>(() => {
     if (queryCurrency && WORLDWIDE_CURRENCIES[queryCurrency]) return queryCurrency;
-    return localStorage.getItem('queueless_currency') || 'USD';
+    return localStorage.getItem('queueless_currency') || 'INR';
   });
 
   useEffect(() => {
@@ -149,8 +149,8 @@ export const PricingPage: React.FC = () => {
         {/* Hero Section */}
         <section className="pt-20 pb-8 sm:pt-24 sm:pb-10 px-4 sm:px-6 relative z-10 text-center">
           <div className="max-w-4xl mx-auto space-y-3.5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 rounded-full text-xs font-black uppercase tracking-wider text-blue-900 dark:text-blue-300 shadow-2xs">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-blue-900 dark:text-blue-300 shadow-2xs">
+              <Sparkles className="w-3 h-3 text-amber-500" />
               <span>Transparent Healthcare SaaS • Zero Setup Fees</span>
             </div>
 
@@ -216,6 +216,16 @@ export const PricingPage: React.FC = () => {
                   </>
                 )}
               </p>
+
+              {/* Grounded Pilot-to-Paid Reassurance Banner */}
+              <div className="pt-1.5 max-w-2xl mx-auto w-full">
+                <div className="p-3 sm:p-3.5 rounded-2xl bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-center gap-2.5 text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold text-center shadow-2xs">
+                  <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 shrink-0" />
+                  <span>
+                    <strong>14-Day Free OPD Pilot:</strong> Pay {selectedCurrency.symbol}0 today. Full live setup with smart QR passes & TV kiosks. Auto-activates Day 15 only if your doctors love it.
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -357,10 +367,10 @@ export const PricingPage: React.FC = () => {
             <div className="max-w-6xl mx-auto mt-16 space-y-6">
               <div className="text-center space-y-2">
                 <span className="text-[11px] font-black uppercase tracking-wider text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/70 px-3 py-1 rounded-full border border-purple-200 dark:border-purple-800">
-                  Hospital Modular Add-Ons
+                  Clinic & OPD Modular Add-Ons
                 </span>
                 <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-                  Power-Up Your Clinical OPD Infrastructure
+                  Power-Up Your Clinic & OPD Infrastructure
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
                   Mix and match modular upgrades anytime. 100% cloud setup with zero disruption to active consultation queues.
@@ -898,8 +908,8 @@ export const PricingPage: React.FC = () => {
             </div>
 
             {/* Filter pills (Horizontal Sliding Track on Mobile & Responsive) */}
-            <div className="w-full max-w-full overflow-x-auto py-2 px-1 touch-pan-x scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              <div className="flex items-center gap-2 min-w-max mx-auto justify-start sm:justify-center px-1">
+            <div className="w-full max-w-full overflow-x-auto py-2 px-1 touch-pan-x scroll-smooth no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+              <div className="flex items-center gap-2 min-w-max mx-auto justify-start sm:justify-center px-2 flex-nowrap">
                 {[
                   { id: 'ALL', label: 'All Questions' },
                   { id: 'DIRECTORS', label: 'For Directors' },
@@ -959,7 +969,7 @@ export const PricingPage: React.FC = () => {
               Ready to Eliminate Lobby Chaos in 20 Minutes?
             </h2>
             <p className="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto mt-2">
-              Join 450+ hospitals running zero-wait OPDs. Activate your zero-wait clinical workspace today with Dodo Payments or Cashfree.
+              Join 50+ clinics and hospital OPDs running zero-wait OPDs. Activate your zero-wait clinical workspace today with Dodo Payments or Cashfree.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link

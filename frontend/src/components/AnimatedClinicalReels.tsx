@@ -84,7 +84,7 @@ export const HOSPITAL_YOUTUBE_VIDEOS: HospitalYouTubeVideo[] = [
     poster: '/assets/hero-hospital-lounge.jpg',
     title: 'Doctor Cabin Calling & Lobby TV Acoustic Chime Synchronizer',
     subtitle: 'How doctors 1-tap call next patient from their cabin console, instantly triggering waiting room TV acoustic chime and multilingual voice announcement.',
-    hospital: 'CareMax Multi-Specialty • 450+ Beds',
+    hospital: 'CareMax Multi-Specialty • 150+ Beds',
     badge: 'Doctor Cabin Calling',
     badgeColor: 'bg-indigo-600',
     duration: '0:58 min',

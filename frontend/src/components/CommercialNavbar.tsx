@@ -99,10 +99,10 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                 Enterprise
               </span>
               <span className="text-slate-300 hidden md:inline truncate">
-                Ayushman Bharat (ABDM M1/M2) & HIPAA Certified Zero-Wait Clinical OS • Active in 450+ Hospitals
+                Ayushman Bharat (ABDM M1/M2) & HIPAA Certified Zero-Wait Clinical OS • Active in 50+ Clinics & Hospital OPDs
               </span>
               <span className="text-slate-300 md:hidden text-[10px] truncate">
-                ABDM & HIPAA Certified • 450+ OPDs
+                ABDM & HIPAA Certified • 50+ OPDs
               </span>
             </div>
 
@@ -449,7 +449,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                     <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
                     ABDM & HIPAA Certified
                   </span>
-                  <span>450+ Hospitals</span>
+                  <span>50+ Healthcare Centers</span>
                 </div>
               </div>
             </div>,

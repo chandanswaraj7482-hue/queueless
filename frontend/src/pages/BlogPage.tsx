@@ -310,7 +310,7 @@ export const BlogPage: React.FC = () => {
               Ready to eliminate OPD counter crowding forever?
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Join 450+ hospitals running on Queueless OS. 14-day free pilot, zero hardware capex, and instant vector QR passes.
+              Join 50+ clinics and OPDs running on Queueless OS. 14-day free pilot, zero hardware capex, and instant vector QR passes.
             </p>
             <div className="pt-2 flex items-center gap-3 flex-wrap">
               <Link

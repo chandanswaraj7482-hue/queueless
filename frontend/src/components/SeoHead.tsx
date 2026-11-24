@@ -19,7 +19,7 @@ export interface SeoProps {
 
 const DEFAULT_TITLE = 'Queueless OS | Zero-Wait Clinical Queue Operating System for Hospitals & OPDs';
 const DEFAULT_DESC =
-  'Queueless OS eliminates hospital waiting room chaos with instant QR check-in, 55" smart TV waiting kiosks, ABDM M1/M2 certification, and 1-tap doctor consoles. Trusted by 450+ hospitals.';
+  'Queueless OS eliminates hospital waiting room chaos with instant QR check-in, 55" smart TV waiting kiosks, ABDM M1/M2 certification, and 1-tap doctor consoles. Trusted by 50+ clinics and healthcare facilities.';
 const DEFAULT_KEYWORDS =
   'Queueless OS, hospital queue system, clinic token system, ABDM certified queue, OPD queue management, zero wait hospital OS, clinical workflow software, NABH wait time compliance, smart TV queue kiosk, doctor OPD calling software';
 const DEFAULT_IMAGE = 'https://queueless-os.vercel.app/logo.png';

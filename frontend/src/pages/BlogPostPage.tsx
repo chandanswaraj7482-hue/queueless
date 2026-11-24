@@ -260,7 +260,7 @@ export const BlogPostPage: React.FC = () => {
           <div className="space-y-2 text-center sm:text-left">
             <h4 className="text-xl font-black">Transform your clinic OPD with Queueless OS</h4>
             <p className="text-xs text-slate-300">
-              Zero setup fees • 14-day free pilot • Active in 450+ hospitals.
+              Zero setup fees • 14-day free pilot • Active in 50+ clinics and OPDs.
             </p>
           </div>
           <Link

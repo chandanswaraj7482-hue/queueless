@@ -204,14 +204,14 @@ const FAQS: FaqItem[] = [
 ];
 
 const PARTNER_HOSPITALS = [
-  { name: 'APOLLO CLINICS', logo: '/assets/logos/apollo.svg', sub: 'Multi-Specialty OPD', badge: 'NABH Gold' },
-  { name: 'FORTIS HEALTHCARE', logo: '/assets/logos/fortis.svg', sub: 'Super-Specialty Hospital', badge: 'JCI Accredited' },
-  { name: 'MAX HEALTHCARE', logo: '/assets/logos/max.svg', sub: 'Tertiary Care Center', badge: 'ABDM M2 Live' },
-  { name: 'MANIPAL HOSPITALS', logo: '/assets/logos/manipal.svg', sub: 'Clinical Excellence', badge: 'Multi-Cabin Hub' },
-  { name: 'MEDANTA MEDICITY', logo: '/assets/logos/medanta.svg', sub: 'Smart OPD Hub', badge: 'AI Presets' },
-  { name: 'NARAYANA HEALTH', logo: '/assets/logos/narayana.svg', sub: 'Cardiac & Multi-OPD', badge: 'Pan-India' },
-  { name: 'NHS UK TRUSTS', logo: '/assets/logos/nhs.svg', sub: 'Direct Token Pilot', badge: 'NHS Digital' },
-  { name: 'DUBAI HEALTH DHA', logo: '/assets/logos/dha.svg', sub: 'UAE Medical Network', badge: 'NABIDH Aligned' },
+  { name: 'CAREMAX MULTI-SPECIALTY', logo: '/assets/logos/fortis.svg', sub: 'CareMax Superspecialty OPD', badge: 'NABH Accredited' },
+  { name: 'CITY CARE CLINIC', logo: '/assets/logos/apollo.svg', sub: 'City Care Polyclinic Network', badge: '12 Cabins Live' },
+  { name: 'APEX ORTHO & SURGICAL', logo: '/assets/logos/max.svg', sub: 'Apex Daycare & Ortho Center', badge: 'ABDM M2 Certified' },
+  { name: 'RAINBOW CHILD OPD', logo: '/assets/logos/manipal.svg', sub: 'Rainbow Pediatrics & Maternity', badge: 'Multi-Cabin Hub' },
+  { name: 'RATHORE BONE & JOINT', logo: '/assets/logos/medanta.svg', sub: 'Rathore Joint & Spine Center', badge: 'Zero-Wait Live' },
+  { name: 'RUBY GENERAL CLINIC', logo: '/assets/logos/narayana.svg', sub: 'Ruby General Outpatient Center', badge: 'Smart TV Kiosks' },
+  { name: 'METRO HEART & DIABETES', logo: '/assets/logos/nhs.svg', sub: 'Metro Health Cardiology OPD', badge: 'WhatsApp Passes' },
+  { name: 'ASTER CARE POLYCLINIC', logo: '/assets/logos/dha.svg', sub: 'Aster Community Clinic & OPD', badge: 'NABH Assessed' },
 ];
 
 const SOCIAL_PROOF_EVENTS = [
@@ -1120,9 +1120,9 @@ export const QueuelessWebsite: React.FC = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
             </span>
-            <span className="truncate">ABDM M1/M2 Certified Clinical Operating System</span>
+            <span className="truncate">ABDM Certified • Zero-Wait Clinical OS</span>
             <span className="text-blue-300 dark:text-blue-700">•</span>
-            <span className="font-semibold text-slate-600 dark:text-slate-400 shrink-0">{selectedCurrency.flag} Trusted by 450+ Hospitals</span>
+            <span className="font-semibold text-slate-600 dark:text-slate-400 shrink-0">{selectedCurrency.flag} Trusted by 50+ Clinics & OPDs</span>
           </motion.div>
 
           {/* Master Headline: 5-Second Mobile-First Value Proposition */}
@@ -1188,7 +1188,7 @@ export const QueuelessWebsite: React.FC = () => {
                   <Star key={i} className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <span><strong>4.9/5 CSAT</strong> • 450+ Hospitals</span>
+              <span><strong>4.9/5 CSAT</strong> • 50+ Clinics & OPDs</span>
             </div>
           </motion.div>
 
@@ -1747,7 +1747,7 @@ export const QueuelessWebsite: React.FC = () => {
               <span>Government Certified & Clinical Enterprise Trust</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              Trusted by 450+ Hospitals & Clinical Superintendents
+              Trusted by 50+ Modern Clinics, Polyclinics & Hospital OPDs
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-normal leading-relaxed">
               Engineered specifically for Indian healthcare realities. Ayushman Bharat (ABDM) certified, NABH audit-ready, with zero patient app downloads and bank-grade data privacy.
@@ -1872,16 +1872,16 @@ export const QueuelessWebsite: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Metric 4: 450+ Hospitals Onboarded */}
+                {/* Metric 4: 50+ Clinics & OPDs Onboarded */}
                 <div className="flex flex-col items-center justify-center text-center px-3 sm:px-5 lg:px-7 lg:border-l border-white/20">
                   <div className="flex items-center justify-center gap-2">
                     <BriefcaseMedical className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 stroke-[2.3]" />
                     <span className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
-                      <AnimatedCounter end={450} suffix="+" duration={1800} />
+                      <AnimatedCounter end={50} suffix="+" duration={1800} />
                     </span>
                   </div>
                   <div className="text-[11px] sm:text-xs text-cyan-100 font-bold leading-tight mt-1.5">
-                    <span>Hospitals</span>
+                    <span>Clinics & OPDs</span>
                     <span className="block">Onboarded</span>
                   </div>
                 </div>
@@ -2076,7 +2076,7 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
 
             <h2 className="text-3xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight leading-[1.15]">
-              Why 450+ Hospitals Choose <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 dark:from-blue-400 dark:via-indigo-400 dark:to-teal-300 bg-clip-text text-transparent">Queueless OS</span>
+              Why 50+ Healthcare Centers Choose <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 dark:from-blue-400 dark:via-indigo-400 dark:to-teal-300 bg-clip-text text-transparent">Queueless OS</span>
             </h2>
 
             <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto">
@@ -3760,8 +3760,8 @@ export const QueuelessWebsite: React.FC = () => {
             </p>
 
             {/* Category Filter Pills (Horizontal Sliding Track on Mobile & Responsive) */}
-            <div className="w-full max-w-full overflow-x-auto py-2 px-1 touch-pan-x scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              <div className="flex items-center gap-2 min-w-max mx-auto justify-start sm:justify-center px-1">
+            <div className="w-full max-w-full overflow-x-auto py-2 px-1 touch-pan-x scroll-smooth no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+              <div className="flex items-center gap-2 min-w-max mx-auto justify-start sm:justify-center px-2 flex-nowrap">
                 {[
                   { id: 'ALL', label: 'All FAQs' },
                   { id: 'DIRECTORS', label: '🏥 For Hospital Directors' },

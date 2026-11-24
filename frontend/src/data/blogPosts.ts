@@ -39,7 +39,7 @@ export const BLOG_POSTS: BlogPost[] = [
       avatar: '/assets/avatars/doc-1.jpg',
     },
     featuredImage: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80',
-    excerpt: 'Traditional token machines and physical queue slips cost ₹3.5L+ per clinic, break down constantly, and fail to prevent reception congestion. Here is how 450+ hospitals transitioned to instant QR passes and smart TV displays.',
+    excerpt: 'Traditional token machines and physical queue slips cost ₹3.5L+ per clinic, break down constantly, and fail to prevent reception congestion. Here is how 50+ clinics and OPDs transitioned to instant QR passes and smart TV displays.',
     keyTakeaways: [
       'Physical token kiosks have a 24% annual hardware maintenance cost and require thermal paper refilling daily.',
       'Vector QR passes require 0 app downloads: patients scan and track queue status directly on mobile browsers.',
@@ -951,7 +951,7 @@ export const BLOG_POSTS: BlogPost[] = [
     tags: ['Hospital Revenue', 'Financial Audit', 'Cashfree UPI', 'Healthcare Economics', 'Practice Management'],
     contentHtml: `
       <h2>Where Does OPD Revenue Disappear?</h2>
-      <p>In a bustling outpatient facility managing 150 to 400 patients daily, operational chaos creates numerous blind spots for financial leakage. Our clinical financial audits across 450+ facilities reveal three recurring culprits:</p>
+      <p>In a bustling outpatient facility managing 150 to 400 patients daily, operational chaos creates numerous blind spots for financial leakage. Our clinical financial audits across 50+ healthcare facilities reveal three recurring culprits:</p>
       <ol>
         <li><strong>Walkout Leakage (11–16%):</strong> Patients wait 45 minutes without visibility, become frustrated by non-transparent counter shouting, and walk out to neighborhood clinics.</li>
         <li><strong>Unregulated Follow-Up Extensions (5–8%):</strong> Reception staff allow patients to bypass fees citing "just showing a report", even when the hospital 15-day review limit has expired.</li>

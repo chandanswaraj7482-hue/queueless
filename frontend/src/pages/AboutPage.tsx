@@ -139,8 +139,8 @@ export const AboutPage: React.FC = () => {
             {/* Quick Metrics Bar */}
             <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
               <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
-                <span className="text-2xl sm:text-4xl font-black text-blue-600 dark:text-cyan-400 block font-mono">450+</span>
-                <span className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Hospitals Deployed</span>
+                <span className="text-2xl sm:text-4xl font-black text-blue-600 dark:text-cyan-400 block font-mono">50+</span>
+                <span className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Clinics & OPDs Deployed</span>
               </div>
               <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
                 <span className="text-2xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400 block font-mono">-78%</span>
@@ -755,7 +755,7 @@ export const AboutPage: React.FC = () => {
             </h2>
 
             <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto font-normal">
-              Join 450+ healthcare leaders operating serene, zero-wait OPDs with zero hardware capex. Launch in under 90 minutes.
+              Join 50+ healthcare leaders operating serene, zero-wait OPDs with zero hardware capex. Launch in under 90 minutes.
             </p>
 
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4">

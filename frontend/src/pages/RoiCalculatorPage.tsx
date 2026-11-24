@@ -214,7 +214,7 @@ export const RoiCalculatorPage: React.FC = () => {
               <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 space-y-1">
                 <p className="font-bold text-slate-800 dark:text-slate-200">🔬 Research Methodology & Assumptions:</p>
                 <p>
-                  Based on healthcare queue data from 450+ hospitals, ~8.5% of patients leave without completing consultations when waiting room crowding exceeds 45 minutes. Queueless recovers 85% of these walkouts by giving patients live digital tokens on their phones.
+                  Based on healthcare queue data from 50+ clinics and healthcare facilities, ~8.5% of patients leave without completing consultations when waiting room crowding exceeds 45 minutes. Queueless recovers 85% of these walkouts by giving patients live digital tokens on their phones.
                 </p>
               </div>
             </div>

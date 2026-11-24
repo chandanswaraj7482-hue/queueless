@@ -50,6 +50,10 @@ export const BlogPostPage: React.FC = () => {
         canonical={`https://queueless-os.vercel.app/blog/${post.slug}`}
         ogImage={post.featuredImage}
         ogType="article"
+        breadcrumbs={[
+          { name: 'Clinical Blog', item: '/blog' },
+          { name: post.title, item: `/blog/${post.slug}` },
+        ]}
         schema={{
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',

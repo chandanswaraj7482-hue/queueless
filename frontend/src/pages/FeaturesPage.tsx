@@ -32,8 +32,9 @@ export const FeaturesPage: React.FC = () => {
       <SeoHead
         title="5 Clinical Portals & Full OPD Feature Suite"
         description="Explore Queueless 5-portal ecosystem: Vector QR Patient Badges, 55-inch Lobby Smart TV Kiosks, 1-Tap Doctor Calling, and Multi-Floor OPD Orchestration."
-        keywords="hospital queue features, OPD smart TV display, digital token system, doctor calling console, reception desk queue software"
+        keywords="hospital queue features, OPD smart TV display, digital token system, doctor calling console, reception desk queue software, ABDM features"
         canonical="https://queueless-os.vercel.app/features"
+        breadcrumbs={[{ name: 'Features & Architecture', item: '/features' }]}
       />
       <CommercialNavbar
         currentCurrencyCode={currencyCode}

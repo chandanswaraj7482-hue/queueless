@@ -26,6 +26,7 @@ export const SecurityPolicy: React.FC = () => {
         description="Enterprise-grade healthcare security, zero PHI persistence on central servers, 256-bit TLS encryption, role-based access control, and ABDM M1/M2 compliant architecture."
         keywords="queueless security architecture, hipaa compliance, abdm security, healthcare data encryption, hospital cyber security"
         canonical="https://queueless-os.vercel.app/security"
+        breadcrumbs={[{ name: 'Security & ABDM', item: '/security' }]}
       />
 
       <CommercialNavbar />

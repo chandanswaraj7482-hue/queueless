@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
+import { SeoHead } from '../components/SeoHead';
 import {
   WORLDWIDE_CURRENCIES,
   PLAN_TEMPLATES,
@@ -67,6 +68,27 @@ export const RoiCalculatorPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans relative overflow-x-clip flex flex-col transition-colors duration-200">
+      <SeoHead
+        title="Hospital OPD ROI & Walkout Recovery Calculator | Queueless OS"
+        description="Calculate exact monthly revenue recovered by eliminating OPD waiting room fatigue and walkouts. Model savings for 1 to 50+ doctors with Queueless OS."
+        keywords="hospital ROI calculator, OPD walkout rate, clinic revenue recovery, patient wait time cost, hospital operational efficiency"
+        canonical="https://queueless-os.vercel.app/roi-calculator"
+        breadcrumbs={[{ name: 'ROI Calculator', item: '/roi-calculator' }]}
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'WebApplication',
+          'name': 'Queueless Hospital ROI Calculator',
+          'applicationCategory': 'BusinessApplication, FinanceApplication',
+          'operatingSystem': 'Web Browser',
+          'description': 'Interactive hospital OPD walkout and financial recovery calculator.',
+          'url': 'https://queueless-os.vercel.app/roi-calculator',
+          'offers': {
+            '@type': 'Offer',
+            'price': '0.00',
+            'priceCurrency': 'USD'
+          }
+        }}
+      />
       <CommercialNavbar
         currentCurrencyCode={currencyCode}
         onCurrencyChange={handleCurrencyChange}

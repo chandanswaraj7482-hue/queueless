@@ -136,8 +136,9 @@ export const PricingPage: React.FC = () => {
       <SeoHead
         title="Clinical Queue OS Pricing & Hospital Location Plans"
         description="Predictable hospital queue management pricing starting at $149/mo (₹9,999/mo) per clinic location. Zero setup fees, unlimited OPD doctors, smart TV kiosks included."
-        keywords="hospital queue pricing, clinic queue cost, OPD token software price, ABDM queue license, zero capex clinic OS"
+        keywords="hospital queue pricing, clinic queue cost, OPD token software price, ABDM queue license, zero capex clinic OS, hospital subscription plans"
         canonical="https://queueless-os.vercel.app/pricing"
+        breadcrumbs={[{ name: 'Pricing & Plans', item: '/pricing' }]}
       />
       <CommercialNavbar
         currentCurrencyCode={currencyCode}
@@ -148,8 +149,8 @@ export const PricingPage: React.FC = () => {
         {/* Hero Section */}
         <section className="pt-20 pb-8 sm:pt-24 sm:pb-10 px-4 sm:px-6 relative z-10 text-center">
           <div className="max-w-4xl mx-auto space-y-3.5">
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 rounded-full text-[10px] sm:text-xs font-extrabold uppercase tracking-normal sm:tracking-wider text-blue-900 dark:text-blue-300 shadow-2xs max-w-full">
-              <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500 shrink-0" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 rounded-full text-xs font-black uppercase tracking-wider text-blue-900 dark:text-blue-300 shadow-2xs">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>Transparent Healthcare SaaS • Zero Setup Fees</span>
             </div>
 
@@ -494,11 +495,10 @@ export const PricingPage: React.FC = () => {
                       type="button"
                       onClick={() => scrollToAddonCard(dot)}
                       aria-label={`Go to addon card ${dot + 1}`}
-                      className={`h-2 rounded-full transition-all cursor-pointer ${
-                        activeAddonIndex === dot
-                          ? 'w-6 bg-purple-600 dark:bg-purple-400 shadow-xs'
-                          : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
-                      }`}
+                      className={`h-2 rounded-full transition-all cursor-pointer ${activeAddonIndex === dot
+                        ? 'w-6 bg-purple-600 dark:bg-purple-400 shadow-xs'
+                        : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                        }`}
                     />
                   ))}
                 </div>
@@ -557,8 +557,8 @@ export const PricingPage: React.FC = () => {
                   <div
                     onClick={() => setSelectedSurgePack('5K')}
                     className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${selectedSurgePack === '5K'
-                        ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                      ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
                       }`}
                   >
                     <div>
@@ -580,8 +580,8 @@ export const PricingPage: React.FC = () => {
                   <div
                     onClick={() => setSelectedSurgePack('15K')}
                     className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between relative ${selectedSurgePack === '15K'
-                        ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                      ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
                       }`}
                   >
                     <span className="absolute -top-2.5 right-4 px-2 py-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-black uppercase rounded-full shadow-xs">
@@ -606,8 +606,8 @@ export const PricingPage: React.FC = () => {
                   <div
                     onClick={() => setSelectedSurgePack('50K')}
                     className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${selectedSurgePack === '50K'
-                        ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                      ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
                       }`}
                   >
                     <div>

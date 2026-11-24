@@ -1,5 +1,6 @@
-# Robots.txt for Queueless Clinical Queue OS
-# Enterprise Googlebot & Search Engine Indexing Guidelines
+# Advanced Robots.txt for Queueless Clinical Queue OS
+# Enterprise Googlebot & Global Search Engine Indexing Protocol
+# Official Production Domain: https://queueless-os.vercel.app
 
 User-agent: *
 Allow: /
@@ -7,28 +8,68 @@ Allow: /pricing
 Allow: /features
 Allow: /about
 Allow: /security
+Allow: /compliance
 Allow: /roi-calculator
 Allow: /portal
 Allow: /login
 Allow: /signup
+Allow: /get-started
+Allow: /buy
 Allow: /privacy
+Allow: /privacy-policy
 Allow: /terms
+Allow: /terms-of-service
 Allow: /refund-policy
+Allow: /cancellation
+Allow: /blog
+Allow: /blog/*
 Allow: /display/city-health
 Allow: /check-in/city-health
+Allow: /assets/*
+Allow: /logo.png
+Allow: /favicon.png
+Allow: /queueless-logo.svg
+Allow: /manifest.json
 
-# Protect confidential doctor & hospital consoles
+# Protect confidential doctor cabins, hospital administration, and patient health tokens
 Disallow: /admin/
 Disallow: /hospital-admin/
 Disallow: /doctor/
 Disallow: /reception/
 Disallow: /founder/
+Disallow: /owner/
 Disallow: /queueless-admin/
+Disallow: /super-admin/
+Disallow: /platform-admin/
+Disallow: /business/
+Disallow: /hq/
 Disallow: /token/
+Disallow: /status/
 Disallow: /prescription/
 Disallow: /rx/
 
-# Search Crawl Rate
+# Googlebot Optimized Directives
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /hospital-admin/
+Disallow: /doctor/
+Disallow: /reception/
+Disallow: /founder/
+Disallow: /token/
+Disallow: /prescription/
+
+# Googlebot Image Crawler
+User-agent: Googlebot-Image
+Allow: /assets/
+Allow: /logo.png
+Allow: /queueless-logo.svg
+Allow: /favicon.png
+Allow: /
+
+# Bingbot Optimized Directives
+User-agent: Bingbot
+Allow: /
 Crawl-delay: 1
 
 # Sitemaps

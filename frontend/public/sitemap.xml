@@ -1,219 +1,248 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  <!-- Homepage & Core Commercial Experience -->
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+                            http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">
+  <!-- Homepage & Core Hospital Queue Operating System Experience -->
   <url>
     <loc>https://queueless-os.vercel.app/</loc>
-    <lastmod>2026-11-23</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://queueless-os.vercel.app/logo.png</image:loc>
+      <image:title>Queueless OS Zero-Wait Hospital Queue Operating System</image:title>
+      <image:caption>Next-generation OPD queue management software with smart QR check-in badges and smart TV lobby kiosks</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://queueless-os.vercel.app/assets/hero-hospital-lounge.jpg</image:loc>
+      <image:title>Serene Modern Hospital Lounge Powered by Queueless OS</image:title>
+      <image:caption>Calm hospital waiting area with real-time patient queue tracking and 55-inch smart TV display</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://queueless-os.vercel.app/assets/acrylic-standee.jpg</image:loc>
+      <image:title>Queueless Heavyweight Acrylic QR Counter Badge</image:title>
+      <image:caption>Zero hardware capex reception check-in standee for hospital OPD desks</image:caption>
+    </image:image>
   </url>
 
-  <!-- Pricing & Subscription Calculator -->
+  <!-- Pricing, Plans & Transparent Hospital SaaS -->
   <url>
     <loc>https://queueless-os.vercel.app/pricing</loc>
-    <lastmod>2026-11-23</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://queueless-os.vercel.app/logo.png</image:loc>
+      <image:title>Queueless OS Transparent Healthcare SaaS Pricing</image:title>
+      <image:caption>Fair clinic and hospital subscription tiers starting at $149/mo (₹9,999/mo) with zero setup fees</image:caption>
+    </image:image>
   </url>
 
-  <!-- Product Features & ABDM Suite -->
+  <!-- Product Features & ABDM M1/M2 Clinical Suite -->
   <url>
     <loc>https://queueless-os.vercel.app/features</loc>
-    <lastmod>2026-11-23</lastmod>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://queueless-os.vercel.app/assets/hospital-after-serene.jpg</image:loc>
+      <image:title>Zero-Wait OPD Clinical Suite & Doctor Hotkeys</image:title>
+      <image:caption>Features: 1-tap doctor calling, instant vector QR passes, HL7 FHIR clinical records exchange</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Hospital ROI & Walkout Recovery Financial Calculator -->
+  <url>
+    <loc>https://queueless-os.vercel.app/roi-calculator</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- About & Mission -->
+  <!-- About Queueless Technologies & Mission -->
   <url>
     <loc>https://queueless-os.vercel.app/about</loc>
-    <lastmod>2026-11-23</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
 
-  <!-- Clinical Security, HIPAA & ABDM Compliance -->
+  <!-- Clinical Security, HIPAA & ABDM Compliance Architecture -->
   <url>
     <loc>https://queueless-os.vercel.app/security</loc>
-    <lastmod>2026-11-23</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
-  </url>
-
-  <!-- Hospital ROI & Cost Savings Calculator -->
-  <url>
-    <loc>https://queueless-os.vercel.app/roi-calculator</loc>
-    <lastmod>2026-11-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Universal Patient Health Vault & Token Tracker -->
-  <url>
-    <loc>https://queueless-os.vercel.app/portal</loc>
-    <lastmod>2026-11-12</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <!-- Hospital Onboarding & Instant License Provisioning -->
   <url>
     <loc>https://queueless-os.vercel.app/signup</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Universal Patient Health Vault & Token Tracker -->
+  <url>
+    <loc>https://queueless-os.vercel.app/portal</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <!-- Hospital Sign In Portal -->
   <url>
     <loc>https://queueless-os.vercel.app/login</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.75</priority>
   </url>
 
-  <!-- Demo 55" Smart TV Kiosk (Live Showcase) -->
+  <!-- Live Showcase: 55" Smart TV Kiosk -->
   <url>
     <loc>https://queueless-os.vercel.app/display/city-health</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
-  <!-- Demo QR Check-In (Live Showcase) -->
+  <!-- Live Showcase: QR Check-In Screen -->
   <url>
     <loc>https://queueless-os.vercel.app/check-in/city-health</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
-  <!-- Clinical Insights & SEO Blog -->
+  <!-- Clinical Insights & Healthcare Engineering Blog Index -->
   <url>
     <loc>https://queueless-os.vercel.app/blog</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- High-Authority Clinical Knowledge Articles for Google Indexing -->
   <url>
     <loc>https://queueless-os.vercel.app/blog/eliminating-hospital-waiting-room-crowding-india</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/abdm-m1-m2-certification-guide-for-clinics</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/smart-tv-kiosks-vs-traditional-token-dispensers</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/reducing-patient-walkout-rate-opd</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/patient-privacy-zero-app-download-architecture</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/doctor-burnout-and-opd-desk-shouting</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/nabh-5th-edition-opd-waiting-time-compliance</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/digital-prescription-emr-legal-validity-telemedicine-india</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/hospital-thermal-receipt-pos-printer-opd-tokens</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/cashfree-upi-counter-reception-leakage-prevention</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/multi-specialty-opd-queue-routing-pediatrics-ortho</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/cloud-clinic-os-vs-legacy-on-premise-his</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/ai-doctor-dictation-speech-to-prescription-emr</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/whatsapp-patient-queue-tracking-zero-app-download</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/nabh-opd-audit-checklist-patient-wait-time-benchmarks</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/hospital-walkout-rate-calculator-opd-revenue-leakage</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/pediatric-opd-queue-management-emergency-triage</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/abha-address-qr-code-counter-scan-benefits-hospitals</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/tv-kiosk-display-hardware-setup-guide-hospitals</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/blog/orthopedic-physiotherapy-opd-workflow-optimization</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -221,19 +250,19 @@
   <!-- Legal & Trust Policies -->
   <url>
     <loc>https://queueless-os.vercel.app/privacy</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/terms</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://queueless-os.vercel.app/refund-policy</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

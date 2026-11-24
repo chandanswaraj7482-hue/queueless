@@ -1,0 +1,37 @@
+{
+  "name": "Queueless OS | Zero-Wait Clinical Queue Operating System",
+  "short_name": "Queueless OS",
+  "description": "Enterprise Zero-Wait Clinical Queue Operating System for hospitals, polyclinics, and OPD centers. Instant QR badges, smart TV kiosks, and 1-tap doctor consoles.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060D1D",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/queueless-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": [
+    "medical",
+    "health",
+    "business",
+    "productivity"
+  ],
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/"
+}

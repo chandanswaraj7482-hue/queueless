@@ -54,6 +54,7 @@ export const BlogPage: React.FC = () => {
         description="Authoritative guides on eliminating OPD waiting room crowding, achieving ABDM M1/M2 certification, and replacing hardware token dispensers with smart TV signage."
         keywords="hospital queue management blog, OPD queue automation, ABDM M1 M2 compliance guide, digital hospital token system, patient wait time reduction"
         canonical="https://queueless-os.vercel.app/blog"
+        breadcrumbs={[{ name: 'Clinical Blog & Research', item: '/blog' }]}
         schema={{
           '@context': 'https://schema.org',
           '@type': 'CollectionPage',

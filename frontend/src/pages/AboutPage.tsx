@@ -98,6 +98,7 @@ export const AboutPage: React.FC = () => {
         description="We don't chase trends. We build what's next. Queueless was founded to permanently eradicate hospital waiting room congestion with elegant zero-capex software, restoring absolute dignity to healthcare."
         keywords="about queueless, healthcare innovation, hospital OPD philosophy, clinical workflow engineers, zero capex queue system, ABDM M1 M2 queue, NABH wait time reduction"
         canonical="https://queueless-os.vercel.app/about"
+        breadcrumbs={[{ name: 'About Queueless', item: '/about' }]}
       />
 
       {/* Universal Commercial Navbar */}

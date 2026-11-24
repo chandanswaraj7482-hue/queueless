@@ -159,21 +159,6 @@ export const HospitalOnboarding: React.FC = () => {
     return { name: 'Card', color: 'bg-slate-700 text-white', badge: 'CARD' };
   };
 
-  const fillTestCard = () => {
-    setPaymentMode('CARD');
-    setCardHolder('Dr. Chief Medical Officer');
-    setCardNumber('4242 4242 4242 4242');
-    setCardExpiry('12/29');
-    setCardCvc('888');
-    setAutopayConsent(true);
-  };
-
-  const fillTestUpi = () => {
-    setPaymentMode('UPI');
-    setUpiVpa('hospital.director@okhdfcbank');
-    setAutopayConsent(true);
-  };
-
   // Processing & Success State
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -1280,16 +1265,9 @@ export const HospitalOnboarding: React.FC = () => {
                   <span className="text-xs font-black text-slate-900 dark:text-white">
                     Select AutoPay Payment Method:
                   </span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={paymentMode === 'CARD' ? fillTestCard : fillTestUpi}
-                      className="text-[10px] text-blue-600 dark:text-blue-400 font-bold hover:underline cursor-pointer flex items-center gap-1 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-1 rounded-lg border border-blue-200 dark:border-blue-800"
-                    >
-                      <Zap className="w-3 h-3 text-amber-500 fill-amber-500" />
-                      <span>{paymentMode === 'CARD' ? '⚡ Fill Test AutoPay Card' : '⚡ Fill Test UPI VPA'}</span>
-                    </button>
-                  </div>
+                  <span className="text-[10px] text-slate-400 font-medium">
+                    256-Bit SSL Encrypted • Recurring AutoPay
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

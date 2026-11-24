@@ -1111,30 +1111,10 @@ export const PatientCheckIn: React.FC = () => {
                     </button>
                   </div>
 
-                  {/* Quick-test sample tags */}
-                  <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 pt-0.5">
-                    <span className="font-semibold text-slate-600 dark:text-slate-300">Quick Test Samples:</span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPreviousRefNumber('CMX-104');
-                        verifyReferenceNumber('CMX-104');
-                      }}
-                      className="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-950/80 hover:bg-emerald-200 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 rounded-lg font-bold transition-all cursor-pointer shadow-2xs"
-                    >
-                      ⚡ CMX-104 (4 Days Ago • Valid)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPreviousRefNumber('EXP-900');
-                        verifyReferenceNumber('EXP-900');
-                      }}
-                      className="px-2.5 py-1 bg-rose-100 dark:bg-rose-950/80 hover:bg-rose-200 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-800 rounded-lg font-bold transition-all cursor-pointer shadow-2xs"
-                    >
-                      ⚡ EXP-900 (24 Days Ago • Expired)
-                    </button>
-                  </div>
+                  {/* Real Reference Guide */}
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 pt-0.5">
+                    Reference ID is printed on your earlier OPD thermal slip or digital prescription SMS/WhatsApp.
+                  </p>
 
                   {/* Success State */}
                   {refVerificationStatus === 'VALID' && refVerificationData && (

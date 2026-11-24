@@ -506,7 +506,7 @@ export const HospitalOnboarding: React.FC = () => {
             <div className="grid grid-cols-5 gap-1 sm:gap-2 text-center">
               {[
                 { step: 1, fullLabel: '1. Hospital & ID', shortLabel: '1. Details' },
-                { step: 2, fullLabel: '2. Staff PINs & Cabins', shortLabel: '2. PINs' },
+                { step: 2, fullLabel: '2. Staff PINs & Passwords', shortLabel: '2. PIN / Pass' },
                 { step: 3, fullLabel: '3. Plan Selection', shortLabel: '3. Plan' },
                 { step: 4, fullLabel: '4. Payment Mandate', shortLabel: '4. Payment' },
                 { step: 5, fullLabel: '5. Workspace Live', shortLabel: '5. Live' },
@@ -818,28 +818,28 @@ export const HospitalOnboarding: React.FC = () => {
                   </div>
                 </div>
 
-                {/* First-Time Custom Security PINs & Clinical Portals Configuration */}
+                {/* First-Time Custom Security PINs & Passwords & Clinical Portals Configuration */}
                 <div className="p-4 sm:p-5 bg-gradient-to-br from-indigo-50/80 via-blue-50/50 to-slate-50 dark:from-indigo-950/40 dark:via-blue-950/30 dark:to-slate-900/40 rounded-2xl border-2 border-indigo-200/90 dark:border-indigo-800/80 space-y-4 shadow-xs">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <span className="text-xs font-black text-indigo-950 dark:text-indigo-200 flex items-center gap-2">
                       <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                      <span>First-Time Security PINs & Clinical Portals Configuration</span>
+                      <span>Staff Security Credentials & Clinical Portals Setup</span>
                     </span>
                     <span className="text-[10px] bg-indigo-100 dark:bg-indigo-900/80 text-indigo-800 dark:text-indigo-300 font-bold px-2 py-0.5 rounded-full w-fit">
-                      100% Custom Desk & Cabin Credentials
+                      4-Digit PIN or Custom Password Allowed
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-600 dark:text-slate-300">
-                    Set up your secret staff PINs and cabin stations now. Each desk/cabin uses its own custom PIN so receptionists and consulting doctors cannot access each other's consoles.
+                    Set up your secret staff PINs or alphanumeric passwords and cabin stations now. Each desk/cabin can use a 4-digit PIN (e.g. 7445) or any custom password (e.g. Reception@2026) so receptionists and consulting doctors cannot access each other's consoles.
                   </p>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {/* Reception Desk PIN */}
+                    {/* Reception Desk PIN / Password */}
                     <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs">
                       <div className="flex items-center justify-between">
                         <label className="text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                           <Users className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                          <span>Reception Desk PIN *</span>
+                          <span>Reception Desk PIN / Password *</span>
                         </label>
                         <button
                           type="button"
@@ -854,20 +854,20 @@ export const HospitalOnboarding: React.FC = () => {
                         required
                         value={receptionPin}
                         onChange={(e) => setReceptionPin(e.target.value)}
-                        placeholder="e.g. 5821 (Unique 4-Digit)"
+                        placeholder="e.g. 5821 or Reception@2026"
                         className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                       />
                       <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                        Unlocks <strong>/{slug || 'your-hospital'}/reception</strong>
+                        Unlocks <strong>/{slug || 'your-hospital'}/reception</strong> (PIN or Password)
                       </p>
                     </div>
 
-                    {/* Doctor Cabin Calling PIN */}
+                    {/* Doctor Cabin Calling PIN / Password */}
                     <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs">
                       <div className="flex items-center justify-between">
                         <label className="text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                           <Stethoscope className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                          <span>Doctor Cabin PIN *</span>
+                          <span>Doctor Cabin PIN / Password *</span>
                         </label>
                         <button
                           type="button"
@@ -882,11 +882,11 @@ export const HospitalOnboarding: React.FC = () => {
                         required
                         value={doctorPin}
                         onChange={(e) => setDoctorPin(e.target.value)}
-                        placeholder="e.g. 3942 (Unique 4-Digit)"
+                        placeholder="e.g. 3942 or Doctor@2026"
                         className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                       />
                       <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                        Unlocks <strong>/{slug || 'your-hospital'}/doctor/{doctorCabinSlug || 'cabin-1'}</strong>
+                        Unlocks <strong>/{slug || 'your-hospital'}/doctor/{doctorCabinSlug || 'cabin-1'}</strong> (PIN or Password)
                       </p>
                     </div>
 
@@ -947,7 +947,7 @@ export const HospitalOnboarding: React.FC = () => {
                           <span className="text-[9px] bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold px-1.5 py-0.5 rounded">STAFF</span>
                         </div>
                         <span className="font-mono text-emerald-600 dark:text-emerald-400 text-[10px] block truncate">/{slug || 'your-hospital'}/reception</span>
-                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 block mt-0.5">PIN: {receptionPin || 'Unique PIN (Set Above)'}</span>
+                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 block mt-0.5">PIN / Pass: {receptionPin || 'Unique PIN or Password'}</span>
                       </div>
 
                       <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
@@ -956,7 +956,7 @@ export const HospitalOnboarding: React.FC = () => {
                           <span className="text-[9px] bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold px-1.5 py-0.5 rounded">DOCTOR</span>
                         </div>
                         <span className="font-mono text-indigo-600 dark:text-indigo-400 text-[10px] block truncate">/{slug || 'your-hospital'}/doctor/{doctorCabinSlug || 'cabin-1'}</span>
-                        <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 block mt-0.5">PIN: {doctorPin || 'Unique PIN (Set Above)'}</span>
+                        <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 block mt-0.5">PIN / Pass: {doctorPin || 'Unique PIN or Password'}</span>
                       </div>
 
                       <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
@@ -1669,8 +1669,8 @@ export const HospitalOnboarding: React.FC = () => {
                     href={`https://wa.me/?text=${encodeURIComponent(
                       `🏥 *${provisionedData.clinic.name} - Queueless Zero-Wait OPD Setup*\n\n` +
                       `1. TV Waiting Lounge Display:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/display\n\n` +
-                      `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/doctor/${doctorCabinSlug || 'cabin-1'} (PIN: ${doctorPin})\n\n` +
-                      `3. Reception Desk:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/reception (PIN: ${receptionPin})\n\n` +
+                      `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/doctor/${doctorCabinSlug || 'cabin-1'} (PIN / Pass: ${doctorPin})\n\n` +
+                      `3. Reception Desk:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/reception (PIN / Pass: ${receptionPin})\n\n` +
                       `4. Patient QR Check-in:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/check-in\n\n` +
                       `5. Director Admin:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/admin (Password: ${adminPassword})`
                     )}`}
@@ -1687,8 +1687,8 @@ export const HospitalOnboarding: React.FC = () => {
                       const text =
                         `🏥 ${provisionedData.clinic.name} - Queueless Zero-Wait OPD Setup\n\n` +
                         `1. TV Waiting Lounge Display:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/display\n\n` +
-                        `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/doctor/${doctorCabinSlug || 'cabin-1'} (PIN: ${doctorPin})\n\n` +
-                        `3. Reception Desk:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/reception (PIN: ${receptionPin})\n\n` +
+                        `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/doctor/${doctorCabinSlug || 'cabin-1'} (PIN / Pass: ${doctorPin})\n\n` +
+                        `3. Reception Desk:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/reception (PIN / Pass: ${receptionPin})\n\n` +
                         `4. Patient QR Check-in:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/check-in\n\n` +
                         `5. Director Admin:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/admin (Password: ${adminPassword})`;
                       navigator.clipboard.writeText(text);
@@ -1697,7 +1697,7 @@ export const HospitalOnboarding: React.FC = () => {
                     className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
                   >
                     <Copy className="w-3.5 h-3.5" />
-                    <span>{copiedLink === 'all-bundle' ? 'Copied Bundle!' : 'Copy All Links & PINs'}</span>
+                    <span>{copiedLink === 'all-bundle' ? 'Copied Bundle!' : 'Copy All Links & Credentials'}</span>
                   </button>
                 </div>
               </div>
@@ -1786,7 +1786,7 @@ export const HospitalOnboarding: React.FC = () => {
                     <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
                       <div className="flex items-center gap-1.5 font-mono">
                         <Key className="w-3.5 h-3.5 text-indigo-600" />
-                        <span className="text-slate-500">Doctor PIN:</span>
+                        <span className="text-slate-500">Doctor PIN / Pass:</span>
                         <span className="font-bold text-indigo-600 dark:text-indigo-400">{doctorPin}</span>
                       </div>
                       <button
@@ -1821,7 +1821,7 @@ export const HospitalOnboarding: React.FC = () => {
                     <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
                       <div className="flex items-center gap-1.5 font-mono">
                         <Key className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-slate-500">Reception PIN:</span>
+                        <span className="text-slate-500">Reception PIN / Pass:</span>
                         <span className="font-bold text-emerald-600 dark:text-emerald-400">{receptionPin}</span>
                       </div>
                       <button

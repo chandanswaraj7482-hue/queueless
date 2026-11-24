@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Globe,
@@ -65,6 +66,15 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
   };
 
   const navLinks = [
+    { label: 'Features', href: '/features' },
+    { label: 'ROI Calculator', href: '/roi-calculator' },
+    { label: 'Pricing', href: '/pricing' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'About', href: '/about' },
+  ];
+
+  const mobileNavLinks = [
+    { label: 'Home', href: '/' },
     { label: 'Features', href: '/features' },
     { label: 'ROI Calculator', href: '/roi-calculator' },
     { label: 'Pricing', href: '/pricing' },
@@ -266,16 +276,19 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
             </div>
           </div>
 
-          {/* Mobile Navigation Dropdown Full-Screen Native Overlay */}
-          {mobileMenuOpen && (
-            <div className="xl:hidden fixed inset-0 z-[100] w-full h-screen h-[100dvh] bg-white dark:bg-[#060D1D] flex flex-col justify-between overflow-y-auto overscroll-contain animate-in fade-in duration-200 text-slate-900 dark:text-slate-100 p-4 sm:p-6 border-l border-slate-200 dark:border-slate-800/80">
+          {/* Mobile Navigation Dropdown Portal Overlay (rendered outside overflow-hidden navbar container) */}
+          {mobileMenuOpen && typeof document !== 'undefined' && createPortal(
+            <div className="fixed inset-0 z-[99999] w-full h-screen h-[100dvh] bg-white dark:bg-[#060D1D] flex flex-col justify-between overflow-y-auto overscroll-contain animate-in fade-in duration-200 text-slate-900 dark:text-slate-100 p-5 sm:p-7 border-l border-slate-200 dark:border-slate-800">
               <div className="space-y-4">
                 {/* Drawer Top Header: Logo on left, Theme toggle & Close button on right */}
-                <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex items-center justify-between pb-3.5 border-b border-slate-200 dark:border-slate-800">
                   <Link
                     to="/"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2 group cursor-pointer"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                    }}
+                    className="flex items-center gap-2.5 group cursor-pointer"
                   >
                     <img
                       src="/logo.png"
@@ -284,14 +297,14 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                     />
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="font-black text-base text-slate-900 dark:text-white tracking-tight">
+                        <span className="font-black text-lg text-slate-900 dark:text-white tracking-tight">
                           Queueless
                         </span>
-                        <span className="text-[8px] font-black uppercase tracking-wider bg-blue-500/10 dark:bg-blue-400/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded-full">
+                        <span className="text-[8px] font-black uppercase tracking-wider bg-gradient-to-r from-blue-600 to-teal-500 text-white px-1.5 py-0.5 rounded-full">
                           OS
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Zero-Wait OPD System</p>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Zero-Wait Healthcare OS</p>
                     </div>
                   </Link>
 
@@ -300,7 +313,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                     <button
                       type="button"
                       onClick={toggleTheme}
-                      className="p-2 text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-800 transition-all cursor-pointer shadow-2xs flex items-center justify-center"
+                      className="p-2.5 text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-800 transition-all cursor-pointer shadow-2xs flex items-center justify-center active:scale-95"
                       aria-label="Toggle Theme"
                       title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                     >
@@ -315,7 +328,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                     <button
                       type="button"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 transition-all cursor-pointer shadow-2xs"
+                      className="p-2.5 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-800 transition-all cursor-pointer shadow-2xs active:scale-95"
                       aria-label="Close Navigation Menu"
                     >
                       <X className="w-6 h-6 stroke-[2.5]" />
@@ -327,7 +340,7 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                 <Link
                   to="/portal"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 active:scale-[0.99] text-white font-black text-xs rounded-2xl shadow-md flex items-center justify-between transition-all"
+                  className="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 active:scale-[0.99] text-white font-black text-xs rounded-2xl shadow-md flex items-center justify-between transition-all"
                 >
                   <span className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-emerald-200 shrink-0" />
@@ -336,22 +349,38 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   <ArrowRight className="w-4 h-4 text-emerald-200 shrink-0" />
                 </Link>
 
-                {/* 2. Navigation Links */}
+                {/* 2. Navigation Links: Includes Home, Features, ROI Calculator, Pricing, Blog, About */}
                 <div className="space-y-1">
-                  {navLinks.map((item) => (
-                    <Link
-                      key={item.href}
-                      to={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold transition-colors ${location.pathname === item.href
-                          ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-extrabold'
-                          : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900/80 hover:text-slate-950 dark:hover:text-white'
-                        }`}
-                    >
-                      <span>{item.label}</span>
-                      <ArrowRight className="w-3.5 h-3.5 opacity-40" />
-                    </Link>
-                  ))}
+                  {mobileNavLinks.map((item) => {
+                    const isActive = location.pathname === item.href;
+                    return (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          if (item.href === '/') {
+                            window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                          }
+                        }}
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-colors ${isActive
+                            ? 'bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 font-extrabold border border-blue-200 dark:border-blue-900'
+                            : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900/80 hover:text-slate-950 dark:hover:text-white'
+                          }`}
+                      >
+                        <span className="flex items-center gap-2.5">
+                          {item.label === 'Home' && <span className="text-base">🏠</span>}
+                          {item.label === 'Features' && <span className="text-base">⚡</span>}
+                          {item.label === 'ROI Calculator' && <span className="text-base">📊</span>}
+                          {item.label === 'Pricing' && <span className="text-base">💳</span>}
+                          {item.label === 'Blog' && <span className="text-base">📰</span>}
+                          {item.label === 'About' && <span className="text-base">👥</span>}
+                          <span>{item.label}</span>
+                        </span>
+                        <ArrowRight className="w-4 h-4 opacity-40" />
+                      </Link>
+                    );
+                  })}
                 </div>
 
                 {/* 3. Action CTAs */}
@@ -363,16 +392,16 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                         setMobileMenuOpen(false);
                         onOpenAuditModal();
                       }}
-                      className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-black text-sm rounded-xl shadow-lg shadow-blue-600/30 text-center flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] transition-all"
+                      className="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-sm rounded-xl shadow-lg shadow-blue-600/30 text-center flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] transition-all"
                     >
-                      <Sparkles className="w-4 h-4 text-cyan-200 shrink-0" />
+                      <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
                       <span>Start 14-Day Free Pilot ➔</span>
                     </button>
                   ) : (
                     <Link
                       to="/signup"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="w-full text-center py-3.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-black text-sm rounded-xl shadow-lg shadow-blue-600/30 block active:scale-[0.99] transition-all"
+                      className="w-full text-center py-3.5 px-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-sm rounded-xl shadow-lg shadow-blue-600/30 block active:scale-[0.99] transition-all"
                     >
                       Start 14-Day Free Pilot ➔
                     </Link>
@@ -419,7 +448,8 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                   <span>450+ Hospitals</span>
                 </div>
               </div>
-            </div>
+            </div>,
+            document.body
           )}
         </header>
       </div>

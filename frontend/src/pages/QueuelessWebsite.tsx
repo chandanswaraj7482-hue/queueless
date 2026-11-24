@@ -3008,25 +3008,41 @@ export const QueuelessWebsite: React.FC = () => {
 
               {/* Verified Clinical Stat Pillars */}
               <div className="lg:col-span-5 grid grid-cols-2 gap-3 text-center">
-                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium">
-                  <div className="text-2xl sm:text-3xl font-black text-emerald-400 font-mono">+₹1,84,000</div>
-                  <span className="text-[11px] text-slate-300 font-medium block mt-0.5">Monthly Recovered Fees</span>
-                  <span className="text-[10px] text-emerald-400/80 block mt-1">Average 6-Cabin Hospital</span>
+                <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
+                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap max-w-full">
+                    {selectedCurrencyCode === 'INR'
+                      ? '+₹1,84,000'
+                      : selectedCurrencyCode === 'USD'
+                      ? '+$2,200'
+                      : selectedCurrencyCode === 'GBP'
+                      ? '+£1,750'
+                      : selectedCurrencyCode === 'EUR'
+                      ? '+€2,050'
+                      : selectedCurrencyCode === 'AED'
+                      ? '+AED 8,100'
+                      : selectedCurrencyCode === 'SGD'
+                      ? '+S$2,950'
+                      : selectedCurrencyCode === 'AUD'
+                      ? '+A$3,400'
+                      : `+${selectedCurrency.symbol}${Math.round(184000 / 83).toLocaleString()}`}
+                  </div>
+                  <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Monthly Recovered Fees</span>
+                  <span className="text-[10px] text-emerald-400/80 block mt-0.5 whitespace-nowrap">Average 6-Cabin Hospital</span>
                 </div>
-                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium">
-                  <div className="text-2xl sm:text-3xl font-black text-blue-400 font-mono">3.4 Days</div>
-                  <span className="text-[11px] text-slate-300 font-medium block mt-0.5">Average Payback</span>
-                  <span className="text-[10px] text-blue-400/80 block mt-1">30-Day Money-Back Guarantee</span>
+                <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
+                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-blue-400 font-mono tracking-tight whitespace-nowrap">3.4 Days</div>
+                  <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Average Payback</span>
+                  <span className="text-[10px] text-blue-400/80 block mt-0.5 whitespace-nowrap">30-Day Guarantee</span>
                 </div>
-                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium">
-                  <div className="text-2xl sm:text-3xl font-black text-indigo-400 font-mono">2.4x</div>
-                  <span className="text-[11px] text-slate-300 font-medium block mt-0.5">15-Day Follow-Up Rate</span>
-                  <span className="text-[10px] text-indigo-400/80 block mt-1">Automated Sync</span>
+                <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
+                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-indigo-400 font-mono tracking-tight whitespace-nowrap">2.4x</div>
+                  <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">15-Day Follow-Up Rate</span>
+                  <span className="text-[10px] text-indigo-400/80 block mt-0.5 whitespace-nowrap">Automated Sync</span>
                 </div>
-                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium">
-                  <div className="text-2xl sm:text-3xl font-black text-amber-400 font-mono">-78%</div>
-                  <span className="text-[11px] text-slate-300 font-medium block mt-0.5">Corridor Crowding</span>
-                  <span className="text-[10px] text-amber-400/80 block mt-1">Calm Waiting Lounges</span>
+                <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
+                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-amber-400 font-mono tracking-tight whitespace-nowrap">-78%</div>
+                  <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Corridor Crowding</span>
+                  <span className="text-[10px] text-amber-400/80 block mt-0.5 whitespace-nowrap">Calm Waiting Lounges</span>
                 </div>
               </div>
             </div>

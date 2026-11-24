@@ -760,7 +760,7 @@ export const HospitalOnboarding: React.FC = () => {
                     Step 2 of 4
                   </span>
                   <h2 className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white mt-2">
-                    Staff Security PINs & Clinical Cabins Setup
+                    Staff Security Credentials & Clinical Cabins Setup
                   </h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Hospital: <strong className="text-slate-900 dark:text-white">{hospitalName}</strong> (/{slug})

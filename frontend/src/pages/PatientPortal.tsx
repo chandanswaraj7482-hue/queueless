@@ -98,7 +98,7 @@ const generateWhatsAppRxUrl = (data: any) => {
 
 export const PatientPortal: React.FC = () => {
   const navigate = useNavigate();
-  const [authMode, setAuthMode] = useState<'LOGIN' | 'SIGNUP' | 'TRACK'>('TRACK');
+  const [authMode, setAuthMode] = useState<'LOGIN' | 'SIGNUP' | 'TRACK'>('LOGIN');
   const [mobile, setMobile] = useState('');
   const [portalCountryCode, setPortalCountryCode] = useState('+91');
   const [password, setPassword] = useState('');
@@ -129,7 +129,7 @@ export const PatientPortal: React.FC = () => {
   const [viewingReceipt, setViewingReceipt] = useState<any | null>(null);
   const [showFullHistoryModal, setShowFullHistoryModal] = useState(false);
 
-  // Pre-fill inputs if previously remembered, but NEVER auto-submit or auto-verify without user action
+  // Pre-fill registered mobile if previously remembered, NEVER auto-submit or auto-verify without user action
   useEffect(() => {
     try {
       const saved = localStorage.getItem('queueless_patient_session');
@@ -137,9 +137,6 @@ export const PatientPortal: React.FC = () => {
         const parsed = JSON.parse(saved);
         if (parsed.mobile && !parsed.authProvider) {
           setMobile(parsed.mobile);
-        }
-        if (parsed.name) {
-          setTrackName(parsed.name);
         }
       }
     } catch (e) {}
@@ -149,18 +146,11 @@ export const PatientPortal: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      let authResult: any = null;
-      try {
-        authResult = await signInWithGoogle();
-      } catch (fbErr: any) {
-        console.warn('Firebase popup failed, falling back gracefully to instant Google session:', fbErr);
-        // Resilient fallback: Avoid showing "Firebase: Error (auth/internal-error)" to users
-        authResult = {
-          email: 'patient.google@queueless-health.com',
-          displayName: 'Verified Google Patient',
-          photoURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
-          uid: 'google_patient_' + Date.now(),
-        };
+      const authResult = await signInWithGoogle();
+      if (!authResult || !authResult.email) {
+        setError('Google sign-in was cancelled or unavailable.');
+        setLoading(false);
+        return;
       }
 
       const res = await fetch(`${API_BASE_URL}/api/v1/patient/google-login`, {
@@ -196,10 +186,8 @@ export const PatientPortal: React.FC = () => {
       const msg = err?.message || '';
       if (msg.includes('auth/popup-closed-by-user') || msg.includes('cancelled')) {
         setError('Google sign-in was cancelled.');
-      } else if (msg.includes('Firebase') || msg.includes('auth/') || msg.includes('internal-error')) {
-        setError('Google Sign-In is optimizing your security session. Please log in with your Mobile/Email or Track your Token below.');
       } else {
-        setError(msg || 'Google sign-in error.');
+        setError('Google sign-in unavailable. Please log in with your registered Mobile/Email and Password below.');
       }
     } finally {
       setLoading(false);
@@ -298,6 +286,10 @@ export const PatientPortal: React.FC = () => {
       setError('Please enter your registered mobile number or email.');
       return;
     }
+    if (!password.trim()) {
+      setError('Please enter your account password.');
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -306,7 +298,7 @@ export const PatientPortal: React.FC = () => {
       const res = await fetch(`${API_BASE_URL}/api/v1/patient/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile: mobile.trim(), password: password.trim() || '1234' }),
+        body: JSON.stringify({ mobile: mobile.trim(), password: password.trim() }),
       });
       const data = await res.json().catch(() => ({
         success: false,
@@ -317,7 +309,7 @@ export const PatientPortal: React.FC = () => {
         setLoginFailedCount(0);
         localStorage.setItem(
           'queueless_patient_session',
-          JSON.stringify({ mobile: mobile.trim(), password: password.trim() || '1234' })
+          JSON.stringify({ mobile: mobile.trim(), name: data.data.patientName || data.data.name })
         );
       } else {
         const nextFailed = loginFailedCount + 1;

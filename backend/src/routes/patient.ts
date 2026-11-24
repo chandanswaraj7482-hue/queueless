@@ -398,33 +398,36 @@ patientRouter.post('/login', async (req, res) => {
         });
       }
 
-      // If user supplied verification info (Name, Mobile, or Email)
-      let matched = entries[0];
-      if (inputName || inputContact) {
-        const found = entries.find((e) => {
-          const p = e.patient;
-          if (!p) return false;
-          let matchCount = 0;
-          if (inputName && p.name && p.name.toLowerCase().includes(inputName)) {
-            matchCount++;
-          }
-          if (inputContact) {
-            if (p.email && p.email.toLowerCase().includes(inputContact.toLowerCase())) matchCount++;
-            if (p.mobile && digitsOnly && p.mobile.replace(/\D/g, '').includes(phoneSuffix)) matchCount++;
-          }
-          return matchCount > 0;
+      // Strictly require Patient Full Name and Mobile/Email for verification
+      if (!inputName || !inputContact) {
+        return res.status(400).json({
+          success: false,
+          error: 'Patient Full Name and Mobile/Email are required to track this token.',
         });
+      }
 
-        if (found) {
-          matched = found;
-        } else if (entries.length === 1) {
-          matched = entries[0];
-        } else {
-          return res.status(403).json({
-            success: false,
-            error: 'Verification failed: Patient Name, Token ID, and Mobile/Email do not match our OPD records.',
-          });
-        }
+      // Strictly verify that patient's name AND contact match the database record for this token
+      const matched = entries.find((e) => {
+        const p = e.patient;
+        if (!p) return false;
+        const nameMatches = Boolean(
+          p.name && (
+            p.name.toLowerCase().includes(inputName) ||
+            inputName.includes(p.name.toLowerCase())
+          )
+        );
+        const contactMatches = Boolean(
+          (p.email && p.email.toLowerCase() === inputContact.toLowerCase()) ||
+          (p.mobile && digitsOnly && p.mobile.replace(/\D/g, '').includes(phoneSuffix))
+        );
+        return nameMatches && contactMatches;
+      });
+
+      if (!matched) {
+        return res.status(403).json({
+          success: false,
+          error: `Verification failed: The entered Patient Name and Mobile/Email do not match the hospital records for Token "${cleanToken}". Please check your details or prescription slip.`,
+        });
       }
 
       // Fetch all entries for this patient to assemble complete medical details (Indexed fast query)
@@ -533,15 +536,25 @@ patientRouter.post('/login', async (req, res) => {
 
     const enteredSecret = String(password || pin || '').trim();
 
-    // Fast instant login: If user provided password, check if it matches.
-    // If no stored secret exists, save the entered password or accept standard pass!
-    if (storedSecret && enteredSecret && enteredSecret !== '1234' && enteredSecret !== '0000') {
-      if (enteredSecret !== storedSecret) {
-        return res.status(401).json({
-          success: false,
-          error: 'Incorrect Password. Please enter your account password or use 1-Tap Access.',
-        });
-      }
+    if (!enteredSecret) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password is required to access your confidential medical vault.',
+      });
+    }
+
+    if (!storedSecret) {
+      return res.status(404).json({
+        success: false,
+        error: 'No password has been set for this account yet. Please click "Create Account Here" below to register a password for your health vault.',
+      });
+    }
+
+    if (enteredSecret !== storedSecret) {
+      return res.status(401).json({
+        success: false,
+        error: 'Incorrect Password. Please enter the password you created when registering your health vault.',
+      });
     }
 
     const primaryPatient = matchingPatients[0] || allQueueEntries[0]?.patient || {

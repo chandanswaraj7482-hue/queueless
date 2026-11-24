@@ -85,27 +85,11 @@ export const signInWithGoogle = async (): Promise<GoogleAuthResult> => {
       idToken,
     };
   } catch (error: any) {
-    console.warn('Firebase Google Auth encountered notice, activating instant verified session fallback:', error);
-    // If popup was explicitly closed by the user, respect the cancellation
+    console.warn('Firebase Google Auth encountered notice:', error);
     if (error?.code === 'auth/popup-closed-by-user') {
       throw new Error('Google sign-in was cancelled.');
     }
-    
-    // For any Firebase internal error, unauthorized domain, or network failure,
-    // provide an instant resilient Google authentication profile so the user is never blocked
-    return {
-      user: {
-        uid: 'google_user_' + Date.now(),
-        email: 'doctor.consult@queueless-health.com',
-        displayName: 'Verified Google Account',
-        photoURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
-      } as any,
-      email: 'doctor.consult@queueless-health.com',
-      displayName: 'Verified Google Account',
-      photoURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
-      uid: 'google_user_' + Date.now(),
-      idToken: 'resilient_id_token_' + Date.now(),
-    };
+    throw new Error(error?.message || 'Google sign-in failed. Please log in with your Registered ID and Password.');
   }
 };
 

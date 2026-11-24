@@ -38,6 +38,7 @@ import {
   Mail,
   Sliders,
   QrCode,
+  Loader2,
 } from 'lucide-react';
 
 const generateWhatsAppRxUrl = (data: any) => {
@@ -126,70 +127,17 @@ export const PatientPortal: React.FC = () => {
   const [viewingReceipt, setViewingReceipt] = useState<any | null>(null);
   const [showFullHistoryModal, setShowFullHistoryModal] = useState(false);
 
-  // Auto-restore patient login session
+  // Pre-fill inputs if previously remembered, but NEVER auto-submit or auto-verify without user action
   useEffect(() => {
     try {
       const saved = localStorage.getItem('queueless_patient_session');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.authProvider === 'google' && parsed.email) {
-          setLoading(true);
-          fetch(`${API_BASE_URL}/api/v1/patient/google-login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: parsed.email, name: parsed.name }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.success) {
-                setPortalData(data.data);
-              }
-            })
-            .catch(() => {})
-            .finally(() => setLoading(false));
-          return;
+        if (parsed.mobile && !parsed.authProvider) {
+          setMobile(parsed.mobile);
         }
-
-        const savedMobile = parsed.mobile || parsed.identifier;
-        const savedToken = parsed.token;
-        const savedName = parsed.name;
-
-        if (savedToken && savedMobile) {
-          fetch(`${API_BASE_URL}/api/v1/patient/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              token: savedToken,
-              patientName: savedName,
-              mobile: savedMobile,
-            }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.success && data.data) {
-                setPortalData(data.data);
-              }
-            })
-            .catch(() => {});
-          return;
-        }
-
-        if (savedMobile) {
-          setMobile(savedMobile);
-          const savedSecret = parsed.password || parsed.pin || '1234';
-          if (savedSecret) setPassword(savedSecret);
-          fetch(`${API_BASE_URL}/api/v1/patient/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mobile: savedMobile, password: savedSecret }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.success && data.data) {
-                setPortalData(data.data);
-              }
-            })
-            .catch(() => {});
+        if (parsed.name) {
+          setTrackName(parsed.name);
         }
       }
     } catch (e) {}
@@ -601,11 +549,14 @@ export const PatientPortal: React.FC = () => {
 
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !mobile.trim() || !password.trim()}
                   className="w-full bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-black py-3.5 px-4 rounded-xl text-xs transition-all shadow-md shadow-sky-600/20 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer active:scale-[0.99]"
                 >
                   {loading ? (
-                    <span>Unlocking Medical Vault...</span>
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Unlocking Medical Vault...</span>
+                    </>
                   ) : (
                     <>
                       <Lock className="w-4 h-4" />
@@ -764,11 +715,14 @@ export const PatientPortal: React.FC = () => {
 
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !signupMobile.trim() || !signupPassword.trim() || !signupConfirmPassword.trim()}
                   className="w-full bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-700 hover:to-sky-700 text-white font-black py-3.5 px-4 rounded-xl text-xs transition-all shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer active:scale-[0.99]"
                 >
                   {loading ? (
-                    <span>Creating Health Vault...</span>
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Creating Health Vault...</span>
+                    </>
                   ) : (
                     <>
                       <Sparkles className="w-4 h-4" />
@@ -894,11 +848,14 @@ export const PatientPortal: React.FC = () => {
 
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !trackName.trim() || !trackToken.trim() || !trackContact.trim()}
                   className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black py-3 px-4 rounded-xl text-xs transition-all shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer active:scale-98"
                 >
                   {loading ? (
-                    <span>Verifying Identity & Retrieving Details...</span>
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Verifying Identity & Retrieving Details...</span>
+                    </>
                   ) : (
                     <>
                       <Search className="w-4 h-4" />

@@ -98,6 +98,17 @@ const COUNTRY_DIAL_CODES = [
   { flag: '🇯🇵', name: 'Japan', code: '+81' },
 ];
 
+export const CURRENCY_TO_DIAL_CODE: Record<string, string> = {
+  USD: '+1',
+  INR: '+91',
+  GBP: '+44',
+  EUR: '+49',
+  AED: '+971',
+  SGD: '+65',
+  AUD: '+61',
+  CAD: '+1',
+};
+
 const GLOBAL_COMPLIANCE = [
   {
     flag: '🇺🇸',
@@ -581,7 +592,7 @@ export const QueuelessWebsite: React.FC = () => {
   const [demoHospital, setDemoHospital] = useState('');
   const [demoEmail, setDemoEmail] = useState('');
   const [demoPhone, setDemoPhone] = useState('');
-  const [demoCountryCode, setDemoCountryCode] = useState('+91');
+  const [demoCountryCode, setDemoCountryCode] = useState(() => CURRENCY_TO_DIAL_CODE[selectedCurrencyCode] || '+1');
   const [demoCabins, setDemoCabins] = useState('6-15 Doctors');
   const [demoDate, setDemoDate] = useState('');
   const [demoConfirmed, setDemoConfirmed] = useState(false);
@@ -600,7 +611,7 @@ export const QueuelessWebsite: React.FC = () => {
   const [leadName, setLeadName] = useState('');
   const [leadHospital, setLeadHospital] = useState('');
   const [leadPhone, setLeadPhone] = useState('');
-  const [leadCountryCode, setLeadCountryCode] = useState('+91');
+  const [leadCountryCode, setLeadCountryCode] = useState(() => CURRENCY_TO_DIAL_CODE[selectedCurrencyCode] || '+1');
   const [leadSubmitted, setLeadSubmitted] = useState(false);
 
   // Interactive Live Mockup Queue State & Cabin Configuration
@@ -911,11 +922,15 @@ export const QueuelessWebsite: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [showAuditModal]);
 
-  // Auto-sync audit fee when selected currency changes
+  // Auto-sync audit fee and country dial code when selected currency changes
   useEffect(() => {
     if (selectedCurrency?.defaultFee) {
       setAuditFee(selectedCurrency.defaultFee);
     }
+    const targetDial = CURRENCY_TO_DIAL_CODE[selectedCurrencyCode] || '+1';
+    setLeadCountryCode(targetDial);
+    setDemoCountryCode(targetDial);
+    setDialCode(targetDial);
   }, [selectedCurrencyCode, selectedCurrency?.defaultFee]);
 
   const handleOpenAuditModal = () => {
@@ -936,29 +951,16 @@ export const QueuelessWebsite: React.FC = () => {
     localStorage.setItem('queueless_currency', code);
     setSelectedCurrencyCode(code);
     const curr = WORLDWIDE_CURRENCIES[code];
+    const targetDial = CURRENCY_TO_DIAL_CODE[code] || '+1';
+    setLeadCountryCode(targetDial);
+    setDemoCountryCode(targetDial);
+    setDialCode(targetDial);
     if (curr) {
       setRoiFee(curr.defaultFee);
       setAuditFee(curr.defaultFee);
       if (code === 'INR') {
-        setDialCode('+91');
         setPaymentMethod('UPI');
-      } else if (code === 'GBP') {
-        setDialCode('+44');
-        setPaymentMethod('CARD');
-      } else if (code === 'AED') {
-        setDialCode('+971');
-        setPaymentMethod('CARD');
-      } else if (code === 'SGD') {
-        setDialCode('+65');
-        setPaymentMethod('CARD');
-      } else if (code === 'AUD') {
-        setDialCode('+61');
-        setPaymentMethod('CARD');
-      } else if (code === 'EUR') {
-        setDialCode('+49');
-        setPaymentMethod('CARD');
       } else {
-        setDialCode('+1');
         setPaymentMethod('CARD');
       }
     }
@@ -1059,13 +1061,14 @@ export const QueuelessWebsite: React.FC = () => {
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const fullPhone = leadPhone.trim().startsWith('+') ? leadPhone.trim() : `${leadCountryCode} ${leadPhone.trim()}`;
       await fetch(`${API_BASE_URL}/api/v1/clinics/sales-inquiry`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           hospitalName: leadHospital,
           contactPerson: leadName,
-          phone: leadPhone,
+          phone: fullPhone,
         }),
       });
       setLeadSubmitted(true);
@@ -3847,7 +3850,7 @@ export const QueuelessWebsite: React.FC = () => {
                   placeholder="Your Name / Doctor Name"
                   value={leadName}
                   onChange={(e) => setLeadName(e.target.value)}
-                  className="px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  className="h-10 sm:h-11 px-3.5 rounded-xl bg-white/10 border border-white/20 text-xs font-medium text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400"
                 />
                 <input
                   type="text"
@@ -3855,9 +3858,10 @@ export const QueuelessWebsite: React.FC = () => {
                   placeholder="Hospital / Medical Facility Name"
                   value={leadHospital}
                   onChange={(e) => setLeadHospital(e.target.value)}
-                  className="px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  className="h-10 sm:h-11 px-3.5 rounded-xl bg-white/10 border border-white/20 text-xs font-medium text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400"
                 />
                 <PhoneCountryInput
+                  variant="dark"
                   value={leadPhone}
                   onChange={(val) => setLeadPhone(val)}
                   countryCode={leadCountryCode}

@@ -43,6 +43,8 @@ export interface PhoneCountryInputProps {
   disabled?: boolean;
   className?: string;
   inputClassName?: string;
+  buttonClassName?: string;
+  variant?: 'light' | 'dark' | 'transparent';
   id?: string;
   name?: string;
   allowAlphaOrEmail?: boolean;
@@ -58,10 +60,14 @@ export const PhoneCountryInput: React.FC<PhoneCountryInputProps> = ({
   disabled = false,
   className = '',
   inputClassName = '',
+  buttonClassName = '',
+  variant = 'light',
   id,
   name,
   allowAlphaOrEmail = false,
 }) => {
+  const isDark = variant === 'dark';
+
   const [selectedCountry, setSelectedCountry] = useState<CountryData>(() => {
     return POPULAR_COUNTRIES.find((c) => c.code === countryCode) || POPULAR_COUNTRIES[0];
   });
@@ -126,6 +132,14 @@ export const PhoneCountryInput: React.FC<PhoneCountryInputProps> = ({
       c.iso.toLowerCase().includes(search.toLowerCase())
   );
 
+  const buttonStyle = isDark
+    ? `h-10 sm:h-11 px-2.5 sm:px-3 bg-white/10 hover:bg-white/15 border border-r-0 border-white/20 rounded-l-xl flex items-center gap-1.5 transition-all text-xs font-bold text-white cursor-pointer select-none ${buttonClassName}`
+    : `h-10 sm:h-11 px-2.5 sm:px-3 bg-slate-100 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 border border-r-0 border-slate-300 dark:border-slate-700 rounded-l-xl flex items-center gap-1.5 transition-all text-xs font-bold text-slate-800 dark:text-slate-200 cursor-pointer select-none ${buttonClassName}`;
+
+  const inputStyle = isDark
+    ? `flex-1 h-10 sm:h-11 px-3.5 rounded-r-xl border border-white/20 bg-white/10 text-xs font-bold text-white placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all ${inputClassName}`
+    : `flex-1 h-10 sm:h-11 px-3.5 rounded-r-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all ${inputClassName}`;
+
   return (
     <div className={`relative flex items-center w-full ${className}`} ref={dropdownRef}>
       {/* Country Flag & Dial Code Selector Button */}
@@ -134,7 +148,7 @@ export const PhoneCountryInput: React.FC<PhoneCountryInputProps> = ({
           type="button"
           disabled={disabled}
           onClick={() => setIsOpen(!isOpen)}
-          className="h-10 sm:h-11 px-2.5 sm:px-3 bg-slate-100 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 border border-r-0 border-slate-300 dark:border-slate-700 rounded-l-xl flex items-center gap-1.5 transition-all text-xs font-bold text-slate-800 dark:text-slate-200 cursor-pointer select-none"
+          className={buttonStyle}
           title={`Selected country: ${selectedCountry.name} (${selectedCountry.code})`}
           aria-haspopup="listbox"
           aria-expanded={isOpen}
@@ -143,14 +157,18 @@ export const PhoneCountryInput: React.FC<PhoneCountryInputProps> = ({
             {selectedCountry.flag}
           </span>
           <span className="font-mono font-bold text-xs">{selectedCountry.code}</span>
-          <ChevronDown className={`w-3 h-3 text-slate-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-3 h-3 ${isDark ? 'text-slate-300' : 'text-slate-500'} transition-transform ${isOpen ? 'rotate-180' : ''}`} />
         </button>
 
         {/* Floating Country Picker Popover Dropdown */}
         {isOpen && (
-          <div className="absolute left-0 top-full mt-1.5 w-64 sm:w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+          <div className={`absolute left-0 top-full mt-1.5 w-64 sm:w-72 ${
+            isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700'
+          } border rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100`}>
             {/* Quick Country Search */}
-            <div className="p-2 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/70">
+            <div className={`p-2 border-b ${
+              isDark ? 'border-slate-800 bg-slate-950' : 'border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/70'
+            }`}>
               <div className="relative">
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
                 <input
@@ -159,7 +177,9 @@ export const PhoneCountryInput: React.FC<PhoneCountryInputProps> = ({
                   placeholder="Search country or code..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className={`w-full pl-8 pr-3 py-1.5 ${
+                    isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white'
+                  } border rounded-xl text-xs font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500`}
                 />
               </div>
             </div>
@@ -178,7 +198,11 @@ export const PhoneCountryInput: React.FC<PhoneCountryInputProps> = ({
                       onClick={() => handleSelectCountry(c)}
                       className={`w-full px-2.5 py-2 rounded-xl text-left text-xs flex items-center justify-between transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-sky-50 dark:bg-sky-950/70 text-sky-900 dark:text-sky-200 font-bold'
+                          ? isDark
+                            ? 'bg-sky-950/80 text-sky-200 font-bold'
+                            : 'bg-sky-50 dark:bg-sky-950/70 text-sky-900 dark:text-sky-200 font-bold'
+                          : isDark
+                          ? 'hover:bg-slate-800 text-slate-200'
                           : 'hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-700 dark:text-slate-200'
                       }`}
                     >
@@ -187,8 +211,8 @@ export const PhoneCountryInput: React.FC<PhoneCountryInputProps> = ({
                         <span className="truncate">{c.name}</span>
                       </div>
                       <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                        <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400">{c.code}</span>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />}
+                        <span className={`font-mono text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500 dark:text-slate-400'}`}>{c.code}</span>
+                        {isSelected && <Check className="w-3.5 h-3.5 text-sky-400" />}
                       </div>
                     </button>
                   );
@@ -209,7 +233,7 @@ export const PhoneCountryInput: React.FC<PhoneCountryInputProps> = ({
         placeholder={placeholder || selectedCountry.placeholder}
         value={value}
         onChange={handleInputChange}
-        className={`flex-1 h-10 sm:h-11 px-3.5 rounded-r-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all ${inputClassName}`}
+        className={inputStyle}
       />
     </div>
   );

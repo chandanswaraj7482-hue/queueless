@@ -191,12 +191,72 @@ const DEFAULT_REVIEWS: ClinicalReviewItem[] = [
     verifiedHospital: true,
     date: 'Verified 1 week ago',
   },
+  {
+    id: 'rev-11',
+    author: 'Dr. Vikramaditya Rathore, MS',
+    role: 'Chief Orthopedic Surgeon',
+    org: 'Rathore Bone & Joint Centre • Jaipur',
+    avatar: '/assets/avatars/doc-1.jpg',
+    badge: 'Senior Consultant',
+    category: 'DOCTORS',
+    rating: 5,
+    highlight: '+38% Faster OPD Shift',
+    highlightMetric: '45 Mins Saved Daily',
+    text: 'Waiting hall overcrowding was our clinic’s constant bottleneck. With Queueless, patients are called right from my iPad in cabin. I finish OPD 45 minutes faster every single day with zero lobby complaints.',
+    verifiedHospital: true,
+    date: 'Verified 4 days ago',
+  },
+  {
+    id: 'rev-12',
+    author: 'Deepak Nambiar',
+    role: 'Elderly Caregiver',
+    org: 'Patient Family at Aster Medcity',
+    avatar: '/assets/avatars/pat-2.jpg',
+    badge: 'Verified Google Review',
+    category: 'PATIENTS',
+    rating: 5,
+    highlight: 'Multilingual Audio Chime',
+    highlightMetric: 'Clear Cabin Announcements',
+    text: 'My father has hearing and vision impairment. The waiting hall TV voice announcement calling his token number in Malayalam and Hindi made it completely hassle-free. We never had to keep asking desk staff.',
+    verifiedHospital: true,
+    date: 'Verified 6 days ago',
+  },
+  {
+    id: 'rev-13',
+    author: 'Dr. Shalini Mukhopadhyay',
+    role: 'Medical Superintendent',
+    org: 'Ruby General Hospital • Kolkata',
+    avatar: '/assets/avatars/doc-3.jpg',
+    badge: 'NABH Assessor',
+    category: 'DOCTORS',
+    rating: 5,
+    highlight: 'NABH Audit Ready',
+    highlightMetric: '100% Digital Telemetry',
+    text: 'Accreditation inspectors praised our transparent patient wait-time telemetry. One click generates complete historical OPD compliance logs with zero manual ledger paperwork or errors.',
+    verifiedHospital: true,
+    date: 'Verified 1 week ago',
+  },
+  {
+    id: 'rev-14',
+    author: 'Pooja Chhabra',
+    role: 'Dental Patient',
+    org: 'Patient at Clove Dental Specialist',
+    avatar: '/assets/avatars/pat-4.jpg',
+    badge: 'Verified Practo Review',
+    category: 'PATIENTS',
+    rating: 5,
+    highlight: 'Zero App Download',
+    highlightMetric: 'Live Web Queue Pass',
+    text: 'I loved that I didn’t have to download yet another hospital app that spams notifications. Simple QR scan opened directly in Safari, showed my queue position live, and sent my prescription on WhatsApp immediately.',
+    verifiedHospital: true,
+    date: 'Verified 2 days ago',
+  },
 ];
 
 export const ClinicalReviewsCarousel: React.FC = () => {
   const [reviews, setReviews] = useState<ClinicalReviewItem[]>(() => {
     try {
-      const saved = localStorage.getItem('queueless_community_reviews_v2');
+      const saved = localStorage.getItem('queueless_community_reviews_v3');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {

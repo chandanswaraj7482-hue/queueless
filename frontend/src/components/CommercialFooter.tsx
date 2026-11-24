@@ -355,30 +355,32 @@ export const CommercialFooter: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Copyright & Compliance Strip with Clean Back-to-Top Button */}
-        <div className="pt-6 border-t border-slate-800/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
-          <p className="text-center sm:text-left">
+        {/* Bottom Copyright & Compliance Strip: Completely Center-Aligned on all screens */}
+        <div className="pt-8 border-t border-slate-800/60 flex flex-col items-center justify-center text-center gap-3 text-[11px] text-slate-400">
+          <p className="text-center text-slate-400 leading-relaxed max-w-xl">
             © {new Date().getFullYear()} <strong className="text-slate-200 font-bold">Queueless Healthcare OS</strong>. Built for zero-wait clinical excellence. All rights reserved.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 text-slate-400">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-slate-400 text-center leading-relaxed max-w-2xl">
             <span>India DPDP Compliant</span>
-            <span>•</span>
+            <span className="text-slate-600">•</span>
             <span>Zero Patient PHI Monetization</span>
-            <span>•</span>
+            <span className="text-slate-600">•</span>
             <span>99.99% Hospital SLA Uptime</span>
           </div>
 
-          {/* Minimalist, Clean Back to Top Pill */}
-          <button
-            type="button"
-            onClick={scrollToTop}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition-all text-xs font-semibold cursor-pointer active:scale-95 shadow-sm"
-            title="Scroll to top of page"
-          >
-            <span>Back to top</span>
-            <ArrowUp className="w-3.5 h-3.5 text-sky-400" />
-          </button>
+          {/* Minimalist, Clean Center-Aligned Back to Top Pill */}
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition-all text-xs font-semibold cursor-pointer active:scale-95 shadow-sm"
+              title="Scroll to top of page"
+            >
+              <span>Back to top</span>
+              <ArrowUp className="w-3.5 h-3.5 text-sky-400" />
+            </button>
+          </div>
         </div>
 
       </div>

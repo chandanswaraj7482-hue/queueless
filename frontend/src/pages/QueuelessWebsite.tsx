@@ -499,11 +499,11 @@ const DIRECTORY_SITELINKS: DirectorySitelinkItem[] = [
 ];
 
 export const QueuelessWebsite: React.FC = () => {
-  // Global Currency State
+  // Global Currency State (Default worldwide USD, syncs across tabs & navbar)
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState<string>(
-    () => (typeof window !== 'undefined' ? localStorage.getItem('queueless_currency') || 'INR' : 'INR')
+    () => (typeof window !== 'undefined' ? localStorage.getItem('queueless_currency') || 'USD' : 'USD')
   );
-  const selectedCurrency = WORLDWIDE_CURRENCIES[selectedCurrencyCode] || WORLDWIDE_CURRENCIES.INR;
+  const selectedCurrency = WORLDWIDE_CURRENCIES[selectedCurrencyCode] || WORLDWIDE_CURRENCIES.USD;
 
   // Billing Cycle State
   const [billingCycle, setBillingCycle] = useState<'MONTHLY' | 'ANNUAL'>('ANNUAL');
@@ -3341,25 +3341,25 @@ export const QueuelessWebsite: React.FC = () => {
                   <span className="text-[10px] text-emerald-400/80 block mt-0.5 whitespace-nowrap">Average 6-Cabin Hospital</span>
                 </div>
                 <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
-                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-blue-400 font-mono tracking-tight whitespace-nowrap">
+                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap">
                     <AnimatedCounter end={3.4} decimals={1} suffix=" Days" duration={1600} />
                   </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Average Payback</span>
-                  <span className="text-[10px] text-blue-400/80 block mt-0.5 whitespace-nowrap">30-Day Guarantee</span>
+                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 whitespace-nowrap">30-Day Guarantee</span>
                 </div>
                 <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
-                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-indigo-400 font-mono tracking-tight whitespace-nowrap">
+                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap">
                     <AnimatedCounter end={2.4} decimals={1} suffix="x" duration={1600} />
                   </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">15-Day Follow-Up Rate</span>
-                  <span className="text-[10px] text-indigo-400/80 block mt-0.5 whitespace-nowrap">Automated Sync</span>
+                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 whitespace-nowrap">Automated Sync</span>
                 </div>
                 <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
-                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-amber-400 font-mono tracking-tight whitespace-nowrap">
+                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap">
                     <AnimatedCounter prefix="-" end={78} suffix="%" duration={1600} />
                   </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Corridor Crowding</span>
-                  <span className="text-[10px] text-amber-400/80 block mt-0.5 whitespace-nowrap">Calm Waiting Lounges</span>
+                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 whitespace-nowrap">Calm Waiting Lounges</span>
                 </div>
               </div>
             </div>

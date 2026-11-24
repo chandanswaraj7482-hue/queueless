@@ -60,7 +60,7 @@ export const HospitalOnboarding: React.FC = () => {
   };
 
   const initialPlan = getNormalizedPlan(searchParams.get('plan'));
-  const queryCurrency = (searchParams.get('currency')?.toUpperCase() as string) || localStorage.getItem('queueless_currency') || 'INR';
+  const queryCurrency = (searchParams.get('currency')?.toUpperCase() as string) || localStorage.getItem('queueless_currency') || 'USD';
   const queryCycle = searchParams.get('cycle')?.toUpperCase() === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
   const queryAddon = searchParams.get('addon') === 'custom_logo';
   const querySurge = searchParams.get('addon') === 'token_surge';

@@ -40,7 +40,7 @@ export const PricingPage: React.FC = () => {
 
   const [currencyCode, setCurrencyCode] = useState<string>(() => {
     if (queryCurrency && WORLDWIDE_CURRENCIES[queryCurrency]) return queryCurrency;
-    return localStorage.getItem('queueless_currency') || 'INR';
+    return localStorage.getItem('queueless_currency') || 'USD';
   });
 
   useEffect(() => {

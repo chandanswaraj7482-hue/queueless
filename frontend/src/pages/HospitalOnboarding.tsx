@@ -1346,7 +1346,7 @@ export const HospitalOnboarding: React.FC = () => {
                     </span>
                   </button>
 
-                  {/* UPI AutoPay Tab */}
+                  {/* Cashfree UPI AutoPay Tab */}
                   <button
                     type="button"
                     onClick={() => {
@@ -1361,10 +1361,10 @@ export const HospitalOnboarding: React.FC = () => {
                     <div className="flex items-center justify-between w-full">
                       <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
                         <Smartphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                        <span>UPI AutoPay Mandate</span>
+                        <span>UPI AutoPay (Cashfree)</span>
                       </span>
                       <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">
-                        INSTANT INR
+                        CASHFREE & NPCI
                       </span>
                     </div>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
@@ -1468,7 +1468,7 @@ export const HospitalOnboarding: React.FC = () => {
                     <div className="flex items-center justify-between text-xs font-bold text-slate-900 dark:text-white">
                       <div className="flex items-center gap-2">
                         <Smartphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                        <span>UPI AutoPay Mandate (NPCI Live Gateway)</span>
+                        <span>Cashfree UPI AutoPay Mandate (RBI & NPCI Live Gateway)</span>
                       </div>
                       <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-[10px] font-black uppercase border border-emerald-200 dark:border-emerald-800">
                         Zero OTP on Day 15
@@ -1476,20 +1476,65 @@ export const HospitalOnboarding: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        Hospital Director UPI VPA / ID *
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Select AutoPay UPI App or Enter VPA / UPI ID:
                       </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. hospital.director@okhdfcbank or 9876543210@paytm"
-                        value={upiVpa}
-                        onChange={(e) => setUpiVpa(e.target.value.trim().toLowerCase())}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                      />
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
-                        Works with Google Pay, PhonePe, Paytm, BHIM, Cred, and all major Indian UPI banks.
-                      </p>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setUpiVpa(phone ? `${phone}@okhdfcbank` : 'director@okhdfcbank');
+                          }}
+                          className="px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-500 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-xs cursor-pointer active:scale-95"
+                        >
+                          <span>⚡ Google Pay</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setUpiVpa(phone ? `${phone}@ybl` : 'director@ybl');
+                          }}
+                          className="px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-500 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-xs cursor-pointer active:scale-95"
+                        >
+                          <span>🟣 PhonePe</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setUpiVpa(phone ? `${phone}@paytm` : 'director@paytm');
+                          }}
+                          className="px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-500 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-xs cursor-pointer active:scale-95"
+                        >
+                          <span>🔷 Paytm</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setUpiVpa(phone ? `${phone}@upi` : 'director@upi');
+                          }}
+                          className="px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-500 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-xs cursor-pointer active:scale-95"
+                        >
+                          <span>🇮🇳 BHIM / Other</span>
+                        </button>
+                      </div>
+
+                      <div className="relative">
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g. 9876543210@okhdfcbank or hospital.director@ybl"
+                          value={upiVpa}
+                          onChange={(e) => setUpiVpa(e.target.value.trim().toLowerCase())}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                        />
+                        <span className="absolute right-3 top-2.5 text-[10px] bg-emerald-100 dark:bg-emerald-900/80 text-emerald-800 dark:text-emerald-200 font-bold px-2 py-0.5 rounded-md pointer-events-none">
+                          Cashfree AutoPay Verified
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center justify-between gap-1 text-[10px] text-slate-500 dark:text-slate-400 mt-2">
+                        <span>✓ Powered by <strong>Cashfree Payments</strong> • Official RBI & NPCI e-Mandate Rail</span>
+                        <span>✓ Instant approval in Google Pay, PhonePe, Paytm or BHIM app</span>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -1506,10 +1551,10 @@ export const HospitalOnboarding: React.FC = () => {
                     />
                     <label htmlFor="autopayConsent" className="text-xs text-slate-800 dark:text-slate-200 cursor-pointer select-none">
                       <strong className="text-slate-950 dark:text-white block">
-                        I authorize Queueless Clinical OS to register an AutoPay recurring mandate.
+                        I authorize Queueless Clinical OS to register an AutoPay recurring mandate via Cashfree Payments / Global Gateway.
                       </strong>
                       <span className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed block mt-1">
-                        <strong>₹0 / $0 charged today</strong> for your 14-day free hospital pilot. If you continue after Day 14, your chosen plan ({selectedPlan.name} • {selectedCurrency.symbol}{totalAmount.toLocaleString()} / {billingCycle === 'ANNUAL' ? 'year' : 'month'}) will auto-renew via this mandate. You can cancel anytime before Day 14 in 1 click from your Director Admin Settings with zero penalty.
+                        <strong>₹0 / $0 charged today</strong> for your 14-day free hospital pilot. If you continue after Day 14, your chosen plan ({selectedPlan.name} • {selectedCurrency.symbol}{totalAmount.toLocaleString()} / {billingCycle === 'ANNUAL' ? 'year' : 'month'}) will auto-renew via Cashfree UPI AutoPay (or Card Mandate). You can cancel anytime before Day 14 in 1 click from your Director Admin Settings with zero penalty.
                       </span>
                     </label>
                   </div>
@@ -1528,7 +1573,7 @@ export const HospitalOnboarding: React.FC = () => {
                     <ShieldCheck className="w-4 h-4" />
                     <span>14-Day 100% Free Pilot • Cancel Anytime</span>
                   </span>
-                  <span>Instant Automatic Setup</span>
+                  <span>Instant Cashfree AutoPay Setup</span>
                   <span>Direct Founder Mandate</span>
                 </div>
 
@@ -1551,8 +1596,10 @@ export const HospitalOnboarding: React.FC = () => {
                     <Zap className="w-4 h-4 fill-white" />
                     <span>
                       {isProcessing
-                        ? 'Registering AutoPay Mandate & Provisioning...'
-                        : `Authorize AutoPay & Start 14-Day Free Pilot (Pay ${selectedCurrency.symbol}0 Today) ➔`}
+                        ? 'Registering Cashfree AutoPay Mandate & Provisioning...'
+                        : paymentMode === 'UPI'
+                          ? `Authorize via Cashfree UPI AutoPay (Pay ${selectedCurrency.symbol}0 Today) ➔`
+                          : `Authorize Card AutoPay & Start 14-Day Free Pilot (Pay ${selectedCurrency.symbol}0 Today) ➔`}
                     </span>
                   </button>
                 </div>

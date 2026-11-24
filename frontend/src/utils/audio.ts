@@ -503,8 +503,16 @@ export const CLINICAL_REEL_VOICEOVERS: Record<number, ClinicalVoiceoverItem> = {
 };
 
 let currentVoiceoverUtterance: SpeechSynthesisUtterance | null = null;
+let currentVoiceoverAudio: HTMLAudioElement | null = null;
 
 export function stopClinicalReviewVoiceover() {
+  if (currentVoiceoverAudio) {
+    try {
+      currentVoiceoverAudio.pause();
+      currentVoiceoverAudio.currentTime = 0;
+    } catch {}
+    currentVoiceoverAudio = null;
+  }
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     try {
       window.speechSynthesis.cancel();
@@ -519,20 +527,70 @@ export function playClinicalReviewVoiceover(
   onStart?: () => void,
   onEnd?: () => void
 ): boolean {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+  if (typeof window === 'undefined') {
     return false;
   }
 
   const voiceover = CLINICAL_REEL_VOICEOVERS[reelId];
   if (!voiceover) return false;
 
+  stopClinicalReviewVoiceover();
+  playClinicChime();
+
+  // 1. Primary: High-fidelity natural studio audio file
+  const audioPath = `/assets/audio/voiceover_reel${reelId}_${language}.m4a`;
+  try {
+    const audio = new Audio(audioPath);
+    audio.volume = 1.0;
+
+    let hasStarted = false;
+    audio.onplay = () => {
+      hasStarted = true;
+      if (onStart) onStart();
+    };
+
+    audio.onended = () => {
+      currentVoiceoverAudio = null;
+      if (onEnd) onEnd();
+    };
+
+    audio.onerror = () => {
+      // Fallback to Web Speech API if audio file fails to load
+      if (!hasStarted) {
+        currentVoiceoverAudio = null;
+        playWebSpeechFallback(voiceover, language, onStart, onEnd);
+      }
+    };
+
+    currentVoiceoverAudio = audio;
+    setTimeout(() => {
+      audio.play().catch(() => {
+        // Fallback to Web Speech API if browser blocks audio autoplay
+        currentVoiceoverAudio = null;
+        playWebSpeechFallback(voiceover, language, onStart, onEnd);
+      });
+    }, 350);
+
+    return true;
+  } catch {
+    return playWebSpeechFallback(voiceover, language, onStart, onEnd);
+  }
+}
+
+function playWebSpeechFallback(
+  voiceover: ClinicalVoiceoverItem,
+  language: 'hi' | 'en',
+  onStart?: () => void,
+  onEnd?: () => void
+): boolean {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+    if (onEnd) onEnd();
+    return false;
+  }
+
   const text = language === 'hi' ? voiceover.hiText : voiceover.enText;
 
   try {
-    stopClinicalReviewVoiceover();
-    playClinicChime();
-
-    // Refresh voices if empty
     if (cachedVoices.length === 0) {
       cachedVoices = window.speechSynthesis.getVoices();
     }
@@ -565,21 +623,11 @@ export function playClinicalReviewVoiceover(
     };
 
     currentVoiceoverUtterance = utt;
-
-    // Small delay for chime resonance
-    setTimeout(() => {
-      try {
-        window.speechSynthesis.resume();
-        window.speechSynthesis.speak(utt);
-      } catch (e) {
-        console.warn('Voiceover speak error', e);
-        if (onEnd) onEnd();
-      }
-    }, 380);
-
+    window.speechSynthesis.resume();
+    window.speechSynthesis.speak(utt);
     return true;
   } catch (err) {
-    console.warn('Failed to play clinical voiceover', err);
+    console.warn('Fallback speech error', err);
     if (onEnd) onEnd();
     return false;
   }

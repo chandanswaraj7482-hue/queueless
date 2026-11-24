@@ -57,6 +57,21 @@ const DEFAULT_REVIEWS: ClinicalReviewItem[] = [
     date: 'Verified 3 days ago',
   },
   {
+    id: 'rev-superintendent-patil',
+    author: 'Dr. Devendra N. Patil, MS, MCh',
+    role: 'Medical Superintendent & Chief of Surgery',
+    org: 'Sahyadri Multispecialty Hospital • Pune',
+    avatar: '/assets/avatars/doc-4.jpg',
+    badge: 'NABH Certified',
+    category: 'DOCTORS',
+    rating: 5,
+    highlight: '-82% OPD Hall Noise',
+    highlightMetric: 'Zero Cabin Interruption',
+    text: 'Crowded corridors and patients knocking on consulting doors were everyday headaches for our 18 OPD departments. Queueless synchronized the entire hospital on a single screen and WhatsApp. Patient satisfaction scores jumped to 98% in just two weeks.',
+    verifiedHospital: true,
+    date: 'Verified yesterday',
+  },
+  {
     id: 'rev-2',
     author: 'Dr. Priya S. Kulkarni',
     role: 'Head of Pediatric OPD',
@@ -256,7 +271,7 @@ const DEFAULT_REVIEWS: ClinicalReviewItem[] = [
 export const ClinicalReviewsCarousel: React.FC = () => {
   const [reviews, setReviews] = useState<ClinicalReviewItem[]>(() => {
     try {
-      const saved = localStorage.getItem('queueless_community_reviews_v3');
+      const saved = localStorage.getItem('queueless_community_reviews_v4');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {

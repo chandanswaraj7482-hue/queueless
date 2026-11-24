@@ -16,7 +16,9 @@ import {
   Linkedin,
   Twitter,
   Languages,
-  ExternalLink,
+  ArrowUp,
+  Activity,
+  HeartPulse,
 } from 'lucide-react';
 import { GOOGLE_LANGUAGES, getStoredLanguage, changeLanguage } from '../utils/googleTranslate';
 
@@ -34,17 +36,21 @@ export const CommercialFooter: React.FC = () => {
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <footer className="bg-slate-950 text-slate-400 border-t border-slate-800/80 text-xs relative z-10 pt-16 pb-8 overflow-hidden transition-colors duration-200">
-      {/* Subtle Ambient Radial Backlight for High-End Depth */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[320px] bg-gradient-to-b from-sky-600/10 via-indigo-600/5 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
+    <footer className="bg-slate-950 text-slate-400 border-t border-slate-800/80 text-xs relative z-10 pt-16 pb-12 overflow-hidden transition-colors duration-200">
+      {/* Subtle Ambient Radial Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[260px] bg-gradient-to-b from-sky-500/10 via-indigo-500/5 to-transparent rounded-full blur-[120px] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 space-y-12">
-        {/* Main Footer Grid: 2 Columns on Mobile & Tablet, 6 Columns on Desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-x-6 sm:gap-x-8 gap-y-10 lg:gap-10">
+        {/* Main Footer Grid: 2 Columns on Mobile/Tablet, 6 Columns on Desktop */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 sm:gap-x-8 gap-y-10 lg:gap-8">
           
-          {/* Brand & Identity (Full width across 2 columns on mobile/tablet, 2 cols on desktop) */}
-          <div className="col-span-2 lg:col-span-2 space-y-4">
+          {/* Brand & Identity Column (Spans 2 columns) */}
+          <div className="col-span-2 space-y-4 pr-0 lg:pr-4">
             <Link to="/" className="flex items-center gap-3 group w-fit">
               <div className="relative">
                 <img
@@ -68,11 +74,19 @@ export const CommercialFooter: React.FC = () => {
             </Link>
 
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              Empowering hospitals and healthcare facilities across 120+ countries to eliminate waiting room congestion, prevent walkout revenue leakage, and deliver dignified zero-wait patient experiences.
+              Autonomous clinical queue operating system eliminating waiting hall congestion, preventing walkout revenue loss, and delivering dignified zero-wait patient experiences.
             </p>
 
+            {/* Live Operational Status Pill */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-300">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="font-semibold text-emerald-400">99.99% Uptime</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-slate-400">ABDM M1/M2 Certified</span>
+            </div>
+
             {/* Clean Minimalist Social Media Icon Buttons */}
-            <div className="pt-2 flex items-center gap-2">
+            <div className="pt-1 flex items-center gap-2">
               <a
                 href="https://twitter.com/queueless"
                 target="_blank"
@@ -112,7 +126,7 @@ export const CommercialFooter: React.FC = () => {
             </div>
 
             {/* Direct Official Contact */}
-            <div className="pt-2">
+            <div className="pt-1">
               <a
                 href="mailto:contact@queuelesslabs.com"
                 className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-sky-400 transition-colors"
@@ -120,17 +134,17 @@ export const CommercialFooter: React.FC = () => {
                 <Mail className="w-3.5 h-3.5 text-sky-400 shrink-0" />
                 <span>contact@queuelesslabs.com</span>
               </a>
-              <p className="text-[11px] text-slate-400 mt-0.5">Enterprise onboarding, hospital networks & custom integrations</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">Enterprise onboarding, hospital networks & custom integrations</p>
             </div>
           </div>
 
-          {/* Col 1 (Mobile Grid): Platform Capabilities */}
+          {/* Column 2: Platform Suite */}
           <div className="col-span-1 space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-sky-400 shrink-0" />
               <span>Platform Suite</span>
             </h4>
-            <ul className="space-y-2.5 text-xs">
+            <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <Link to="/features" className="hover:text-white transition-colors">
                   Autonomous Queue
@@ -157,13 +171,13 @@ export const CommercialFooter: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-blue-400 font-bold hover:text-blue-300 flex items-center gap-1">
+                <Link to="/blog" className="text-sky-400 font-semibold hover:text-sky-300 flex items-center gap-1">
                   <span>Clinical Insights & Blog</span>
                   <ArrowRight className="w-3 h-3 shrink-0" />
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="text-sky-400 font-bold hover:text-sky-300 flex items-center gap-1">
+                <Link to="/pricing" className="text-sky-400 font-semibold hover:text-sky-300 flex items-center gap-1">
                   <span>Transparent Pricing</span>
                   <ArrowRight className="w-3 h-3 shrink-0" />
                 </Link>
@@ -171,13 +185,13 @@ export const CommercialFooter: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 2 (Mobile Grid): Healthcare Solutions */}
+          {/* Column 3: Solutions */}
           <div className="col-span-1 space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
               <Building2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
               <span>Solutions</span>
             </h4>
-            <ul className="space-y-2.5 text-xs">
+            <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <Link to="/features" className="hover:text-white transition-colors">
                   Multi-Specialty Hospitals
@@ -195,7 +209,7 @@ export const CommercialFooter: React.FC = () => {
               </li>
               <li>
                 <Link to="/features" className="hover:text-white transition-colors">
-                  Hospital Chains
+                  Hospital Chains & Networks
                 </Link>
               </li>
               <li>
@@ -205,19 +219,19 @@ export const CommercialFooter: React.FC = () => {
               </li>
               <li>
                 <Link to="/roi-calculator" className="hover:text-white transition-colors">
-                  ROI Calculator
+                  ROI Payback Calculator
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 3 (Mobile Grid): Live Operations Portals */}
+          {/* Column 4: Live Portals */}
           <div className="col-span-1 space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
               <Globe className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <span>Live Portals</span>
             </h4>
-            <ul className="space-y-2.5 text-xs">
+            <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <Link to="/portal" className="hover:text-white transition-colors">
                   Patient Token Tracker
@@ -225,7 +239,7 @@ export const CommercialFooter: React.FC = () => {
               </li>
               <li>
                 <Link to="/city-health/doctor" className="hover:text-white transition-colors">
-                  Doctor OPD Station
+                  Doctor Cabin Console
                 </Link>
               </li>
               <li>
@@ -240,25 +254,30 @@ export const CommercialFooter: React.FC = () => {
               </li>
               <li>
                 <Link to="/admin" className="hover:text-white transition-colors">
-                  Hospital Admin Desk
+                  Hospital Admin HQ
                 </Link>
               </li>
               <li>
-                <Link to="/login" className="hover:text-white transition-colors flex items-center gap-1">
-                  <Lock className="w-3 h-3 text-slate-500 shrink-0" />
+                <Link to="/login" className="hover:text-white transition-colors flex items-center gap-1 text-slate-300 font-semibold">
+                  <Lock className="w-3 h-3 text-emerald-400 shrink-0" />
                   <span>Hospital Staff Login</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 4 (Mobile Grid): Trust & Compliance */}
+          {/* Column 5: Trust & Compliance */}
           <div className="col-span-1 space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-teal-400 shrink-0" />
               <span>Trust & Legal</span>
             </h4>
-            <ul className="space-y-2.5 text-xs">
+            <ul className="space-y-2.5 text-xs text-slate-400">
+              <li>
+                <Link to="/about" className="hover:text-white transition-colors flex items-center gap-1">
+                  <span>About Queueless</span>
+                </Link>
+              </li>
               <li>
                 <Link to="/privacy" className="hover:text-white transition-colors">
                   Privacy Policy
@@ -275,18 +294,12 @@ export const CommercialFooter: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/about#something-labs" className="hover:text-white transition-colors flex items-center gap-1.5 text-sky-400 font-bold">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                  <span>Something Labs</span>
-                </Link>
-              </li>
-              <li>
                 <Link to="/refund-policy" className="hover:text-white transition-colors">
                   Refund & Cancellation
                 </Link>
               </li>
               <li className="pt-1">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-[10px] font-bold">
                   <CheckCircle2 className="w-3 h-3 shrink-0" />
                   <span>ABDM Certified</span>
                 </span>
@@ -296,23 +309,23 @@ export const CommercialFooter: React.FC = () => {
 
         </div>
 
-        {/* Global Payment & Verification Security Ribbon */}
-        <div className="pt-6 pb-4 border-t border-slate-800/70 flex flex-wrap items-center justify-between gap-4 text-[11px] text-slate-400">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="font-semibold text-slate-400 uppercase tracking-wider text-[10px]">
-              Security & Payment Standards:
+        {/* Global Security & Multi-Language Ribbon */}
+        <div className="pt-8 pb-4 border-t border-slate-800/70 flex flex-wrap items-center justify-between gap-4 text-[11px] text-slate-400">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+            <span className="font-bold text-slate-300 uppercase tracking-wider text-[10px]">
+              Compliance & Security:
             </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-medium">
               <Lock className="w-3 h-3 text-emerald-400" />
               <span>256-Bit Cryptographic SSL</span>
             </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-medium">
               <CreditCard className="w-3 h-3 text-sky-400" />
-              <span>Dodo Payments & UPI</span>
+              <span>Direct UPI & NetBanking</span>
             </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-              <ShieldCheck className="w-3 h-3 text-emerald-400" />
-              <span>Cashfree Verified Gateway</span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-medium">
+              <ShieldCheck className="w-3 h-3 text-teal-400" />
+              <span>HIPAA & ABDM Aligned</span>
             </span>
           </div>
 
@@ -342,54 +355,30 @@ export const CommercialFooter: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Copyright & Compliance Notice */}
-        <div className="pt-4 border-t border-slate-800/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
-          <p>
-            © {new Date().getFullYear()} <strong className="text-slate-200 font-bold">Queueless Healthcare OS</strong>. Built & Engineered by{' '}
-            <Link to="/about#something-labs" className="text-sky-400 hover:text-sky-300 font-bold underline decoration-sky-500/40">
-              Something Labs
-            </Link>
-            . All rights reserved.
+        {/* Bottom Copyright & Compliance Strip with Clean Back-to-Top Button */}
+        <div className="pt-6 border-t border-slate-800/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
+          <p className="text-center sm:text-left">
+            © {new Date().getFullYear()} <strong className="text-slate-200 font-bold">Queueless Healthcare OS</strong>. Built for zero-wait clinical excellence. All rights reserved.
           </p>
-          <div className="flex flex-wrap items-center gap-3">
+
+          <div className="flex flex-wrap items-center justify-center gap-3 text-slate-400">
             <span>India DPDP Compliant</span>
             <span>•</span>
             <span>Zero Patient PHI Monetization</span>
             <span>•</span>
             <span>99.99% Hospital SLA Uptime</span>
           </div>
-        </div>
 
-        {/* Sleek, Ultra-Luxury Gradient Brand Watermark with Interactive Smooth Scroll-to-Top */}
-        <div
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="pt-10 pb-6 text-center select-none w-full max-w-full overflow-hidden flex flex-col items-center justify-center relative group cursor-pointer"
-          title="Queueless OS • Click to scroll back to top"
-        >
-          {/* Interactive Ambient Radial Glow Behind Watermark */}
-          <div className="absolute inset-0 max-w-4xl mx-auto h-36 bg-gradient-to-r from-sky-500/25 via-indigo-500/35 to-teal-400/25 blur-3xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 pointer-events-none" />
-
-          <h2
-            className="relative text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight select-none leading-none transition-all duration-700 ease-out transform group-hover:scale-[1.02] active:scale-95 cursor-pointer"
-            style={{
-              background: 'linear-gradient(135deg, #0284c7 0%, #38bdf8 25%, #818cf8 50%, #06b6d4 75%, #10b981 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              color: 'transparent',
-              filter: 'drop-shadow(0 4px 20px rgba(56, 189, 248, 0.35))',
-            }}
+          {/* Minimalist, Clean Back to Top Pill */}
+          <button
+            type="button"
+            onClick={scrollToTop}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition-all text-xs font-semibold cursor-pointer active:scale-95 shadow-sm"
+            title="Scroll to top of page"
           >
-            Queueless OS
-          </h2>
-          <div className="flex items-center justify-center gap-2 -mt-1 sm:-mt-2 transition-colors">
-            <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-sky-400/80 group-hover:text-sky-300">
-              Autonomous Zero-Wait Clinical Queue Operating System
-            </span>
-            <span className="text-[10px] font-bold text-sky-400/50 group-hover:text-sky-300 transition-colors hidden sm:inline">
-              • Click to scroll to top ↑
-            </span>
-          </div>
+            <span>Back to top</span>
+            <ArrowUp className="w-3.5 h-3.5 text-sky-400" />
+          </button>
         </div>
 
       </div>

@@ -311,22 +311,20 @@ export const CommercialFooter: React.FC = () => {
 
         {/* Global Security & Multi-Language Ribbon */}
         <div className="pt-8 pb-4 border-t border-slate-800/70 flex flex-wrap items-center justify-between gap-4 text-[11px] text-slate-400">
-          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-            <span className="font-bold text-slate-300 uppercase tracking-wider text-[10px]">
-              Compliance & Security:
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+            <span className="font-bold text-slate-300 uppercase tracking-wider text-[10px] hidden sm:inline">
+              Payment & Security:
             </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-medium">
-              <Lock className="w-3 h-3 text-emerald-400" />
-              <span>256-Bit Cryptographic SSL</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-medium">
-              <CreditCard className="w-3 h-3 text-sky-400" />
-              <span>Direct UPI & NetBanking</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-medium">
-              <ShieldCheck className="w-3 h-3 text-teal-400" />
-              <span>HIPAA & ABDM Aligned</span>
-            </span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-300 whitespace-nowrap shadow-xs">
+              <CreditCard className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+              <span className="font-bold text-white">Dodo Payments & Cashfree</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-slate-400">Cards & UPI AutoPay</span>
+              <span className="text-slate-600">•</span>
+              <span className="inline-flex items-center gap-1 text-emerald-400 font-medium">
+                <Lock className="w-3 h-3" /> 256-Bit SSL
+              </span>
+            </div>
           </div>
 
           {/* Interactive Multi-Language Switcher */}

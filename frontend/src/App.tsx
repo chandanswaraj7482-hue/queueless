@@ -223,15 +223,15 @@ function Navigation() {
 
           {/* Minimal, Clean Public Nav Bar */}
           <div className="flex items-center gap-2">
-            {/* Quick Track Token Button */}
-            <button
-              onClick={() => setShowSearchModal(true)}
+            {/* Quick Track Token Link directly to dedicated 3-factor portal */}
+            <Link
+              to="/portal"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-800 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800 rounded-xl text-xs font-bold transition-all shadow-xs"
               title="Track Token ID e.g. A-108"
             >
               <Search className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
               <span>Track Token</span>
-            </button>
+            </Link>
 
             {/* Back to Home / Commercial SaaS */}
             <Link

@@ -1132,8 +1132,8 @@ export const QueuelessWebsite: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
             className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[62px] font-black text-slate-950 dark:text-white tracking-tight leading-[1.14] max-w-4xl mx-auto px-1"
           >
-            Autonomous <span className="inline-block whitespace-nowrap">Zero-Wait</span> <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
+            <span className="whitespace-nowrap">Autonomous Zero-Wait</span> <br className="hidden sm:inline" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 whitespace-nowrap">
               Clinical Operating System
             </span>
           </motion.h1>

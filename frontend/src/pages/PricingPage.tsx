@@ -370,7 +370,7 @@ export const PricingPage: React.FC = () => {
                       Surge Token Packs
                     </h4>
                     <div className="text-base font-black text-amber-600 dark:text-amber-400 font-mono mt-0.5">
-                      {selectedCurrency.code === 'INR' ? '₹999 - ₹6,999' : '$15 - $89'}
+                      {selectedCurrency.code === 'INR' ? '₹3,999 – ₹24,999' : '$49 – $299'}
                     </div>
                   </div>
                   <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -446,7 +446,7 @@ export const PricingPage: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
-                        {selectedCurrency.code === 'INR' ? '₹999' : '$15'}
+                        {selectedCurrency.code === 'INR' ? '₹3,999' : '$49'}
                       </span>
                       <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
                     </div>
@@ -473,7 +473,7 @@ export const PricingPage: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
-                        {selectedCurrency.code === 'INR' ? '₹2,499' : '$39'}
+                        {selectedCurrency.code === 'INR' ? '₹9,999' : '$129'}
                       </span>
                       <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
                     </div>
@@ -497,7 +497,7 @@ export const PricingPage: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
-                        {selectedCurrency.code === 'INR' ? '₹6,999' : '$89'}
+                        {selectedCurrency.code === 'INR' ? '₹24,999' : '$299'}
                       </span>
                       <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
                     </div>

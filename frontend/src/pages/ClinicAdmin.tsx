@@ -3258,7 +3258,7 @@ export const ClinicAdmin: React.FC = () => {
                   <span className="text-[10px] font-black text-amber-600 uppercase tracking-wider">Pay-As-You-Grow</span>
                   <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">Surge Token Packs</h3>
                   <div className="text-xs font-black text-slate-700 dark:text-slate-300 font-mono mt-0.5">
-                    ₹999 – ₹6,999<span className="text-[10px] font-normal text-slate-400 font-sans"> ($15 – $89)</span>
+                    ₹3,999 – ₹24,999<span className="text-[10px] font-normal text-slate-400 font-sans"> ($49 – $299)</span>
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                     Instant cloud credit top-ups during seasonal OPD patient surges. 5,000 / 15,000 / 50,000 digital token bundles available with 1 tap.
@@ -3287,9 +3287,9 @@ export const ClinicAdmin: React.FC = () => {
                 {/* Refill Pack Buttons */}
                 <div className="space-y-2">
                   {[
-                    { label: '+5,000 Tokens Pack', price: '₹999 ($15)', amount: 5000 },
-                    { label: '+15,000 Surge Pack (Popular)', price: '₹2,499 ($39)', amount: 15000, highlight: true },
-                    { label: '+50,000 Hospital Pack', price: '₹6,999 ($89)', amount: 50000 },
+                    { label: '+5,000 Tokens Pack', price: '₹3,999 ($49)', amount: 5000 },
+                    { label: '+15,000 Surge Pack (Popular)', price: '₹9,999 ($129)', amount: 15000, highlight: true },
+                    { label: '+50,000 Hospital Pack', price: '₹24,999 ($299)', amount: 50000 },
                   ].map((pack) => (
                     <button
                       key={pack.amount}

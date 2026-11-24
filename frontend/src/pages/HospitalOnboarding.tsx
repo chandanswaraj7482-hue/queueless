@@ -201,7 +201,7 @@ export const HospitalOnboarding: React.FC = () => {
   const planRate = billingCycle === 'ANNUAL' ? rates.annual : rates.monthly;
   const whiteLabelCost = hardwareAddon ? (selectedCurrency.code === 'INR' ? 2999 : 29) : 0;
   const whatsappCost = whatsappAddon ? (selectedCurrency.code === 'INR' ? 1499 : 19) : 0;
-  const surgeCost = tokenSurgeAddon ? (selectedCurrency.code === 'INR' ? 999 : 15) : 0;
+  const surgeCost = tokenSurgeAddon ? (selectedCurrency.code === 'INR' ? 3999 : 49) : 0;
   const totalAmount = planRate + whiteLabelCost + whatsappCost + surgeCost;
 
   // Step 1 Validation
@@ -1174,7 +1174,7 @@ export const HospitalOnboarding: React.FC = () => {
                       </p>
                     </div>
                     <div className="text-xs font-black text-amber-600 dark:text-amber-400 font-mono mt-3">
-                      +{selectedCurrency.code === 'INR' ? '₹999' : '$15'}
+                      +{selectedCurrency.code === 'INR' ? '₹3,999' : '$49'}
                     </div>
                   </div>
                 </div>

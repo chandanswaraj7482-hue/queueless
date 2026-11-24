@@ -2516,11 +2516,11 @@ export const QueuelessWebsite: React.FC = () => {
                   </ul>
                   <div className="pt-3">
                     <Link
-                      to="/check-in/city-health"
+                      to="/city-health/check-in"
                       target="_blank"
                       className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-xs rounded-xl shadow-md shadow-blue-600/25 ring-1 ring-blue-500/20 transition-all cursor-pointer active:scale-98"
                     >
-                      <span>Try Live Patient Check-In Screen (/city-health) ➔</span>
+                      <span>Try Live Patient Check-In Screen (/city-health/check-in) ➔</span>
                     </Link>
                   </div>
                 </div>
@@ -2805,11 +2805,11 @@ export const QueuelessWebsite: React.FC = () => {
                   </ul>
                   <div className="pt-3">
                     <Link
-                      to="/reception/city-health"
+                      to="/city-health/reception"
                       target="_blank"
                       className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-black text-xs rounded-xl shadow-md transition-all cursor-pointer active:scale-98"
                     >
-                      <span>Open Reception Desk Kiosk (/reception/city-health) ➔</span>
+                      <span>Open Reception Desk Kiosk (/city-health/reception) ➔</span>
                     </Link>
                   </div>
                 </div>
@@ -3264,7 +3264,7 @@ export const QueuelessWebsite: React.FC = () => {
                   {/* Scannable Real QR Canvas */}
                   <div className="my-2.5 p-3 bg-white rounded-2xl border border-slate-200/90 shadow-sm inline-block">
                     <QRCodeCanvas
-                      value={`${typeof window !== 'undefined' ? window.location.origin : 'https://queueless-os.vercel.app'}/check-in/city-health`}
+                      value={`${typeof window !== 'undefined' ? window.location.origin : 'https://queueless-os.vercel.app'}/city-health/check-in`}
                       size={124}
                       level="H"
                       includeMargin={false}
@@ -4383,7 +4383,7 @@ export const QueuelessWebsite: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                 {/* 1. Patient Check-In */}
                 <Link
-                  to="/check-in/city-health"
+                  to="/city-health/check-in"
                   target="_blank"
                   className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-sky-50 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-500 rounded-2xl transition-all group flex items-start gap-3"
                 >
@@ -4395,14 +4395,14 @@ export const QueuelessWebsite: React.FC = () => {
                       <span>📱 Patient QR Check-In</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/check-in/city-health</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/city-health/check-in</span>
                     <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5">Self-entry QR pass & live token pass</span>
                   </div>
                 </Link>
 
                 {/* 2. TV Kiosk Display */}
                 <Link
-                  to="/display/city-health"
+                  to="/city-health/display"
                   target="_blank"
                   className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-500 rounded-2xl transition-all group flex items-start gap-3"
                 >
@@ -4414,14 +4414,14 @@ export const QueuelessWebsite: React.FC = () => {
                       <span>🖥️ Waiting Room TV Kiosk</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/display/city-health</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/city-health/display</span>
                     <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5">55" lobby TV with voice & chimes</span>
                   </div>
                 </Link>
 
                 {/* 3. Reception POS */}
                 <Link
-                  to="/reception/city-health"
+                  to="/city-health/reception"
                   target="_blank"
                   className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-teal-50 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-teal-300 dark:hover:border-teal-500 rounded-2xl transition-all group flex items-start gap-3"
                 >
@@ -4433,14 +4433,14 @@ export const QueuelessWebsite: React.FC = () => {
                       <span>🧾 Reception Desk & POS</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/reception/city-health</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/city-health/reception</span>
                     <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5">Cash approvals & thermal slip printing</span>
                   </div>
                 </Link>
 
                 {/* 4. Doctor OPD Cabin */}
                 <Link
-                  to="/doctor/city-health"
+                  to="/city-health/doctor"
                   target="_blank"
                   className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-purple-50 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-500 rounded-2xl transition-all group flex items-start gap-3"
                 >
@@ -4452,14 +4452,14 @@ export const QueuelessWebsite: React.FC = () => {
                       <span>👨‍⚕️ Doctor Cabin Console</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/doctor/city-health</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/city-health/doctor</span>
                     <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5">1-click call next & Rx prescriptions</span>
                   </div>
                 </Link>
 
                 {/* 5. Hospital Admin */}
                 <Link
-                  to="/admin/city-health"
+                  to="/city-health/admin"
                   target="_blank"
                   className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500 rounded-2xl transition-all group flex items-start gap-3 sm:col-span-2"
                 >
@@ -4471,7 +4471,7 @@ export const QueuelessWebsite: React.FC = () => {
                       <span>🏥 Hospital Management & Admin Panel</span>
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/admin/city-health</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate font-mono mt-0.5">/city-health/admin</span>
                     <span className="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5">Medical Superintendent settings, doctors roster & daily audits</span>
                   </div>
                 </Link>
@@ -4496,14 +4496,14 @@ export const QueuelessWebsite: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 w-full sm:w-auto">
                   <Link
-                    to={`/check-in/${customPortalSlug || 'city-health'}`}
+                    to={`/${customPortalSlug || 'city-health'}/check-in`}
                     target="_blank"
                     className="flex-1 sm:flex-initial px-3 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all text-center whitespace-nowrap cursor-pointer shadow-xs"
                   >
                     Patient Entry ➔
                   </Link>
                   <Link
-                    to={`/admin/${customPortalSlug || 'city-health'}`}
+                    to={`/${customPortalSlug || 'city-health'}/admin`}
                     target="_blank"
                     className="flex-1 sm:flex-initial px-3 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all text-center whitespace-nowrap cursor-pointer shadow-xs border border-transparent dark:border-slate-700"
                   >

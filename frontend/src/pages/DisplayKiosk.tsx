@@ -70,8 +70,8 @@ const WORLDWIDE_LANGUAGES: { code: SpeechLanguageMode; flag: string; label: stri
 ];
 
 export const DisplayKiosk: React.FC = () => {
-  const { clinicId: routeClinicId } = useParams<{ clinicId?: string }>();
-  const clinicId = routeClinicId || 'city-health';
+  const { clinicId: routeClinicId, slug: routeSlug } = useParams<{ clinicId?: string; slug?: string }>();
+  const clinicId = routeSlug || routeClinicId || 'city-health';
   const initialClinicName =
     clinicId === 'caremax-opd'
       ? 'Caremax OPD'

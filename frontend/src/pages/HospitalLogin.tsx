@@ -148,7 +148,7 @@ export const HospitalLogin: React.FC = () => {
                 timestamp: Date.now(),
               })
             );
-            const targetUrl = role === 'RECEPTION' ? `/reception/${h.slug}` : role === 'DOCTOR' ? `/doctor/${h.slug}` : `/admin/${h.slug}`;
+            const targetUrl = role === 'RECEPTION' ? `/${h.slug}/reception` : role === 'DOCTOR' ? `/${h.slug}/doctor` : `/${h.slug}/admin`;
             navigate(targetUrl);
             return;
           }
@@ -174,7 +174,7 @@ export const HospitalLogin: React.FC = () => {
               timestamp: Date.now(),
             })
           );
-          const targetUrl = role === 'RECEPTION' ? `/reception/${h.slug}` : role === 'DOCTOR' ? `/doctor/${h.slug}` : `/admin/${h.slug}`;
+          const targetUrl = role === 'RECEPTION' ? `/${h.slug}/reception` : role === 'DOCTOR' ? `/${h.slug}/doctor` : `/${h.slug}/admin`;
           navigate(targetUrl);
           return;
         }

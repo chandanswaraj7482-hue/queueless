@@ -224,17 +224,17 @@ export const CommercialFooter: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/doctor/city-health" className="hover:text-white transition-colors">
+                <Link to="/city-health/doctor" className="hover:text-white transition-colors">
                   Doctor OPD Station
                 </Link>
               </li>
               <li>
-                <Link to="/reception/city-health" className="hover:text-white transition-colors">
+                <Link to="/city-health/reception" className="hover:text-white transition-colors">
                   Reception POS & Desk
                 </Link>
               </li>
               <li>
-                <Link to="/display/city-health" className="hover:text-white transition-colors">
+                <Link to="/city-health/display" className="hover:text-white transition-colors">
                   55" TV Lobby Kiosk
                 </Link>
               </li>

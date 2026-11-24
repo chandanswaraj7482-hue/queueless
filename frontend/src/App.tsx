@@ -171,7 +171,7 @@ function Navigation() {
   };
 
   const links = [
-    { to: '/check-in/city-health', label: 'Patient QR', icon: Smartphone },
+    { to: '/city-health/check-in', label: 'Patient QR', icon: Smartphone },
     { to: '/portal', label: 'Passes', icon: User },
     { to: '/reception', label: 'Reception', icon: Users },
     { to: '/doctor', label: 'Doctor OPD', icon: Stethoscope },
@@ -407,23 +407,35 @@ export function App() {
             <Route path="/commercial" element={<QueuelessWebsite />} />
             <Route path="/demo" element={<QueuelessWebsite />} />
 
-            {/* 2. Hospital Dedicated Link Setup Packages (HIPAA & ABDM notranslate Shielded, Scoped Suspense) */}
-            <Route path="/check-in" element={<Navigate to="/check-in/city-health" replace />} />
+            {/* 2. Hospital Dedicated Link Setup Packages (Both /:slug/reception and /reception/:slug Supported) */}
+            <Route path="/check-in" element={<Navigate to="/city-health/check-in" replace />} />
             <Route path="/check-in/:slug" element={<div className="notranslate" translate="no"><ClinicalLazy><PatientCheckIn /></ClinicalLazy></div>} />
-            <Route path="/checkin" element={<Navigate to="/check-in/city-health" replace />} />
+            <Route path="/checkin" element={<Navigate to="/city-health/check-in" replace />} />
             <Route path="/checkin/:slug" element={<div className="notranslate" translate="no"><ClinicalLazy><PatientCheckIn /></ClinicalLazy></div>} />
-            <Route path="/reception" element={<Navigate to="/reception/city-health" replace />} />
+            <Route path="/reception" element={<Navigate to="/city-health/reception" replace />} />
             <Route path="/reception/:slug" element={<div className="notranslate" translate="no"><ClinicalLazy><ReceptionDashboard /></ClinicalLazy></div>} />
-            <Route path="/doctor" element={<Navigate to="/doctor/city-health" replace />} />
+            <Route path="/doctor" element={<Navigate to="/city-health/doctor" replace />} />
             <Route path="/doctor/:slug" element={<div className="notranslate" translate="no"><ClinicalLazy><DoctorView /></ClinicalLazy></div>} />
             <Route path="/doctor/:slug/:doctorId" element={<div className="notranslate" translate="no"><ClinicalLazy><DoctorView /></ClinicalLazy></div>} />
             <Route path="/doctor/:slug/cabin/:doctorId" element={<div className="notranslate" translate="no"><ClinicalLazy><DoctorView /></ClinicalLazy></div>} />
-            <Route path="/display" element={<Navigate to="/display/city-health" replace />} />
+            <Route path="/display" element={<Navigate to="/city-health/display" replace />} />
             <Route path="/display/:clinicId" element={<ClinicalLazy><DisplayKiosk /></ClinicalLazy>} />
-            <Route path="/admin" element={<Navigate to="/admin/city-health" replace />} />
+            <Route path="/admin" element={<Navigate to="/city-health/admin" replace />} />
             <Route path="/admin/:slug" element={<div className="notranslate" translate="no"><ClinicalLazy><ClinicAdmin /></ClinicalLazy></div>} />
-            <Route path="/hospital-admin" element={<Navigate to="/admin/city-health" replace />} />
+            <Route path="/hospital-admin" element={<Navigate to="/city-health/admin" replace />} />
             <Route path="/hospital-admin/:slug" element={<div className="notranslate" translate="no"><ClinicalLazy><ClinicAdmin /></ClinicalLazy></div>} />
+
+            {/* Hospital-First URL Routes (e.g. /:slug/reception, /:slug/doctor, /:slug/display, /:slug/admin, /:slug/check-in) */}
+            <Route path="/:slug/check-in" element={<div className="notranslate" translate="no"><ClinicalLazy><PatientCheckIn /></ClinicalLazy></div>} />
+            <Route path="/:slug/checkin" element={<div className="notranslate" translate="no"><ClinicalLazy><PatientCheckIn /></ClinicalLazy></div>} />
+            <Route path="/:slug/reception" element={<div className="notranslate" translate="no"><ClinicalLazy><ReceptionDashboard /></ClinicalLazy></div>} />
+            <Route path="/:slug/doctor" element={<div className="notranslate" translate="no"><ClinicalLazy><DoctorView /></ClinicalLazy></div>} />
+            <Route path="/:slug/doctor/:doctorId" element={<div className="notranslate" translate="no"><ClinicalLazy><DoctorView /></ClinicalLazy></div>} />
+            <Route path="/:slug/doctor/cabin/:doctorId" element={<div className="notranslate" translate="no"><ClinicalLazy><DoctorView /></ClinicalLazy></div>} />
+            <Route path="/:slug/display" element={<ClinicalLazy><DisplayKiosk /></ClinicalLazy>} />
+            <Route path="/:slug/kiosk" element={<ClinicalLazy><DisplayKiosk /></ClinicalLazy>} />
+            <Route path="/:slug/admin" element={<div className="notranslate" translate="no"><ClinicalLazy><ClinicAdmin /></ClinicalLazy></div>} />
+            <Route path="/:slug/hospital-admin" element={<div className="notranslate" translate="no"><ClinicalLazy><ClinicAdmin /></ClinicalLazy></div>} />
             <Route path="/founder" element={<ClinicalLazy><FounderDashboard /></ClinicalLazy>} />
             <Route path="/owner" element={<ClinicalLazy><FounderDashboard /></ClinicalLazy>} />
 

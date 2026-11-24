@@ -807,7 +807,7 @@ export const ClinicAdmin: React.FC = () => {
   };
 
   // 4. Standee Print & Image Download
-  const checkInUrl = `${window.location.origin}/check-in/${clinic?.slug || 'city-health'}`;
+  const checkInUrl = `${window.location.origin}/${clinic?.slug || 'city-health'}/check-in`;
 
   const handlePrint = () => {
     window.print();
@@ -1118,7 +1118,7 @@ export const ClinicAdmin: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full md:w-auto shrink-0">
             {/* 1. Doctor Cabin */}
             <a
-              href={`/doctor/${activeSlug}`}
+              href={`/${activeSlug}/doctor`}
               target="_blank"
               rel="noreferrer"
               className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all flex items-center gap-2 group cursor-pointer"
@@ -1135,7 +1135,7 @@ export const ClinicAdmin: React.FC = () => {
 
             {/* 2. Reception POS */}
             <a
-              href={`/reception/${activeSlug}`}
+              href={`/${activeSlug}/reception`}
               target="_blank"
               rel="noreferrer"
               className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all flex items-center gap-2 group cursor-pointer"
@@ -1152,7 +1152,7 @@ export const ClinicAdmin: React.FC = () => {
 
             {/* 3. 55" TV Kiosk */}
             <a
-              href={`/display/${activeSlug}`}
+              href={`/${activeSlug}/display`}
               target="_blank"
               rel="noreferrer"
               className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all flex items-center gap-2 group cursor-pointer"
@@ -1169,7 +1169,7 @@ export const ClinicAdmin: React.FC = () => {
 
             {/* 4. Patient Mobile Pass */}
             <a
-              href={`/check-in/${activeSlug}`}
+              href={`/${activeSlug}/check-in`}
               target="_blank"
               rel="noreferrer"
               className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all flex items-center gap-2 group cursor-pointer"
@@ -3228,7 +3228,7 @@ export const ClinicAdmin: React.FC = () => {
                     `👨‍⚕️ *Doctor:* Dr. Rohan Sharma, MD (Cabin 1)\n` +
                     `⏳ *Estimated Wait:* 4 Minutes (1 Patient Ahead)\n\n` +
                     `🔗 *Track Live Token on Mobile:*\n` +
-                    `https://queueless-os.vercel.app/check-in/${activeSlug}\n\n` +
+                    `https://queueless-os.vercel.app/${activeSlug}/check-in\n\n` +
                     `_Powered by Queueless Clinical OS_`;
                   const waUrl = `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(text)}`;
                   window.open(waUrl, '_blank');

@@ -654,7 +654,7 @@ export const HospitalOnboarding: React.FC = () => {
                       />
                     </div>
                     <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
-                      Your patient QR link will be: {window.location.host || 'queueless-os.vercel.app'}/check-in/<strong>{slug || 'your-clinic'}</strong>
+                      Your patient QR link will be: {window.location.host || 'queueless-os.vercel.app'}/<strong>{slug || 'your-clinic'}</strong>/check-in
                     </p>
                   </div>
                 </div>
@@ -826,7 +826,7 @@ export const HospitalOnboarding: React.FC = () => {
                         className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                       />
                       <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                        Unlocks <strong>/reception/{slug || 'clinic'}</strong>
+                        Unlocks <strong>/{slug || 'your-hospital'}/reception</strong>
                       </p>
                     </div>
 
@@ -854,7 +854,7 @@ export const HospitalOnboarding: React.FC = () => {
                         className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                       />
                       <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                        Unlocks <strong>/doctor/{slug || 'clinic'}/{doctorCabinSlug || 'cabin-1'}</strong>
+                        Unlocks <strong>/{slug || 'your-hospital'}/doctor/{doctorCabinSlug || 'cabin-1'}</strong>
                       </p>
                     </div>
 
@@ -896,7 +896,7 @@ export const HospitalOnboarding: React.FC = () => {
                           <span className="font-bold text-slate-700 dark:text-slate-300">1. QR Check-In</span>
                           <span className="text-[9px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold px-1.5 py-0.5 rounded">PATIENT</span>
                         </div>
-                        <span className="font-mono text-blue-600 dark:text-blue-400 text-[10px] block truncate">/check-in/{slug || 'clinic'}</span>
+                        <span className="font-mono text-blue-600 dark:text-blue-400 text-[10px] block truncate">/{slug || 'your-hospital'}/check-in</span>
                         <span className="text-[10px] text-slate-500 dark:text-slate-400 block mt-0.5">Contactless scan (No PIN)</span>
                       </div>
 
@@ -914,7 +914,7 @@ export const HospitalOnboarding: React.FC = () => {
                           <span className="font-bold text-slate-700 dark:text-slate-300">3. Reception Desk</span>
                           <span className="text-[9px] bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold px-1.5 py-0.5 rounded">STAFF</span>
                         </div>
-                        <span className="font-mono text-emerald-600 dark:text-emerald-400 text-[10px] block truncate">/reception/{slug || 'clinic'}</span>
+                        <span className="font-mono text-emerald-600 dark:text-emerald-400 text-[10px] block truncate">/{slug || 'your-hospital'}/reception</span>
                         <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 block mt-0.5">PIN: {receptionPin || 'Unique PIN (Set Above)'}</span>
                       </div>
 
@@ -923,7 +923,7 @@ export const HospitalOnboarding: React.FC = () => {
                           <span className="font-bold text-slate-700 dark:text-slate-300">4. Doctor Cabin</span>
                           <span className="text-[9px] bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold px-1.5 py-0.5 rounded">DOCTOR</span>
                         </div>
-                        <span className="font-mono text-indigo-600 dark:text-indigo-400 text-[10px] block truncate">/doctor/{slug || 'clinic'}/{doctorCabinSlug || 'cabin-1'}</span>
+                        <span className="font-mono text-indigo-600 dark:text-indigo-400 text-[10px] block truncate">/{slug || 'your-hospital'}/doctor/{doctorCabinSlug || 'cabin-1'}</span>
                         <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 block mt-0.5">PIN: {doctorPin || 'Unique PIN (Set Above)'}</span>
                       </div>
 
@@ -932,7 +932,7 @@ export const HospitalOnboarding: React.FC = () => {
                           <span className="font-bold text-slate-700 dark:text-slate-300">5. 55" TV Lobby Kiosk</span>
                           <span className="text-[9px] bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-bold px-1.5 py-0.5 rounded">LOBBY</span>
                         </div>
-                        <span className="font-mono text-purple-600 dark:text-purple-400 text-[10px] block truncate">/display/{slug || 'clinic'}</span>
+                        <span className="font-mono text-purple-600 dark:text-purple-400 text-[10px] block truncate">/{slug || 'your-hospital'}/display</span>
                         <span className="text-[10px] text-slate-500 dark:text-slate-400 block mt-0.5">Dual-tone audio chimes</span>
                       </div>
 
@@ -941,7 +941,7 @@ export const HospitalOnboarding: React.FC = () => {
                           <span className="font-bold text-slate-700 dark:text-slate-300">6. Director Admin HQ</span>
                           <span className="text-[9px] bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold px-1.5 py-0.5 rounded">DIRECTOR</span>
                         </div>
-                        <span className="font-mono text-blue-600 dark:text-blue-400 text-[10px] block truncate">/admin/{slug || 'clinic'}</span>
+                        <span className="font-mono text-blue-600 dark:text-blue-400 text-[10px] block truncate">/{slug || 'your-hospital'}/admin</span>
                         <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 block mt-0.5">Master Admin Password</span>
                       </div>
                     </div>
@@ -1643,11 +1643,11 @@ export const HospitalOnboarding: React.FC = () => {
                   <a
                     href={`https://wa.me/?text=${encodeURIComponent(
                       `🏥 *${provisionedData.clinic.name} - Queueless Zero-Wait OPD Setup*\n\n` +
-                      `1. TV Waiting Lounge Display:\nhttps://queueless-os.vercel.app/display/${provisionedData.clinic.slug}\n\n` +
-                      `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/doctor/${provisionedData.clinic.slug}/${doctorCabinSlug || 'cabin-1'} (PIN: ${doctorPin})\n\n` +
-                      `3. Reception Desk:\nhttps://queueless-os.vercel.app/reception/${provisionedData.clinic.slug} (PIN: ${receptionPin})\n\n` +
-                      `4. Patient QR Check-in:\nhttps://queueless-os.vercel.app/check-in/${provisionedData.clinic.slug}\n\n` +
-                      `5. Director Admin:\nhttps://queueless-os.vercel.app/admin/${provisionedData.clinic.slug} (Password: ${adminPassword})`
+                      `1. TV Waiting Lounge Display:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/display\n\n` +
+                      `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/doctor/${doctorCabinSlug || 'cabin-1'} (PIN: ${doctorPin})\n\n` +
+                      `3. Reception Desk:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/reception (PIN: ${receptionPin})\n\n` +
+                      `4. Patient QR Check-in:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/check-in\n\n` +
+                      `5. Director Admin:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/admin (Password: ${adminPassword})`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -1661,11 +1661,11 @@ export const HospitalOnboarding: React.FC = () => {
                     onClick={() => {
                       const text =
                         `🏥 ${provisionedData.clinic.name} - Queueless Zero-Wait OPD Setup\n\n` +
-                        `1. TV Waiting Lounge Display:\nhttps://queueless-os.vercel.app/display/${provisionedData.clinic.slug}\n\n` +
-                        `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/doctor/${provisionedData.clinic.slug}/${doctorCabinSlug || 'cabin-1'} (PIN: ${doctorPin})\n\n` +
-                        `3. Reception Desk:\nhttps://queueless-os.vercel.app/reception/${provisionedData.clinic.slug} (PIN: ${receptionPin})\n\n` +
-                        `4. Patient QR Check-in:\nhttps://queueless-os.vercel.app/check-in/${provisionedData.clinic.slug}\n\n` +
-                        `5. Director Admin:\nhttps://queueless-os.vercel.app/admin/${provisionedData.clinic.slug} (Password: ${adminPassword})`;
+                        `1. TV Waiting Lounge Display:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/display\n\n` +
+                        `2. Doctor Cabin Console:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/doctor/${doctorCabinSlug || 'cabin-1'} (PIN: ${doctorPin})\n\n` +
+                        `3. Reception Desk:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/reception (PIN: ${receptionPin})\n\n` +
+                        `4. Patient QR Check-in:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/check-in\n\n` +
+                        `5. Director Admin:\nhttps://queueless-os.vercel.app/${provisionedData.clinic.slug}/admin (Password: ${adminPassword})`;
                       navigator.clipboard.writeText(text);
                       copyToClipboard(text, 'all-bundle');
                     }}
@@ -1681,7 +1681,7 @@ export const HospitalOnboarding: React.FC = () => {
               <div className="text-center space-y-2">
                 <button
                   type="button"
-                  onClick={() => navigate(`/admin/${provisionedData.clinic.slug}`)}
+                  onClick={() => navigate(`/${provisionedData.clinic.slug}/admin`)}
                   className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-sm rounded-2xl shadow-xl shadow-blue-600/30 transition-all inline-flex items-center justify-center gap-2 cursor-pointer active:scale-98"
                 >
                   <Building2 className="w-5 h-5" />
@@ -1712,11 +1712,11 @@ export const HospitalOnboarding: React.FC = () => {
                           <span>1. Director Executive Admin</span>
                         </span>
                         <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
-                          /admin/{provisionedData.clinic.slug}
+                          /{provisionedData.clinic.slug}/admin
                         </span>
                       </div>
                       <Link
-                        to={`/admin/${provisionedData.clinic.slug}`}
+                        to={`/${provisionedData.clinic.slug}/admin`}
                         className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
                       >
                         <span>Open</span>
@@ -1747,11 +1747,11 @@ export const HospitalOnboarding: React.FC = () => {
                           <span>2. Doctor Cabin Workbench</span>
                         </span>
                         <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
-                          /doctor/{provisionedData.clinic.slug}/{doctorCabinSlug || 'cabin-1'}
+                          /{provisionedData.clinic.slug}/doctor/{doctorCabinSlug || 'cabin-1'}
                         </span>
                       </div>
                       <Link
-                        to={`/doctor/${provisionedData.clinic.slug}`}
+                        to={`/${provisionedData.clinic.slug}/doctor`}
                         className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
                       >
                         <span>Open</span>
@@ -1782,11 +1782,11 @@ export const HospitalOnboarding: React.FC = () => {
                           <span>3. Reception Cashier Desk</span>
                         </span>
                         <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
-                          /reception/{provisionedData.clinic.slug}
+                          /{provisionedData.clinic.slug}/reception
                         </span>
                       </div>
                       <Link
-                        to={`/reception/${provisionedData.clinic.slug}`}
+                        to={`/${provisionedData.clinic.slug}/reception`}
                         className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
                       >
                         <span>Open</span>
@@ -1817,11 +1817,11 @@ export const HospitalOnboarding: React.FC = () => {
                           <span>4. Waiting Hall 55" TV Kiosk</span>
                         </span>
                         <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono block">
-                          /display/{provisionedData.clinic.slug}
+                          /{provisionedData.clinic.slug}/display
                         </span>
                       </div>
                       <Link
-                        to={`/display/${provisionedData.clinic.slug}`}
+                        to={`/${provisionedData.clinic.slug}/display`}
                         className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1"
                       >
                         <span>Open</span>
@@ -1835,7 +1835,7 @@ export const HospitalOnboarding: React.FC = () => {
                         <span className="font-bold text-purple-600 dark:text-purple-400">Zero PIN • Audio Chime</span>
                       </div>
                       <button
-                        onClick={() => copyToClipboard(`${window.location.origin}/display/${provisionedData.clinic.slug}`, 'tv-url')}
+                        onClick={() => copyToClipboard(`${window.location.origin}/${provisionedData.clinic.slug}/display`, 'tv-url')}
                         className="text-[11px] font-bold text-purple-600 hover:underline"
                       >
                         {copiedLink === 'tv-url' ? 'Copied' : 'Copy URL'}
@@ -1847,7 +1847,7 @@ export const HospitalOnboarding: React.FC = () => {
                 {/* 5. Patient QR Standee Card */}
                 {(() => {
                   const originUrl = typeof window !== 'undefined' ? window.location.origin : 'https://queueless-os.vercel.app';
-                  const checkInUrl = `${originUrl}/check-in/${provisionedData.clinic.slug}`;
+                  const checkInUrl = `${originUrl}/${provisionedData.clinic.slug}/check-in`;
                   return (
                     <div className="p-5 bg-blue-50/70 dark:bg-blue-950/40 rounded-2xl border border-blue-200 dark:border-blue-800 flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div className="flex items-center gap-4">
@@ -1881,7 +1881,7 @@ export const HospitalOnboarding: React.FC = () => {
                           <span>{copiedLink === 'patient-qr' ? 'Copied!' : 'Copy QR Link'}</span>
                         </button>
                         <Link
-                          to={`/check-in/${provisionedData.clinic.slug}`}
+                          to={`/${provisionedData.clinic.slug}/check-in`}
                           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-2xs inline-flex items-center gap-1.5"
                         >
                           <span>Test Live QR</span>

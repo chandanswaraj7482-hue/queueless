@@ -368,12 +368,12 @@ export const AnimatedClinicalReels: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto">
+          <div className="flex items-center gap-2 self-start sm:self-auto shrink-0 flex-nowrap">
             {/* Interactive Sound Toggle Pill */}
             <button
               type="button"
               onClick={toggleVideoSound}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-black shadow-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-full text-xs font-black shadow-xs flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 isVideoMuted
                   ? 'bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 ring-2 ring-amber-400/20'
                   : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 ring-2 ring-emerald-500/20'
@@ -383,18 +383,16 @@ export const AnimatedClinicalReels: React.FC = () => {
               {isVideoMuted ? (
                 <>
                   <VolumeX className="w-3.5 h-3.5 text-amber-600 animate-pulse shrink-0" />
-                  <span className="hidden sm:inline">🔇 Sound Muted • Click to Unmute</span>
-                  <span className="sm:hidden">🔇 Unmute</span>
+                  <span>Unmute</span>
                 </>
               ) : (
                 <>
                   <Volume2 className="w-3.5 h-3.5 text-emerald-600 animate-bounce shrink-0" />
-                  <span className="hidden sm:inline">🔊 Sound Active • Click to Mute</span>
-                  <span className="sm:hidden">🔊 Mute</span>
+                  <span>Mute</span>
                 </>
               )}
             </button>
-            <span className="px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-xs font-bold shadow-2xs hidden sm:inline-flex items-center">
+            <span className="px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-xs font-bold shadow-2xs whitespace-nowrap shrink-0 hidden sm:inline-flex items-center">
               ✓ ABDM M1/M2 Certified Flow
             </span>
           </div>

@@ -58,13 +58,13 @@ export const HospitalOnboarding: React.FC = () => {
   };
 
   const initialPlan = getNormalizedPlan(searchParams.get('plan'));
-  const queryCurrency = (searchParams.get('currency')?.toUpperCase() as string) || localStorage.getItem('queueless_currency') || 'USD';
+  const queryCurrency = (searchParams.get('currency')?.toUpperCase() as string) || localStorage.getItem('queueless_currency') || 'INR';
   const queryCycle = searchParams.get('cycle')?.toUpperCase() === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
   const queryAddon = searchParams.get('addon') === 'custom_logo';
   const querySurge = searchParams.get('addon') === 'token_surge';
 
-  // Step Tracker: 1 = Details & Credentials, 2 = Plan & Billing, 3 = Payment (Dodo/Cashfree), 4 = Live Provisioned
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
+  // Step Tracker: 1 = Details & Master Login, 2 = Staff PINs & Cabins, 3 = Plan & Billing, 4 = Payment Mandate, 5 = Live Provisioned
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4 | 5>(1);
 
   // Currency & Billing
   const [currencyCode, setCurrencyCode] = useState<string>(queryCurrency);
@@ -190,7 +190,7 @@ export const HospitalOnboarding: React.FC = () => {
   const surgeCost = tokenSurgeAddon ? (selectedCurrency.code === 'INR' ? 3999 : 49) : 0;
   const totalAmount = planRate + whiteLabelCost + whatsappCost + surgeCost;
 
-  // Step 1 Validation
+  // Step 1 Validation: Hospital Details & Master Login
   const handleStep1Submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!hospitalName.trim() || !slug.trim()) {
@@ -201,6 +201,13 @@ export const HospitalOnboarding: React.FC = () => {
       setErrorMsg('Please specify Admin Login Email and Password');
       return;
     }
+    setErrorMsg(null);
+    setCurrentStep(2);
+  };
+
+  // Step 2 Validation: Staff PINs & First Doctor Setup
+  const handleStep2Submit = (e: React.FormEvent) => {
+    e.preventDefault();
     if (!receptionPin.trim()) {
       setReceptionPin(generateRandomPin());
     }
@@ -208,13 +215,13 @@ export const HospitalOnboarding: React.FC = () => {
       setDoctorPin(generateRandomPin());
     }
     setErrorMsg(null);
-    setCurrentStep(2);
+    setCurrentStep(3);
   };
 
-  // Step 2 Proceed
-  const handleStep2Submit = () => {
+  // Step 3 Proceed: Plan Selection
+  const handleStep3Submit = () => {
     setErrorMsg(null);
-    setCurrentStep(3);
+    setCurrentStep(4);
   };
 
   // Step 3: Trigger Payment & Hospital Provisioning with Credit Card AutoPay
@@ -335,7 +342,7 @@ export const HospitalOnboarding: React.FC = () => {
         resData.data.clinic = enrichedClinic;
         resData.data.autopay = autopayRecord;
         setProvisionedData(resData.data);
-        setCurrentStep(4);
+        setCurrentStep(5);
         playClinicChime();
 
         // Save into local registered hospitals list
@@ -496,12 +503,13 @@ export const HospitalOnboarding: React.FC = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Multi-Step Visual Progress Stepper */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl border border-slate-200/90 dark:border-slate-800 p-3.5 sm:p-6 shadow-sm">
-            <div className="grid grid-cols-4 gap-1.5 sm:gap-2 text-center">
+            <div className="grid grid-cols-5 gap-1 sm:gap-2 text-center">
               {[
                 { step: 1, fullLabel: '1. Hospital & ID', shortLabel: '1. Details' },
-                { step: 2, fullLabel: '2. Plan Selection', shortLabel: '2. Plan' },
-                { step: 3, fullLabel: '3. Payment Gateway', shortLabel: '3. Payment' },
-                { step: 4, fullLabel: '4. Workspace Live', shortLabel: '4. Live' },
+                { step: 2, fullLabel: '2. Staff PINs & Cabins', shortLabel: '2. PINs' },
+                { step: 3, fullLabel: '3. Plan Selection', shortLabel: '3. Plan' },
+                { step: 4, fullLabel: '4. Payment Mandate', shortLabel: '4. Payment' },
+                { step: 5, fullLabel: '5. Workspace Live', shortLabel: '5. Live' },
               ].map((s) => (
                 <div key={s.step} className="space-y-1">
                   <div
@@ -541,13 +549,13 @@ export const HospitalOnboarding: React.FC = () => {
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-10 shadow-xl space-y-6 animate-in fade-in">
               <div className="border-b border-slate-100 dark:border-slate-800 pb-4">
                 <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-1 rounded-full border border-blue-200/60 dark:border-blue-800">
-                  Step 1 of 3
+                  Step 1 of 4
                 </span>
                 <h1 className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white mt-2">
                   Create Your Hospital Account & Master Login
                 </h1>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  These credentials will be used by your Hospital Director and staff to log into the clinic dashboard.
+                  These master credentials will be used by your Hospital Director to manage the clinic and OPD portals.
                 </p>
               </div>
 
@@ -728,6 +736,39 @@ export const HospitalOnboarding: React.FC = () => {
                   </div>
                 </div>
 
+                <div className="pt-4 flex justify-end">
+                  <button
+                    type="submit"
+                    className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs rounded-xl shadow-md shadow-blue-500/25 transition-all inline-flex items-center gap-2 cursor-pointer active:scale-98"
+                  >
+                    <span>Continue to Staff PINs & Security</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* ============================================================== */}
+          {/* STEP 2: Staff Security PINs & Clinical Cabins Configuration     */}
+          {/* ============================================================== */}
+          {currentStep === 2 && (
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-10 shadow-xl space-y-6 animate-in fade-in">
+              <div className="border-b border-slate-100 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/80 px-2.5 py-1 rounded-full border border-indigo-200/60 dark:border-indigo-800">
+                    Step 2 of 4
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white mt-2">
+                    Staff Security PINs & Clinical Cabins Setup
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    Hospital: <strong className="text-slate-900 dark:text-white">{hospitalName}</strong> (/{slug})
+                  </p>
+                </div>
+              </div>
+
+              <form onSubmit={handleStep2Submit} className="space-y-5">
                 {/* Initial Doctor Setup */}
                 <div className="p-4 bg-slate-50 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
                   <span className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
@@ -939,7 +980,16 @@ export const HospitalOnboarding: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="pt-4 flex justify-end">
+                <div className="pt-4 flex items-center justify-between border-t border-slate-100 dark:border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentStep(1)}
+                    className="text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-1 cursor-pointer"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span>Back to Hospital Details</span>
+                  </button>
+
                   <button
                     type="submit"
                     className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs rounded-xl shadow-md shadow-blue-500/25 transition-all inline-flex items-center gap-2 cursor-pointer active:scale-98"
@@ -953,14 +1003,14 @@ export const HospitalOnboarding: React.FC = () => {
           )}
 
           {/* ============================================================== */}
-          {/* STEP 2: Plan Selection & Hardware Standee Addon                */}
+          {/* STEP 3: Plan Selection & Hardware Standee Addon                */}
           {/* ============================================================== */}
-          {currentStep === 2 && (
+          {currentStep === 3 && (
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-10 shadow-xl space-y-6 animate-in fade-in">
               <div className="border-b border-slate-100 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-1 rounded-full border border-blue-200/60 dark:border-blue-800">
-                    Step 2 of 3
+                    Step 3 of 4
                   </span>
                   <h2 className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white mt-2">
                     Choose Your Subscription Plan
@@ -1168,11 +1218,11 @@ export const HospitalOnboarding: React.FC = () => {
               <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <button
                   type="button"
-                  onClick={() => setCurrentStep(1)}
+                  onClick={() => setCurrentStep(2)}
                   className="text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-1 cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  <span>Back to Hospital Details</span>
+                  <span>Back to Staff PINs & Cabins</span>
                 </button>
 
                 <div className="flex items-center gap-4">
@@ -1185,7 +1235,7 @@ export const HospitalOnboarding: React.FC = () => {
 
                   <button
                     type="button"
-                    onClick={handleStep2Submit}
+                    onClick={handleStep3Submit}
                     className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs rounded-xl shadow-md shadow-blue-500/25 transition-all inline-flex items-center gap-2 cursor-pointer active:scale-98"
                   >
                     <span>Proceed to Payment</span>
@@ -1197,15 +1247,15 @@ export const HospitalOnboarding: React.FC = () => {
           )}
 
           {/* ============================================================== */}
-          {/* STEP 3: Payment Gateway Checkout (Dodo Payments, Cashfree) */}
+          {/* STEP 4: Payment Gateway Checkout (Dodo Payments, Cashfree) */}
           {/* ============================================================== */}
-          {currentStep === 3 && (
+          {currentStep === 4 && (
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-10 shadow-xl space-y-6 animate-in fade-in">
               <div className="border-b border-slate-100 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-200/60 dark:border-emerald-800">
-                      Step 3 of 3 • 14-Day Free Pilot
+                      Step 4 of 4 • 14-Day Free Pilot
                     </span>
                     <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-1 rounded-full border border-blue-200/60 dark:border-blue-800">
                       AutoPay Mandate Setup
@@ -1486,11 +1536,11 @@ export const HospitalOnboarding: React.FC = () => {
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
                   <button
                     type="button"
-                    onClick={() => setCurrentStep(2)}
+                    onClick={() => setCurrentStep(3)}
                     className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1 cursor-pointer"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    <span>Back</span>
+                    <span>Back to Plan Selection</span>
                   </button>
 
                   <button
@@ -1511,9 +1561,9 @@ export const HospitalOnboarding: React.FC = () => {
           )}
 
           {/* ============================================================== */}
-          {/* STEP 4: Success & Scoped Hospital Workspace Links              */}
+          {/* STEP 5: Success & Scoped Hospital Workspace Links              */}
           {/* ============================================================== */}
-          {currentStep === 4 && provisionedData && (
+          {currentStep === 5 && provisionedData && (
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-10 shadow-2xl space-y-8 animate-in zoom-in-95 duration-200">
               {/* Celebration Banner */}
               <div className="text-center space-y-3 pb-6 border-b border-slate-100 dark:border-slate-800">

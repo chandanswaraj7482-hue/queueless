@@ -624,6 +624,58 @@ export const QueuelessWebsite: React.FC = () => {
     return () => clearInterval(interval);
   }, [isWhyAutoSlidePaused]);
 
+  // Instant Vector QR Kit & Cloud Backend Mobile Auto-Slide State
+  const [activeKitIndex, setActiveKitIndex] = useState<number>(0);
+  const [isKitAutoSlidePaused, setIsKitAutoSlidePaused] = useState<boolean>(false);
+  const kitSliderRef = useRef<HTMLDivElement>(null);
+
+  const handleKitScroll = () => {
+    if (!kitSliderRef.current) return;
+    const { scrollLeft, clientWidth } = kitSliderRef.current;
+    if (clientWidth > 0 && kitSliderRef.current.children.length > 0) {
+      let closestIdx = 0;
+      let minDiff = Infinity;
+      Array.from(kitSliderRef.current.children).forEach((child, i) => {
+        const el = child as HTMLElement;
+        const diff = Math.abs(el.offsetLeft - scrollLeft);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIdx = i;
+        }
+      });
+      setActiveKitIndex(Math.min(Math.max(closestIdx, 0), 3));
+    }
+  };
+
+  const scrollToKitCard = (index: number) => {
+    if (!kitSliderRef.current) return;
+    const targetChild = kitSliderRef.current.children[index] as HTMLElement;
+    if (targetChild) {
+      targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    } else {
+      const cardWidth = kitSliderRef.current.clientWidth * 0.86 + 16;
+      kitSliderRef.current.scrollTo({
+        left: index * cardWidth,
+        behavior: 'smooth',
+      });
+    }
+    setActiveKitIndex(index);
+  };
+
+  useEffect(() => {
+    if (isKitAutoSlidePaused) return;
+    const interval = setInterval(() => {
+      if (typeof window !== 'undefined' && window.innerWidth >= 640) return;
+      setActiveKitIndex((prev) => {
+        const next = (prev + 1) % 4;
+        scrollToKitCard(next);
+        return next;
+      });
+    }, 3800);
+
+    return () => clearInterval(interval);
+  }, [isKitAutoSlidePaused]);
+
   // FAQ Accordion State
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
   const [faqCategory, setFaqCategory] = useState<FaqCategory>('ALL');
@@ -3263,23 +3315,24 @@ export const QueuelessWebsite: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-7 sm:p-10 rounded-[36px] bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center transition-colors duration-200">
+          <div className="p-4 sm:p-10 rounded-3xl sm:rounded-[36px] bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center transition-colors duration-200">
             {/* Left 7 Cols: Description & Digital Cloud Props */}
-            <div className="lg:col-span-7 space-y-6">
+            <div className="lg:col-span-7 space-y-5 sm:space-y-6">
               <div>
-                <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 block mb-1">
-                  Instant Digital Delivery • Zero Waiting
-                </span>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-full text-[11px] font-black uppercase tracking-wider mb-2">
+                  <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+                  <span>Instant Digital Delivery • Zero Waiting</span>
+                </div>
                 <h3 className="text-xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
                   Instant Vector QR Kit & Cloud Backend Setup
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2.5 leading-relaxed font-normal">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed font-normal">
                   Download high-resolution print-ready 300 DPI PDF and vector SVG QR badges immediately upon checkout. Print them on standard A4, acrylic counter stands, or laminated desk cards. Patients scan with standard smartphone cameras — zero app download required.
                 </p>
               </div>
 
-              {/* 4 Core Pillars Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs text-slate-700 dark:text-slate-300 pt-1">
+              {/* 4 Core Pillars: Desktop 2x2 Grid */}
+              <div className="hidden sm:grid sm:grid-cols-2 gap-3.5 text-xs text-slate-700 dark:text-slate-300 pt-1">
                 <div className="p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500 transition-all flex items-start gap-3.5 group">
                   <div className="w-10 h-10 rounded-xl bg-blue-100/80 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200/80 dark:border-blue-800 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
                     <Printer className="w-5 h-5 stroke-[1.8]" />
@@ -3329,8 +3382,126 @@ export const QueuelessWebsite: React.FC = () => {
                 </div>
               </div>
 
+              {/* 4 Core Pillars: Mobile Auto-Slide Touch Gesture Carousel */}
+              <div className="sm:hidden space-y-2.5 pt-1">
+                <div
+                  ref={kitSliderRef}
+                  onScroll={handleKitScroll}
+                  onTouchStart={() => setIsKitAutoSlidePaused(true)}
+                  onTouchEnd={() => setTimeout(() => setIsKitAutoSlidePaused(false), 5000)}
+                  onMouseEnter={() => setIsKitAutoSlidePaused(true)}
+                  onMouseLeave={() => setIsKitAutoSlidePaused(false)}
+                  className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 pt-1 gap-3 text-left touch-pan-x"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                  {/* Mobile Card 1: Vector PDF & SVG */}
+                  <div className="w-[82vw] max-w-[320px] shrink-0 snap-center p-4 rounded-2xl bg-gradient-to-br from-blue-50/90 to-white dark:from-slate-800/90 dark:to-slate-900 border border-blue-200/80 dark:border-blue-900/50 shadow-md flex flex-col justify-between space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                        <Printer className="w-5 h-5 stroke-[2]" />
+                      </div>
+                      <div>
+                        <strong className="text-slate-900 dark:text-white block font-bold text-sm">Vector PDF & SVG Kits</strong>
+                        <span className="text-[10px] uppercase font-bold text-blue-600 dark:text-blue-400 tracking-wider">Zero Shipping Delay</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                      300 DPI vector badges with custom hospital logo, ready to print instantly on standard A4 or counter standees.
+                    </p>
+                  </div>
+
+                  {/* Mobile Card 2: Any Smart TV */}
+                  <div className="w-[82vw] max-w-[320px] shrink-0 snap-center p-4 rounded-2xl bg-gradient-to-br from-emerald-50/90 to-white dark:from-slate-800/90 dark:to-slate-900 border border-emerald-200/80 dark:border-emerald-900/50 shadow-md flex flex-col justify-between space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                        <Tv className="w-5 h-5 stroke-[2]" />
+                      </div>
+                      <div>
+                        <strong className="text-slate-900 dark:text-white block font-bold text-sm">Any Smart TV Kiosk</strong>
+                        <span className="text-[10px] uppercase font-bold text-emerald-600 dark:text-emerald-400 tracking-wider">1 URL Activation</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                      Opens in Samsung, LG, Sony, Android TV, or Chromecast with voice chime announcements.
+                    </p>
+                  </div>
+
+                  {/* Mobile Card 3: Doctor Web Consoles */}
+                  <div className="w-[82vw] max-w-[320px] shrink-0 snap-center p-4 rounded-2xl bg-gradient-to-br from-purple-50/90 to-white dark:from-slate-800/90 dark:to-slate-900 border border-purple-200/80 dark:border-purple-900/50 shadow-md flex flex-col justify-between space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                        <Stethoscope className="w-5 h-5 stroke-[2]" />
+                      </div>
+                      <div>
+                        <strong className="text-slate-900 dark:text-white block font-bold text-sm">Doctor Web Consoles</strong>
+                        <span className="text-[10px] uppercase font-bold text-purple-600 dark:text-purple-400 tracking-wider">1-Tap Consultation</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                      1-Tap Call Next & 15-day follow-up tracking on any iPad, Android tablet, laptop, or cabin PC.
+                    </p>
+                  </div>
+
+                  {/* Mobile Card 4: Instant 3-Min Activation */}
+                  <div className="w-[82vw] max-w-[320px] shrink-0 snap-center p-4 rounded-2xl bg-gradient-to-br from-amber-50/90 to-white dark:from-slate-800/90 dark:to-slate-900 border border-amber-200/80 dark:border-amber-900/50 shadow-md flex flex-col justify-between space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 shadow-xs">
+                        <Zap className="w-5 h-5 stroke-[2.2]" />
+                      </div>
+                      <div>
+                        <strong className="text-slate-900 dark:text-white block font-bold text-sm">Instant 3-Min Activation</strong>
+                        <span className="text-[10px] uppercase font-bold text-amber-600 dark:text-amber-400 tracking-wider">Zero Hardware Capex</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                      Live instantly. No physical hardware delivery, zero IT server setup, and no annual AMC contracts.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Mobile Slider Dots & Navigation Controls */}
+                <div className="flex flex-col items-center justify-center gap-1.5 pt-0.5">
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => scrollToKitCard((activeKitIndex - 1 + 4) % 4)}
+                      className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
+                      aria-label="Previous hardware kit card"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                    </button>
+                    <div className="flex items-center gap-1.5">
+                      {[0, 1, 2, 3].map((dot) => (
+                        <button
+                          key={dot}
+                          type="button"
+                          onClick={() => scrollToKitCard(dot)}
+                          aria-label={`Go to kit feature ${dot + 1}`}
+                          className={`h-2 rounded-full transition-all cursor-pointer ${
+                            activeKitIndex === dot
+                              ? 'w-6 bg-blue-600 dark:bg-blue-400 shadow-xs'
+                              : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => scrollToKitCard((activeKitIndex + 1) % 4)}
+                      className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
+                      aria-label="Next hardware kit card"
+                    >
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1">
+                    <span>👈 Swipe or watch auto-slide • Card {activeKitIndex + 1} of 4</span>
+                  </p>
+                </div>
+              </div>
+
               {/* Security & Zero Capex Highlights */}
-              <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] font-bold text-slate-600 dark:text-slate-400">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-1 text-[10.5px] sm:text-[11px] font-bold text-slate-600 dark:text-slate-400">
                 <span className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 px-3 py-1 rounded-full border border-emerald-200/60 dark:border-emerald-800/60">
                   <Check className="w-3.5 h-3.5 text-emerald-600" />
                   Zero Courier Shipping Delay
@@ -3349,17 +3520,17 @@ export const QueuelessWebsite: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowCheckoutModal(true)}
-                  className="px-6 py-3.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl text-xs font-black shadow-lg shadow-blue-500/25 transition-all flex items-center gap-2 cursor-pointer active:scale-98"
+                  className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl text-xs sm:text-sm font-black shadow-lg shadow-blue-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
                 >
                   <Sparkles className="w-4 h-4 text-amber-300" />
-                  <span>Activate Instant Cloud OS Today ({selectedCurrency.symbol}{currentPlanMonthlyRate}/mo {billingCycle === 'ANNUAL' ? '• Billed Annually' : ''}) ➔</span>
+                  <span>Activate Instant Cloud OS Today ({selectedCurrency.symbol}{currentPlanMonthlyRate.toLocaleString()}/mo {billingCycle === 'ANNUAL' ? '• Billed Annually' : ''}) ➔</span>
                 </button>
               </div>
             </div>
 
             {/* Right 5 Cols: Multi-Screen Cloud Ecosystem (Adaptive, Elegant, Zero Clashing Blocks) */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="w-full max-w-[340px] bg-slate-50 dark:bg-slate-950 rounded-3xl p-5 border border-slate-200/90 dark:border-slate-800 shadow-xl text-slate-900 dark:text-white space-y-3.5 relative overflow-hidden transition-colors">
+              <div className="w-full max-w-full sm:max-w-[340px] bg-slate-50 dark:bg-slate-950 rounded-3xl p-4 sm:p-5 border border-slate-200/90 dark:border-slate-800 shadow-xl text-slate-900 dark:text-white space-y-3.5 relative overflow-hidden transition-colors">
                 {/* Ambient Screen Glow */}
                 <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-indigo-500"></div>
 
@@ -3392,7 +3563,7 @@ export const QueuelessWebsite: React.FC = () => {
                 </div>
 
                 {/* Layer 2: Real Luxury Clinical Counter Standee (Clean, Crisp, High-Contrast) */}
-                <div className="rounded-2xl p-4 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-center border-2 border-blue-500/30 dark:border-blue-500/40 shadow-md relative">
+                <div className="rounded-2xl p-3.5 sm:p-4 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-center border-2 border-blue-500/30 dark:border-blue-500/40 shadow-md relative">
                   <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-1.5 min-w-0">
                       <Building2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
@@ -3409,7 +3580,7 @@ export const QueuelessWebsite: React.FC = () => {
                   <div className="my-2.5 p-3 bg-white rounded-2xl border border-slate-200/90 shadow-sm inline-block">
                     <QRCodeCanvas
                       value={`${typeof window !== 'undefined' ? window.location.origin : 'https://queueless-os.vercel.app'}/city-health/check-in`}
-                      size={124}
+                      size={120}
                       level="H"
                       includeMargin={false}
                     />
@@ -3423,6 +3594,15 @@ export const QueuelessWebsite: React.FC = () => {
                     <span>⚡ 20-Sec Live Web Pass</span>
                     <span className="text-emerald-600 dark:text-emerald-400 font-bold">Zero App Needed</span>
                   </div>
+
+                  {/* Mobile Direct Tap Button (Because phone users cannot scan their own screen!) */}
+                  <Link
+                    to="/city-health/check-in"
+                    className="mt-2.5 w-full py-2 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 text-white font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                    <span>Tap to Test Live QR Pass on Mobile ➔</span>
+                  </Link>
                 </div>
 
                 {/* Layer 3: Doctor Cabin Tablet Snippet */}
@@ -4826,30 +5006,6 @@ export const QueuelessWebsite: React.FC = () => {
         </div>,
         document.body
       )}
-
-
-
-      {/* Floating Sticky Mobile Quick Action Bar (Discreet, Native-feeling Bottom Bar on Phones) */}
-      <div className="fixed bottom-3 inset-x-3 z-40 sm:hidden pointer-events-none">
-        <div className="max-w-md mx-auto p-1.5 rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-slate-800/90 shadow-2xl flex items-center justify-between gap-2 pointer-events-auto">
-          <button
-            type="button"
-            onClick={triggerSimulatedDoctorCall}
-            className="flex-1 py-2.5 px-3 bg-gradient-to-r from-emerald-600 to-teal-600 active:scale-95 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-          >
-            <Volume2 className="w-3.5 h-3.5" />
-            <span>Call Token 📢</span>
-          </button>
-
-          <Link
-            to={`/signup?plan=${selectedPlanTemplate.id}&currency=${selectedCurrencyCode}&cycle=${billingCycle}`}
-            className="flex-1 py-2.5 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-          >
-            <Zap className="w-3.5 h-3.5" />
-            <span>Free Pilot ➔</span>
-          </Link>
-        </div>
-      </div>
 
     </div>
   );

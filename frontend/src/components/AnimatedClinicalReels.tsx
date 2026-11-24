@@ -28,7 +28,13 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { playClinicChime, playClinicVoiceAnnouncement } from '../utils/audio';
+import {
+  playClinicChime,
+  playClinicVoiceAnnouncement,
+  playClinicalReviewVoiceover,
+  stopClinicalReviewVoiceover,
+  CLINICAL_REEL_VOICEOVERS,
+} from '../utils/audio';
 
 export interface HospitalYouTubeVideo {
   id: string;
@@ -166,6 +172,8 @@ export const CLINICAL_REELS_DATA: ClinicalReelData[] = [
 
 export const AnimatedClinicalReels: React.FC = () => {
   const [unmutedReelId, setUnmutedReelId] = useState<number | null>(null);
+  const [voiceoverLang, setVoiceoverLang] = useState<'hi' | 'en'>('hi');
+  const [isSpeakingVoiceover, setIsSpeakingVoiceover] = useState(false);
   const [activeModalReel, setActiveModalReel] = useState<ClinicalReelData | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<HospitalYouTubeVideo>(HOSPITAL_YOUTUBE_VIDEOS[0]);
   const [isPlayingVideo, setIsPlayingVideo] = useState<boolean>(true);
@@ -274,23 +282,47 @@ export const AnimatedClinicalReels: React.FC = () => {
   }, []);
 
   const handleToggleSound = (reelId: number) => {
-    if (unmutedReelId === reelId) {
+    if (unmutedReelId === reelId && isSpeakingVoiceover) {
+      stopClinicalReviewVoiceover();
       setUnmutedReelId(null);
+      setIsSpeakingVoiceover(false);
     } else {
       setUnmutedReelId(reelId);
-      // Play real hospital acoustic chime
-      playClinicChime();
+      setIsSpeakingVoiceover(true);
 
-      // Speak realistic clinical announcement
-      if (reelId === 1) {
-        playClinicVoiceAnnouncement('Token A, 1 1 6, please proceed to Cabin 204', 'en');
-      } else if (reelId === 2) {
-        playClinicVoiceAnnouncement('Welcome to Caremax. Your digital token is A, 1 1 7', 'en');
-      } else if (reelId === 3) {
-        playClinicVoiceAnnouncement('टोकन CMX, 1 0 1, कृपया कैबिन 2 में पधारें', 'hi');
-      } else if (reelId === 4) {
-        playClinicVoiceAnnouncement('Payment successful. Consultation fee settled to hospital account', 'en');
-      }
+      playClinicalReviewVoiceover(
+        reelId,
+        voiceoverLang,
+        () => {
+          setIsSpeakingVoiceover(true);
+          setUnmutedReelId(reelId);
+        },
+        () => {
+          setIsSpeakingVoiceover(false);
+          setUnmutedReelId(null);
+        }
+      );
+    }
+  };
+
+  const handleLanguageChange = (lang: 'hi' | 'en') => {
+    setVoiceoverLang(lang);
+    if (unmutedReelId !== null) {
+      const activeId = unmutedReelId;
+      stopClinicalReviewVoiceover();
+      setIsSpeakingVoiceover(true);
+      playClinicalReviewVoiceover(
+        activeId,
+        lang,
+        () => {
+          setIsSpeakingVoiceover(true);
+          setUnmutedReelId(activeId);
+        },
+        () => {
+          setIsSpeakingVoiceover(false);
+          setUnmutedReelId(null);
+        }
+      );
     }
   };
 
@@ -603,7 +635,7 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 1: DOCTOR CABIN 1-CLICK CALL                              */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-blue-500/80 transition-all duration-300 flex flex-col justify-between">
+        <div className={`relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border transition-all duration-300 flex flex-col justify-between ${unmutedReelId === 1 && isSpeakingVoiceover ? 'border-blue-400 ring-4 ring-blue-500/40 shadow-blue-500/50 scale-[1.01]' : 'border-slate-800 hover:border-blue-500/80'}`}>
           {/* Animated Background Canvas Layer */}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Background Medical Ambient Grid & Glowing Nebula */}
@@ -735,13 +767,21 @@ export const AnimatedClinicalReels: React.FC = () => {
             <button
               type="button"
               onClick={() => handleToggleSound(1)}
-              className="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-blue-600/90 hover:bg-blue-600 text-white backdrop-blur-md flex items-center justify-center transition-all border border-white/25 shadow-xl active:scale-90"
-              title={unmutedReelId === 1 ? 'Mute Audio' : 'Play Hospital Chime & Announcement'}
+              className={`absolute bottom-4 right-4 w-9 h-9 rounded-full text-white backdrop-blur-md flex items-center justify-center transition-all border border-white/25 shadow-xl active:scale-90 ${
+                unmutedReelId === 1 && isSpeakingVoiceover
+                  ? 'bg-blue-500 ring-4 ring-blue-400/50 scale-105 shadow-blue-500/50'
+                  : 'bg-blue-600/90 hover:bg-blue-600'
+              }`}
+              title={unmutedReelId === 1 && isSpeakingVoiceover ? 'Stop Voiceover' : 'Play Doctor Review & Product Voiceover'}
             >
-              {unmutedReelId === 1 ? (
-                <Volume2 className="w-4 h-4 text-white animate-pulse" />
+              {unmutedReelId === 1 && isSpeakingVoiceover ? (
+                <div className="flex items-end gap-0.5 h-3.5 px-0.5">
+                  <span className="w-0.5 bg-white rounded-full animate-pulse" style={{ height: '70%', animationDuration: '0.4s' }} />
+                  <span className="w-0.5 bg-white rounded-full animate-bounce" style={{ height: '100%', animationDuration: '0.6s' }} />
+                  <span className="w-0.5 bg-white rounded-full animate-pulse" style={{ height: '50%', animationDuration: '0.35s' }} />
+                </div>
               ) : (
-                <VolumeX className="w-4 h-4 text-white/90" />
+                <Volume2 className="w-4 h-4 text-white" />
               )}
             </button>
           </div>
@@ -750,7 +790,7 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 2: 20-SEC ENTRANCE QR ADMISSION                           */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-emerald-500/80 transition-all duration-300 flex flex-col justify-between">
+        <div className={`relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border transition-all duration-300 flex flex-col justify-between ${unmutedReelId === 2 && isSpeakingVoiceover ? 'border-emerald-400 ring-4 ring-emerald-500/40 shadow-emerald-500/50 scale-[1.01]' : 'border-slate-800 hover:border-emerald-500/80'}`}>
           {/* Animated Background Canvas Layer */}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-emerald-950/40 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Ambient Depth Elements */}
@@ -863,13 +903,21 @@ export const AnimatedClinicalReels: React.FC = () => {
             <button
               type="button"
               onClick={() => handleToggleSound(2)}
-              className="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-emerald-600/90 hover:bg-emerald-600 text-white backdrop-blur-md flex items-center justify-center transition-all border border-white/25 shadow-xl active:scale-90"
-              title={unmutedReelId === 2 ? 'Mute Audio' : 'Play Sound'}
+              className={`absolute bottom-4 right-4 w-9 h-9 rounded-full text-white backdrop-blur-md flex items-center justify-center transition-all border border-white/25 shadow-xl active:scale-90 ${
+                unmutedReelId === 2 && isSpeakingVoiceover
+                  ? 'bg-emerald-500 ring-4 ring-emerald-400/50 scale-105 shadow-emerald-500/50'
+                  : 'bg-emerald-600/90 hover:bg-emerald-600'
+              }`}
+              title={unmutedReelId === 2 && isSpeakingVoiceover ? 'Stop Voiceover' : 'Play Doctor Review & Product Voiceover'}
             >
-              {unmutedReelId === 2 ? (
-                <Volume2 className="w-4 h-4 text-white animate-pulse" />
+              {unmutedReelId === 2 && isSpeakingVoiceover ? (
+                <div className="flex items-end gap-0.5 h-3.5 px-0.5">
+                  <span className="w-0.5 bg-white rounded-full animate-pulse" style={{ height: '70%', animationDuration: '0.4s' }} />
+                  <span className="w-0.5 bg-white rounded-full animate-bounce" style={{ height: '100%', animationDuration: '0.6s' }} />
+                  <span className="w-0.5 bg-white rounded-full animate-pulse" style={{ height: '50%', animationDuration: '0.35s' }} />
+                </div>
               ) : (
-                <VolumeX className="w-4 h-4 text-white/90" />
+                <Volume2 className="w-4 h-4 text-white" />
               )}
             </button>
           </div>
@@ -878,7 +926,7 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 3: SILENT LOBBY & 55" SMART TV CHIME                      */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-indigo-500/80 transition-all duration-300 flex flex-col justify-between">
+        <div className={`relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border transition-all duration-300 flex flex-col justify-between ${unmutedReelId === 3 && isSpeakingVoiceover ? 'border-indigo-400 ring-4 ring-indigo-500/40 shadow-indigo-500/50 scale-[1.01]' : 'border-slate-800 hover:border-indigo-500/80'}`}>
           {/* Animated Background Canvas Layer */}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-indigo-950/40 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Ambient Background Grid */}
@@ -998,13 +1046,21 @@ export const AnimatedClinicalReels: React.FC = () => {
             <button
               type="button"
               onClick={() => handleToggleSound(3)}
-              className="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-indigo-600/90 hover:bg-indigo-600 text-white backdrop-blur-md flex items-center justify-center transition-all border border-white/25 shadow-xl active:scale-90"
-              title={unmutedReelId === 3 ? 'Mute Audio' : 'Play Sound'}
+              className={`absolute bottom-4 right-4 w-9 h-9 rounded-full text-white backdrop-blur-md flex items-center justify-center transition-all border border-white/25 shadow-xl active:scale-90 ${
+                unmutedReelId === 3 && isSpeakingVoiceover
+                  ? 'bg-indigo-500 ring-4 ring-indigo-400/50 scale-105 shadow-indigo-500/50'
+                  : 'bg-indigo-600/90 hover:bg-indigo-600'
+              }`}
+              title={unmutedReelId === 3 && isSpeakingVoiceover ? 'Stop Voiceover' : 'Play Coordinator Review & Product Voiceover'}
             >
-              {unmutedReelId === 3 ? (
-                <Volume2 className="w-4 h-4 text-white animate-pulse" />
+              {unmutedReelId === 3 && isSpeakingVoiceover ? (
+                <div className="flex items-end gap-0.5 h-3.5 px-0.5">
+                  <span className="w-0.5 bg-white rounded-full animate-pulse" style={{ height: '70%', animationDuration: '0.4s' }} />
+                  <span className="w-0.5 bg-white rounded-full animate-bounce" style={{ height: '100%', animationDuration: '0.6s' }} />
+                  <span className="w-0.5 bg-white rounded-full animate-pulse" style={{ height: '50%', animationDuration: '0.35s' }} />
+                </div>
               ) : (
-                <VolumeX className="w-4 h-4 text-white/90" />
+                <Volume2 className="w-4 h-4 text-white" />
               )}
             </button>
           </div>
@@ -1013,7 +1069,7 @@ export const AnimatedClinicalReels: React.FC = () => {
         {/* ============================================================== */}
         {/* REEL 4: DIRECT UPI HOSPITAL BANK SETTLEMENT                    */}
         {/* ============================================================== */}
-        <div className="relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border border-slate-800 hover:border-purple-500/80 transition-all duration-300 flex flex-col justify-between">
+        <div className={`relative aspect-[9/16] w-[82vw] max-w-[320px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center rounded-3xl sm:rounded-[32px] overflow-hidden bg-slate-950 shadow-2xl group border transition-all duration-300 flex flex-col justify-between ${unmutedReelId === 4 && isSpeakingVoiceover ? 'border-purple-400 ring-4 ring-purple-500/40 shadow-purple-500/50 scale-[1.01]' : 'border-slate-800 hover:border-purple-500/80'}`}>
           {/* Animated Background Canvas Layer */}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-purple-950/40 to-black p-3.5 sm:p-4 flex flex-col justify-center items-center overflow-hidden">
             {/* Ambient Background Grid */}
@@ -1123,13 +1179,21 @@ export const AnimatedClinicalReels: React.FC = () => {
             <button
               type="button"
               onClick={() => handleToggleSound(4)}
-              className="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-purple-600/90 hover:bg-purple-600 text-white backdrop-blur-md flex items-center justify-center transition-all border border-white/25 shadow-xl active:scale-90"
-              title={unmutedReelId === 4 ? 'Mute Audio' : 'Play Sound'}
+              className={`absolute bottom-4 right-4 w-9 h-9 rounded-full text-white backdrop-blur-md flex items-center justify-center transition-all border border-white/25 shadow-xl active:scale-90 ${
+                unmutedReelId === 4 && isSpeakingVoiceover
+                  ? 'bg-purple-500 ring-4 ring-purple-400/50 scale-105 shadow-purple-500/50'
+                  : 'bg-purple-600/90 hover:bg-purple-600'
+              }`}
+              title={unmutedReelId === 4 && isSpeakingVoiceover ? 'Stop Voiceover' : 'Play Director Review & Product Voiceover'}
             >
-              {unmutedReelId === 4 ? (
-                <Volume2 className="w-4 h-4 text-white animate-pulse" />
+              {unmutedReelId === 4 && isSpeakingVoiceover ? (
+                <div className="flex items-end gap-0.5 h-3.5 px-0.5">
+                  <span className="w-0.5 bg-white rounded-full animate-pulse" style={{ height: '70%', animationDuration: '0.4s' }} />
+                  <span className="w-0.5 bg-white rounded-full animate-bounce" style={{ height: '100%', animationDuration: '0.6s' }} />
+                  <span className="w-0.5 bg-white rounded-full animate-pulse" style={{ height: '50%', animationDuration: '0.35s' }} />
+                </div>
               ) : (
-                <VolumeX className="w-4 h-4 text-white/90" />
+                <Volume2 className="w-4 h-4 text-white" />
               )}
             </button>
           </div>
@@ -1156,15 +1220,93 @@ export const AnimatedClinicalReels: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Subtitle / Instruction */}
-      <div className="text-center pt-2 max-w-xl mx-auto space-y-2">
+      {/* Voiceover Language Switcher & Interactive Review Player Controls */}
+      <div className="text-center pt-3 max-w-2xl mx-auto space-y-3">
         <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed">
           Every counter has an instant vector QR pass. Patients scan it, receive live queue updates, and doctors call with one tap.
         </p>
+
+        {/* Language selector toggle */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+          <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+            <Volume2 className="w-3.5 h-3.5 text-emerald-500" /> Voiceover Review:
+          </span>
+          <button
+            type="button"
+            onClick={() => handleLanguageChange('hi')}
+            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              voiceoverLang === 'hi'
+                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 ring-2 ring-emerald-400/50'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300/80 dark:border-slate-700'
+            }`}
+          >
+            <span>🇮🇳</span>
+            <span>Hindi / Hinglish (डॉक्टर रिव्यू)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleLanguageChange('en')}
+            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              voiceoverLang === 'en'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 ring-2 ring-blue-400/50'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300/80 dark:border-slate-700'
+            }`}
+          >
+            <span>🌐</span>
+            <span>English (Doctor Walkthrough)</span>
+          </button>
+        </div>
+
         <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center justify-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Click any speaker icon to test realistic hospital chime and announcements live</span>
+          <span>Click any card's speaker icon to listen to clinician reviews and product walkthrough live</span>
         </p>
+
+        {/* Live Speaking Visualizer & Captions Card */}
+        {unmutedReelId !== null && isSpeakingVoiceover && CLINICAL_REEL_VOICEOVERS[unmutedReelId] && (
+          <div className="mt-3 p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-indigo-500/50 shadow-2xl text-white text-left animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between gap-3 mb-2.5 pb-2 border-b border-white/10">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
+                  <Volume2 className="w-4 h-4 animate-bounce" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs font-black text-white flex items-center gap-2 truncate">
+                    <span className="truncate">{CLINICAL_REEL_VOICEOVERS[unmutedReelId].doctor}</span>
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 uppercase font-black tracking-wider shrink-0">
+                      Live Clinical Review
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-400 truncate font-medium">
+                    {CLINICAL_REEL_VOICEOVERS[unmutedReelId].facility}
+                  </p>
+                </div>
+              </div>
+
+              {/* Live Soundwave Bars & Stop Button */}
+              <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-end gap-1 h-5 px-1">
+                  <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '70%', animationDuration: '0.4s' }} />
+                  <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '100%', animationDuration: '0.6s' }} />
+                  <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '40%', animationDuration: '0.35s' }} />
+                  <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '85%', animationDuration: '0.5s' }} />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleToggleSound(unmutedReelId)}
+                  className="px-2.5 py-1 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white border border-red-500/40 text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer active:scale-95"
+                >
+                  <Pause className="w-3 h-3" />
+                  <span>Stop</span>
+                </button>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-200 leading-relaxed italic font-medium">
+              "{voiceoverLang === 'hi' ? CLINICAL_REEL_VOICEOVERS[unmutedReelId].hiText : CLINICAL_REEL_VOICEOVERS[unmutedReelId].enText}"
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Expanded Interactive Simulation Modal */}
@@ -1215,10 +1357,23 @@ export const AnimatedClinicalReels: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleToggleSound(activeModalReel.id)}
-                className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg text-white"
+                className={`flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg text-white ${
+                  unmutedReelId === activeModalReel.id && isSpeakingVoiceover
+                    ? 'bg-red-600 hover:bg-red-500'
+                    : 'bg-blue-600 hover:bg-blue-500'
+                }`}
               >
-                <Volume2 className="w-4 h-4" />
-                <span>Test Studio Audio Broadcast</span>
+                {unmutedReelId === activeModalReel.id && isSpeakingVoiceover ? (
+                  <>
+                    <Pause className="w-4 h-4" />
+                    <span>Stop Voiceover Review</span>
+                  </>
+                ) : (
+                  <>
+                    <Volume2 className="w-4 h-4" />
+                    <span>Listen to Doctor Review & Product Voiceover</span>
+                  </>
+                )}
               </button>
               <button
                 type="button"

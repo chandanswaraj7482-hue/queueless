@@ -462,3 +462,125 @@ export function playClinicVoiceAnnouncement(
     console.warn('Speech synthesis unavailable or blocked by browser', err);
   }
 }
+
+export interface ClinicalVoiceoverItem {
+  id: number;
+  doctor: string;
+  facility: string;
+  enText: string;
+  hiText: string;
+}
+
+export const CLINICAL_REEL_VOICEOVERS: Record<number, ClinicalVoiceoverItem> = {
+  1: {
+    id: 1,
+    doctor: 'Dr. Rohan Sharma, MD',
+    facility: 'CareMax Superspecialty • Cabin 204',
+    enText: "Hello, I'm Dr. Rohan Sharma from CareMax Cardiology. Before Queueless, corridors were packed with 40-minute wait times. With Queueless Cabin Console on my iPad, I call the next patient in one tap. The TV chimes automatically and alerts the patient on mobile. Our OPD is now completely quiet, seamless, and zero-wait.",
+    hiText: "नमस्ते, मैं डॉक्टर रोहन शर्मा, केयरमैक्स कार्डियोलॉजी से। पहले ओपीडी में पेशेंट्स को चालीस मिनट लाइन में खड़े रहना पड़ता था। क्यूलेस केबिन कंसोल से अब मैं आईपैड पर एक क्लिक में अगला पेशेंट बुला लेता हूँ। टीवी पर बेल बजती है और पेशेंट के फोन पर अलर्ट जाता है। क्लिनिक एकदम शांत और ज़ीरो-वेट हो गया है।"
+  },
+  2: {
+    id: 2,
+    doctor: 'Dr. Priya S. Kulkarni',
+    facility: 'Rainbow Children Clinic • OPD Gate',
+    enText: "I'm Dr. Priya Kulkarni from Rainbow Clinic. Standing in counter lines with sick children was stressful for parents. With Queueless Mobile QR Pass, families simply scan the hospital entrance standee, get a live WhatsApp token pass, and wait comfortably in the cafeteria while tracking their turn. It has transformed our patient satisfaction!",
+    hiText: "मैं डॉक्टर प्रिया कुलकर्णी, रेनबो क्लिनिक से। बीमार बच्चों के साथ रिसेप्शन लाइन में खड़े रहना पैरेंट्स के लिए बहुत तकलीफदेह था। क्यूलेस क्यूआर पास से पैरेंट्स गेट पर क्यूआर कोड स्कैन करके सीधे व्हाट्सएप पर लाइव टोकन ले लेते हैं और कैफे में आराम से बैठकर अपनी बारी ट्रैक करते हैं। पेशेंट बहुत खुश हैं!"
+  },
+  3: {
+    id: 3,
+    doctor: 'OPD Central Coordinator',
+    facility: 'Medanta Medicity • Central Hub',
+    enText: "Greetings from Medanta Central OPD Desk. Queueless turns any standard 55-inch smart TV into an autonomous waiting hall display with zero hardware cost. It chimes studio acoustic bells and announces patient tokens in Hindi and English. Waiting hall congestion dropped by 80%, and our staff no longer need to shout names!",
+    hiText: "मेदांता सेंट्रल ओपीडी डेस्क से। क्यूलेस ओएस किसी भी नॉर्मल 55 इंच स्मार्ट टीवी को लाइव कियोस्क में बदल देता है, बिना किसी नए हार्डवेयर के। यह 3-टोन साउंड के साथ हिंदी और अंग्रेजी दोनों में टोकन अनाउंस करता है। वेटिंग हॉल की भीड़ अस्सी परसेंट खत्म हो गई है और स्टाफ को नाम नहीं चिल्लाना पड़ता।"
+  },
+  4: {
+    id: 4,
+    doctor: 'Col. R. K. Nair',
+    facility: 'Apex Surgical Daycare • Procedural Hub',
+    enText: "I'm Col. R. K. Nair from Apex Surgical Daycare. With Queueless Direct Settlement, consultation fees are paid via instant QR UPI and credited 100% directly into our hospital HDFC account. Zero platform fee, zero payout hold, and patients receive an instant digital receipt. It is by far the most reliable healthcare software we've used.",
+    hiText: "मैं कर्नल आर. के. नायर, अपेक्स सर्जिकल से। क्यूलेस डायरेक्ट सेटलमेंट से पेशेंट की कंसल्टेशन फीस इंस्टेंट यूपीआई के ज़रिये सीधे हमारे हॉस्पिटल एचडीएफसी खाते में जमा हो जाती है। कोई कमीशन नहीं, कोई पेमेंट होल्ड नहीं, और पेशेंट को तुरंत डिजिटल जीएसटी इनवॉइस मिल जाती है। यह बेहद प्रॉफिटेबल और रिलायबल सिस्टम है।"
+  }
+};
+
+let currentVoiceoverUtterance: SpeechSynthesisUtterance | null = null;
+
+export function stopClinicalReviewVoiceover() {
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+      currentVoiceoverUtterance = null;
+    } catch {}
+  }
+}
+
+export function playClinicalReviewVoiceover(
+  reelId: number,
+  language: 'hi' | 'en' = 'hi',
+  onStart?: () => void,
+  onEnd?: () => void
+): boolean {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+    return false;
+  }
+
+  const voiceover = CLINICAL_REEL_VOICEOVERS[reelId];
+  if (!voiceover) return false;
+
+  const text = language === 'hi' ? voiceover.hiText : voiceover.enText;
+
+  try {
+    stopClinicalReviewVoiceover();
+    playClinicChime();
+
+    // Refresh voices if empty
+    if (cachedVoices.length === 0) {
+      cachedVoices = window.speechSynthesis.getVoices();
+    }
+
+    const utt = new SpeechSynthesisUtterance(text);
+    const chosenVoice = getBestNaturalVoice(language);
+    if (chosenVoice) {
+      utt.voice = chosenVoice;
+      utt.lang = chosenVoice.lang || (language === 'hi' ? 'hi-IN' : 'en-US');
+    } else {
+      utt.lang = language === 'hi' ? 'hi-IN' : 'en-US';
+    }
+
+    utt.rate = language === 'hi' ? 0.95 : 0.98;
+    utt.pitch = 1.0;
+    utt.volume = 1.0;
+
+    utt.onstart = () => {
+      if (onStart) onStart();
+    };
+
+    utt.onend = () => {
+      currentVoiceoverUtterance = null;
+      if (onEnd) onEnd();
+    };
+
+    utt.onerror = () => {
+      currentVoiceoverUtterance = null;
+      if (onEnd) onEnd();
+    };
+
+    currentVoiceoverUtterance = utt;
+
+    // Small delay for chime resonance
+    setTimeout(() => {
+      try {
+        window.speechSynthesis.resume();
+        window.speechSynthesis.speak(utt);
+      } catch (e) {
+        console.warn('Voiceover speak error', e);
+        if (onEnd) onEnd();
+      }
+    }, 380);
+
+    return true;
+  } catch (err) {
+    console.warn('Failed to play clinical voiceover', err);
+    if (onEnd) onEnd();
+    return false;
+  }
+}

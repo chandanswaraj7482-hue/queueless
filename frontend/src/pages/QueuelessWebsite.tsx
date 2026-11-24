@@ -69,6 +69,7 @@ import { SeoHead } from '../components/SeoHead';
 import { ClinicalReviewsCarousel } from '../components/ClinicalReviewsCarousel';
 import { AnimatedClinicalReels } from '../components/AnimatedClinicalReels';
 import { PhoneCountryInput } from '../components/PhoneCountryInput';
+import { AnimatedCounter } from '../components/AnimatedCounter';
 import {
   WORLDWIDE_CURRENCIES,
   PLAN_TEMPLATES,
@@ -1670,7 +1671,7 @@ export const QueuelessWebsite: React.FC = () => {
                   <div className="flex items-center justify-center gap-2">
                     <Timer className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 stroke-[2.3]" />
                     <span className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
-                      72%
+                      <AnimatedCounter end={72} suffix="%" duration={1600} />
                     </span>
                   </div>
                   <div className="text-[11px] sm:text-xs text-cyan-100 font-bold leading-tight mt-1.5">
@@ -1684,7 +1685,7 @@ export const QueuelessWebsite: React.FC = () => {
                   <div className="flex items-center justify-center gap-2">
                     <Users className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 stroke-[2.3]" />
                     <span className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
-                      2.4x
+                      <AnimatedCounter end={2.4} decimals={1} suffix="x" duration={1600} />
                     </span>
                   </div>
                   <div className="text-[11px] sm:text-xs text-cyan-100 font-bold leading-tight mt-1.5">
@@ -1698,7 +1699,7 @@ export const QueuelessWebsite: React.FC = () => {
                   <div className="flex items-center justify-center gap-2">
                     <ThumbsUp className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 stroke-[2.3]" />
                     <span className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
-                      98%
+                      <AnimatedCounter end={98} suffix="%" duration={1600} />
                     </span>
                   </div>
                   <div className="text-[11px] sm:text-xs text-cyan-100 font-bold leading-tight mt-1.5">
@@ -1712,7 +1713,7 @@ export const QueuelessWebsite: React.FC = () => {
                   <div className="flex items-center justify-center gap-2">
                     <BriefcaseMedical className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 stroke-[2.3]" />
                     <span className="text-2xl sm:text-3xl font-black text-white font-sans tracking-tight">
-                      450+
+                      <AnimatedCounter end={450} suffix="+" duration={1800} />
                     </span>
                   </div>
                   <div className="text-[11px] sm:text-xs text-cyan-100 font-bold leading-tight mt-1.5">
@@ -3124,37 +3125,66 @@ export const QueuelessWebsite: React.FC = () => {
               <div className="lg:col-span-5 grid grid-cols-2 gap-3 text-center">
                 <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
                   <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap max-w-full">
-                    {selectedCurrencyCode === 'INR'
-                      ? '+₹1,84,000'
-                      : selectedCurrencyCode === 'USD'
-                      ? '+$2,200'
-                      : selectedCurrencyCode === 'GBP'
-                      ? '+£1,750'
-                      : selectedCurrencyCode === 'EUR'
-                      ? '+€2,050'
-                      : selectedCurrencyCode === 'AED'
-                      ? '+AED 8,100'
-                      : selectedCurrencyCode === 'SGD'
-                      ? '+S$2,950'
-                      : selectedCurrencyCode === 'AUD'
-                      ? '+A$3,400'
-                      : `+${selectedCurrency.symbol}${Math.round(184000 / 83).toLocaleString()}`}
+                    <AnimatedCounter
+                      end={
+                        selectedCurrencyCode === 'INR'
+                          ? 184000
+                          : selectedCurrencyCode === 'USD'
+                          ? 2200
+                          : selectedCurrencyCode === 'GBP'
+                          ? 1750
+                          : selectedCurrencyCode === 'EUR'
+                          ? 2050
+                          : selectedCurrencyCode === 'AED'
+                          ? 8100
+                          : selectedCurrencyCode === 'SGD'
+                          ? 2950
+                          : selectedCurrencyCode === 'AUD'
+                          ? 3400
+                          : Math.round(184000 / 83)
+                      }
+                      prefix={
+                        selectedCurrencyCode === 'INR'
+                          ? '+₹'
+                          : selectedCurrencyCode === 'USD'
+                          ? '+$'
+                          : selectedCurrencyCode === 'GBP'
+                          ? '+£'
+                          : selectedCurrencyCode === 'EUR'
+                          ? '+€'
+                          : selectedCurrencyCode === 'AED'
+                          ? '+AED '
+                          : selectedCurrencyCode === 'SGD'
+                          ? '+S$'
+                          : selectedCurrencyCode === 'AUD'
+                          ? '+A$'
+                          : `+${selectedCurrency.symbol}`
+                      }
+                      useIndianLocale={selectedCurrencyCode === 'INR'}
+                      duration={1800}
+                    />
                   </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Monthly Recovered Fees</span>
                   <span className="text-[10px] text-emerald-400/80 block mt-0.5 whitespace-nowrap">Average 6-Cabin Hospital</span>
                 </div>
                 <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
-                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-blue-400 font-mono tracking-tight whitespace-nowrap">3.4 Days</div>
+                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-blue-400 font-mono tracking-tight whitespace-nowrap">
+                    <AnimatedCounter end={3.4} decimals={1} suffix=" Days" duration={1600} />
+                  </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Average Payback</span>
                   <span className="text-[10px] text-blue-400/80 block mt-0.5 whitespace-nowrap">30-Day Guarantee</span>
                 </div>
                 <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
-                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-indigo-400 font-mono tracking-tight whitespace-nowrap">2.4x</div>
+                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-indigo-400 font-mono tracking-tight whitespace-nowrap">
+                    <AnimatedCounter end={2.4} decimals={1} suffix="x" duration={1600} />
+                  </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">15-Day Follow-Up Rate</span>
                   <span className="text-[10px] text-indigo-400/80 block mt-0.5 whitespace-nowrap">Automated Sync</span>
                 </div>
                 <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
-                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-amber-400 font-mono tracking-tight whitespace-nowrap">-78%</div>
+                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-amber-400 font-mono tracking-tight whitespace-nowrap">
+                    <AnimatedCounter prefix="-" end={78} suffix="%" duration={1600} />
+                  </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Corridor Crowding</span>
                   <span className="text-[10px] text-amber-400/80 block mt-0.5 whitespace-nowrap">Calm Waiting Lounges</span>
                 </div>

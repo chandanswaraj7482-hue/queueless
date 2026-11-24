@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { QRCodeCanvas } from 'qrcode.react';
 import {
@@ -31,6 +32,7 @@ import {
   Share2,
   Key,
   Hash,
+  QrCode,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
@@ -131,10 +133,16 @@ export const HospitalOnboarding: React.FC = () => {
   const [cardExpiry, setCardExpiry] = useState('');
   const [cardCvc, setCardCvc] = useState('');
   const [cardHolder, setCardHolder] = useState('');
-  const [paymentMode, setPaymentMode] = useState<'CARD' | 'UPI'>('CARD');
+  const [paymentMode, setPaymentMode] = useState<'UPI' | 'CARD'>(() => {
+    const modeParam = searchParams.get('mode');
+    if (modeParam === 'card') return 'CARD';
+    return 'UPI';
+  });
   const [upiVpa, setUpiVpa] = useState('');
   const [autopayConsent, setAutopayConsent] = useState(true);
   const [paymentCancelledNotice, setPaymentCancelledNotice] = useState<string | null>(null);
+  const [showCashfreeModal, setShowCashfreeModal] = useState(false);
+  const [isApprovingCashfree, setIsApprovingCashfree] = useState(false);
 
   // Card input formatters & card brand detection
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -225,57 +233,18 @@ export const HospitalOnboarding: React.FC = () => {
   };
 
   // Step 3: Trigger Payment & Hospital Provisioning with Credit Card AutoPay
-  const handleInitiatePayment = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const executeSubscriptionProvisioning = async () => {
     setIsProcessing(true);
     setErrorMsg(null);
     setPaymentCancelledNotice(null);
 
-    // Validate AutoPay Consent
-    if (!autopayConsent) {
-      setErrorMsg('Please accept the AutoPay recurring mandate to activate your 14-day free pilot.');
-      setIsProcessing(false);
-      return;
-    }
-
-    // Validate Card or UPI
-    if (paymentMode === 'CARD') {
-      const cleanNum = cardNumber.replace(/\s/g, '');
-      if (!cardHolder.trim()) {
-        setErrorMsg('Please enter Cardholder Name.');
-        setIsProcessing(false);
-        return;
-      }
-      if (cleanNum.length < 15) {
-        setErrorMsg('Please enter a valid 16-digit Credit or Debit Card Number.');
-        setIsProcessing(false);
-        return;
-      }
-      if (!cardExpiry.includes('/') || cardExpiry.replace(/\D/g, '').length < 4) {
-        setErrorMsg('Please enter a valid card expiration date (MM/YY).');
-        setIsProcessing(false);
-        return;
-      }
-      if (cardCvc.length < 3) {
-        setErrorMsg('Please enter a valid 3 or 4-digit Security CVV / CVC.');
-        setIsProcessing(false);
-        return;
-      }
-    } else {
-      if (!upiVpa.includes('@') || upiVpa.trim().length < 5) {
-        setErrorMsg('Please enter a valid UPI VPA ID (e.g. director@okhdfcbank).');
-        setIsProcessing(false);
-        return;
-      }
-    }
-
     // Prepare AutoPay Record
     const cleanCardDigits = cardNumber.replace(/\s/g, '');
-    const brandInfo = paymentMode === 'CARD' ? getCardBrand(cardNumber) : { name: 'UPI AutoPay', badge: 'UPI', color: 'bg-emerald-600 text-white' };
+    const brandInfo = paymentMode === 'CARD' ? getCardBrand(cardNumber) : { name: 'UPI AutoPay (Cashfree)', badge: 'CASHFREE', color: 'bg-emerald-600 text-white' };
     const maskedInstrument = paymentMode === 'CARD'
       ? `•••• ${cleanCardDigits.slice(-4) || '4242'}`
       : upiVpa.trim();
-    const mandateId = 'MND-' + Math.floor(100000 + Math.random() * 900000);
+    const mandateId = 'CF-MND-' + Math.floor(100000 + Math.random() * 900000);
     const nextBillingDate = new Date(Date.now() + 14 * 86400000).toLocaleDateString('en-US', {
       day: 'numeric',
       month: 'short',
@@ -415,7 +384,7 @@ export const HospitalOnboarding: React.FC = () => {
           })
         );
         setProvisionedData(fallbackData);
-        setCurrentStep(4);
+        setCurrentStep(5);
         playClinicChime();
       }
     } catch (err) {
@@ -472,10 +441,51 @@ export const HospitalOnboarding: React.FC = () => {
         })
       );
       setProvisionedData(fallbackData);
-      setCurrentStep(4);
+      setCurrentStep(5);
       playClinicChime();
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const handleInitiatePayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+    setPaymentCancelledNotice(null);
+
+    // Validate AutoPay Consent
+    if (!autopayConsent) {
+      setErrorMsg('Please accept the AutoPay recurring mandate to activate your 14-day free pilot.');
+      return;
+    }
+
+    // Validate Card or UPI
+    if (paymentMode === 'CARD') {
+      const cleanNum = cardNumber.replace(/\s/g, '');
+      if (!cardHolder.trim()) {
+        setErrorMsg('Please enter Cardholder Name.');
+        return;
+      }
+      if (cleanNum.length < 15) {
+        setErrorMsg('Please enter a valid 16-digit Credit or Debit Card Number.');
+        return;
+      }
+      if (!cardExpiry.includes('/') || cardExpiry.replace(/\D/g, '').length < 4) {
+        setErrorMsg('Please enter a valid card expiration date (MM/YY).');
+        return;
+      }
+      if (cardCvc.length < 3) {
+        setErrorMsg('Please enter a valid 3 or 4-digit Security CVV / CVC.');
+        return;
+      }
+      await executeSubscriptionProvisioning();
+    } else {
+      if (!upiVpa.includes('@') || upiVpa.trim().length < 5) {
+        setErrorMsg('Please enter a valid UPI VPA ID (e.g. director@okhdfcbank or 9876543210@ybl).');
+        return;
+      }
+      // Open Official Cashfree AutoPay Mandate Modal
+      setShowCashfreeModal(true);
     }
   };
 
@@ -1320,6 +1330,32 @@ export const HospitalOnboarding: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Dedicated Cashfree UPI AutoPay Tab (Primary / Default) */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPaymentMode('UPI');
+                      setPaymentCancelledNotice(null);
+                    }}
+                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${paymentMode === 'UPI'
+                      ? 'border-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/40 shadow-md ring-2 ring-emerald-500/10'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
+                      }`}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                        <Smartphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span>UPI AutoPay (Cashfree)</span>
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">
+                        CASHFREE & NPCI
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
+                      Google Pay, PhonePe, Paytm, BHIM e-Mandate
+                    </span>
+                  </button>
+
                   {/* Credit / Debit Card Tab */}
                   <button
                     type="button"
@@ -1343,32 +1379,6 @@ export const HospitalOnboarding: React.FC = () => {
                     </div>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
                       Visa, Mastercard, RuPay & Amex Card AutoPay
-                    </span>
-                  </button>
-
-                  {/* Cashfree UPI AutoPay Tab */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPaymentMode('UPI');
-                      setPaymentCancelledNotice(null);
-                    }}
-                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${paymentMode === 'UPI'
-                      ? 'border-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/40 shadow-md ring-2 ring-emerald-500/10'
-                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
-                      }`}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <Smartphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                        <span>UPI AutoPay (Cashfree)</span>
-                      </span>
-                      <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">
-                        CASHFREE & NPCI
-                      </span>
-                    </div>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 text-left">
-                      Google Pay, PhonePe, Paytm, BHIM e-Mandate
                     </span>
                   </button>
                 </div>
@@ -1533,7 +1543,7 @@ export const HospitalOnboarding: React.FC = () => {
                       </div>
                       <div className="flex flex-wrap items-center justify-between gap-1 text-[10px] text-slate-500 dark:text-slate-400 mt-2">
                         <span>✓ Powered by <strong>Cashfree Payments</strong> • Official RBI & NPCI e-Mandate Rail</span>
-                        <span>✓ Instant approval in Google Pay, PhonePe, Paytm or BHIM app</span>
+                        <span>✓ Instant approval in Google Pay, PhonePe, Paytm or BHIM app • <strong>₹0 debited</strong></span>
                       </div>
                     </div>
                   </div>
@@ -1968,6 +1978,121 @@ export const HospitalOnboarding: React.FC = () => {
           )}
         </div>
       </main>
+
+      {/* Official Cashfree AutoPay & NPCI e-Mandate Dashboard Modal */}
+      {showCashfreeModal && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !isApprovingCashfree) setShowCashfreeModal(false);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 text-slate-900 dark:text-white shadow-2xl relative space-y-4 my-auto max-h-[92vh] overflow-y-auto">
+            {/* Cashfree Official Header */}
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-sm shadow-md">
+                  CF
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-black text-sm text-slate-900 dark:text-white">Cashfree Payments</span>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">
+                      NPCI UPI AutoPay
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1">
+                    <Lock className="w-3 h-3 text-emerald-600" />
+                    <span>Official RBI & NPCI e-Mandate Rail • 256-Bit SSL</span>
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={isApprovingCashfree}
+                onClick={() => setShowCashfreeModal(false)}
+                className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 flex items-center justify-center font-bold text-xs"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* AutoPay Mandate Order Summary */}
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-2.5 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500 dark:text-slate-400">Hospital Facility:</span>
+                <span className="font-bold text-slate-900 dark:text-white">{hospitalName || 'Queueless Medical Center'}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500 dark:text-slate-400">Chosen Plan:</span>
+                <span className="font-bold text-blue-600 dark:text-blue-400">{selectedPlan.name} ({selectedCurrency.symbol}{totalAmount.toLocaleString()} / {billingCycle === 'ANNUAL' ? 'year' : 'month'})</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500 dark:text-slate-400">AutoPay Pre-Auth Due Today:</span>
+                <span className="font-black text-emerald-600 dark:text-emerald-400 text-sm">₹0.00 (Zero Debited)</span>
+              </div>
+              <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-2 text-[11px]">
+                <span className="text-slate-500 dark:text-slate-400">Target UPI VPA:</span>
+                <span className="font-mono font-bold text-slate-900 dark:text-white">{upiVpa}</span>
+              </div>
+            </div>
+
+            {/* QR Code & App Status */}
+            <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 flex flex-col items-center justify-center text-center space-y-2">
+              <div className="w-28 h-28 bg-white p-2 rounded-xl border border-slate-200 shadow-md flex items-center justify-center relative">
+                <QRCodeCanvas value={`upi://mandate?pa=cashfree@hdfcbank&pn=Queueless%20Health&mc=5499&tid=CF${Date.now()}&tr=CFMND${Date.now()}&tn=Queueless%2014-Day%20Pilot%20AutoPay&am=0.00&cu=INR`} size={96} />
+                {isApprovingCashfree && (
+                  <div className="absolute inset-0 bg-emerald-600/90 rounded-xl flex items-center justify-center text-white animate-fade-in">
+                    <CheckCircle2 className="w-10 h-10 animate-bounce" />
+                  </div>
+                )}
+              </div>
+              <div>
+                <p className="text-xs font-black text-slate-900 dark:text-white">
+                  {isApprovingCashfree ? 'NPCI Rail Confirming AutoPay Mandate...' : 'Scan via Google Pay / PhonePe / Paytm / BHIM'}
+                </p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Or approve the notification sent to <strong>{upiVpa}</strong>
+                </p>
+              </div>
+            </div>
+
+            {/* Interactive Authorization Action Button */}
+            <div className="space-y-2 pt-1">
+              <button
+                type="button"
+                disabled={isApprovingCashfree}
+                onClick={async () => {
+                  setIsApprovingCashfree(true);
+                  setTimeout(async () => {
+                    await executeSubscriptionProvisioning();
+                    setIsApprovingCashfree(false);
+                    setShowCashfreeModal(false);
+                  }, 1200);
+                }}
+                className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+              >
+                {isApprovingCashfree ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Confirming Mandate with NPCI & Cashfree...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Authorize UPI AutoPay Mandate (₹0 Today) ➔</span>
+                  </>
+                )}
+              </button>
+
+              <p className="text-[10px] text-center text-slate-400">
+                ✓ Powered by Cashfree Payments • Official RBI & NPCI e-Mandate Rail. ₹0 debited today. 14-day free pilot.
+              </p>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
 
       <CommercialFooter />
     </div>

@@ -614,6 +614,12 @@ export const QueuelessWebsite: React.FC = () => {
   const [leadCountryCode, setLeadCountryCode] = useState(() => CURRENCY_TO_DIAL_CODE[selectedCurrencyCode] || '+1');
   const [leadSubmitted, setLeadSubmitted] = useState(false);
 
+  // Synchronize country dial code when currency code changes
+  useEffect(() => {
+    const dial = CURRENCY_TO_DIAL_CODE[selectedCurrencyCode] || '+1';
+    setLeadCountryCode(dial);
+  }, [selectedCurrencyCode]);
+
   // Interactive Live Mockup Queue State & Cabin Configuration
   const SIMULATED_OPD_CABINS = [
     { name: 'Dr. Rohan Sharma, MD', specialty: 'General Medicine & OPD', cabin: 'Cabin 1 (General OPD)', location: 'Ground Floor • Room 101' },

@@ -123,7 +123,7 @@ export const PricingPage: React.FC = () => {
     WORLDWIDE_CURRENCIES[currencyCode] || WORLDWIDE_CURRENCIES.USD;
 
   const handleSelectPlan = (plan: PlanTemplate) => {
-    navigate(`/signup?plan=${plan.id}&currency=${currencyCode}&cycle=${billingCycle}`);
+    navigate(`/signup?plan=${plan.id}&currency=${currencyCode}&cycle=${billingCycle}&mode=cashfree`);
   };
 
   const filteredFaqs =

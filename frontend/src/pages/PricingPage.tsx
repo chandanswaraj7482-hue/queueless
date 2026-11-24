@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   CheckCircle2,
@@ -18,6 +18,8 @@ import {
   Printer,
   Coins,
   X,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
 import { CommercialFooter } from '../components/CommercialFooter';
@@ -53,6 +55,69 @@ export const PricingPage: React.FC = () => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [showSurgeModal, setShowSurgeModal] = useState(false);
   const [selectedSurgePack, setSelectedSurgePack] = useState<'5K' | '15K' | '50K'>('15K');
+
+  // Modular Add-Ons Mobile Carousel State
+  const [activeAddonIndex, setActiveAddonIndex] = useState<number>(0);
+  const [isAddonAutoSlidePaused, setIsAddonAutoSlidePaused] = useState<boolean>(false);
+  const addonSliderRef = useRef<HTMLDivElement>(null);
+  const MODULAR_ADDONS_COUNT = 3;
+
+  const handleAddonScroll = () => {
+    if (!addonSliderRef.current) return;
+    const { scrollLeft, clientWidth } = addonSliderRef.current;
+    if (clientWidth > 0 && addonSliderRef.current.children.length > 0) {
+      let closestIdx = 0;
+      let minDiff = Infinity;
+      Array.from(addonSliderRef.current.children).forEach((child, i) => {
+        const el = child as HTMLElement;
+        const diff = Math.abs(el.offsetLeft - scrollLeft);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIdx = i;
+        }
+      });
+      setActiveAddonIndex(Math.min(Math.max(closestIdx, 0), MODULAR_ADDONS_COUNT - 1));
+    }
+  };
+
+  const scrollToAddonCard = (index: number) => {
+    if (!addonSliderRef.current) return;
+    const targetChild = addonSliderRef.current.children[index] as HTMLElement;
+    if (targetChild) {
+      targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    } else {
+      const cardWidth = addonSliderRef.current.clientWidth * 0.88 + 16;
+      addonSliderRef.current.scrollTo({
+        left: index * cardWidth,
+        behavior: 'smooth',
+      });
+    }
+    setActiveAddonIndex(index);
+  };
+
+  useEffect(() => {
+    if (isAddonAutoSlidePaused) return;
+    const interval = setInterval(() => {
+      if (typeof window !== 'undefined' && window.innerWidth >= 768) return;
+      setActiveAddonIndex((prev) => {
+        const next = (prev + 1) % MODULAR_ADDONS_COUNT;
+        if (addonSliderRef.current) {
+          const targetChild = addonSliderRef.current.children[next] as HTMLElement;
+          if (targetChild) {
+            targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          } else {
+            const cardWidth = addonSliderRef.current.clientWidth * 0.88 + 16;
+            addonSliderRef.current.scrollTo({
+              left: next * cardWidth,
+              behavior: 'smooth',
+            });
+          }
+        }
+        return next;
+      });
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isAddonAutoSlidePaused]);
 
   const selectedCurrency: CurrencyConfig =
     WORLDWIDE_CURRENCIES[currencyCode] || WORLDWIDE_CURRENCIES.USD;
@@ -291,9 +356,19 @@ export const PricingPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {/* Cards Slider / Grid */}
+            <div
+              ref={addonSliderRef}
+              onScroll={handleAddonScroll}
+              onMouseEnter={() => setIsAddonAutoSlidePaused(true)}
+              onMouseLeave={() => setIsAddonAutoSlidePaused(false)}
+              onTouchStart={() => setIsAddonAutoSlidePaused(true)}
+              onTouchEnd={() => setTimeout(() => setIsAddonAutoSlidePaused(false), 3000)}
+              className="flex md:grid md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-3 px-2 touch-pan-x scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               {/* Card 1: White-Label Suite */}
-              <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-purple-200/90 dark:border-purple-800/80 shadow-md flex flex-col justify-between hover:border-purple-400 transition-all">
+              <div className="w-[88%] sm:w-[85%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-white dark:bg-slate-900 border border-purple-200/90 dark:border-purple-800/80 shadow-md flex flex-col justify-between hover:border-purple-400 transition-all">
                 <div className="space-y-3">
                   <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold">
                     <Sparkles className="w-5 h-5" />
@@ -325,7 +400,7 @@ export const PricingPage: React.FC = () => {
               </div>
 
               {/* Card 2: WhatsApp Business Green-Tick */}
-              <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-emerald-200/90 dark:border-emerald-800/80 shadow-md flex flex-col justify-between hover:border-emerald-400 transition-all">
+              <div className="w-[88%] sm:w-[85%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-white dark:bg-slate-900 border border-emerald-200/90 dark:border-emerald-800/80 shadow-md flex flex-col justify-between hover:border-emerald-400 transition-all">
                 <div className="space-y-3">
                   <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-300 flex items-center justify-center font-bold">
                     <MessageSquare className="w-5 h-5" />
@@ -357,7 +432,7 @@ export const PricingPage: React.FC = () => {
               </div>
 
               {/* Card 3: Surge Token Refills */}
-              <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-amber-200/90 dark:border-amber-800/80 shadow-md flex flex-col justify-between hover:border-amber-400 transition-all">
+              <div className="w-[88%] sm:w-[85%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-white dark:bg-slate-900 border border-amber-200/90 dark:border-amber-800/80 shadow-md flex flex-col justify-between hover:border-amber-400 transition-all">
                 <div className="space-y-3">
                   <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-300 flex items-center justify-center font-bold">
                     <Coins className="w-5 h-5" />
@@ -389,6 +464,46 @@ export const PricingPage: React.FC = () => {
                   </button>
                 </div>
               </div>
+            </div>
+
+            {/* Mobile Controls & Dots */}
+            <div className="flex md:hidden flex-col items-center justify-center gap-2 pt-1">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => scrollToAddonCard((activeAddonIndex - 1 + MODULAR_ADDONS_COUNT) % MODULAR_ADDONS_COUNT)}
+                  className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
+                  aria-label="Previous modular addon card"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <div className="flex items-center gap-1.5">
+                  {[0, 1, 2].map((dot) => (
+                    <button
+                      key={dot}
+                      type="button"
+                      onClick={() => scrollToAddonCard(dot)}
+                      aria-label={`Go to addon card ${dot + 1}`}
+                      className={`h-2 rounded-full transition-all cursor-pointer ${
+                        activeAddonIndex === dot
+                          ? 'w-6 bg-purple-600 dark:bg-purple-400 shadow-xs'
+                          : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => scrollToAddonCard((activeAddonIndex + 1) % MODULAR_ADDONS_COUNT)}
+                  className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
+                  aria-label="Next modular addon card"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1">
+                <span>👈 Swipe or watch auto-slide • Card {activeAddonIndex + 1} of {MODULAR_ADDONS_COUNT}</span>
+              </p>
             </div>
           </div>
 

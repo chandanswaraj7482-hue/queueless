@@ -775,27 +775,29 @@ export const PricingPage: React.FC = () => {
               </p>
             </div>
 
-            {/* Filter pills */}
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {[
-                { id: 'ALL', label: 'All Questions' },
-                { id: 'DIRECTORS', label: 'For Directors' },
-                { id: 'PAYMENTS_COMPLIANCE', label: 'Payments & Security' },
-                { id: 'DOCTORS', label: 'For Doctors' },
-                { id: 'RECEPTION', label: 'For Reception' },
-              ].map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => setFaqCategory(cat.id as FaqCategory)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${faqCategory === cat.id
-                      ? 'bg-blue-600 text-white shadow-xs font-black'
-                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                    }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
+            {/* Filter pills (Horizontal Sliding Track on Mobile & Responsive) */}
+            <div className="w-full max-w-full overflow-x-auto py-2 px-1 touch-pan-x scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <div className="flex items-center gap-2 min-w-max mx-auto justify-start sm:justify-center px-1">
+                {[
+                  { id: 'ALL', label: 'All Questions' },
+                  { id: 'DIRECTORS', label: 'For Directors' },
+                  { id: 'PAYMENTS_COMPLIANCE', label: 'Payments & Security' },
+                  { id: 'DOCTORS', label: 'For Doctors' },
+                  { id: 'RECEPTION', label: 'For Reception' },
+                ].map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setFaqCategory(cat.id as FaqCategory)}
+                    className={`whitespace-nowrap shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${faqCategory === cat.id
+                        ? 'bg-blue-600 text-white shadow-xs font-black ring-2 ring-blue-500/20'
+                        : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                      }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="space-y-3 pt-4">

@@ -110,21 +110,23 @@ export const BlogPage: React.FC = () => {
               />
             </div>
 
-            {/* Category Pills */}
-            <div className="flex items-center justify-center gap-1.5 flex-wrap pt-4">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                    selectedCategory === cat
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:border-slate-300'
-                  }`}
-                >
-                  {cat === 'ALL' ? 'All Articles' : cat}
-                </button>
-              ))}
+            {/* Category Pills (Horizontal Sliding Track on Mobile & Responsive) */}
+            <div className="w-full max-w-full overflow-x-auto py-2 px-1 touch-pan-x scroll-smooth pt-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <div className="flex items-center gap-2 min-w-max mx-auto justify-start sm:justify-center px-1">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`whitespace-nowrap shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      selectedCategory === cat
+                        ? 'bg-blue-600 text-white shadow-xs font-black ring-2 ring-blue-500/20'
+                        : 'bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                    }`}
+                  >
+                    {cat === 'ALL' ? 'All Articles' : cat}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

@@ -3759,27 +3759,29 @@ export const QueuelessWebsite: React.FC = () => {
               Everything you need to know about purchasing and launching Queueless OS worldwide.
             </p>
 
-            {/* Category Filter Pills */}
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-3">
-              {[
-                { id: 'ALL', label: 'All FAQs' },
-                { id: 'DIRECTORS', label: '🏥 For Hospital Directors' },
-                { id: 'DOCTORS', label: '👨‍⚕️ For Consulting Doctors' },
-                { id: 'RECEPTION', label: '🧾 For Reception & Staff' },
-                { id: 'COMPLIANCE', label: '🛡️ ABDM & HIPAA Security' },
-              ].map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => setFaqCategory(cat.id as FaqCategory)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all border cursor-pointer ${faqCategory === cat.id
-                      ? 'bg-blue-600 text-white border-blue-600 shadow-sm font-black ring-2 ring-blue-500/20'
-                      : 'bg-slate-50 dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
-                    }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
+            {/* Category Filter Pills (Horizontal Sliding Track on Mobile & Responsive) */}
+            <div className="w-full max-w-full overflow-x-auto py-2 px-1 touch-pan-x scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <div className="flex items-center gap-2 min-w-max mx-auto justify-start sm:justify-center px-1">
+                {[
+                  { id: 'ALL', label: 'All FAQs' },
+                  { id: 'DIRECTORS', label: '🏥 For Hospital Directors' },
+                  { id: 'DOCTORS', label: '👨‍⚕️ For Consulting Doctors' },
+                  { id: 'RECEPTION', label: '🧾 For Reception & Staff' },
+                  { id: 'COMPLIANCE', label: '🛡️ ABDM & HIPAA Security' },
+                ].map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setFaqCategory(cat.id as FaqCategory)}
+                    className={`whitespace-nowrap shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${faqCategory === cat.id
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-sm font-black ring-2 ring-blue-500/20'
+                        : 'bg-slate-50 dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
+                      }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 

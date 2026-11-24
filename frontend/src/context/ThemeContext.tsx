@@ -47,16 +47,45 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [theme]);
 
   const toggleTheme = () => {
-    setThemeState((prev) => {
-      const next: Theme = prev === 'dark' ? 'light' : 'dark';
+    const next: Theme = theme === 'dark' ? 'light' : 'dark';
+    const isSafari =
+      typeof navigator !== 'undefined' &&
+      /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    if (
+      typeof document !== 'undefined' &&
+      'startViewTransition' in document &&
+      !isSafari
+    ) {
+      (document as any).startViewTransition(() => {
+        applyThemeToDOM(next);
+        setThemeState(next);
+      });
+    } else {
       applyThemeToDOM(next);
-      return next;
-    });
+      setThemeState(next);
+    }
   };
 
   const setTheme = (next: Theme) => {
-    applyThemeToDOM(next);
-    setThemeState(next);
+    if (next === theme) return;
+    const isSafari =
+      typeof navigator !== 'undefined' &&
+      /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    if (
+      typeof document !== 'undefined' &&
+      'startViewTransition' in document &&
+      !isSafari
+    ) {
+      (document as any).startViewTransition(() => {
+        applyThemeToDOM(next);
+        setThemeState(next);
+      });
+    } else {
+      applyThemeToDOM(next);
+      setThemeState(next);
+    }
   };
 
   return (

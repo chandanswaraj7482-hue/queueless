@@ -43,7 +43,6 @@ import {
   PlanId,
 } from '../data/commercialData';
 import { playClinicChime } from '../utils/audio';
-import { PhoneCountryInput } from '../components/PhoneCountryInput';
 
 import { API_BASE_URL } from '../config/api';
 export const HospitalOnboarding: React.FC = () => {
@@ -106,7 +105,6 @@ export const HospitalOnboarding: React.FC = () => {
   const [city, setCity] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
-  const [phoneCountryCode, setPhoneCountryCode] = useState('+91');
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const generateRandomPin = () => Math.floor(1000 + Math.random() * 9000).toString();
@@ -345,7 +343,7 @@ export const HospitalOnboarding: React.FC = () => {
           const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
           storedHospitals[slug.trim()] = enrichedClinic;
           localStorage.setItem('queueless_registered_hospitals', JSON.stringify(storedHospitals));
-        } catch (e) {}
+        } catch (e) { }
 
         // Save auth into localStorage so they are immediately logged in
         localStorage.setItem(
@@ -399,7 +397,7 @@ export const HospitalOnboarding: React.FC = () => {
           const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
           storedHospitals[slug.trim()] = fallbackClinic;
           localStorage.setItem('queueless_registered_hospitals', JSON.stringify(storedHospitals));
-        } catch (e) {}
+        } catch (e) { }
 
         localStorage.setItem(
           'queueless_auth',
@@ -456,7 +454,7 @@ export const HospitalOnboarding: React.FC = () => {
         const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
         storedHospitals[slug.trim()] = fallbackClinic;
         localStorage.setItem('queueless_registered_hospitals', JSON.stringify(storedHospitals));
-      } catch (e) {}
+      } catch (e) { }
 
       localStorage.setItem(
         'queueless_auth',
@@ -507,14 +505,12 @@ export const HospitalOnboarding: React.FC = () => {
               ].map((s) => (
                 <div key={s.step} className="space-y-1">
                   <div
-                    className={`h-1.5 sm:h-2 rounded-full transition-all ${
-                      currentStep >= s.step ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-800'
-                    }`}
+                    className={`h-1.5 sm:h-2 rounded-full transition-all ${currentStep >= s.step ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-800'
+                      }`}
                   />
                   <span
-                    className={`text-[10px] sm:text-[11px] font-bold block truncate ${
-                      currentStep === s.step ? 'text-blue-600 dark:text-blue-400 font-black' : 'text-slate-400 dark:text-slate-500'
-                    }`}
+                    className={`text-[10px] sm:text-[11px] font-bold block truncate ${currentStep === s.step ? 'text-blue-600 dark:text-blue-400 font-black' : 'text-slate-400 dark:text-slate-500'
+                      }`}
                   >
                     <span className="sm:hidden">{s.shortLabel}</span>
                     <span className="hidden sm:inline">{s.fullLabel}</span>
@@ -589,8 +585,8 @@ export const HospitalOnboarding: React.FC = () => {
                       {selectedPlan.id === 'STARTER'
                         ? 'Solo clinics • Up to 3 Consulting Doctors • 1,500 monthly tokens'
                         : selectedPlan.id === 'ENTERPRISE'
-                        ? 'Hospital facility • Unlimited Consulting Doctors • 50,000+ monthly tokens'
-                        : 'Multi-cabin polyclinics • Up to 12 Consulting Doctors • 10,000 monthly tokens'}
+                          ? 'Hospital facility • Unlimited Consulting Doctors • 50,000+ monthly tokens'
+                          : 'Multi-cabin polyclinics • Up to 12 Consulting Doctors • 10,000 monthly tokens'}
                     </p>
                   </div>
                 </div>
@@ -674,13 +670,17 @@ export const HospitalOnboarding: React.FC = () => {
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                       Official Contact Phone *
                     </label>
-                    <PhoneCountryInput
-                      value={phone}
-                      onChange={(val) => setPhone(val)}
-                      countryCode={phoneCountryCode}
-                      onCountryCodeChange={(code) => setPhoneCountryCode(code)}
-                      required
-                    />
+                    <div className="relative">
+                      <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                      <input
+                        type="tel"
+                        required
+                        placeholder="+1 (555) 000-0000 or 9876543210"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -975,18 +975,16 @@ export const HospitalOnboarding: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setBillingCycle('MONTHLY')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                      billingCycle === 'MONTHLY' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs' : 'text-slate-600 dark:text-slate-400'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${billingCycle === 'MONTHLY' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs' : 'text-slate-600 dark:text-slate-400'
+                      }`}
                   >
                     Monthly
                   </button>
                   <button
                     type="button"
                     onClick={() => setBillingCycle('ANNUAL')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
-                      billingCycle === 'ANNUAL' ? 'bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-300 shadow-2xs' : 'text-slate-600 dark:text-slate-400'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${billingCycle === 'ANNUAL' ? 'bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-300 shadow-2xs' : 'text-slate-600 dark:text-slate-400'
+                      }`}
                   >
                     <span>Annual</span>
                     <span className="text-[9px] bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 px-1 py-0.2 rounded font-extrabold border border-emerald-200 dark:border-emerald-800">
@@ -1007,11 +1005,10 @@ export const HospitalOnboarding: React.FC = () => {
                     <div
                       key={plan.id}
                       onClick={() => setSelectedPlan(plan)}
-                      className={`p-5 rounded-2xl border-2 transition-all cursor-pointer relative ${
-                        isSelected
-                          ? 'border-blue-600 bg-blue-50/30 dark:bg-blue-950/40 shadow-md ring-2 ring-blue-500/10'
-                          : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
-                      }`}
+                      className={`p-5 rounded-2xl border-2 transition-all cursor-pointer relative ${isSelected
+                        ? 'border-blue-600 bg-blue-50/30 dark:bg-blue-950/40 shadow-md ring-2 ring-blue-500/10'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
+                        }`}
                     >
                       {plan.badge && (
                         <span className="absolute -top-2.5 right-4 text-[9px] font-black uppercase tracking-wider bg-blue-600 text-white px-2 py-0.5 rounded-full">
@@ -1022,9 +1019,8 @@ export const HospitalOnboarding: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <span className="font-black text-sm text-slate-900 dark:text-white">{plan.name}</span>
                         <div
-                          className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                            isSelected ? 'border-blue-600 bg-blue-600' : 'border-slate-300 dark:border-slate-600'
-                          }`}
+                          className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-blue-600 bg-blue-600' : 'border-slate-300 dark:border-slate-600'
+                            }`}
                         >
                           {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                         </div>
@@ -1085,11 +1081,10 @@ export const HospitalOnboarding: React.FC = () => {
                   {/* Addon 1: White-Label */}
                   <div
                     onClick={() => setHardwareAddon(!hardwareAddon)}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
-                      hardwareAddon
-                        ? 'border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
-                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
-                    }`}
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${hardwareAddon
+                      ? 'border-purple-600 bg-purple-50/50 dark:bg-purple-950/30'
+                      : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
+                      }`}
                   >
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
@@ -1097,7 +1092,7 @@ export const HospitalOnboarding: React.FC = () => {
                         <input
                           type="checkbox"
                           checked={hardwareAddon}
-                          onChange={() => {}}
+                          onChange={() => { }}
                           className="rounded text-purple-600 focus:ring-purple-500 cursor-pointer"
                         />
                       </div>
@@ -1114,11 +1109,10 @@ export const HospitalOnboarding: React.FC = () => {
                   {/* Addon 2: WhatsApp Alerts & Rx */}
                   <div
                     onClick={() => setWhatsappAddon(!whatsappAddon)}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
-                      whatsappAddon
-                        ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/30'
-                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
-                    }`}
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${whatsappAddon
+                      ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/30'
+                      : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
+                      }`}
                   >
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
@@ -1126,7 +1120,7 @@ export const HospitalOnboarding: React.FC = () => {
                         <input
                           type="checkbox"
                           checked={whatsappAddon}
-                          onChange={() => {}}
+                          onChange={() => { }}
                           className="rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer"
                         />
                       </div>
@@ -1143,11 +1137,10 @@ export const HospitalOnboarding: React.FC = () => {
                   {/* Addon 3: Seasonal Surge Token Top-Up */}
                   <div
                     onClick={() => setTokenSurgeAddon(!tokenSurgeAddon)}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
-                      tokenSurgeAddon
-                        ? 'border-amber-500 bg-amber-50/50 dark:bg-amber-950/30'
-                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
-                    }`}
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${tokenSurgeAddon
+                      ? 'border-amber-500 bg-amber-50/50 dark:bg-amber-950/30'
+                      : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
+                      }`}
                   >
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
@@ -1155,7 +1148,7 @@ export const HospitalOnboarding: React.FC = () => {
                         <input
                           type="checkbox"
                           checked={tokenSurgeAddon}
-                          onChange={() => {}}
+                          onChange={() => { }}
                           className="rounded text-amber-600 focus:ring-amber-500 cursor-pointer"
                         />
                       </div>
@@ -1284,11 +1277,10 @@ export const HospitalOnboarding: React.FC = () => {
                       setPaymentMode('CARD');
                       setPaymentCancelledNotice(null);
                     }}
-                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${
-                      paymentMode === 'CARD'
-                        ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-950/50 shadow-md ring-2 ring-blue-500/10'
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
-                    }`}
+                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer ${paymentMode === 'CARD'
+                      ? 'border-blue-600 bg-blue-50/50 dark:bg-blue-950/50 shadow-md ring-2 ring-blue-500/10'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
+                      }`}
                   >
                     <div className="flex items-center justify-between w-full">
                       <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
@@ -1311,11 +1303,10 @@ export const HospitalOnboarding: React.FC = () => {
                       setPaymentMode('UPI');
                       setPaymentCancelledNotice(null);
                     }}
-                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${
-                      paymentMode === 'UPI'
-                        ? 'border-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/40 shadow-md ring-2 ring-emerald-500/10'
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
-                    }`}
+                    className={`p-3.5 rounded-2xl border-2 transition-all flex flex-col items-start gap-1 cursor-pointer relative ${paymentMode === 'UPI'
+                      ? 'border-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/40 shadow-md ring-2 ring-emerald-500/10'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950'
+                      }`}
                   >
                     <div className="flex items-center justify-between w-full">
                       <span className="font-black text-xs text-slate-900 dark:text-white flex items-center gap-1.5">

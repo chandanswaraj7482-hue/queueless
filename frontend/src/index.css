@@ -663,3 +663,60 @@ body {
     background: #ffffff !important;
   }
 }
+
+/* ==============================================================
+   Dodo Payments Dark / Light Mode Curtain Wipe Transition
+   (Native View Transitions API with Custom Cubic-Bezier Ease)
+   ============================================================== */
+:root {
+  --custom-ease: cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+::view-transition-group(root) {
+  animation-duration: 0.75s;
+  animation-timing-function: var(--custom-ease);
+}
+
+::view-transition-new(root) {
+  animation-name: reveal-light;
+  animation-fill-mode: both;
+}
+
+.dark::view-transition-old(root),
+::view-transition-old(root) {
+  animation: none;
+  animation-fill-mode: both;
+  z-index: -1;
+}
+
+.dark::view-transition-new(root) {
+  animation-name: reveal-dark;
+  animation-fill-mode: both;
+}
+
+@keyframes reveal-dark {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+  to {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@keyframes reveal-light {
+  0% {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  }
+  to {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root),
+  ::view-transition-new(root),
+  ::view-transition-old(root) {
+    animation: none !important;
+  }
+}
+

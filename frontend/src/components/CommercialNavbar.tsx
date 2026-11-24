@@ -198,15 +198,17 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
               <button
                 type="button"
                 onClick={toggleTheme}
-                className="p-2 text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100/90 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-200/90 dark:border-slate-700/60 backdrop-blur-md rounded-full transition-all cursor-pointer shadow-2xs shrink-0 flex items-center justify-center hover:scale-105 active:scale-95"
+                className="p-2 text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100/90 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-200/90 dark:border-slate-700/60 backdrop-blur-md rounded-full transition-all cursor-pointer shadow-2xs shrink-0 flex items-center justify-center hover:scale-105 active:scale-95 group overflow-hidden"
                 aria-label="Toggle Theme"
                 title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               >
-                {theme === 'dark' ? (
-                  <Sun className="w-4 h-4 text-amber-400" />
-                ) : (
-                  <Moon className="w-4 h-4 text-slate-700" />
-                )}
+                <div className="relative z-10 transition-transform duration-700 ease-in-out group-hover:rotate-[360deg]">
+                  {theme === 'dark' ? (
+                    <Sun className="w-4 h-4 text-amber-400" />
+                  ) : (
+                    <Moon className="w-4 h-4 text-slate-700" />
+                  )}
+                </div>
               </button>
 
               {/* Currency Selector Pill (Desktop only >= 1280px; on tablet/mobile available in drawer) */}
@@ -313,15 +315,17 @@ export const CommercialNavbar: React.FC<CommercialNavbarProps> = ({
                     <button
                       type="button"
                       onClick={toggleTheme}
-                      className="p-2.5 text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-800 transition-all cursor-pointer shadow-2xs flex items-center justify-center active:scale-95"
+                      className="p-2.5 text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-800 transition-all cursor-pointer shadow-2xs flex items-center justify-center active:scale-95 group overflow-hidden"
                       aria-label="Toggle Theme"
                       title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                     >
-                      {theme === 'dark' ? (
-                        <Sun className="w-5 h-5 text-amber-400" />
-                      ) : (
-                        <Moon className="w-5 h-5 text-slate-700" />
-                      )}
+                      <div className="relative z-10 transition-transform duration-700 ease-in-out group-hover:rotate-[360deg]">
+                        {theme === 'dark' ? (
+                          <Sun className="w-5 h-5 text-amber-400" />
+                        ) : (
+                          <Moon className="w-5 h-5 text-slate-700" />
+                        )}
+                      </div>
                     </button>
 
                     {/* Close 'X' Button */}

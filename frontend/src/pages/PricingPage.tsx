@@ -237,458 +237,458 @@ export const PricingPage: React.FC = () => {
                 <div
                   key={plan.id}
                   className={`w-[88%] sm:w-[85%] lg:w-auto shrink-0 snap-center relative rounded-3xl p-5 sm:p-8 flex flex-col justify-between transition-all card-interactive ${plan.highlight
-                    ? 'bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-2xl shadow-blue-500/15 lg:scale-102 ring-4 ring-blue-500/10'
-                    : 'bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 shadow-lg hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl'
-                    }`}
-                >
-                  {plan.badge && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-[10px] tracking-wider uppercase shadow-md whitespace-nowrap shimmer-sweep">
-                      {plan.badge}
+                      ? 'bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-2xl shadow-blue-500/15 lg:scale-102 ring-4 ring-blue-500/10'
+                      : 'bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 shadow-lg hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl'
+                      }`}
+                  >
+                    {plan.badge && (
+                      <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-[10px] tracking-wider uppercase shadow-md whitespace-nowrap shimmer-sweep">
+                        {plan.badge}
+                      </div>
+                    )}
+
+                    <div>
+                      <h3 className="text-xl font-black text-slate-900 dark:text-white">{plan.name}</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 min-h-[32px]">{plan.tagline}</p>
+
+                      {/* Price Header */}
+                      <div className="mt-6 pb-6 border-b border-slate-100 dark:border-slate-800">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-4xl font-black text-slate-950 dark:text-white font-mono">
+                            {selectedCurrency.symbol}
+                            {displayRate.toLocaleString()}
+                          </span>
+                          <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+                            {plan.id === 'ENTERPRISE' ? '/ hospital location / month' : '/ clinic location / month'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
+                          {billingCycle === 'ANNUAL'
+                            ? `Billed annually (${selectedCurrency.symbol}${rates.annual.toLocaleString()}/yr)`
+                            : 'Billed monthly with zero lock-in'}
+                        </p>
+                      </div>
+
+                      {/* Specs info */}
+                      <div className="py-4 space-y-2 border-b border-slate-100 dark:border-slate-800 text-xs">
+                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-bold">
+                          <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                          <span>{plan.doctorLimit}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-[11px]">
+                          <span className="font-semibold text-slate-500">Setup:</span>
+                          <span>{plan.hardwareIncluded}</span>
+                        </div>
+                      </div>
+
+                      {/* Features List */}
+                      <div className="pt-5 space-y-2.5">
+                        <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                          Included In This Plan:
+                        </p>
+                        <ul className="space-y-2">
+                          {plan.features.map((feature, idx) => {
+                            let displayFeature = feature;
+                            if (billingCycle === 'ANNUAL') {
+                              displayFeature = displayFeature
+                                .replace(/AutoPay Monthly Renewal/g, 'Annual AutoPay Renewal (Save ~17% • 2 Months Free)')
+                                .replace(/Auto-Renews Day 15/g, 'Auto-Renews Annually on Day 15 (Save ~17% • 2 Months Free)')
+                                .replace(/AutoPay Recurring Mandate/g, 'Annual Corporate AutoPay (Save ~17% Billed Annually)');
+                            }
+                            return (
+                              <li key={idx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                                <span>{displayFeature}</span>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
                     </div>
-                  )}
 
-                  <div>
-                    <h3 className="text-xl font-black text-slate-900 dark:text-white">{plan.name}</h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 min-h-[32px]">{plan.tagline}</p>
-
-                    {/* Price Header */}
-                    <div className="mt-6 pb-6 border-b border-slate-100 dark:border-slate-800">
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-4xl font-black text-slate-950 dark:text-white font-mono">
-                          {selectedCurrency.symbol}
-                          {displayRate.toLocaleString()}
+                    {/* Card CTA */}
+                    <div className="pt-8 mt-6 border-t border-slate-100 dark:border-slate-800">
+                      <button
+                        type="button"
+                        onClick={() => handleSelectPlan(plan)}
+                        className={`w-full py-3.5 px-6 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer btn-physics ${plan.highlight
+                          ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/25 ring-2 ring-blue-500/20 active:scale-95 shimmer-sweep hover-glow-blue'
+                          : plan.id === 'ENTERPRISE'
+                            ? 'bg-gradient-to-r from-slate-900 to-indigo-950 hover:from-black hover:to-indigo-900 text-white border border-indigo-500/40 active:scale-95 shadow-md'
+                            : 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white active:scale-95'
+                          }`}
+                      >
+                        <Zap className="w-4 h-4 fill-white" />
+                        <span>
+                          {plan.id === 'ENTERPRISE' ? 'Deploy Enterprise License ➔' : 'Start 14-Day Free Pilot ➔'}
                         </span>
-                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                          {plan.id === 'ENTERPRISE' ? '/ hospital location / month' : '/ clinic location / month'}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
-                        {billingCycle === 'ANNUAL'
-                          ? `Billed annually (${selectedCurrency.symbol}${rates.annual.toLocaleString()}/yr)`
-                          : 'Billed monthly with zero lock-in'}
+                      </button>
+                      <p className="text-[10px] text-center text-slate-500 dark:text-slate-400 mt-2 font-semibold flex items-center justify-center gap-1">
+                        {plan.id === 'ENTERPRISE' ? (
+                          <>
+                            <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
+                            <span>Dedicated Hospital SLA • Custom Integration • 30-Day Guarantee</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                            <span>
+                              {billingCycle === 'ANNUAL'
+                                ? `14-Day Free Pilot • Pay ${selectedCurrency.symbol}0 Today • First Annual Charge on Day 15 (${selectedCurrency.symbol}${rates.annual.toLocaleString()}/yr)`
+                                : `14-Day Free Pilot • Pay ${selectedCurrency.symbol}0 Today • Auto-renews monthly on Day 15 (${selectedCurrency.symbol}${rates.monthly}/mo)`}
+                            </span>
+                          </>
+                        )}
                       </p>
-                    </div>
-
-                    {/* Specs info */}
-                    <div className="py-4 space-y-2 border-b border-slate-100 dark:border-slate-800 text-xs">
-                      <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-bold">
-                        <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-                        <span>{plan.doctorLimit}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-[11px]">
-                        <span className="font-semibold text-slate-500">Setup:</span>
-                        <span>{plan.hardwareIncluded}</span>
-                      </div>
-                    </div>
-
-                    {/* Features List */}
-                    <div className="pt-5 space-y-2.5">
-                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">
-                        Included In This Plan:
-                      </p>
-                      <ul className="space-y-2">
-                        {plan.features.map((feature, idx) => {
-                          let displayFeature = feature;
-                          if (billingCycle === 'ANNUAL') {
-                            displayFeature = displayFeature
-                              .replace(/AutoPay Monthly Renewal/g, 'Annual AutoPay Renewal (Save ~17% • 2 Months Free)')
-                              .replace(/Auto-Renews Day 15/g, 'Auto-Renews Annually on Day 15 (Save ~17% • 2 Months Free)')
-                              .replace(/AutoPay Recurring Mandate/g, 'Annual Corporate AutoPay (Save ~17% Billed Annually)');
-                          }
-                          return (
-                            <li key={idx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-                              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                              <span>{displayFeature}</span>
-                            </li>
-                          );
-                        })}
-                      </ul>
                     </div>
                   </div>
+                );
+              })}
+            </div>
 
-                  {/* Card CTA */}
-                  <div className="pt-8 mt-6 border-t border-slate-100 dark:border-slate-800">
-                    <button
-                      type="button"
-                      onClick={() => handleSelectPlan(plan)}
-                      className={`w-full py-3.5 px-6 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer btn-physics ${plan.highlight
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/25 ring-2 ring-blue-500/20 active:scale-95 shimmer-sweep hover-glow-blue'
-                        : plan.id === 'ENTERPRISE'
-                          ? 'bg-gradient-to-r from-slate-900 to-indigo-950 hover:from-black hover:to-indigo-900 text-white border border-indigo-500/40 active:scale-95 shadow-md'
-                          : 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white active:scale-95'
-                        }`}
-                    >
-                      <Zap className="w-4 h-4 fill-white" />
-                      <span>
-                        {plan.id === 'ENTERPRISE' ? 'Deploy Enterprise License ➔' : 'Start 14-Day Free Pilot ➔'}
+            {/* Mobile Pricing Swipe Indicator */}
+            <div className="flex lg:hidden flex-col items-center justify-center gap-1.5 pt-3 text-center">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center gap-1.5">
+                <span>👈 Swipe to compare Starter, Multi-Specialty & Chain 👉</span>
+              </p>
+            </div>
+
+            {/* Clinical Power Add-Ons Suite Grid */}
+            <div className="max-w-6xl mx-auto mt-16 space-y-6">
+              <div className="text-center space-y-2">
+                <span className="text-[11px] font-black uppercase tracking-wider text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/70 px-3 py-1 rounded-full border border-purple-200 dark:border-purple-800">
+                  Hospital Modular Add-Ons
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                  Power-Up Your Clinical OPD Infrastructure
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
+                  Mix and match modular upgrades anytime. 100% cloud setup with zero disruption to active consultation queues.
+                </p>
+              </div>
+
+              {/* Cards Slider / Grid */}
+              <div
+                ref={addonSliderRef}
+                onScroll={handleAddonScroll}
+                onMouseEnter={() => setIsAddonAutoSlidePaused(true)}
+                onMouseLeave={() => setIsAddonAutoSlidePaused(false)}
+                onTouchStart={() => setIsAddonAutoSlidePaused(true)}
+                onTouchEnd={() => setTimeout(() => setIsAddonAutoSlidePaused(false), 3000)}
+                className="flex md:grid md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-3 px-2 touch-pan-x scroll-smooth"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {/* Card 1: White-Label Suite */}
+                <div className="w-[88%] sm:w-[85%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-white dark:bg-slate-900 border border-purple-200/90 dark:border-purple-800/80 shadow-md flex flex-col justify-between hover:border-purple-400 transition-all">
+                  <div className="space-y-3">
+                    <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold">
+                      <Sparkles className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/80 px-2 py-0.5 rounded-md">
+                        Brand Customization
                       </span>
-                    </button>
-                    <p className="text-[10px] text-center text-slate-500 dark:text-slate-400 mt-2 font-semibold flex items-center justify-center gap-1">
-                      {plan.id === 'ENTERPRISE' ? (
-                        <>
-                          <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
-                          <span>Dedicated Hospital SLA • Custom Integration • 30-Day Guarantee</span>
-                        </>
-                      ) : (
-                        <>
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          <span>
-                            {billingCycle === 'ANNUAL'
-                              ? `14-Day Free Pilot • Pay ${selectedCurrency.symbol}0 Today • First Annual Charge on Day 15 (${selectedCurrency.symbol}${rates.annual.toLocaleString()}/yr)`
-                              : `14-Day Free Pilot • Pay ${selectedCurrency.symbol}0 Today • Auto-renews monthly on Day 15 (${selectedCurrency.symbol}${rates.monthly}/mo)`}
-                          </span>
-                        </>
-                      )}
+                      <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
+                        Full White-Label Suite
+                      </h4>
+                      <div className="text-base font-black text-purple-600 dark:text-purple-400 font-mono mt-0.5">
+                        {selectedCurrency.code === 'INR' ? '₹2,999' : '$29'}<span className="text-[11px] text-slate-400 font-normal">/month</span>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                      Custom hospital logo on digital patient passes, 55" waiting TV kiosk displays, printable vector QR kits, and doctor Rx letterheads.
                     </p>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Mobile Pricing Swipe Indicator */}
-          <div className="flex lg:hidden flex-col items-center justify-center gap-1.5 pt-3 text-center">
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center gap-1.5">
-              <span>👈 Swipe to compare Starter, Multi-Specialty & Chain 👉</span>
-            </p>
-          </div>
-
-          {/* Clinical Power Add-Ons Suite Grid */}
-          <div className="max-w-6xl mx-auto mt-16 space-y-6">
-            <div className="text-center space-y-2">
-              <span className="text-[11px] font-black uppercase tracking-wider text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/70 px-3 py-1 rounded-full border border-purple-200 dark:border-purple-800">
-                Hospital Modular Add-Ons
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-                Power-Up Your Clinical OPD Infrastructure
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
-                Mix and match modular upgrades anytime. 100% cloud setup with zero disruption to active consultation queues.
-              </p>
-            </div>
-
-            {/* Cards Slider / Grid */}
-            <div
-              ref={addonSliderRef}
-              onScroll={handleAddonScroll}
-              onMouseEnter={() => setIsAddonAutoSlidePaused(true)}
-              onMouseLeave={() => setIsAddonAutoSlidePaused(false)}
-              onTouchStart={() => setIsAddonAutoSlidePaused(true)}
-              onTouchEnd={() => setTimeout(() => setIsAddonAutoSlidePaused(false), 3000)}
-              className="flex md:grid md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-3 px-2 touch-pan-x scroll-smooth"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {/* Card 1: White-Label Suite */}
-              <div className="w-[88%] sm:w-[85%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-white dark:bg-slate-900 border border-purple-200/90 dark:border-purple-800/80 shadow-md flex flex-col justify-between hover:border-purple-400 transition-all">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold">
-                    <Sparkles className="w-5 h-5" />
+                  <div className="pt-4">
+                    <Link
+                      to={`/signup?addon=custom_logo&currency=${currencyCode}`}
+                      className="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
+                    >
+                      <span>Add White-Label</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
-                  <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/80 px-2 py-0.5 rounded-md">
-                      Brand Customization
-                    </span>
-                    <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
-                      Full White-Label Suite
-                    </h4>
-                    <div className="text-base font-black text-purple-600 dark:text-purple-400 font-mono mt-0.5">
-                      {selectedCurrency.code === 'INR' ? '₹2,999' : '$29'}<span className="text-[11px] text-slate-400 font-normal">/month</span>
+                </div>
+
+                {/* Card 2: WhatsApp Business Green-Tick */}
+                <div className="w-[88%] sm:w-[85%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-white dark:bg-slate-900 border border-emerald-200/90 dark:border-emerald-800/80 shadow-md flex flex-col justify-between hover:border-emerald-400 transition-all">
+                  <div className="space-y-3">
+                    <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-300 flex items-center justify-center font-bold">
+                      <MessageSquare className="w-5 h-5" />
                     </div>
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded-md">
+                        Patient Communications
+                      </span>
+                      <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
+                        WhatsApp Alerts & Rx
+                      </h4>
+                      <div className="text-base font-black text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">
+                        {selectedCurrency.code === 'INR' ? '₹1,499' : '$19'}<span className="text-[11px] text-slate-400 font-normal">/month</span>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                      Live token countdown updates, doctor calling notifications, and 1-tap digital Rx PDFs delivered directly to patient WhatsApp.
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                    Custom hospital logo on digital patient passes, 55" waiting TV kiosk displays, printable vector QR kits, and doctor Rx letterheads.
-                  </p>
+                  <div className="pt-4">
+                    <Link
+                      to={`/signup?addon=whatsapp&currency=${currencyCode}`}
+                      className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
+                    >
+                      <span>Add WhatsApp Suite</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
                 </div>
-                <div className="pt-4">
-                  <Link
-                    to={`/signup?addon=custom_logo&currency=${currencyCode}`}
-                    className="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
-                  >
-                    <span>Add White-Label</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+
+                {/* Card 3: Surge Token Refills */}
+                <div className="w-[88%] sm:w-[85%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-white dark:bg-slate-900 border border-amber-200/90 dark:border-amber-800/80 shadow-md flex flex-col justify-between hover:border-amber-400 transition-all">
+                  <div className="space-y-3">
+                    <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-300 flex items-center justify-center font-bold">
+                      <Coins className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/80 px-2 py-0.5 rounded-md">
+                        Pay-As-You-Grow
+                      </span>
+                      <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
+                        Surge Token Packs
+                      </h4>
+                      <div className="text-base font-black text-amber-600 dark:text-amber-400 font-mono mt-0.5">
+                        {selectedCurrency.code === 'INR' ? '₹3,999 – ₹24,999' : '$49 – $299'}
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                      Instant cloud credit top-ups during seasonal OPD patient surges. 5,000 / 15,000 / 50,000 digital token bundles available with 1 tap.
+                    </p>
+                  </div>
+                  <div className="pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowSurgeModal(true)}
+                      className="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-95"
+                    >
+                      <Coins className="w-3.5 h-3.5" />
+                      <span>View Packs</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* Card 2: WhatsApp Business Green-Tick */}
-              <div className="w-[88%] sm:w-[85%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-white dark:bg-slate-900 border border-emerald-200/90 dark:border-emerald-800/80 shadow-md flex flex-col justify-between hover:border-emerald-400 transition-all">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-300 flex items-center justify-center font-bold">
-                    <MessageSquare className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded-md">
-                      Patient Communications
-                    </span>
-                    <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
-                      WhatsApp Alerts & Rx
-                    </h4>
-                    <div className="text-base font-black text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">
-                      {selectedCurrency.code === 'INR' ? '₹1,499' : '$19'}<span className="text-[11px] text-slate-400 font-normal">/month</span>
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                    Live token countdown updates, doctor calling notifications, and 1-tap digital Rx PDFs delivered directly to patient WhatsApp.
-                  </p>
-                </div>
-                <div className="pt-4">
-                  <Link
-                    to={`/signup?addon=whatsapp&currency=${currencyCode}`}
-                    className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
-                  >
-                    <span>Add WhatsApp Suite</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
-
-              {/* Card 3: Surge Token Refills */}
-              <div className="w-[88%] sm:w-[85%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-white dark:bg-slate-900 border border-amber-200/90 dark:border-amber-800/80 shadow-md flex flex-col justify-between hover:border-amber-400 transition-all">
-                <div className="space-y-3">
-                  <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-300 flex items-center justify-center font-bold">
-                    <Coins className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/80 px-2 py-0.5 rounded-md">
-                      Pay-As-You-Grow
-                    </span>
-                    <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
-                      Surge Token Packs
-                    </h4>
-                    <div className="text-base font-black text-amber-600 dark:text-amber-400 font-mono mt-0.5">
-                      {selectedCurrency.code === 'INR' ? '₹3,999 – ₹24,999' : '$49 – $299'}
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                    Instant cloud credit top-ups during seasonal OPD patient surges. 5,000 / 15,000 / 50,000 digital token bundles available with 1 tap.
-                  </p>
-                </div>
-                <div className="pt-4">
+              {/* Mobile Controls & Dots */}
+              <div className="flex md:hidden flex-col items-center justify-center gap-2 pt-1">
+                <div className="flex items-center gap-3">
                   <button
                     type="button"
-                    onClick={() => setShowSurgeModal(true)}
-                    className="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-95"
+                    onClick={() => scrollToAddonCard((activeAddonIndex - 1 + MODULAR_ADDONS_COUNT) % MODULAR_ADDONS_COUNT)}
+                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
+                    aria-label="Previous modular addon card"
                   >
-                    <Coins className="w-3.5 h-3.5" />
-                    <span>View Packs</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <div className="flex items-center gap-1.5">
+                    {[0, 1, 2].map((dot) => (
+                      <button
+                        key={dot}
+                        type="button"
+                        onClick={() => scrollToAddonCard(dot)}
+                        aria-label={`Go to addon card ${dot + 1}`}
+                        className={`h-2 rounded-full transition-all cursor-pointer ${activeAddonIndex === dot
+                          ? 'w-6 bg-purple-600 dark:bg-purple-400 shadow-xs'
+                          : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                          }`}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => scrollToAddonCard((activeAddonIndex + 1) % MODULAR_ADDONS_COUNT)}
+                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
+                    aria-label="Next modular addon card"
+                  >
+                    <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
-            </div>
-
-            {/* Mobile Controls & Dots */}
-            <div className="flex md:hidden flex-col items-center justify-center gap-2 pt-1">
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => scrollToAddonCard((activeAddonIndex - 1 + MODULAR_ADDONS_COUNT) % MODULAR_ADDONS_COUNT)}
-                  className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
-                  aria-label="Previous modular addon card"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <div className="flex items-center gap-1.5">
-                  {[0, 1, 2].map((dot) => (
-                    <button
-                      key={dot}
-                      type="button"
-                      onClick={() => scrollToAddonCard(dot)}
-                      aria-label={`Go to addon card ${dot + 1}`}
-                      className={`h-2 rounded-full transition-all cursor-pointer ${activeAddonIndex === dot
-                        ? 'w-6 bg-purple-600 dark:bg-purple-400 shadow-xs'
-                        : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
-                        }`}
-                    />
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => scrollToAddonCard((activeAddonIndex + 1) % MODULAR_ADDONS_COUNT)}
-                  className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
-                  aria-label="Next modular addon card"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1">
-                <span>👈 Swipe or watch auto-slide • Card {activeAddonIndex + 1} of {MODULAR_ADDONS_COUNT}</span>
-              </p>
-            </div>
-          </div>
-
-          {/* Surge Token Packs Interactive Modal */}
-          {showSurgeModal && (
-            <div
-              className="fixed inset-0 bg-slate-950/75 backdrop-blur-md z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
-              onClick={(e) => {
-                if (e.target === e.currentTarget) setShowSurgeModal(false);
-              }}
-            >
-              <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white my-auto text-left relative">
-                <button
-                  type="button"
-                  onClick={() => setShowSurgeModal(false)}
-                  className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 rounded-2xl">
-                    <Coins className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400">
-                      On-Demand Cloud Top-Up
-                    </span>
-                    <h3 className="text-lg font-black text-slate-950 dark:text-white tracking-tight">
-                      Seasonal Surge Token Packs
-                    </h3>
-                  </div>
-                </div>
-
-                <p className="text-xs text-slate-600 dark:text-slate-300 mb-5 leading-relaxed">
-                  Experiencing peak patient footfall or seasonal epidemics? Top-up extra patient queue tokens instantly without upgrading your monthly subscription plan.
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1">
+                  <span>👈 Swipe or watch auto-slide • Card {activeAddonIndex + 1} of {MODULAR_ADDONS_COUNT}</span>
                 </p>
+              </div>
+            </div>
 
-                <div className="space-y-3 mb-6">
-                  {/* Pack 1: 5,000 */}
-                  <div
-                    onClick={() => setSelectedSurgePack('5K')}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${selectedSurgePack === '5K'
-                      ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
-                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
-                      }`}
-                  >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-black text-sm text-slate-900 dark:text-white">5,000 Extra Tokens</span>
-                        <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/60 px-2 py-0.5 rounded-full">Single Clinic</span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Valid for 90 days • Instant activation</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
-                        {selectedCurrency.code === 'INR' ? '₹3,999' : '$49'}
-                      </span>
-                      <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
-                    </div>
-                  </div>
-
-                  {/* Pack 2: 15,000 (Popular) */}
-                  <div
-                    onClick={() => setSelectedSurgePack('15K')}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between relative ${selectedSurgePack === '15K'
-                      ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
-                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
-                      }`}
-                  >
-                    <span className="absolute -top-2.5 right-4 px-2 py-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-black uppercase rounded-full shadow-xs">
-                      ★ Most Popular
-                    </span>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-black text-sm text-slate-900 dark:text-white">15,000 Extra Tokens</span>
-                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded-full">Polyclinic</span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Valid for 180 days • Zero expiration pressure</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
-                        {selectedCurrency.code === 'INR' ? '₹9,999' : '$129'}
-                      </span>
-                      <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
-                    </div>
-                  </div>
-
-                  {/* Pack 3: 50,000 */}
-                  <div
-                    onClick={() => setSelectedSurgePack('50K')}
-                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${selectedSurgePack === '50K'
-                      ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
-                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
-                      }`}
-                  >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-black text-sm text-slate-900 dark:text-white">50,000 Extra Tokens</span>
-                        <span className="text-[10px] font-bold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/60 px-2 py-0.5 rounded-full">Hospital Network</span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Full multi-department surge coverage</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
-                        {selectedCurrency.code === 'INR' ? '₹24,999' : '$299'}
-                      </span>
-                      <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between gap-3 pt-2">
+            {/* Surge Token Packs Interactive Modal */}
+            {showSurgeModal && (
+              <div
+                className="fixed inset-0 bg-slate-950/75 backdrop-blur-md z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
+                onClick={(e) => {
+                  if (e.target === e.currentTarget) setShowSurgeModal(false);
+                }}
+              >
+                <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white my-auto text-left relative">
                   <button
                     type="button"
                     onClick={() => setShowSurgeModal(false)}
-                    className="px-4 py-2.5 text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer"
+                    className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
                   >
-                    Close
+                    <X className="w-5 h-5" />
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowSurgeModal(false);
-                      navigate(`/signup?addon=token_surge&pack=${selectedSurgePack}&currency=${currencyCode}`);
-                    }}
-                    className="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-black text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
-                  >
-                    <span>Refill {selectedSurgePack} Tokens</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 rounded-2xl">
+                      <Coins className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                        On-Demand Cloud Top-Up
+                      </span>
+                      <h3 className="text-lg font-black text-slate-950 dark:text-white tracking-tight">
+                        Seasonal Surge Token Packs
+                      </h3>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mb-5 leading-relaxed">
+                    Experiencing peak patient footfall or seasonal epidemics? Top-up extra patient queue tokens instantly without upgrading your monthly subscription plan.
+                  </p>
+
+                  <div className="space-y-3 mb-6">
+                    {/* Pack 1: 5,000 */}
+                    <div
+                      onClick={() => setSelectedSurgePack('5K')}
+                      className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${selectedSurgePack === '5K'
+                        ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                        }`}
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-black text-sm text-slate-900 dark:text-white">5,000 Extra Tokens</span>
+                          <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/60 px-2 py-0.5 rounded-full">Single Clinic</span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Valid for 90 days • Instant activation</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
+                          {selectedCurrency.code === 'INR' ? '₹3,999' : '$49'}
+                        </span>
+                        <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
+                      </div>
+                    </div>
+
+                    {/* Pack 2: 15,000 (Popular) */}
+                    <div
+                      onClick={() => setSelectedSurgePack('15K')}
+                      className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between relative ${selectedSurgePack === '15K'
+                        ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                        }`}
+                    >
+                      <span className="absolute -top-2.5 right-4 px-2 py-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-black uppercase rounded-full shadow-xs">
+                        ★ Most Popular
+                      </span>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-black text-sm text-slate-900 dark:text-white">15,000 Extra Tokens</span>
+                          <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded-full">Polyclinic</span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Valid for 180 days • Zero expiration pressure</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
+                          {selectedCurrency.code === 'INR' ? '₹9,999' : '$129'}
+                        </span>
+                        <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
+                      </div>
+                    </div>
+
+                    {/* Pack 3: 50,000 */}
+                    <div
+                      onClick={() => setSelectedSurgePack('50K')}
+                      className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${selectedSurgePack === '50K'
+                        ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-sm'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                        }`}
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-black text-sm text-slate-900 dark:text-white">50,000 Extra Tokens</span>
+                          <span className="text-[10px] font-bold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/60 px-2 py-0.5 rounded-full">Hospital Network</span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Full multi-department surge coverage</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-base font-black text-amber-600 dark:text-amber-400 font-mono">
+                          {selectedCurrency.code === 'INR' ? '₹24,999' : '$299'}
+                        </span>
+                        <span className="block text-[10px] text-slate-400 font-mono">One-time</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowSurgeModal(false)}
+                      className="px-4 py-2.5 text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer"
+                    >
+                      Close
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowSurgeModal(false);
+                        navigate(`/signup?addon=token_surge&pack=${selectedSurgePack}&currency=${currencyCode}`);
+                      }}
+                      className="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-black text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                    >
+                      <span>Refill {selectedSurgePack} Tokens</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Payment Gateways Bar */}
+            <div className="max-w-4xl mx-auto mt-16 p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-md text-center">
+              <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider mb-2">
+                Official Global Payment Partners
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 max-w-xl mx-auto mb-6">
+                Subscribe in your local currency with instant automated provisioning. All transactions are protected by bank-grade 256-bit encryption.
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
+                {/* Dodo Payments Badge */}
+                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl">
+                  <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <div className="text-left">
+                    <span className="block text-xs font-black text-slate-900 dark:text-white">Dodo Payments</span>
+                    <span className="block text-[10px] text-slate-500 dark:text-slate-400">Global Cards & Instant Checkout</span>
+                  </div>
+                </div>
+
+                {/* Dodo Payments & Cashfree Badge */}
+                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl">
+                  <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <div className="text-left ml-1">
+                    <span className="block text-xs font-black text-slate-900 dark:text-white">Dodo Payments & Cashfree</span>
+                    <span className="block text-[10px] text-slate-500 dark:text-slate-400">Global & Domestic Settlement</span>
+                  </div>
+                </div>
+
+                {/* Security Badge */}
+                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl">
+                  <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                  <div className="text-left">
+                    <span className="block text-xs font-black text-slate-900 dark:text-white">30-Day Money Back</span>
+                    <span className="block text-[10px] text-slate-500 dark:text-slate-400">100% Satisfaction Guarantee</span>
+                  </div>
                 </div>
               </div>
             </div>
-          )}
-
-          {/* Payment Gateways Bar */}
-          <div className="max-w-4xl mx-auto mt-16 p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-md text-center">
-            <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider mb-2">
-              Official Global Payment Partners
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 max-w-xl mx-auto mb-6">
-              Subscribe in your local currency with instant automated provisioning. All transactions are protected by bank-grade 256-bit encryption.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
-              {/* Dodo Payments Badge */}
-              <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl">
-                <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                <div className="text-left">
-                  <span className="block text-xs font-black text-slate-900 dark:text-white">Dodo Payments</span>
-                  <span className="block text-[10px] text-slate-500 dark:text-slate-400">Global Cards & Instant Checkout</span>
-                </div>
-              </div>
-
-              {/* Dodo Payments & Cashfree Badge */}
-              <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl">
-                <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                <div className="text-left ml-1">
-                  <span className="block text-xs font-black text-slate-900 dark:text-white">Dodo Payments & Cashfree</span>
-                  <span className="block text-[10px] text-slate-500 dark:text-slate-400">Global & Domestic Settlement</span>
-                </div>
-              </div>
-
-              {/* Security Badge */}
-              <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl">
-                <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <div className="text-left">
-                  <span className="block text-xs font-black text-slate-900 dark:text-white">30-Day Money Back</span>
-                  <span className="block text-[10px] text-slate-500 dark:text-slate-400">100% Satisfaction Guarantee</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* Feature Comparison Matrix */}

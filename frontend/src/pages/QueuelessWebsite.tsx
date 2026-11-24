@@ -571,6 +571,58 @@ export const QueuelessWebsite: React.FC = () => {
     playClinicVoiceAnnouncement(tokenStr, chosen.cabin, chosen.name, true);
   };
 
+  // Why Choose Queueless Bento Mobile Auto-Slide & Touch Gesture State
+  const [activeWhyIndex, setActiveWhyIndex] = useState<number>(0);
+  const [isWhyAutoSlidePaused, setIsWhyAutoSlidePaused] = useState<boolean>(false);
+  const whySliderRef = useRef<HTMLDivElement>(null);
+
+  const handleWhyScroll = () => {
+    if (!whySliderRef.current) return;
+    const { scrollLeft, clientWidth } = whySliderRef.current;
+    if (clientWidth > 0 && whySliderRef.current.children.length > 0) {
+      let closestIdx = 0;
+      let minDiff = Infinity;
+      Array.from(whySliderRef.current.children).forEach((child, i) => {
+        const el = child as HTMLElement;
+        const diff = Math.abs(el.offsetLeft - scrollLeft);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIdx = i;
+        }
+      });
+      setActiveWhyIndex(Math.min(Math.max(closestIdx, 0), 3));
+    }
+  };
+
+  const scrollToWhyCard = (index: number) => {
+    if (!whySliderRef.current) return;
+    const targetChild = whySliderRef.current.children[index] as HTMLElement;
+    if (targetChild) {
+      targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    } else {
+      const cardWidth = whySliderRef.current.clientWidth * 0.86 + 16;
+      whySliderRef.current.scrollTo({
+        left: index * cardWidth,
+        behavior: 'smooth',
+      });
+    }
+    setActiveWhyIndex(index);
+  };
+
+  useEffect(() => {
+    if (isWhyAutoSlidePaused) return;
+    const interval = setInterval(() => {
+      if (typeof window !== 'undefined' && window.innerWidth >= 1024) return;
+      setActiveWhyIndex((prev) => {
+        const next = (prev + 1) % 4;
+        scrollToWhyCard(next);
+        return next;
+      });
+    }, 3800);
+
+    return () => clearInterval(interval);
+  }, [isWhyAutoSlidePaused]);
+
   // FAQ Accordion State
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
   const [faqCategory, setFaqCategory] = useState<FaqCategory>('ALL');
@@ -1867,11 +1919,20 @@ export const QueuelessWebsite: React.FC = () => {
             </p>
           </div>
 
-          {/* High-Impact Asymmetric Clinical Bento Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 text-left pt-4">
+          {/* High-Impact Asymmetric Clinical Bento Grid (Auto-Slide Horizontal Gesture Slider on Mobile, Multi-col Grid on Desktop) */}
+          <div
+            ref={whySliderRef}
+            onScroll={handleWhyScroll}
+            onTouchStart={() => setIsWhyAutoSlidePaused(true)}
+            onTouchEnd={() => setTimeout(() => setIsWhyAutoSlidePaused(false), 5000)}
+            onMouseEnter={() => setIsWhyAutoSlidePaused(true)}
+            onMouseLeave={() => setIsWhyAutoSlidePaused(false)}
+            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 px-3 sm:px-0 -mx-3 sm:mx-0 sm:grid sm:grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 text-left pt-4 touch-pan-x"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
 
             {/* Card 1: ABDM & NABH (Large 7-Col Feature) */}
-            <div className="lg:col-span-7 p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-white via-emerald-50/25 to-white dark:from-slate-900/90 dark:via-emerald-950/20 dark:to-slate-900/90 border border-emerald-500/30 dark:border-emerald-500/20 shadow-xl shadow-emerald-500/5 hover:shadow-2xl hover:shadow-emerald-500/15 transition-all duration-300 flex flex-col justify-between space-y-6 group relative overflow-hidden">
+            <div className="w-[86vw] max-w-[340px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center lg:col-span-7 p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-white via-emerald-50/25 to-white dark:from-slate-900/90 dark:via-emerald-950/20 dark:to-slate-900/90 border border-emerald-500/30 dark:border-emerald-500/20 shadow-xl shadow-emerald-500/5 hover:shadow-2xl hover:shadow-emerald-500/15 transition-all duration-300 flex flex-col justify-between space-y-6 group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
               <div className="space-y-5 relative z-10">
@@ -1932,7 +1993,7 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
 
             {/* Card 2: Patient Privacy & Zero App (5-Col Feature) */}
-            <div className="lg:col-span-5 p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-white via-indigo-50/25 to-white dark:from-slate-900/90 dark:via-indigo-950/20 dark:to-slate-900/90 border border-indigo-500/30 dark:border-indigo-500/20 shadow-xl shadow-indigo-500/5 hover:shadow-2xl hover:shadow-indigo-500/15 transition-all duration-300 flex flex-col justify-between space-y-6 group relative overflow-hidden">
+            <div className="w-[86vw] max-w-[340px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center lg:col-span-5 p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-white via-indigo-50/25 to-white dark:from-slate-900/90 dark:via-indigo-950/20 dark:to-slate-900/90 border border-indigo-500/30 dark:border-indigo-500/20 shadow-xl shadow-indigo-500/5 hover:shadow-2xl hover:shadow-indigo-500/15 transition-all duration-300 flex flex-col justify-between space-y-6 group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
               <div className="space-y-5 relative z-10">
@@ -1976,7 +2037,7 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
 
             {/* Card 3: 15-Day Free Follow-Up Engine (5-Col Feature) */}
-            <div className="lg:col-span-5 p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-white via-rose-50/25 to-white dark:from-slate-900/90 dark:via-rose-950/20 dark:to-slate-900/90 border border-rose-500/30 dark:border-rose-500/20 shadow-xl shadow-rose-500/5 hover:shadow-2xl hover:shadow-rose-500/15 transition-all duration-300 flex flex-col justify-between space-y-6 group relative overflow-hidden">
+            <div className="w-[86vw] max-w-[340px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center lg:col-span-5 p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-white via-rose-50/25 to-white dark:from-slate-900/90 dark:via-rose-950/20 dark:to-slate-900/90 border border-rose-500/30 dark:border-rose-500/20 shadow-xl shadow-rose-500/5 hover:shadow-2xl hover:shadow-rose-500/15 transition-all duration-300 flex flex-col justify-between space-y-6 group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
 
               <div className="space-y-5 relative z-10">
@@ -2023,7 +2084,7 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
 
             {/* Card 4: Zero Capex & Runs on Existing TVs (7-Col Feature) */}
-            <div className="lg:col-span-7 p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-white via-cyan-50/25 to-white dark:from-slate-900/90 dark:via-cyan-950/20 dark:to-slate-900/90 border border-cyan-500/30 dark:border-cyan-500/20 shadow-xl shadow-cyan-500/5 hover:shadow-2xl hover:shadow-cyan-500/15 transition-all duration-300 flex flex-col justify-between space-y-6 group relative overflow-hidden">
+            <div className="w-[86vw] max-w-[340px] sm:w-auto sm:max-w-none shrink-0 sm:shrink snap-center lg:col-span-7 p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-white via-cyan-50/25 to-white dark:from-slate-900/90 dark:via-cyan-950/20 dark:to-slate-900/90 border border-cyan-500/30 dark:border-cyan-500/20 shadow-xl shadow-cyan-500/5 hover:shadow-2xl hover:shadow-cyan-500/15 transition-all duration-300 flex flex-col justify-between space-y-6 group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
               <div className="space-y-5 relative z-10">
@@ -2067,6 +2128,55 @@ export const QueuelessWebsite: React.FC = () => {
               </div>
             </div>
 
+          </div>
+
+          {/* Mobile Auto-Slide Navigation Dots & Arrow Controls */}
+          <div className="flex sm:hidden flex-col items-center justify-center gap-2 pt-2 pb-1">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const prev = (activeWhyIndex - 1 + 4) % 4;
+                  scrollToWhyCard(prev);
+                }}
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
+                aria-label="Previous feature card"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-center gap-1.5">
+                {[0, 1, 2, 3].map((dot) => (
+                  <button
+                    key={dot}
+                    type="button"
+                    onClick={() => scrollToWhyCard(dot)}
+                    aria-label={`Go to feature card ${dot + 1}`}
+                    className={`h-2 rounded-full transition-all cursor-pointer ${
+                      activeWhyIndex === dot
+                        ? 'w-7 bg-blue-600 dark:bg-blue-400 shadow-xs'
+                        : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const next = (activeWhyIndex + 1) % 4;
+                  scrollToWhyCard(next);
+                }}
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-slate-700 active:scale-95 transition-all shadow-xs"
+                aria-label="Next feature card"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1">
+              <span>👈 Swipe or watch auto-slide • Card {activeWhyIndex + 1} of 4</span>
+            </p>
           </div>
 
           {/* Quick Reassurance Action Banner */}

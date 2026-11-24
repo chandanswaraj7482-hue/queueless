@@ -2588,12 +2588,13 @@ export const QueuelessWebsite: React.FC = () => {
             </div>
           </div>
 
-          {/* Interactive Dynamic Tab Showcase (Hidden on Mobile to match Claude Compact Reference) */}
+          {/* Interactive Dynamic Tab Showcase (Visible on all devices with responsive padding) */}
           <div
+            id="touchpoint-showcase"
             onTouchStart={onPillarTouchStart}
             onTouchMove={onPillarTouchMove}
             onTouchEnd={onPillarTouchEnd}
-            className="hidden sm:block bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-[36px] border border-slate-200/90 dark:border-slate-800 shadow-xl relative overflow-hidden transition-colors duration-200 touch-pan-y select-none"
+            className="block bg-white dark:bg-slate-900 p-5 sm:p-10 rounded-3xl sm:rounded-[36px] border border-slate-200/90 dark:border-slate-800 shadow-xl relative overflow-hidden transition-colors duration-200 touch-pan-y select-none"
           >
             {/* PILLAR 1: MOBILE QR PASS */}
             {productTab === 'MOBILE_QR' && (

@@ -392,11 +392,14 @@ export const FeaturesPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              className="flex lg:grid lg:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto lg:overflow-visible snap-x snap-mandatory pb-4 px-1 touch-pan-x scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               {GLOBAL_COMPLIANCE.map((comp, idx) => (
                 <div
                   key={idx}
-                  className="p-6 bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 space-y-2 hover-card-premium shadow-sm"
+                  className="w-[85%] sm:w-[80%] lg:w-auto shrink-0 snap-center p-6 bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 space-y-2 hover-card-premium shadow-sm"
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{comp.flag}</span>
@@ -406,6 +409,13 @@ export const FeaturesPage: React.FC = () => {
                   <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{comp.desc}</p>
                 </div>
               ))}
+            </div>
+
+            {/* Mobile Swipe Helper */}
+            <div className="flex lg:hidden flex-col items-center justify-center gap-1.5 pt-2 text-center">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold">
+                👈 Swipe across global compliance standards 👉
+              </p>
             </div>
           </div>
         </section>

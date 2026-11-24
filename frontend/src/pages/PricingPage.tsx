@@ -221,7 +221,10 @@ export const PricingPage: React.FC = () => {
 
         {/* Pricing Cards Grid */}
         <section className="pb-20 px-4 sm:px-6 relative z-10">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          <div
+            className="max-w-7xl mx-auto flex lg:grid lg:grid-cols-3 gap-5 lg:gap-8 items-stretch overflow-x-auto lg:overflow-visible snap-x snap-mandatory pb-4 px-1 touch-pan-x scroll-smooth"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
             {PLAN_TEMPLATES.map((plan) => {
               const rates = selectedCurrency.rates[plan.id];
               const displayRate =
@@ -232,7 +235,7 @@ export const PricingPage: React.FC = () => {
               return (
                 <div
                   key={plan.id}
-                  className={`relative rounded-3xl p-5 sm:p-8 flex flex-col justify-between transition-all card-interactive ${plan.highlight
+                  className={`w-[88%] sm:w-[85%] lg:w-auto shrink-0 snap-center relative rounded-3xl p-5 sm:p-8 flex flex-col justify-between transition-all card-interactive ${plan.highlight
                     ? 'bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-2xl shadow-blue-500/15 lg:scale-102 ring-4 ring-blue-500/10'
                     : 'bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 shadow-lg hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl'
                     }`}
@@ -340,6 +343,13 @@ export const PricingPage: React.FC = () => {
                 </div>
               );
             })}
+          </div>
+
+          {/* Mobile Pricing Swipe Indicator */}
+          <div className="flex lg:hidden flex-col items-center justify-center gap-1.5 pt-3 text-center">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center gap-1.5">
+              <span>👈 Swipe to compare Starter, Multi-Specialty & Chain 👉</span>
+            </p>
           </div>
 
           {/* Clinical Power Add-Ons Suite Grid */}

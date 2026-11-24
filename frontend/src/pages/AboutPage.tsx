@@ -285,9 +285,12 @@ export const AboutPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+            <div
+              className="flex lg:grid lg:grid-cols-3 gap-4 sm:gap-8 text-left overflow-x-auto lg:overflow-visible snap-x snap-mandatory pb-4 px-1 touch-pan-x scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               {/* Pillar 1 */}
-              <div className="p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500/40 hover:shadow-xl transition-all space-y-4">
+              <div className="w-[88%] sm:w-[80%] lg:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500/40 hover:shadow-xl transition-all space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-blue-500/15 text-blue-600 dark:text-cyan-400 flex items-center justify-center">
                   <Smartphone className="w-6 h-6 stroke-[2.2]" />
                 </div>
@@ -300,7 +303,7 @@ export const AboutPage: React.FC = () => {
               </div>
 
               {/* Pillar 2 */}
-              <div className="p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-emerald-500/40 hover:shadow-xl transition-all space-y-4">
+              <div className="w-[88%] sm:w-[80%] lg:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-emerald-500/40 hover:shadow-xl transition-all space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                   <Tv className="w-6 h-6 stroke-[2.2]" />
                 </div>
@@ -313,7 +316,7 @@ export const AboutPage: React.FC = () => {
               </div>
 
               {/* Pillar 3 */}
-              <div className="p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-indigo-500/40 hover:shadow-xl transition-all space-y-4">
+              <div className="w-[88%] sm:w-[80%] lg:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-indigo-500/40 hover:shadow-xl transition-all space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                   <Zap className="w-6 h-6 stroke-[2.2]" />
                 </div>
@@ -326,7 +329,7 @@ export const AboutPage: React.FC = () => {
               </div>
 
               {/* Pillar 4 */}
-              <div className="p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500/40 hover:shadow-xl transition-all space-y-4">
+              <div className="w-[88%] sm:w-[80%] lg:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-teal-500/40 hover:shadow-xl transition-all space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-teal-500/15 text-teal-600 dark:text-teal-400 flex items-center justify-center">
                   <Activity className="w-6 h-6 stroke-[2.2]" />
                 </div>
@@ -339,7 +342,7 @@ export const AboutPage: React.FC = () => {
               </div>
 
               {/* Pillar 5 */}
-              <div className="p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-purple-500/40 hover:shadow-xl transition-all space-y-4">
+              <div className="w-[88%] sm:w-[80%] lg:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-purple-500/40 hover:shadow-xl transition-all space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center">
                   <HeartPulse className="w-6 h-6 stroke-[2.2]" />
                 </div>
@@ -352,7 +355,7 @@ export const AboutPage: React.FC = () => {
               </div>
 
               {/* Pillar 6 */}
-              <div className="p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-amber-500/40 hover:shadow-xl transition-all space-y-4">
+              <div className="w-[88%] sm:w-[80%] lg:w-auto shrink-0 snap-center p-6 sm:p-8 rounded-3xl bg-slate-50/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 hover:border-amber-500/40 hover:shadow-xl transition-all space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                   <Lock className="w-6 h-6 stroke-[2.2]" />
                 </div>
@@ -363,6 +366,13 @@ export const AboutPage: React.FC = () => {
                   Bank-grade AES-256 data protection with full compliance under India's Digital Personal Data Protection Act 2023, Ayushman Bharat Digital Mission (ABDM), and automated NABH audit-ready wait-time tracking.
                 </p>
               </div>
+            </div>
+
+            {/* Mobile Swipe Helper */}
+            <div className="flex lg:hidden flex-col items-center justify-center gap-1.5 pt-2 text-center">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold">
+                👈 Swipe across 6 clinical pillars 👉
+              </p>
             </div>
           </div>
         </section>
@@ -385,8 +395,11 @@ export const AboutPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="overflow-x-auto rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl">
-              <table className="w-full text-left text-xs sm:text-sm border-collapse">
+            <div
+              className="overflow-x-auto rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl touch-pan-x"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              <table className="w-full min-w-[580px] text-left text-xs sm:text-sm border-collapse">
                 <thead>
                   <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-100/70 dark:bg-slate-800/80">
                     <th className="py-4 px-4 sm:px-6 font-black text-slate-900 dark:text-white">Operational Metric</th>
@@ -490,8 +503,11 @@ export const AboutPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-left">
-              <div className="p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 relative space-y-3">
+            <div
+              className="flex md:grid md:grid-cols-4 gap-4 sm:gap-6 text-left overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 px-1 touch-pan-x scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              <div className="w-[85%] sm:w-[75%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 relative space-y-3">
                 <div className="w-9 h-9 rounded-xl bg-blue-600 text-white font-black text-sm flex items-center justify-center">
                   01
                 </div>
@@ -501,7 +517,7 @@ export const AboutPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 relative space-y-3">
+              <div className="w-[85%] sm:w-[75%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 relative space-y-3">
                 <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white font-black text-sm flex items-center justify-center">
                   02
                 </div>
@@ -511,7 +527,7 @@ export const AboutPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 relative space-y-3">
+              <div className="w-[85%] sm:w-[75%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 relative space-y-3">
                 <div className="w-9 h-9 rounded-xl bg-teal-600 text-white font-black text-sm flex items-center justify-center">
                   03
                 </div>
@@ -521,7 +537,7 @@ export const AboutPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 relative space-y-3">
+              <div className="w-[85%] sm:w-[75%] md:w-auto shrink-0 snap-center p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 relative space-y-3">
                 <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center">
                   04
                 </div>
@@ -530,6 +546,13 @@ export const AboutPage: React.FC = () => {
                   Doctor writes digital Rx. Token is archived, Rx is emailed instantly, and a 15-day free follow-up window is logged in the patient's Universal Health Vault.
                 </p>
               </div>
+            </div>
+
+            {/* Mobile Journey Swipe Helper */}
+            <div className="flex md:hidden flex-col items-center justify-center gap-1.5 pt-2 text-center">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold">
+                👈 Swipe through 4 journey steps 👉
+              </p>
             </div>
           </div>
         </section>

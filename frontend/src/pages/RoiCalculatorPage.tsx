@@ -292,8 +292,11 @@ export const RoiCalculatorPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div
+              className="flex md:grid md:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 px-1 touch-pan-x scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              <div className="w-[85%] sm:w-[80%] md:w-auto shrink-0 snap-center bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
                 <div className="p-2.5 bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-300 rounded-xl w-fit font-black text-xs border border-rose-200/50 dark:border-rose-900/50">
                   Leakage #1
                 </div>
@@ -303,7 +306,7 @@ export const RoiCalculatorPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="w-[85%] sm:w-[80%] md:w-auto shrink-0 snap-center bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
                 <div className="p-2.5 bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-300 rounded-xl w-fit font-black text-xs border border-blue-200/50 dark:border-blue-900/50">
                   Leakage #2
                 </div>
@@ -313,7 +316,7 @@ export const RoiCalculatorPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="w-[85%] sm:w-[80%] md:w-auto shrink-0 snap-center bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
                 <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-300 rounded-xl w-fit font-black text-xs border border-emerald-200/50 dark:border-emerald-900/50">
                   Leakage #3
                 </div>
@@ -322,6 +325,13 @@ export const RoiCalculatorPage: React.FC = () => {
                   Doctor time is your hospital's most valuable asset. Prefilled symptoms and one-key calling save 4 minutes per consult, allowing each doctor to see 3-5 additional patients per day without overtime.
                 </p>
               </div>
+            </div>
+
+            {/* Mobile Swipe Helper */}
+            <div className="flex md:hidden flex-col items-center justify-center gap-1.5 pt-2 text-center">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold">
+                👈 Swipe across 3 revenue leakage defenses 👉
+              </p>
             </div>
           </div>
         </section>

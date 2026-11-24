@@ -32,6 +32,7 @@ import {
   X,
   Loader2,
 } from 'lucide-react';
+import { PhoneCountryInput } from '../components/PhoneCountryInput';
 
 interface ClinicData {
   id: string;
@@ -91,6 +92,7 @@ export const PatientCheckIn: React.FC = () => {
   // Full Patient Registration Fields
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('');
+  const [countryCode, setCountryCode] = useState('+91');
   const [email, setEmail] = useState('');
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('Male');
@@ -596,8 +598,8 @@ export const PatientCheckIn: React.FC = () => {
   const handleProceedToPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanMobile = mobile.replace(/\D/g, '');
-    if (!name.trim() || cleanMobile.length !== 10) {
-      setError('Please provide your full patient name and a valid 10-digit mobile number.');
+    if (!name.trim() || cleanMobile.length < 8) {
+      setError('Please provide your full patient name and a valid mobile number.');
       return;
     }
 
@@ -1250,28 +1252,20 @@ export const PatientCheckIn: React.FC = () => {
             {/* Mobile Number with 15-day check */}
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 flex items-center justify-between">
-                <span>Mobile Number (10 Digits) *</span>
+                <span>Mobile / Contact Number *</span>
                 {checkingFollowUp && (
                   <span className="text-[10px] text-sky-600 font-bold flex items-center gap-1">
                     <RefreshCw className="w-3 h-3 animate-spin" /> Checking 15-day policy...
                   </span>
                 )}
               </label>
-              <div className="relative">
-                <div className="absolute left-3.5 top-2.5 flex items-center gap-1 text-slate-400 font-bold text-xs border-r border-slate-200 pr-2">
-                  <Phone className="w-3.5 h-3.5 text-sky-600" />
-                  <span>+91</span>
-                </div>
-                <input
-                  type="tel"
-                  required
-                  maxLength={10}
-                  placeholder="9876543210"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
-                  className="w-full pl-16 pr-3.5 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white tracking-wider focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 focus:outline-none transition-all"
-                />
-              </div>
+              <PhoneCountryInput
+                value={mobile}
+                onChange={(val) => setMobile(val)}
+                countryCode={countryCode}
+                onCountryCodeChange={(code) => setCountryCode(code)}
+                required
+              />
             </div>
 
             {/* Patient Name */}

@@ -68,6 +68,7 @@ import { CommercialFooter } from '../components/CommercialFooter';
 import { SeoHead } from '../components/SeoHead';
 import { ClinicalReviewsCarousel } from '../components/ClinicalReviewsCarousel';
 import { AnimatedClinicalReels } from '../components/AnimatedClinicalReels';
+import { PhoneCountryInput } from '../components/PhoneCountryInput';
 import {
   WORLDWIDE_CURRENCIES,
   PLAN_TEMPLATES,
@@ -519,6 +520,7 @@ export const QueuelessWebsite: React.FC = () => {
   const [demoHospital, setDemoHospital] = useState('');
   const [demoEmail, setDemoEmail] = useState('');
   const [demoPhone, setDemoPhone] = useState('');
+  const [demoCountryCode, setDemoCountryCode] = useState('+91');
   const [demoCabins, setDemoCabins] = useState('6-15 Doctors');
   const [demoDate, setDemoDate] = useState('');
   const [demoConfirmed, setDemoConfirmed] = useState(false);
@@ -537,6 +539,7 @@ export const QueuelessWebsite: React.FC = () => {
   const [leadName, setLeadName] = useState('');
   const [leadHospital, setLeadHospital] = useState('');
   const [leadPhone, setLeadPhone] = useState('');
+  const [leadCountryCode, setLeadCountryCode] = useState('+91');
   const [leadSubmitted, setLeadSubmitted] = useState(false);
 
   // Interactive Live Mockup Queue State & Cabin Configuration
@@ -3419,13 +3422,12 @@ export const QueuelessWebsite: React.FC = () => {
                   onChange={(e) => setLeadHospital(e.target.value)}
                   className="px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400"
                 />
-                <input
-                  type="tel"
-                  required
-                  placeholder="Direct Phone / WhatsApp"
+                <PhoneCountryInput
                   value={leadPhone}
-                  onChange={(e) => setLeadPhone(e.target.value)}
-                  className="px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  onChange={(val) => setLeadPhone(val)}
+                  countryCode={leadCountryCode}
+                  onCountryCodeChange={(code) => setLeadCountryCode(code)}
+                  required
                 />
                 <div className="sm:col-span-3 flex justify-center pt-2">
                   <button
@@ -3732,13 +3734,12 @@ export const QueuelessWebsite: React.FC = () => {
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Direct Phone / WhatsApp *</label>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="+91 98765 43210"
+                      <PhoneCountryInput
                         value={demoPhone}
-                        onChange={(e) => setDemoPhone(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                        onChange={(val) => setDemoPhone(val)}
+                        countryCode={demoCountryCode}
+                        onCountryCodeChange={(code) => setDemoCountryCode(code)}
+                        required
                       />
                     </div>
                   </div>

@@ -37,6 +37,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { playClinicChime } from '../utils/audio';
+import { PhoneCountryInput } from '../components/PhoneCountryInput';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
 
 import { API_BASE_URL } from '../config/api';
@@ -243,6 +244,7 @@ export const ReceptionDashboard: React.FC = () => {
   const [showWalkInModal, setShowWalkInModal] = useState(false);
   const [walkInName, setWalkInName] = useState('');
   const [walkInMobile, setWalkInMobile] = useState('');
+  const [walkInCountryCode, setWalkInCountryCode] = useState('+91');
   const [walkInDoctorId, setWalkInDoctorId] = useState('');
   const [walkInReason, setWalkInReason] = useState('');
   const [walkInPaymentMode, setWalkInPaymentMode] = useState<'CASH' | 'UPI' | 'DUE'>('CASH');
@@ -1676,14 +1678,13 @@ export const ReceptionDashboard: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Mobile Number</label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="10-digit number"
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Mobile Number *</label>
+                <PhoneCountryInput
                   value={walkInMobile}
-                  onChange={(e) => setWalkInMobile(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  onChange={(val) => setWalkInMobile(val)}
+                  countryCode={walkInCountryCode}
+                  onCountryCodeChange={(code) => setWalkInCountryCode(code)}
+                  required
                 />
               </div>
 

@@ -40,6 +40,7 @@ import {
   QrCode,
   Loader2,
 } from 'lucide-react';
+import { PhoneCountryInput } from '../components/PhoneCountryInput';
 
 const generateWhatsAppRxUrl = (data: any) => {
   const phone = data.patient?.mobile || '';
@@ -99,6 +100,7 @@ export const PatientPortal: React.FC = () => {
   const navigate = useNavigate();
   const [authMode, setAuthMode] = useState<'LOGIN' | 'SIGNUP' | 'TRACK'>('TRACK');
   const [mobile, setMobile] = useState('');
+  const [portalCountryCode, setPortalCountryCode] = useState('+91');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [trackName, setTrackName] = useState('');
@@ -505,17 +507,15 @@ export const PatientPortal: React.FC = () => {
               <form onSubmit={handleLogin} className="space-y-4 text-left">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Registered Mobile Number or Email (ID)</label>
-                  <div className="relative">
-                    <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. 9876543210 or patient@gmail.com"
-                      value={mobile}
-                      onChange={(e) => setMobile(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-sky-500 focus:outline-none placeholder:text-slate-600 dark:placeholder:text-slate-300"
-                    />
-                  </div>
+                  <PhoneCountryInput
+                    value={mobile}
+                    onChange={(val) => setMobile(val)}
+                    countryCode={portalCountryCode}
+                    onCountryCodeChange={(code) => setPortalCountryCode(code)}
+                    placeholder="98765 43210 or patient@gmail.com"
+                    allowAlphaOrEmail={true}
+                    required
+                  />
                   <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
                     Enter the mobile number or email used during your hospital check-in.
                   </p>
@@ -639,17 +639,15 @@ export const PatientPortal: React.FC = () => {
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Mobile Number or Email (ID) *</label>
-                  <div className="relative">
-                    <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. 9876543210 or patient@gmail.com"
-                      value={signupMobile}
-                      onChange={(e) => setSignupMobile(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder:text-slate-600 dark:placeholder:text-slate-300"
-                    />
-                  </div>
+                  <PhoneCountryInput
+                    value={signupMobile}
+                    onChange={(val) => setSignupMobile(val)}
+                    countryCode={portalCountryCode}
+                    onCountryCodeChange={(code) => setPortalCountryCode(code)}
+                    placeholder="98765 43210 or patient@gmail.com"
+                    allowAlphaOrEmail={true}
+                    required
+                  />
                 </div>
 
                 <div>
@@ -830,17 +828,15 @@ export const PatientPortal: React.FC = () => {
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                     3. Mobile Number or Email *
                   </label>
-                  <div className="relative">
-                    <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. 98765 11111 or patient@gmail.com"
-                      value={trackContact}
-                      onChange={(e) => setTrackContact(e.target.value)}
-                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-bold placeholder:font-normal placeholder:text-slate-600 dark:placeholder:text-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                    />
-                  </div>
+                  <PhoneCountryInput
+                    value={trackContact}
+                    onChange={(val) => setTrackContact(val)}
+                    countryCode={portalCountryCode}
+                    onCountryCodeChange={(code) => setPortalCountryCode(code)}
+                    placeholder="98765 11111 or patient@gmail.com"
+                    allowAlphaOrEmail={true}
+                    required
+                  />
                   <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 flex items-center gap-1">
                     <span>🔒 Enter the contact details provided at hospital reception or QR check-in.</span>
                   </p>

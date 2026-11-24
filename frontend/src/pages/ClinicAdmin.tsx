@@ -48,6 +48,7 @@ import {
   ExternalLink,
   FileDown,
 } from 'lucide-react';
+import { PhoneCountryInput } from '../components/PhoneCountryInput';
 import { getAuthSession, setAuthSession, clearAuthSession } from '../utils/auth';
 import { playClinicChime } from '../utils/audio';
 
@@ -3192,12 +3193,10 @@ export const ClinicAdmin: React.FC = () => {
                   <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300">
                     Test Patient Mobile Number:
                   </label>
-                  <input
-                    type="tel"
-                    placeholder="+91 98765 43210"
-                    value={addonWhatsappNumber}
-                    onChange={(e) => setAddonWhatsappNumber(e.target.value)}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
+                  <PhoneCountryInput
+                    value={addonWhatsappNumber.replace(/^\+\d+\s*/, '')}
+                    onChange={(val, full) => setAddonWhatsappNumber(full || val)}
+                    countryCode="+91"
                   />
 
                   <div className="space-y-1.5 text-[11px] text-slate-600 dark:text-slate-400">

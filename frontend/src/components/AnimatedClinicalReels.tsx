@@ -170,6 +170,29 @@ export const CLINICAL_REELS_DATA: ClinicalReelData[] = [
   },
 ];
 
+export const REVIEW_METRICS: Record<number, { metric1: string; metric2: string; metric3: string }> = {
+  1: {
+    metric1: '⏱️ 40m ➔ 0m Wait',
+    metric2: '⚡ 1-Tap iPad Call',
+    metric3: '🔇 Quiet Clinical Corridors',
+  },
+  2: {
+    metric1: '📱 20-Sec QR Admission',
+    metric2: '💬 WhatsApp Live Token',
+    metric3: '☕ Wait Anywhere Freely',
+  },
+  3: {
+    metric1: '📺 Standard 55" Smart TV',
+    metric2: '🔔 3-Tone Voice Chime',
+    metric3: '📉 -80% Hall Crowding',
+  },
+  4: {
+    metric1: '💳 Direct Bank Settlement',
+    metric2: '₹0 Platform Fee',
+    metric3: '🧾 Automated Tax Invoice',
+  },
+};
+
 export const AnimatedClinicalReels: React.FC = () => {
   const [unmutedReelId, setUnmutedReelId] = useState<number | null>(null);
   const [voiceoverLang, setVoiceoverLang] = useState<'hi' | 'en'>('hi');
@@ -180,6 +203,52 @@ export const AnimatedClinicalReels: React.FC = () => {
   const [isVideoMuted, setIsVideoMuted] = useState<boolean>(true);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Active Video Review Card State (Below 4 cards)
+  const [activeReviewId, setActiveReviewId] = useState<number>(1);
+  const [isReviewVideoMuted, setIsReviewVideoMuted] = useState<boolean>(true);
+  const [isReviewVideoPlaying, setIsReviewVideoPlaying] = useState<boolean>(true);
+  const reviewVideoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleReviewVideoSound = () => {
+    if (reviewVideoRef.current) {
+      reviewVideoRef.current.muted = !isReviewVideoMuted;
+      setIsReviewVideoMuted(!isReviewVideoMuted);
+    }
+  };
+
+  const toggleReviewVideoPlayback = () => {
+    if (reviewVideoRef.current) {
+      if (reviewVideoRef.current.paused) {
+        reviewVideoRef.current.play();
+        setIsReviewVideoPlaying(true);
+      } else {
+        reviewVideoRef.current.pause();
+        setIsReviewVideoPlaying(false);
+      }
+    }
+  };
+
+  const selectReviewReel = (reelId: number) => {
+    setActiveReviewId(reelId);
+    if (isSpeakingVoiceover) {
+      stopClinicalReviewVoiceover();
+      setUnmutedReelId(reelId);
+      setIsSpeakingVoiceover(true);
+      playClinicalReviewVoiceover(
+        reelId,
+        voiceoverLang,
+        () => {
+          setIsSpeakingVoiceover(true);
+          setUnmutedReelId(reelId);
+        },
+        () => {
+          setIsSpeakingVoiceover(false);
+          setUnmutedReelId(null);
+        }
+      );
+    }
+  };
 
   const toggleVideoSound = () => {
     if (selectedVideo.type === 'local') {
@@ -282,6 +351,7 @@ export const AnimatedClinicalReels: React.FC = () => {
   }, []);
 
   const handleToggleSound = (reelId: number) => {
+    setActiveReviewId(reelId);
     if (unmutedReelId === reelId && isSpeakingVoiceover) {
       stopClinicalReviewVoiceover();
       setUnmutedReelId(null);
@@ -1218,93 +1288,267 @@ export const AnimatedClinicalReels: React.FC = () => {
         </div>
       </div>
 
-      {/* Voiceover Language Switcher & Interactive Review Player Controls */}
-      <div className="text-center pt-3 max-w-2xl mx-auto space-y-3">
-        <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed">
-          Every counter has an instant vector QR pass. Patients scan it, receive live queue updates, and doctors call with one tap.
-        </p>
-
-        {/* Language selector toggle */}
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-          <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-            <Volume2 className="w-3.5 h-3.5 text-emerald-500" /> Voiceover Review:
-          </span>
-          <button
-            type="button"
-            onClick={() => handleLanguageChange('hi')}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              voiceoverLang === 'hi'
-                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 ring-2 ring-emerald-400/50'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300/80 dark:border-slate-700'
-            }`}
-          >
-            <span>🇮🇳</span>
-            <span>Hindi / Hinglish (डॉक्टर रिव्यू)</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => handleLanguageChange('en')}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              voiceoverLang === 'en'
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 ring-2 ring-blue-400/50'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300/80 dark:border-slate-700'
-            }`}
-          >
-            <span>🌐</span>
-            <span>English (Doctor Walkthrough)</span>
-          </button>
+      {/* ============================================================== */}
+      {/* CINEMA-GRADE GROUND REALITY VIDEO & CLINICAL REVIEW SHOWCASE   */}
+      {/* ============================================================== */}
+      <div className="pt-3 max-w-4xl mx-auto space-y-4">
+        {/* Intro Subtitle */}
+        <div className="text-center space-y-1">
+          <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed">
+            Every counter has an instant vector QR pass. Patients scan it, receive live queue updates, and doctors call with one tap.
+          </p>
         </div>
 
-        <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center justify-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Click any card's speaker icon to listen to clinician reviews and product walkthrough live</span>
-        </p>
-
-        {/* Live Speaking Visualizer & Captions Card */}
-        {unmutedReelId !== null && isSpeakingVoiceover && CLINICAL_REEL_VOICEOVERS[unmutedReelId] && (
-          <div className="mt-3 p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-indigo-500/50 shadow-2xl text-white text-left animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between gap-3 mb-2.5 pb-2 border-b border-white/10">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0">
-                  <Volume2 className="w-4 h-4 animate-bounce" />
+        {/* 4 Interactive Clinical Video Reel Tabs */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {CLINICAL_REELS_DATA.map((reel) => {
+            const isSelected = activeReviewId === reel.id;
+            return (
+              <button
+                key={reel.id}
+                type="button"
+                onClick={() => selectReviewReel(reel.id)}
+                className={`p-2.5 rounded-2xl text-left transition-all border cursor-pointer relative overflow-hidden flex flex-col justify-between ${
+                  isSelected
+                    ? 'bg-gradient-to-r from-blue-900/90 to-indigo-900/90 text-white border-blue-400/80 shadow-lg ring-2 ring-blue-500/30'
+                    : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/80 border-slate-200 dark:border-slate-800'
+                }`}
+              >
+                <div className="flex items-center justify-between w-full mb-1">
+                  <span
+                    className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                      isSelected ? 'bg-blue-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                    }`}
+                  >
+                    {reel.badge}
+                  </span>
+                  {isSelected && (
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  )}
                 </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-black text-white flex items-center gap-2 truncate">
-                    <span className="truncate">{CLINICAL_REEL_VOICEOVERS[unmutedReelId].doctor}</span>
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 uppercase font-black tracking-wider shrink-0">
-                      Live Clinical Review
+                <p className="text-[11px] font-black truncate">{reel.doctor}</p>
+                <p className={`text-[10px] truncate ${isSelected ? 'text-blue-200' : 'text-slate-400'}`}>
+                  {reel.hospital.split('•')[0]}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* The Featured Video Review Card */}
+        {(() => {
+          const activeReelData = CLINICAL_REELS_DATA.find((r) => r.id === activeReviewId) || CLINICAL_REELS_DATA[0];
+          const activeVoiceover = CLINICAL_REEL_VOICEOVERS[activeReviewId] || CLINICAL_REEL_VOICEOVERS[1];
+          const metrics = REVIEW_METRICS[activeReviewId] || REVIEW_METRICS[1];
+
+          return (
+            <div className="p-4 sm:p-6 rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border border-slate-700/80 shadow-2xl text-white relative overflow-hidden">
+              {/* Top Header: Live Video Indicator + Language Selector */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+                  <div className="flex items-center gap-2">
+                    <Video className="w-4 h-4 text-rose-400" />
+                    <span className="text-xs font-black uppercase tracking-wider text-rose-400">
+                      Live Clinical Workflow & Review Video
                     </span>
                   </div>
-                  <p className="text-[10px] text-slate-400 truncate font-medium">
-                    {CLINICAL_REEL_VOICEOVERS[unmutedReelId].facility}
-                  </p>
+                  <span className="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full font-black uppercase">
+                    ABDM M1/M2 Verified
+                  </span>
+                </div>
+
+                {/* Voiceover Language Switcher */}
+                <div className="flex items-center gap-1.5 self-start sm:self-auto">
+                  <span className="text-[10px] font-bold text-slate-400 mr-1">Voiceover:</span>
+                  <button
+                    type="button"
+                    onClick={() => handleLanguageChange('hi')}
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                      voiceoverLang === 'hi'
+                        ? 'bg-emerald-600 text-white shadow-xs ring-2 ring-emerald-400/50'
+                        : 'bg-white/10 text-slate-300 hover:bg-white/20'
+                    }`}
+                  >
+                    <span>🇮🇳</span>
+                    <span>Hindi</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleLanguageChange('en')}
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                      voiceoverLang === 'en'
+                        ? 'bg-blue-600 text-white shadow-xs ring-2 ring-blue-400/50'
+                        : 'bg-white/10 text-slate-300 hover:bg-white/20'
+                    }`}
+                  >
+                    <span>🌐</span>
+                    <span>English</span>
+                  </button>
                 </div>
               </div>
 
-              {/* Live Soundwave Bars & Stop Button */}
-              <div className="flex items-center gap-3 shrink-0">
-                <div className="flex items-end gap-1 h-5 px-1">
-                  <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '70%', animationDuration: '0.4s' }} />
-                  <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '100%', animationDuration: '0.6s' }} />
-                  <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '40%', animationDuration: '0.35s' }} />
-                  <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '85%', animationDuration: '0.5s' }} />
+              {/* 2-Column Split: Video on Left, Review on Right */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                {/* Video Player Column */}
+                <div className="lg:col-span-6">
+                  <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/15 group">
+                    <video
+                      key={activeReelData.videoSrc}
+                      ref={reviewVideoRef}
+                      src={activeReelData.videoSrc}
+                      poster="/assets/hero-hospital-lounge.jpg"
+                      autoPlay
+                      loop
+                      muted={isReviewVideoMuted}
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+
+                    {/* Overlay: Top Left Badge */}
+                    <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1.5">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase text-white shadow-md backdrop-blur-md ${activeReelData.badgeColor}`}>
+                        {activeReelData.badge}
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/60 text-slate-200 backdrop-blur-md border border-white/10">
+                        HD 60fps
+                      </span>
+                    </div>
+
+                    {/* Overlay: Top Right Sound Toggle */}
+                    <div className="absolute top-2.5 right-2.5 z-10">
+                      <button
+                        type="button"
+                        onClick={toggleReviewVideoSound}
+                        className={`px-2.5 py-1 rounded-full text-[11px] font-bold shadow-lg backdrop-blur-md transition-all flex items-center gap-1.5 cursor-pointer ${
+                          isReviewVideoMuted
+                            ? 'bg-amber-500/90 hover:bg-amber-500 text-slate-950 font-black'
+                            : 'bg-emerald-500/90 hover:bg-emerald-500 text-white font-black'
+                        }`}
+                        title={isReviewVideoMuted ? 'Click to Unmute Video' : 'Click to Mute Video'}
+                      >
+                        {isReviewVideoMuted ? (
+                          <>
+                            <VolumeX className="w-3.5 h-3.5 animate-pulse" />
+                            <span>Tap for Sound 🔊</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="w-3.5 h-3.5 animate-bounce" />
+                            <span>Sound ON</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Center Clickable Play/Pause Overlay */}
+                    <button
+                      type="button"
+                      onClick={toggleReviewVideoPlayback}
+                      className="absolute inset-0 z-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                      aria-label={isReviewVideoPlaying ? 'Pause Video' : 'Play Video'}
+                    >
+                      <div className="w-12 h-12 rounded-full bg-black/70 backdrop-blur-md text-white flex items-center justify-center border border-white/20 shadow-2xl">
+                        {isReviewVideoPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
+                      </div>
+                    </button>
+
+                    {/* Overlay: Bottom Bar */}
+                    <div className="absolute bottom-0 inset-x-0 p-2.5 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex items-center justify-between text-[10px] text-slate-300">
+                      <span className="font-semibold text-white truncate">{activeReelData.subtitle}</span>
+                      <span className="text-emerald-400 font-mono font-bold shrink-0">Live OPD</span>
+                    </div>
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => handleToggleSound(unmutedReelId)}
-                  className="px-2.5 py-1 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white border border-red-500/40 text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer active:scale-95"
-                >
-                  <Pause className="w-3 h-3" />
-                  <span>Stop</span>
-                </button>
+
+                {/* Doctor Review & Spoken Voiceover Column */}
+                <div className="lg:col-span-6 flex flex-col justify-between space-y-3.5 text-left">
+                  {/* Doctor Profile Header */}
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={`/assets/avatars/doc-${activeReviewId}.jpg`}
+                      alt={activeVoiceover.doctor}
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                      className="w-12 h-12 rounded-2xl object-cover border-2 border-emerald-400/60 shadow-md shrink-0"
+                    />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-black text-white">{activeVoiceover.doctor}</h4>
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      </div>
+                      <p className="text-xs text-blue-300 font-medium">{activeVoiceover.facility}</p>
+                    </div>
+                  </div>
+
+                  {/* Doctor Testimonial Quote */}
+                  <div className="p-3.5 bg-white/5 rounded-2xl border border-white/10 relative">
+                    <p className="text-xs text-slate-200 leading-relaxed italic font-medium">
+                      "{voiceoverLang === 'hi' ? activeVoiceover.hiText : activeVoiceover.enText}"
+                    </p>
+                  </div>
+
+                  {/* Audio Voiceover Play Button */}
+                  <button
+                    type="button"
+                    onClick={() => handleToggleSound(activeReviewId)}
+                    className={`w-full py-3 px-4 rounded-xl font-black text-xs flex items-center justify-center gap-2.5 transition-all shadow-lg cursor-pointer ${
+                      isSpeakingVoiceover && unmutedReelId === activeReviewId
+                        ? 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/30 ring-2 ring-red-400 animate-pulse'
+                        : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-600/30'
+                    }`}
+                  >
+                    {isSpeakingVoiceover && unmutedReelId === activeReviewId ? (
+                      <>
+                        <Pause className="w-4 h-4" />
+                        <span>Stop Doctor Voiceover Review</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="w-4 h-4 animate-bounce" />
+                        <span>Listen to Clinician Voiceover ({voiceoverLang === 'hi' ? 'हिंदी ऑडियो' : 'English Audio'})</span>
+                      </>
+                    )}
+                  </button>
+
+                  {/* Animated Soundwave Visualizer when speaking */}
+                  {isSpeakingVoiceover && unmutedReelId === activeReviewId && (
+                    <div className="flex items-center justify-center gap-2 py-1 px-3 bg-emerald-950/60 border border-emerald-500/30 rounded-xl">
+                      <span className="text-[10px] text-emerald-300 font-black uppercase tracking-wider">
+                        Doctor Voice Broadcast Active:
+                      </span>
+                      <div className="flex items-end gap-1 h-3.5">
+                        <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '60%', animationDuration: '0.4s' }} />
+                        <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '100%', animationDuration: '0.6s' }} />
+                        <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '40%', animationDuration: '0.35s' }} />
+                        <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '90%', animationDuration: '0.5s' }} />
+                        <span className="w-1 bg-emerald-400 rounded-full animate-pulse" style={{ height: '70%', animationDuration: '0.45s' }} />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Key Highlights / Metrics */}
+                  <div className="grid grid-cols-3 gap-2 pt-1 text-center">
+                    <div className="p-2 bg-white/5 border border-white/10 rounded-xl">
+                      <p className="text-[10px] font-black text-emerald-400">{metrics.metric1}</p>
+                    </div>
+                    <div className="p-2 bg-white/5 border border-white/10 rounded-xl">
+                      <p className="text-[10px] font-black text-sky-400">{metrics.metric2}</p>
+                    </div>
+                    <div className="p-2 bg-white/5 border border-white/10 rounded-xl">
+                      <p className="text-[10px] font-black text-indigo-400">{metrics.metric3}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+          );
+        })()}
 
-            <p className="text-xs text-slate-200 leading-relaxed italic font-medium">
-              "{voiceoverLang === 'hi' ? CLINICAL_REEL_VOICEOVERS[unmutedReelId].hiText : CLINICAL_REEL_VOICEOVERS[unmutedReelId].enText}"
-            </p>
-          </div>
-        )}
+        <p className="text-[11px] text-slate-500 dark:text-slate-400 text-center font-medium">
+          💡 Click any card above or tab to switch video review in real time
+        </p>
       </div>
 
       {/* Expanded Interactive Simulation Modal */}

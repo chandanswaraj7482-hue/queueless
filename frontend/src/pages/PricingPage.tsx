@@ -356,12 +356,7 @@ export const PricingPage: React.FC = () => {
               })}
             </div>
 
-            {/* Mobile Pricing Swipe Indicator */}
-            <div className="flex lg:hidden flex-col items-center justify-center gap-1.5 pt-3 text-center">
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center gap-1.5">
-                <span>👈 Swipe to compare Starter, Multi-Specialty & Chain 👉</span>
-              </p>
-            </div>
+
 
             {/* Clinical Power Add-Ons Suite Grid */}
             <div className="max-w-6xl mx-auto mt-16 space-y-6">
@@ -521,9 +516,6 @@ export const PricingPage: React.FC = () => {
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
-                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1">
-                  <span>👈 Swipe or watch auto-slide • Card {activeAddonIndex + 1} of {MODULAR_ADDONS_COUNT}</span>
-                </p>
               </div>
             </div>
 
@@ -670,32 +662,17 @@ export const PricingPage: React.FC = () => {
                 Subscribe in your local currency with instant automated provisioning. All transactions are protected by bank-grade 256-bit encryption.
               </p>
 
-              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
-                {/* Dodo Payments Badge */}
-                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl">
-                  <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                  <div className="text-left">
-                    <span className="block text-xs font-black text-slate-900 dark:text-white">Dodo Payments</span>
-                    <span className="block text-[10px] text-slate-500 dark:text-slate-400">Global Cards & Instant Checkout</span>
-                  </div>
-                </div>
-
-                {/* Dodo Payments & Cashfree Badge */}
-                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl">
-                  <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                  <div className="text-left ml-1">
-                    <span className="block text-xs font-black text-slate-900 dark:text-white">Dodo Payments & Cashfree</span>
-                    <span className="block text-[10px] text-slate-500 dark:text-slate-400">Global & Domestic Settlement</span>
-                  </div>
-                </div>
-
-                {/* Security Badge */}
-                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl">
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <div className="text-left">
-                    <span className="block text-xs font-black text-slate-900 dark:text-white">30-Day Money Back</span>
-                    <span className="block text-[10px] text-slate-500 dark:text-slate-400">100% Satisfaction Guarantee</span>
-                  </div>
+              {/* Single Clean Line Payment Partner Bar */}
+              <div className="flex items-center justify-center px-2">
+                <div className="inline-flex items-center justify-center gap-1.5 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl sm:rounded-2xl text-[10px] sm:text-xs shadow-xs overflow-x-auto whitespace-nowrap">
+                  <CreditCard className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                  <span className="font-black text-slate-900 dark:text-white">Dodo Payments & Cashfree</span>
+                  <span className="text-slate-300 dark:text-slate-700 font-bold">•</span>
+                  <span className="text-slate-600 dark:text-slate-400 font-medium">Cards & UPI AutoPay</span>
+                  <span className="text-slate-300 dark:text-slate-700 font-bold">•</span>
+                  <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
+                    <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" /> 30-Day Money Back Guarantee
+                  </span>
                 </div>
               </div>
             </div>
@@ -712,12 +689,7 @@ export const PricingPage: React.FC = () => {
                 Compare capabilities across our clinical tiers to match your facility scale.
               </p>
 
-              {/* Mobile Horizontal Scroll Hint */}
-              <div className="sm:hidden pt-2 flex items-center justify-center">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-800 text-[11px] font-bold text-blue-700 dark:text-blue-300 shadow-2xs">
-                  <span>Swipe table left & right to compare all plans ➔</span>
-                </span>
-              </div>
+
             </div>
 
             <div className="overflow-x-auto bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm scrollbar-thin">

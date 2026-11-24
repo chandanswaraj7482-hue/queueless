@@ -834,6 +834,14 @@ export const PatientPortal: React.FC = () => {
                   </p>
                 </div>
 
+                {/* 15-Day Policy Verification Notice */}
+                <div className="p-3 bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl flex items-start gap-2 text-[11px] text-emerald-800 dark:text-emerald-300">
+                  <ShieldCheck className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
+                  <p className="leading-snug">
+                    <strong>15-Day Clinical Review Rule:</strong> Instant token tracking and 100% free review follow-up is valid for up to <strong>15 days</strong> from your visit date. Prior visits older than 15 days require account login or fresh booking.
+                  </p>
+                </div>
+
                 <button
                   type="submit"
                   disabled={loading || !trackName.trim() || !trackToken.trim() || !trackContact.trim()}
@@ -893,6 +901,12 @@ export const PatientPortal: React.FC = () => {
                     <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                     <span>Universal Health Passport (ABDM)</span>
                   </span>
+                  {portalData.followUpEligible && (
+                    <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/70 border border-amber-200 dark:border-amber-800 px-2 py-0.5 rounded-md flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                      <span>15-Day Free Follow-Up Active ({portalData.followUpDaysRemaining}d remaining)</span>
+                    </span>
+                  )}
                 </div>
                 {portalData.patient.address && (
                   <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 flex items-center gap-1">

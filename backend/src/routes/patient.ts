@@ -430,6 +430,21 @@ patientRouter.post('/login', async (req, res) => {
         });
       }
 
+      // Strictly enforce 15-day validity window for token tracking & free follow-up
+      const visitTime = matched.joinedAt || (matched.queueDate ? new Date(matched.queueDate) : new Date());
+      const diffMs = Date.now() - new Date(visitTime).getTime();
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      if (diffDays > 15) {
+        return res.status(403).json({
+          success: false,
+          error: `Token validity expired (>15 days): Token "${cleanToken}" was registered on ${new Date(visitTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} (${diffDays} days ago). Under hospital policy, token tracking & free follow-up review validity is strictly 15 days. For visits older than 15 days, please register for a fresh OPD consultation or log in with your registered account password.`,
+          expired: true,
+          diffDays,
+          maxDays: 15,
+        });
+      }
+
       // Fetch all entries for this patient to assemble complete medical details (Indexed fast query)
       const patientId = matched.patientId;
       const patientMobile = matched.patient?.mobile || inputContact;
@@ -462,8 +477,14 @@ patientRouter.post('/login', async (req, res) => {
       return res.json({
         success: true,
         publicToken: matched.publicToken,
-        data: portalData,
-        message: 'Identity verified & OPD details retrieved successfully',
+        data: {
+          ...portalData,
+          followUpEligible: true,
+          followUpDaysRemaining: Math.max(0, 15 - diffDays),
+          visitDaysAgo: diffDays,
+          visitDateFormatted: new Date(visitTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        },
+        message: `Identity verified! Valid for 15-day follow-up (${Math.max(0, 15 - diffDays)} days remaining).`,
       });
     }
 

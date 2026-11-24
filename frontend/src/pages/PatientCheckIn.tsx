@@ -1565,44 +1565,178 @@ export const PatientCheckIn: React.FC = () => {
       {/* Hospital Queue Policy & Admission Modal */}
       {showPolicyModal && typeof document !== 'undefined' && createPortal(
         <div
-          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
           onClick={(e) => {
             if (e.target === e.currentTarget) setShowPolicyModal(false);
           }}
         >
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4 my-auto text-left relative">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-8 max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4 my-auto text-left relative max-h-[92vh] flex flex-col">
             <button
               type="button"
               onClick={() => setShowPolicyModal(false)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-2xl bg-sky-50 dark:bg-sky-950/70 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold">
-                <ShieldCheck className="w-5 h-5" />
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-sky-50 dark:bg-sky-950/70 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold shrink-0 shadow-xs border border-sky-200/60 dark:border-sky-800">
+                <ShieldCheck className="w-6 h-6" />
               </div>
-              <div>
-                <h3 className="text-base font-black text-slate-900 dark:text-white">Hospital Queue Policy & Token Admission</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Patient Rights, OPD Rules & Zero-Wait Protocol</p>
+              <div className="min-w-0 pr-8">
+                <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-sky-700 dark:text-sky-300 bg-sky-100 dark:bg-sky-950 px-2 py-0.5 rounded-full border border-sky-200 dark:border-sky-800">
+                    NABH 5th Edition Aligned
+                  </span>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                    ABDM M1/M2 Certified
+                  </span>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-950 px-2 py-0.5 rounded-full border border-indigo-200 dark:border-indigo-800">
+                    DPDP Act 2023 Compliant
+                  </span>
+                </div>
+                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
+                  Hospital Queue Policy & OPD Token Admission Guidelines
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Institutional Patient Rights, Queue Sequencing, 15-Day Free Follow-Up & Clinical Governance
+                </p>
               </div>
             </div>
 
-            <div className="space-y-3 text-xs text-slate-600 dark:text-slate-300 border-y border-slate-100 dark:border-slate-800 py-3.5 leading-relaxed max-h-[60vh] overflow-y-auto">
-              <p><strong>1. Live Digital Token Entry:</strong> Your digital token will be automatically announced on the OPD 55" TV kiosk and notified on your phone when 2 patients remain ahead.</p>
-              <p><strong>2. 15-Day Free Review Policy:</strong> Follow-up visits within 15 days of consultation for the same symptom are automatically verified for zero consultation fee.</p>
-              <p><strong>3. Transparent Cabin Assignment:</strong> Patients are admitted to doctor cabins in verified sequential order. Emergency triage cases receive immediate medical override.</p>
-              <p><strong>4. Clinical Data Privacy:</strong> We strictly adhere to ABDM and HIPAA data principles. Your medical records and prescriptions are encrypted and never monetized.</p>
+            {/* Scrollable Clinical Policy Body */}
+            <div className="space-y-4 text-xs text-slate-600 dark:text-slate-300 border-y border-slate-100 dark:border-slate-800 py-4 leading-relaxed overflow-y-auto max-h-[62vh] pr-2.5 scrollbar-thin">
+              
+              {/* Clause 1 */}
+              <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">1</span>
+                  <strong className="text-slate-900 dark:text-white text-xs font-black">
+                    Digital First-Come First-Served (FIFO) Queue Sequencing
+                  </strong>
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 pl-7 leading-normal">
+                  All consultations operate strictly on sequential electronic token queuing. Once a patient checks in via mobile QR or kiosk, their verified position is permanently logged on the hospital cloud ledger. Counter favoritism or manual token skipping is strictly prohibited by hospital management.
+                </p>
+              </div>
+
+              {/* Clause 2 */}
+              <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">2</span>
+                  <strong className="text-slate-900 dark:text-white text-xs font-black">
+                    15-Day Free Follow-Up & Clinical Review Guarantee
+                  </strong>
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 pl-7 leading-normal">
+                  Patients returning to consult the same specialist within <strong>15 calendar days</strong> for symptom review, investigation report reading (X-ray, MRI, blood labs), or wound dressing are 100% exempt from consultation fees. The system automatically verifies your prior phone record and sets payable fee to ₹0.
+                </p>
+              </div>
+
+              {/* Clause 3 */}
+              <div className="p-3.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/80 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">3</span>
+                  <strong className="text-amber-900 dark:text-amber-200 text-xs font-black">
+                    Emergency Triage & Clinical Escalation Override
+                  </strong>
+                </div>
+                <p className="text-[11px] text-amber-900/80 dark:text-amber-300/80 pl-7 leading-normal">
+                  In accordance with emergency medical guidelines, patients presenting with acute symptoms (severe chest pain, respiratory distress, active trauma, high pediatric fever, convulsions, or active labor) receive immediate nursing triage priority over sequential non-urgent OPD tokens.
+                </p>
+              </div>
+
+              {/* Clause 4 */}
+              <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">4</span>
+                  <strong className="text-slate-900 dark:text-white text-xs font-black">
+                    55" Lobby Acoustic Chime & Multi-Lingual Calling
+                  </strong>
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 pl-7 leading-normal">
+                  When a doctor finishes a consultation and triggers "Next Patient" from their cabin console, the lobby 55" OLED display sounds a dual-tone acoustic chime and announces the token number in both Hindi and English. An automatic WhatsApp / SMS alert is also dispatched to the patient's phone when 2 patients remain ahead.
+                </p>
+              </div>
+
+              {/* Clause 5 */}
+              <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">5</span>
+                  <strong className="text-slate-900 dark:text-white text-xs font-black">
+                    Senior Citizens, Expectant Mothers & Differently-Abled Dignity
+                  </strong>
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 pl-7 leading-normal">
+                  Elderly patients (aged 65+), differently-abled persons, and pregnant mothers are provided dedicated waiting chairs with ergonomic support. Reception staff can offer wheelchair escorts and expedited room transit upon request.
+                </p>
+              </div>
+
+              {/* Clause 6 */}
+              <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">6</span>
+                  <strong className="text-slate-900 dark:text-white text-xs font-black">
+                    Missed Announcement Grace Window & Re-Queuing
+                  </strong>
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 pl-7 leading-normal">
+                  If a patient is temporarily away from the waiting lounge when called, the doctor's console flags them as "Grace Hold" for 15 minutes. The patient does not lose their consultation; once they return, they are automatically placed after the currently active patient without paying any additional fee.
+                </p>
+              </div>
+
+              {/* Clause 7 */}
+              <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">7</span>
+                  <strong className="text-slate-900 dark:text-white text-xs font-black">
+                    Transparent Tariff & Zero-Cash-Tipping Governance
+                  </strong>
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 pl-7 leading-normal">
+                  All doctor fees, diagnostic charges, and procedural estimates are displayed upfront before token confirmation. Under hospital NABH compliance rules, staff members are strictly forbidden from accepting cash tips or informal expediting charges. Digital UPI / Card payment receipts are issued instantly.
+                </p>
+              </div>
+
+              {/* Clause 8 */}
+              <div className="p-3.5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/80 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">8</span>
+                  <strong className="text-emerald-900 dark:text-emerald-200 text-xs font-black">
+                    ABHA / ABDM Cryptographic Privacy & Zero Data Monetization
+                  </strong>
+                </div>
+                <p className="text-[11px] text-emerald-900/80 dark:text-emerald-300/80 pl-7 leading-normal">
+                  Patient demographic details, clinical symptoms, and electronic health records are encrypted via 256-bit AES cryptographic protocols under the India Digital Personal Data Protection (DPDP) Act 2023. We do not sell or monetize patient data with pharmaceutical marketing agencies.
+                </p>
+              </div>
+
+              {/* Clause 9 */}
+              <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">9</span>
+                  <strong className="text-slate-900 dark:text-white text-xs font-black">
+                    Mutual Respect, Zero Tolerance for Violence & Peaceful Atmosphere
+                  </strong>
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 pl-7 leading-normal">
+                  Healthcare personnel work diligently to provide high-quality medical care. Verbal abuse, harassment, or physical intimidation of doctors, nursing staff, or security personnel is strictly prohibited and subject to legal prosecution under the Healthcare Service Personnel Act. Please keep mobile phones on silent mode in consultation lounges.
+                </p>
+              </div>
+
             </div>
 
-            <div className="pt-2 flex justify-end">
+            {/* Modal Bottom Actions */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                By tapping Accept, you acknowledge agreement with all 9 hospital queue & admission guidelines.
+              </span>
               <button
                 type="button"
                 onClick={() => {
                   setConsent(true);
                   setShowPolicyModal(false);
                 }}
-                className="w-full sm:w-auto px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+                className="w-full sm:w-auto px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer shrink-0 active:scale-95"
               >
                 I Understand & Accept Policy
               </button>

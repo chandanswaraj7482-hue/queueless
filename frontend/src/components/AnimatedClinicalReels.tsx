@@ -424,13 +424,18 @@ export const AnimatedClinicalReels: React.FC = () => {
               <Play className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />
               <span>Select Hospital Video Review & Walkthrough:</span>
             </div>
-            <span className="sm:hidden text-[10px] text-blue-600 dark:text-blue-400 font-bold flex items-center gap-1">
-              Swipe to browse ➔
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold bg-blue-50 dark:bg-blue-950/70 px-2.5 py-0.5 rounded-full border border-blue-200/60 dark:border-blue-800">
+                {HOSPITAL_YOUTUBE_VIDEOS.findIndex((v) => v.id === selectedVideo.id) + 1} of {HOSPITAL_YOUTUBE_VIDEOS.length} Videos
+              </span>
+              <span className="sm:hidden text-[10px] text-slate-400 font-medium">
+                Swipe ➔
+              </span>
+            </div>
           </div>
 
-          {/* Swipeable track on phone, clean 5-column grid on desktop */}
-          <div className="flex sm:grid overflow-x-auto sm:overflow-visible pb-2.5 sm:pb-0 scrollbar-none snap-x snap-mandatory sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2.5">
+          {/* Swipeable track on phone (-mx-4 px-4 for edge-to-edge feel), balanced 5-col grid on desktop */}
+          <div className="flex lg:grid overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 scrollbar-none snap-x snap-mandatory lg:grid-cols-5 gap-2.5 -mx-2 px-2 sm:mx-0 sm:px-0">
             {HOSPITAL_YOUTUBE_VIDEOS.map((vid, idx) => {
               const isCurrent = vid.id === selectedVideo.id;
               return (
@@ -441,25 +446,25 @@ export const AnimatedClinicalReels: React.FC = () => {
                     setSelectedVideo(vid);
                     setIsPlayingVideo(true);
                   }}
-                  className={`p-2.5 sm:p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center sm:items-start gap-2.5 shrink-0 w-[84vw] max-w-[290px] sm:w-auto sm:max-w-none snap-start ${
+                  className={`p-2.5 sm:p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center lg:items-start gap-2.5 shrink-0 w-[78vw] xs:w-[260px] lg:w-auto snap-center lg:snap-align-none hover:-translate-y-0.5 ${
                     isCurrent
-                      ? 'bg-blue-50/90 dark:bg-blue-950/50 border-blue-500 text-slate-900 dark:text-white shadow-md ring-2 ring-blue-500/20'
-                      : 'bg-white dark:bg-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                      ? 'bg-blue-50/95 dark:bg-blue-950/70 border-blue-500 text-slate-900 dark:text-white shadow-md ring-2 ring-blue-500/25 scale-[1.01]'
+                      : 'bg-white dark:bg-slate-800/60 hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300'
                   }`}
                 >
-                  <div className="relative w-14 sm:w-16 h-11 sm:h-12 rounded-xl overflow-hidden shrink-0 bg-slate-900 border border-slate-200 dark:border-slate-700">
+                  <div className="relative w-14 sm:w-16 h-11 sm:h-12 rounded-xl overflow-hidden shrink-0 bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-2xs">
                     <img
                       src={vid.type === 'local' ? (vid.poster || '/assets/hero-hospital-lounge.jpg') : `https://i.ytimg.com/vi/${vid.id}/mqdefault.jpg`}
                       alt={vid.title}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <div className={`absolute inset-0 flex items-center justify-center transition-colors ${isCurrent ? 'bg-blue-600/30' : 'bg-black/40'}`}>
                       <Play className="w-3.5 h-3.5 text-white fill-white" />
                     </div>
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 text-[9px] font-black uppercase text-slate-400">
-                      <span className={isCurrent ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500'}>
+                      <span className={isCurrent ? 'text-blue-600 dark:text-blue-400 font-extrabold' : 'text-slate-500'}>
                         {vid.badge}
                       </span>
                       <span>• {vid.duration}</span>
@@ -477,24 +482,57 @@ export const AnimatedClinicalReels: React.FC = () => {
           </div>
 
           {/* Mobile Dot Indicators & Quick Navigation */}
-          <div className="flex sm:hidden items-center justify-center gap-2 mt-2">
-            {HOSPITAL_YOUTUBE_VIDEOS.map((vid, idx) => {
-              const isCurrent = vid.id === selectedVideo.id;
-              return (
-                <button
-                  key={vid.id}
-                  type="button"
-                  onClick={() => {
-                    setSelectedVideo(vid);
-                    setIsPlayingVideo(true);
-                  }}
-                  className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                    isCurrent ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 dark:bg-slate-700'
-                  }`}
-                  aria-label={`Select walkthrough video ${idx + 1}`}
-                />
-              );
-            })}
+          <div className="flex lg:hidden items-center justify-between mt-2.5 px-1">
+            <span className="text-[10px] font-semibold text-slate-400">
+              Video {HOSPITAL_YOUTUBE_VIDEOS.findIndex((v) => v.id === selectedVideo.id) + 1} of {HOSPITAL_YOUTUBE_VIDEOS.length}
+            </span>
+            <div className="flex items-center gap-1.5">
+              {HOSPITAL_YOUTUBE_VIDEOS.map((vid, idx) => {
+                const isCurrent = vid.id === selectedVideo.id;
+                return (
+                  <button
+                    key={vid.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedVideo(vid);
+                      setIsPlayingVideo(true);
+                    }}
+                    className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                      isCurrent ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 dark:bg-slate-700'
+                    }`}
+                    aria-label={`Select walkthrough video ${idx + 1}`}
+                  />
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const currIdx = HOSPITAL_YOUTUBE_VIDEOS.findIndex((v) => v.id === selectedVideo.id);
+                  const prevIdx = (currIdx - 1 + HOSPITAL_YOUTUBE_VIDEOS.length) % HOSPITAL_YOUTUBE_VIDEOS.length;
+                  setSelectedVideo(HOSPITAL_YOUTUBE_VIDEOS[prevIdx]);
+                  setIsPlayingVideo(true);
+                }}
+                className="p-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 cursor-pointer"
+                aria-label="Previous video"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const currIdx = HOSPITAL_YOUTUBE_VIDEOS.findIndex((v) => v.id === selectedVideo.id);
+                  const nextIdx = (currIdx + 1) % HOSPITAL_YOUTUBE_VIDEOS.length;
+                  setSelectedVideo(HOSPITAL_YOUTUBE_VIDEOS[nextIdx]);
+                  setIsPlayingVideo(true);
+                }}
+                className="p-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 cursor-pointer"
+                aria-label="Next video"
+              >
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

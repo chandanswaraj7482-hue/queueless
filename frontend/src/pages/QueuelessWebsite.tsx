@@ -902,7 +902,7 @@ export const QueuelessWebsite: React.FC = () => {
             </span>
             <span className="truncate">ABDM M1/M2 Certified Clinical Operating System</span>
             <span className="text-blue-300 dark:text-blue-700">•</span>
-            <span className="font-semibold text-slate-600 dark:text-slate-400 shrink-0">{selectedCurrency.flag} 450+ Hospitals</span>
+            <span className="font-semibold text-slate-600 dark:text-slate-400 shrink-0">{selectedCurrency.flag} Trusted by 450+ Hospitals</span>
           </motion.div>
 
           {/* Master Headline: 5-Second Mobile-First Value Proposition */}
@@ -910,9 +910,9 @@ export const QueuelessWebsite: React.FC = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-tight leading-tight px-1"
+            className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[62px] font-black text-slate-950 dark:text-white tracking-tight leading-[1.14] max-w-4xl mx-auto px-1"
           >
-            Queueless OS: Autonomous Zero-Wait <br />
+            Autonomous <span className="inline-block whitespace-nowrap">Zero-Wait</span> <br className="hidden sm:inline" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
               Clinical Operating System
             </span>
@@ -925,7 +925,7 @@ export const QueuelessWebsite: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
             className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 font-medium max-w-2xl mx-auto leading-relaxed px-2"
           >
-            Dismantle crowded reception waiting halls with zero hardware capex. 95% of patients scan a QR pass on mobile, track their live waiting position in real-time, and walk directly into the doctor's cabin when called.
+            Transform crowded OPD waiting halls into quiet, dignified spaces with zero counter hardware. Patients scan a smart QR pass, track live consultation wait times on mobile, and walk directly into the doctor's cabin when called.
           </motion.p>
 
           {/* Doctor Social Proof Avatar Stack */}
@@ -987,16 +987,10 @@ export const QueuelessWebsite: React.FC = () => {
             >
               <Link
                 to={`/signup?plan=${selectedPlanTemplate.id}&currency=${selectedCurrencyCode}&cycle=${billingCycle}`}
-                className="w-full sm:w-auto px-5 py-3.5 sm:px-7 sm:py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl shadow-xl shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full sm:w-auto px-6 py-3.5 sm:px-8 sm:py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-xs sm:text-sm rounded-xl sm:rounded-2xl shadow-xl shadow-blue-600/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Zap className="w-4 h-4 fill-white shrink-0" />
-                <span>
-                  Activate Queueless OS ({selectedCurrency.symbol}
-                  {billingCycle === 'ANNUAL'
-                    ? Math.round(selectedCurrency.rates[selectedPlanTemplate.id as keyof typeof selectedCurrency.rates]?.annual / 12)
-                    : selectedCurrency.rates[selectedPlanTemplate.id as keyof typeof selectedCurrency.rates]?.monthly}
-                  /mo {billingCycle === 'ANNUAL' ? '• Billed Annually' : '• Monthly'}) ➔
-                </span>
+                <span>Start 14-Day Free Pilot ➔</span>
               </Link>
             </motion.div>
 
@@ -2154,21 +2148,21 @@ export const QueuelessWebsite: React.FC = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* The Old Chaotic Way: The Cost of Legacy Counter Queues */}
-            <div className={`p-6 sm:p-9 rounded-[32px] bg-rose-50/40 dark:bg-slate-950 border border-rose-200 dark:border-rose-500/30 text-slate-900 dark:text-white shadow-xl space-y-6 relative overflow-hidden flex-col justify-between transition-colors ${auditComparisonTab === 'LEGACY' ? 'flex' : 'hidden lg:flex'
+            <div className={`p-6 sm:p-9 rounded-[32px] bg-rose-50/40 dark:bg-slate-950 border border-rose-200 dark:border-rose-500/30 text-slate-900 dark:text-white shadow-xl space-y-6 relative overflow-hidden flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-2xl hover:shadow-rose-500/15 hover:border-rose-300 dark:hover:border-rose-500/60 group/legacy cursor-default ${auditComparisonTab === 'LEGACY' ? 'flex' : 'hidden lg:flex'
               }`}>
-              <div className="absolute top-0 right-0 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
+              <div className="absolute top-0 right-0 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none group-hover/legacy:bg-rose-500/20 group-hover/legacy:scale-125 transition-all duration-700"></div>
 
               <div className="space-y-6 relative z-10">
                 <div className="flex items-center justify-between">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-rose-100 dark:bg-rose-950/80 border border-rose-300/80 dark:border-rose-500/40 text-rose-800 dark:text-rose-300 rounded-full text-[11px] font-black uppercase tracking-wider">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-rose-100 dark:bg-rose-950/80 border border-rose-300/80 dark:border-rose-500/40 text-rose-800 dark:text-rose-300 rounded-full text-[11px] font-black uppercase tracking-wider group-hover/legacy:scale-105 group-hover/legacy:shadow-sm transition-transform duration-300">
                     <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
                     <span>Critical Revenue Leak Audit</span>
                   </div>
-                  <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">Status Quo</span>
+                  <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400 group-hover/legacy:scale-105 transition-transform duration-300">Status Quo</span>
                 </div>
 
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight group-hover/legacy:text-rose-600 dark:group-hover/legacy:text-rose-400 transition-colors duration-300">
                     The Legacy Counter Queue Bottleneck
                   </h3>
                   <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
@@ -2177,82 +2171,82 @@ export const QueuelessWebsite: React.FC = () => {
                 </div>
 
                 {/* Photographic Evidence: Legacy Overcrowding */}
-                <div className="relative rounded-2xl overflow-hidden h-36 sm:h-44 border border-rose-300/70 dark:border-rose-500/30 shadow-lg group">
+                <div className="relative rounded-2xl overflow-hidden h-36 sm:h-44 border border-rose-300/70 dark:border-rose-500/30 shadow-lg group/img">
                   <img
                     src="/assets/hospital-before-chaotic.jpg"
                     alt="Chaotic Overcrowded Hospital Reception Lines"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-90 contrast-110"
+                    className="w-full h-full object-cover group-hover/legacy:scale-105 group-hover/img:scale-110 transition-transform duration-700 ease-out filter brightness-90 contrast-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent group-hover/img:via-slate-950/20 transition-all duration-500" />
                   <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white shadow-md flex items-center gap-1.5">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white shadow-md flex items-center gap-1.5 group-hover/legacy:shadow-rose-600/50 transition-shadow duration-300">
                       <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                       Legacy Reception Chaos
                     </span>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-black/70 text-rose-300 backdrop-blur-md border border-rose-500/30">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-black/70 text-rose-300 backdrop-blur-md border border-rose-500/30 group-hover/legacy:border-rose-400 transition-colors duration-300">
                       48m Avg Delay
                     </span>
                   </div>
                 </div>
 
                 {/* Impact Metrics Banner (Dynamic Currency & Mobile Font Scaling) */}
-                <div className="grid grid-cols-3 gap-1 sm:gap-2.5 p-2.5 sm:p-3.5 rounded-2xl bg-white/90 dark:bg-white/5 border border-rose-200 dark:border-white/10 text-center shadow-xs">
-                  <div className="px-1">
+                <div className="grid grid-cols-3 gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-2xl bg-white/90 dark:bg-white/5 border border-rose-200 dark:border-white/10 text-center shadow-xs">
+                  <div className="p-1 sm:p-2 rounded-xl transition-all duration-200 hover:bg-rose-100/70 dark:hover:bg-rose-950/60 hover:scale-105 cursor-pointer">
                     <span className="text-xs sm:text-base md:text-xl font-black text-rose-600 dark:text-rose-400 block font-mono truncate">
                       -{selectedCurrency.symbol === '₹' ? '₹2.4L' : `${selectedCurrency.symbol}${(2800 * (selectedCurrency.defaultFee / 500)).toFixed(0)}`}
                     </span>
                     <span className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium block truncate">Monthly Leak</span>
                   </div>
-                  <div className="border-x border-rose-200 dark:border-white/10 px-1">
+                  <div className="border-x border-rose-200 dark:border-white/10 p-1 sm:p-2 rounded-xl transition-all duration-200 hover:bg-rose-100/70 dark:hover:bg-rose-950/60 hover:scale-105 cursor-pointer">
                     <span className="text-xs sm:text-base md:text-xl font-black text-rose-600 dark:text-rose-400 block font-mono">48 Mins</span>
                     <span className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium block truncate">Standing Queue</span>
                   </div>
-                  <div className="px-1">
+                  <div className="p-1 sm:p-2 rounded-xl transition-all duration-200 hover:bg-rose-100/70 dark:hover:bg-rose-950/60 hover:scale-105 cursor-pointer">
                     <span className="text-xs sm:text-base md:text-xl font-black text-rose-600 dark:text-rose-400 block font-mono">21%</span>
                     <span className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium block truncate">Walkout Rate</span>
                   </div>
                 </div>
 
-                <ul className="space-y-4 text-xs text-slate-600 dark:text-slate-300">
-                  <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
+                <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+                  <li className="p-2 sm:p-2.5 -mx-2 rounded-2xl transition-all duration-200 hover:bg-white/80 dark:hover:bg-slate-900/80 hover:shadow-xs flex items-start gap-3 group/item cursor-pointer">
+                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black group-hover/item:scale-115 group-hover/item:bg-rose-600 group-hover/item:text-white transition-all duration-200 shadow-2xs">
                       ✕
                     </div>
                     <div>
-                      <strong className="text-slate-900 dark:text-white block font-bold">Lobby Congestion & Viral Hazard:</strong>
+                      <strong className="text-slate-900 dark:text-white block font-bold group-hover/item:text-rose-600 dark:group-hover/item:text-rose-400 transition-colors">Lobby Congestion & Viral Hazard:</strong>
                       <span className="text-slate-600 dark:text-slate-400">
                         Patients cough and stand shoulder-to-shoulder in 50-person lines, triggering airborne infection risks and angry 1-star Google complaints.
                       </span>
                     </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
+                  <li className="p-2 sm:p-2.5 -mx-2 rounded-2xl transition-all duration-200 hover:bg-white/80 dark:hover:bg-slate-900/80 hover:shadow-xs flex items-start gap-3 group/item cursor-pointer">
+                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black group-hover/item:scale-115 group-hover/item:bg-rose-600 group-hover/item:text-white transition-all duration-200 shadow-2xs">
                       ✕
                     </div>
                     <div>
-                      <strong className="text-slate-900 dark:text-white block font-bold">Frontdesk Verbal Friction & Burnout:</strong>
+                      <strong className="text-slate-900 dark:text-white block font-bold group-hover/item:text-rose-600 dark:group-hover/item:text-rose-400 transition-colors">Frontdesk Verbal Friction & Burnout:</strong>
                       <span className="text-slate-600 dark:text-slate-400">
                         Receptionists answer "When is my turn?" 200+ times per shift, leaving zero bandwidth for billing, emergency triage, or patient empathy.
                       </span>
                     </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
+                  <li className="p-2 sm:p-2.5 -mx-2 rounded-2xl transition-all duration-200 hover:bg-white/80 dark:hover:bg-slate-900/80 hover:shadow-xs flex items-start gap-3 group/item cursor-pointer">
+                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black group-hover/item:scale-115 group-hover/item:bg-rose-600 group-hover/item:text-white transition-all duration-200 shadow-2xs">
                       ✕
                     </div>
                     <div>
-                      <strong className="text-slate-900 dark:text-white block font-bold">18-21% Walkout Revenue Bleed:</strong>
+                      <strong className="text-slate-900 dark:text-white block font-bold group-hover/item:text-rose-600 dark:group-hover/item:text-rose-400 transition-colors">18-21% Walkout Revenue Bleed:</strong>
                       <span className="text-slate-600 dark:text-slate-400">
                         High-value cash and private insurance patients see the crowded lobby and leave for rival clinics, bleeding consultation & pharmacy revenue.
                       </span>
                     </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black">
+                  <li className="p-2 sm:p-2.5 -mx-2 rounded-2xl transition-all duration-200 hover:bg-white/80 dark:hover:bg-slate-900/80 hover:shadow-xs flex items-start gap-3 group/item cursor-pointer">
+                    <div className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-950/80 border border-rose-300 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-black group-hover/item:scale-115 group-hover/item:bg-rose-600 group-hover/item:text-white transition-all duration-200 shadow-2xs">
                       ✕
                     </div>
                     <div>
-                      <strong className="text-slate-900 dark:text-white block font-bold">Lost Slips & Zero Follow-Up Sync:</strong>
+                      <strong className="text-slate-900 dark:text-white block font-bold group-hover/item:text-rose-600 dark:group-hover/item:text-rose-400 transition-colors">Lost Slips & Zero Follow-Up Sync:</strong>
                       <span className="text-slate-600 dark:text-slate-400">
                         Misplaced paper tokens, cabin shouting, manual paper registers, and zero tracking for the 15-day follow-up retention policy.
                       </span>
@@ -2261,30 +2255,30 @@ export const QueuelessWebsite: React.FC = () => {
                 </ul>
               </div>
 
-              <div className="pt-4 border-t border-rose-200 dark:border-white/10 text-[11px] text-rose-700 dark:text-rose-300/80 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-rose-500 dark:text-rose-400 shrink-0" />
+              <div className="pt-4 border-t border-rose-200 dark:border-white/10 text-[11px] text-rose-700 dark:text-rose-300/80 flex items-center gap-2 group-hover/legacy:translate-x-1 transition-transform duration-200">
+                <AlertTriangle className="w-4 h-4 text-rose-500 dark:text-rose-400 shrink-0 group-hover/legacy:scale-110 transition-transform" />
                 <span>Result: ₹25L+ yearly revenue loss and frustrated clinical staff.</span>
               </div>
             </div>
 
             {/* The Queueless Zero-Wait Way: Autonomous Hospital OS */}
-            <div className={`p-6 sm:p-9 rounded-[32px] bg-gradient-to-b from-white via-blue-50/25 to-white dark:from-slate-900 dark:via-blue-950/30 dark:to-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-[0_20px_50px_rgba(37,99,235,0.12)] ring-4 ring-blue-500/15 space-y-6 relative overflow-hidden flex-col justify-between ${auditComparisonTab === 'ZERO_WAIT' ? 'flex' : 'hidden lg:flex'
+            <div className={`p-6 sm:p-9 rounded-[32px] bg-gradient-to-b from-white via-blue-50/30 to-white dark:from-slate-900 dark:via-blue-950/30 dark:to-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-[0_20px_50px_rgba(37,99,235,0.12)] ring-4 ring-blue-500/15 space-y-6 relative overflow-hidden flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-2.5 hover:shadow-[0_25px_60px_rgba(37,99,235,0.25)] hover:border-blue-500 hover:ring-8 hover:ring-blue-500/25 group/zerowait cursor-default ${auditComparisonTab === 'ZERO_WAIT' ? 'flex' : 'hidden lg:flex'
               }`}>
-              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none group-hover/zerowait:bg-blue-500/25 group-hover/zerowait:scale-125 transition-all duration-700"></div>
 
               <div className="space-y-6 relative z-10">
                 <div className="flex items-center justify-between">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm group-hover/zerowait:scale-105 group-hover/zerowait:shadow-md transition-all duration-300">
                     <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                     <span>Queueless Clinical Benchmark</span>
                   </div>
-                  <span className="text-xs font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/80 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800">
+                  <span className="text-xs font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/80 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800 group-hover/zerowait:scale-105 group-hover/zerowait:bg-blue-600 group-hover/zerowait:text-white transition-all duration-300">
                     ABDM & HIPAA Ready
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight group-hover/zerowait:text-blue-600 dark:group-hover/zerowait:text-blue-400 transition-colors duration-300">
                     Autonomous Zero-Wait Healthcare OS
                   </h3>
                   <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
@@ -2293,82 +2287,82 @@ export const QueuelessWebsite: React.FC = () => {
                 </div>
 
                 {/* Photographic Evidence: Modern Silent Executive Lounge */}
-                <div className="relative rounded-2xl overflow-hidden h-36 sm:h-44 border border-blue-500/30 shadow-lg group">
+                <div className="relative rounded-2xl overflow-hidden h-36 sm:h-44 border border-blue-500/30 shadow-lg group/img">
                   <img
                     src="/assets/hospital-after-serene.jpg"
                     alt="Silent Serene Hospital Executive Lounge"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95 contrast-105"
+                    className="w-full h-full object-cover group-hover/zerowait:scale-105 group-hover/img:scale-110 transition-transform duration-700 ease-out filter brightness-95 contrast-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent group-hover/img:from-slate-950/60 transition-all duration-500" />
                   <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-600 text-white shadow-md flex items-center gap-1.5">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-600 text-white shadow-md flex items-center gap-1.5 group-hover/zerowait:shadow-emerald-600/50 transition-shadow duration-300">
                       <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                       Silent Digital Lounge
                     </span>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-black/70 text-emerald-300 backdrop-blur-md border border-emerald-500/30">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-black/70 text-emerald-300 backdrop-blur-md border border-emerald-500/30 group-hover/zerowait:border-emerald-400 transition-colors duration-300">
                       0 Waiting Hall Line
                     </span>
                   </div>
                 </div>
 
                 {/* Positive Impact Metrics Banner (Dynamic Currency & Mobile Font Scaling) */}
-                <div className="grid grid-cols-3 gap-1 sm:gap-2.5 p-2.5 sm:p-3.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-center">
-                  <div className="px-1">
+                <div className="grid grid-cols-3 gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-center shadow-xs">
+                  <div className="p-1 sm:p-2 rounded-xl transition-all duration-200 hover:bg-emerald-100/90 dark:hover:bg-emerald-900/60 hover:scale-105 cursor-pointer">
                     <span className="text-xs sm:text-base md:text-xl font-black text-emerald-700 dark:text-emerald-300 block font-mono truncate">
                       +{selectedCurrency.symbol === '₹' ? '₹2.1L' : `${selectedCurrency.symbol}${(2500 * (selectedCurrency.defaultFee / 500)).toFixed(0)}`}
                     </span>
                     <span className="text-[9px] sm:text-[10px] text-emerald-800 dark:text-emerald-400 font-bold block truncate">Revenue Saved</span>
                   </div>
-                  <div className="border-x border-emerald-200 dark:border-emerald-800 px-1">
+                  <div className="border-x border-emerald-200 dark:border-emerald-800 p-1 sm:p-2 rounded-xl transition-all duration-200 hover:bg-emerald-100/90 dark:hover:bg-emerald-900/60 hover:scale-105 cursor-pointer">
                     <span className="text-xs sm:text-base md:text-xl font-black text-emerald-700 dark:text-emerald-300 block font-mono">20 Sec</span>
                     <span className="text-[9px] sm:text-[10px] text-emerald-800 dark:text-emerald-400 font-bold block truncate">Contactless Pass</span>
                   </div>
-                  <div className="px-1">
+                  <div className="p-1 sm:p-2 rounded-xl transition-all duration-200 hover:bg-emerald-100/90 dark:hover:bg-emerald-900/60 hover:scale-105 cursor-pointer">
                     <span className="text-xs sm:text-base md:text-xl font-black text-emerald-700 dark:text-emerald-300 block font-mono">2.4x</span>
                     <span className="text-[9px] sm:text-[10px] text-emerald-800 dark:text-emerald-400 font-bold block truncate">Follow-Up Rate</span>
                   </div>
                 </div>
 
-                <ul className="space-y-4 text-xs text-slate-700 dark:text-slate-300">
-                  <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 mt-0.5 text-xs font-black">
+                <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                  <li className="p-2 sm:p-2.5 -mx-2 rounded-2xl transition-all duration-200 hover:bg-white/90 dark:hover:bg-slate-800/90 hover:shadow-xs flex items-start gap-3 group/item cursor-pointer">
+                    <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 mt-0.5 text-xs font-black group-hover/item:scale-115 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-all duration-200 shadow-2xs">
                       ✓
                     </div>
                     <div>
-                      <strong className="text-slate-900 dark:text-white block font-bold">20-Second QR Admission:</strong>
+                      <strong className="text-slate-900 dark:text-white block font-bold group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400 transition-colors">20-Second QR Admission:</strong>
                       <span className="text-slate-600 dark:text-slate-400">
                         Patients scan the entrance vector QR pass, pick doctor, and get a live mobile pass with real-time countdown. Zero app downloads.
                       </span>
                     </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 mt-0.5 text-xs font-black">
+                  <li className="p-2 sm:p-2.5 -mx-2 rounded-2xl transition-all duration-200 hover:bg-white/90 dark:hover:bg-slate-800/90 hover:shadow-xs flex items-start gap-3 group/item cursor-pointer">
+                    <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 mt-0.5 text-xs font-black group-hover/item:scale-115 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-all duration-200 shadow-2xs">
                       ✓
                     </div>
                     <div>
-                      <strong className="text-slate-900 dark:text-white block font-bold">Silent Lounge & Cafeteria Freedom:</strong>
+                      <strong className="text-slate-900 dark:text-white block font-bold group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400 transition-colors">Silent Lounge & Cafeteria Freedom:</strong>
                       <span className="text-slate-600 dark:text-slate-400">
                         Patients relax comfortably in cafeteria, garden, or car. 55" OLED TV display chimes and calls them in Hindi & English when their turn arrives.
                       </span>
                     </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 mt-0.5 text-xs font-black">
+                  <li className="p-2 sm:p-2.5 -mx-2 rounded-2xl transition-all duration-200 hover:bg-white/90 dark:hover:bg-slate-800/90 hover:shadow-xs flex items-start gap-3 group/item cursor-pointer">
+                    <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 mt-0.5 text-xs font-black group-hover/item:scale-115 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-all duration-200 shadow-2xs">
                       ✓
                     </div>
                     <div>
-                      <strong className="text-slate-900 dark:text-white block font-bold">Zero Walkouts & 2.4x Retention Engine:</strong>
+                      <strong className="text-slate-900 dark:text-white block font-bold group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400 transition-colors">Zero Walkouts & 2.4x Retention Engine:</strong>
                       <span className="text-slate-600 dark:text-slate-400">
                         Automated phone lookup validates 15-day follow-ups, waives fees per hospital rules, and triples patient lifetime loyalty.
                       </span>
                     </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 mt-0.5 text-xs font-black">
+                  <li className="p-2 sm:p-2.5 -mx-2 rounded-2xl transition-all duration-200 hover:bg-white/90 dark:hover:bg-slate-800/90 hover:shadow-xs flex items-start gap-3 group/item cursor-pointer">
+                    <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 mt-0.5 text-xs font-black group-hover/item:scale-115 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-all duration-200 shadow-2xs">
                       ✓
                     </div>
                     <div>
-                      <strong className="text-slate-900 dark:text-white block font-bold">Doctor 1-Tap Cabin Console:</strong>
+                      <strong className="text-slate-900 dark:text-white block font-bold group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400 transition-colors">Doctor 1-Tap Cabin Console:</strong>
                       <span className="text-slate-600 dark:text-slate-400">
                         Pre-consult symptoms, vitals, and 1-click clinical presets loaded before the patient enters the cabin. Saves 4 minutes per consultation.
                       </span>
@@ -2377,8 +2371,8 @@ export const QueuelessWebsite: React.FC = () => {
                 </ul>
               </div>
 
-              <div className="pt-4 border-t border-slate-200 dark:border-slate-800 text-[11px] text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <div className="pt-4 border-t border-slate-200 dark:border-slate-800 text-[11px] text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-2 group-hover/zerowait:translate-x-1 transition-transform duration-200">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 group-hover/zerowait:scale-110 transition-transform" />
                 <span>Result: 4.9-star Google ratings and guaranteed 4-day payback ROI.</span>
               </div>
             </div>

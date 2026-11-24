@@ -47,16 +47,16 @@ export const FeaturesPage: React.FC = () => {
       <main className="flex-1">
         {/* Features Hero */}
         <section className="pt-28 pb-14 sm:pt-36 sm:pb-18 px-4 sm:px-6 relative z-10 text-center">
-          <div className="max-w-4xl mx-auto space-y-4">
+          <div className="max-w-5xl mx-auto space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 rounded-full text-xs font-black uppercase tracking-wider text-blue-900 dark:text-blue-300 shadow-2xs">
               <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
               <span>Full Clinical Architecture & Product Suite</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-tight leading-tight">
-              Built Specifically for the High-Velocity <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 dark:from-blue-400 dark:via-indigo-400 dark:to-teal-300 bg-clip-text text-transparent">
-                Hospital Waiting Hall.
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 dark:text-white tracking-tight leading-tight">
+              <span className="block">Built Specifically for High-Velocity</span>
+              <span className="block bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500 dark:from-blue-400 dark:via-indigo-400 dark:to-teal-300 bg-clip-text text-transparent">
+                Hospital Waiting Halls.
               </span>
             </h1>
 

@@ -84,7 +84,10 @@ export const PricingPage: React.FC = () => {
     if (!addonSliderRef.current) return;
     const targetChild = addonSliderRef.current.children[index] as HTMLElement;
     if (targetChild) {
-      targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      addonSliderRef.current.scrollTo({
+        left: targetChild.offsetLeft - addonSliderRef.current.offsetLeft,
+        behavior: 'smooth',
+      });
     } else {
       const cardWidth = addonSliderRef.current.clientWidth * 0.88 + 16;
       addonSliderRef.current.scrollTo({
@@ -95,29 +98,10 @@ export const PricingPage: React.FC = () => {
     setActiveAddonIndex(index);
   };
 
+  // Modular addons: 100% manual swipe with snap-x (no auto-slide timer)
   useEffect(() => {
-    if (isAddonAutoSlidePaused) return;
-    const interval = setInterval(() => {
-      if (typeof window !== 'undefined' && window.innerWidth >= 768) return;
-      setActiveAddonIndex((prev) => {
-        const next = (prev + 1) % MODULAR_ADDONS_COUNT;
-        if (addonSliderRef.current) {
-          const targetChild = addonSliderRef.current.children[next] as HTMLElement;
-          if (targetChild) {
-            targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-          } else {
-            const cardWidth = addonSliderRef.current.clientWidth * 0.88 + 16;
-            addonSliderRef.current.scrollTo({
-              left: next * cardWidth,
-              behavior: 'smooth',
-            });
-          }
-        }
-        return next;
-      });
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [isAddonAutoSlidePaused]);
+    // Disabled auto-timer so mobile addon cards stay static unless swiped by user
+  }, []);
 
   const selectedCurrency: CurrencyConfig =
     WORLDWIDE_CURRENCIES[currencyCode] || WORLDWIDE_CURRENCIES.USD;

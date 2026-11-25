@@ -676,7 +676,10 @@ export const QueuelessWebsite: React.FC = () => {
     if (!whySliderRef.current) return;
     const targetChild = whySliderRef.current.children[index] as HTMLElement;
     if (targetChild) {
-      targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      whySliderRef.current.scrollTo({
+        left: targetChild.offsetLeft - whySliderRef.current.offsetLeft,
+        behavior: 'smooth',
+      });
     } else {
       const cardWidth = whySliderRef.current.clientWidth * 0.86 + 16;
       whySliderRef.current.scrollTo({
@@ -687,19 +690,11 @@ export const QueuelessWebsite: React.FC = () => {
     setActiveWhyIndex(index);
   };
 
+  // Mobile horizontal sliders: 100% user-controlled manual swipe with snap-x (no auto-slide timer)
+  // Kept static so mobile cards never slide on their own while the user is reading
   useEffect(() => {
-    if (isWhyAutoSlidePaused) return;
-    const interval = setInterval(() => {
-      if (typeof window !== 'undefined' && window.innerWidth >= 1024) return;
-      setActiveWhyIndex((prev) => {
-        const next = (prev + 1) % 4;
-        scrollToWhyCard(next);
-        return next;
-      });
-    }, 3800);
-
-    return () => clearInterval(interval);
-  }, [isWhyAutoSlidePaused]);
+    // Zero auto-slide timers on mobile for rock-solid stability
+  }, []);
 
   // Instant Vector QR Kit & Cloud Backend Mobile Auto-Slide State
   const [activeKitIndex, setActiveKitIndex] = useState<number>(0);
@@ -728,7 +723,10 @@ export const QueuelessWebsite: React.FC = () => {
     if (!kitSliderRef.current) return;
     const targetChild = kitSliderRef.current.children[index] as HTMLElement;
     if (targetChild) {
-      targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      kitSliderRef.current.scrollTo({
+        left: targetChild.offsetLeft - kitSliderRef.current.offsetLeft,
+        behavior: 'smooth',
+      });
     } else {
       const cardWidth = kitSliderRef.current.clientWidth * 0.86 + 16;
       kitSliderRef.current.scrollTo({
@@ -739,19 +737,10 @@ export const QueuelessWebsite: React.FC = () => {
     setActiveKitIndex(index);
   };
 
+  // Kit cards: 100% manual swipe with snap-x (no auto-slide timer)
   useEffect(() => {
-    if (isKitAutoSlidePaused) return;
-    const interval = setInterval(() => {
-      if (typeof window !== 'undefined' && window.innerWidth >= 640) return;
-      setActiveKitIndex((prev) => {
-        const next = (prev + 1) % 4;
-        scrollToKitCard(next);
-        return next;
-      });
-    }, 3800);
-
-    return () => clearInterval(interval);
-  }, [isKitAutoSlidePaused]);
+    // Disabled auto-timer to prevent unexpected movement on mobile
+  }, []);
 
   // Directory & Quick Navigation Sitelinks Mobile Auto-Slide State
   const [activeDirectoryIndex, setActiveDirectoryIndex] = useState<number>(0);
@@ -780,7 +769,10 @@ export const QueuelessWebsite: React.FC = () => {
     if (!directorySliderRef.current) return;
     const targetChild = directorySliderRef.current.children[index] as HTMLElement;
     if (targetChild) {
-      targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      directorySliderRef.current.scrollTo({
+        left: targetChild.offsetLeft - directorySliderRef.current.offsetLeft,
+        behavior: 'smooth',
+      });
     } else {
       const cardWidth = directorySliderRef.current.clientWidth * 0.86 + 14;
       directorySliderRef.current.scrollTo({
@@ -791,19 +783,10 @@ export const QueuelessWebsite: React.FC = () => {
     setActiveDirectoryIndex(index);
   };
 
+  // Directory sitelinks: 100% manual swipe with snap-x (no auto-slide timer)
   useEffect(() => {
-    if (isDirectoryAutoSlidePaused) return;
-    const interval = setInterval(() => {
-      if (typeof window !== 'undefined' && window.innerWidth >= 640) return;
-      setActiveDirectoryIndex((prev) => {
-        const next = (prev + 1) % DIRECTORY_SITELINKS.length;
-        scrollToDirectoryCard(next);
-        return next;
-      });
-    }, 3800);
-
-    return () => clearInterval(interval);
-  }, [isDirectoryAutoSlidePaused]);
+    // Disabled auto-timer to keep mobile links static
+  }, []);
 
   // FAQ Accordion State
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);

@@ -419,6 +419,7 @@ export function App() {
             <Route path="/doctor/:slug/:doctorId" element={<div className="notranslate" translate="no"><ClinicalLazy><DoctorView /></ClinicalLazy></div>} />
             <Route path="/doctor/:slug/cabin/:doctorId" element={<div className="notranslate" translate="no"><ClinicalLazy><DoctorView /></ClinicalLazy></div>} />
             <Route path="/display" element={<Navigate to="/city-health/display" replace />} />
+            <Route path="/kiosk" element={<Navigate to="/city-health/display" replace />} />
             <Route path="/display/:clinicId" element={<ClinicalLazy><DisplayKiosk /></ClinicalLazy>} />
             <Route path="/admin" element={<Navigate to="/city-health/admin" replace />} />
             <Route path="/admin/:slug" element={<div className="notranslate" translate="no"><ClinicalLazy><ClinicAdmin /></ClinicalLazy></div>} />

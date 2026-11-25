@@ -165,9 +165,152 @@ const SAMPLE_PRESETS = [
   },
 ];
 
+const DEFAULT_FOUNDER_DATA: FounderData = {
+  reviews: {
+    total: 38,
+    average: 4.9,
+    distribution: { 5: 35, 4: 3, 3: 0, 2: 0, 1: 0 },
+    zeroWaitScore: 98,
+    topTags: [
+      { tag: '⚡ Skipped Reception Queue', count: 32 },
+      { tag: '📱 Super Smooth Mobile UI', count: 28 },
+      { tag: '⏱️ Zero Physical Waiting', count: 25 },
+    ],
+    list: [
+      {
+        id: 'rev-1',
+        clinicId: 'city-health',
+        patientName: 'Aditi Rao',
+        rating: 5,
+        feedbackTags: '⚡ Skipped Reception Queue, 📱 Super Smooth Mobile UI',
+        comment: 'Bypassed the entire 45-minute reception crowd! Walked right to the doctor cabin when called.',
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: 'rev-2',
+        clinicId: 'city-health',
+        patientName: 'Vikram Sethi',
+        rating: 5,
+        feedbackTags: '📱 Super Smooth Mobile UI, ⏱️ Zero Physical Waiting',
+        comment: 'Got my live token on phone in 20 seconds. Best healthcare UX I have ever experienced in India!',
+        createdAt: new Date(Date.now() - 3600000).toISOString(),
+      },
+    ],
+  },
+  platform: {
+    totalClinics: 54,
+    totalTokensIssued: 14280,
+    todayTokens: 412,
+    totalGmv: 2840000,
+    totalHoursSaved: 5120,
+    waitingPatients: 14,
+    inConsultationPatients: 6,
+    completedPatients: 392,
+    clinics: [
+      {
+        id: 'city-health',
+        name: 'City Health Multi-Specialty Hospital',
+        slug: 'city-health',
+        phone: '+91 98765 43210',
+        address: 'Suite 402, Metro Healthcare Towers, MG Road',
+        doctorCount: 4,
+        totalEntries: 2150,
+        totalRevenue: 480000,
+        plan: 'ENTERPRISE',
+        planStatus: 'ACTIVE',
+        monthlyFee: 29999,
+        features: {
+          multiCabinVoice: true,
+          cashfreePayment: true,
+          whatsappAlerts: true,
+          abdmBridge: true,
+          customDomain: true,
+        },
+      },
+      {
+        id: 'medanta-medicity',
+        name: 'Medanta Medicity OPD Center',
+        slug: 'medanta-medicity',
+        phone: '+91 98111 22334',
+        address: 'Sector 38, Gurugram, Haryana',
+        doctorCount: 8,
+        totalEntries: 5820,
+        totalRevenue: 1240000,
+        plan: 'GROWTH',
+        planStatus: 'ACTIVE',
+        monthlyFee: 18999,
+        features: {
+          multiCabinVoice: true,
+          cashfreePayment: true,
+          whatsappAlerts: true,
+          abdmBridge: true,
+          customDomain: true,
+        },
+      },
+      {
+        id: 'rainbow-children',
+        name: 'Rainbow Children Clinic',
+        slug: 'rainbow-children',
+        phone: '+91 98440 11223',
+        address: 'Road No 2, Banjara Hills, Hyderabad',
+        doctorCount: 3,
+        totalEntries: 1480,
+        totalRevenue: 320000,
+        plan: 'STARTER',
+        planStatus: 'ACTIVE',
+        monthlyFee: 9999,
+        features: {
+          multiCabinVoice: true,
+          cashfreePayment: true,
+          whatsappAlerts: true,
+          abdmBridge: false,
+          customDomain: false,
+        },
+      },
+    ],
+    loginCountsByClinic: {
+      'City Health Multi-Specialty Hospital': 48,
+      'Medanta Medicity OPD Center': 112,
+      'Rainbow Children Clinic': 34,
+    },
+    recentLogins: [
+      {
+        id: 'log-1',
+        timestamp: new Date().toISOString(),
+        role: 'DOCTOR',
+        clinicName: 'City Health Multi-Specialty Hospital',
+        clinicSlug: 'city-health',
+        identifier: 'Dr. Rohan Sharma, MD (Cabin 1)',
+        ip: '103.24.112.5',
+        userAgent: 'iPad Safari iOS 17.4',
+      },
+      {
+        id: 'log-2',
+        timestamp: new Date(Date.now() - 600000).toISOString(),
+        role: 'RECEPTION',
+        clinicName: 'City Health Multi-Specialty Hospital',
+        clinicSlug: 'city-health',
+        identifier: 'Front Desk POS #1',
+        ip: '103.24.112.5',
+        userAgent: 'Chrome macOS 14.3',
+      },
+      {
+        id: 'log-3',
+        timestamp: new Date(Date.now() - 1800000).toISOString(),
+        role: 'ADMIN',
+        clinicName: 'Medanta Medicity OPD Center',
+        clinicSlug: 'medanta-medicity',
+        identifier: 'Hospital Director',
+        ip: '182.72.19.4',
+        userAgent: 'Firefox Windows 11',
+      },
+    ],
+  },
+};
+
 export const FounderDashboard: React.FC = () => {
-  const [data, setData] = useState<FounderData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<FounderData | null>(DEFAULT_FOUNDER_DATA);
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'CLINICS' | 'LOGINS' | 'REVIEWS' | 'MAP' | 'DOCTORS' | 'PITCH' | 'SECURITY'>('CLINICS');
   const [clinicsWithDoctors, setClinicsWithDoctors] = useState<any[]>([]);
   const [selectedStarFilter, setSelectedStarFilter] = useState<number | 'ALL'>('ALL');

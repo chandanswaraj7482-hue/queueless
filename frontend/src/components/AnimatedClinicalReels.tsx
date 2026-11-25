@@ -309,7 +309,10 @@ export const AnimatedClinicalReels: React.FC = () => {
     if (!sliderRef.current) return;
     const targetChild = sliderRef.current.children[index] as HTMLElement;
     if (targetChild) {
-      targetChild.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      sliderRef.current.scrollTo({
+        left: targetChild.offsetLeft - sliderRef.current.offsetLeft,
+        behavior: 'smooth',
+      });
     } else {
       const cardWidth = sliderRef.current.clientWidth * 0.82 + 16;
       sliderRef.current.scrollTo({

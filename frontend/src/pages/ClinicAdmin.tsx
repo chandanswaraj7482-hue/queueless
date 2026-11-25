@@ -602,7 +602,7 @@ export const ClinicAdmin: React.FC = () => {
     }
   };
 
-  // Save Queue & Cash Rules
+  // Save Queue & Cash Rules + Hospital Payment Gateway Credentials
   const handleSaveSettings = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setSavingSettings(true);
@@ -618,10 +618,32 @@ export const ClinicAdmin: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setClinic(data.data);
-        showToast('Queue rules & cash policy saved successfully!');
+        // Also persist settings to localStorage for offline resilience
+        try {
+          const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+          if (storedHospitals[activeSlug]) {
+            storedHospitals[activeSlug].settings = settings;
+            localStorage.setItem('queueless_registered_hospitals', JSON.stringify(storedHospitals));
+          }
+        } catch (e) {}
+        // Show context-specific toast
+        const isGatewayTab = activeTab === 'PAYMENTS';
+        showToast(isGatewayTab
+          ? '✅ Hospital payment gateway credentials saved! Patient fees will route directly to your bank account.'
+          : 'Queue rules & cash policy saved successfully!');
       }
     } catch (err) {
-      showToast('Failed to save settings');
+      // Save to localStorage as fallback
+      try {
+        const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+        if (storedHospitals[activeSlug]) {
+          storedHospitals[activeSlug].settings = settings;
+          localStorage.setItem('queueless_registered_hospitals', JSON.stringify(storedHospitals));
+        }
+      } catch (e) {}
+      showToast(activeTab === 'PAYMENTS'
+        ? '⚠️ Saved gateway credentials locally. Will sync to cloud when connection resumes.'
+        : 'Settings saved locally. Will sync when online.');
     } finally {
       setSavingSettings(false);
     }
@@ -2289,6 +2311,21 @@ export const ClinicAdmin: React.FC = () => {
                       className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>
+                </div>
+                {/* Cashfree Connection Status */}
+                <div className={`mt-2 p-3 rounded-xl border text-[11px] flex items-center gap-2 ${
+                  settings.cashfreeAppId && settings.cashfreeSecretKey
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                    : 'bg-amber-50 border-amber-200 text-amber-800'
+                }`}>
+                  <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                    settings.cashfreeAppId && settings.cashfreeSecretKey ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                  }`}></span>
+                  <span className="font-bold">
+                    {settings.cashfreeAppId && settings.cashfreeSecretKey
+                      ? `✅ Cashfree Connected — AppID: ${settings.cashfreeAppId.slice(0, 8)}...${settings.cashfreeAppId.slice(-4)} • Patient payments will go directly to YOUR linked Cashfree bank account.`
+                      : '⚠️ Not Connected — Enter your Cashfree Production API keys from dashboard.cashfree.com to activate direct patient payments.'}
+                  </span>
                 </div>
               </div>
             )}

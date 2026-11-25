@@ -27,7 +27,7 @@ export function ScrollToTop() {
       return () => clearTimeout(timer);
     }
 
-    // Always reset scroll to the very top immediately on route change
+    // Only reset scroll to the very top when PATHNAME changes (new route)
     window.scrollTo({
       top: 0,
       left: 0,
@@ -35,7 +35,7 @@ export function ScrollToTop() {
     });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-  }, [pathname, search, hash]);
+  }, [pathname]);
 
   return null;
 }

@@ -122,8 +122,18 @@ paymentRouter.post('/create-order', async (req, res) => {
 paymentRouter.get('/cashfree-verify/:orderId', async (req, res) => {
   try {
     const { orderId } = req.params;
-    const cfAppId = process.env.CASHFREE_APP_ID || '133552174c102e641875b3c58081255331';
-    const cfSecret = process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_2f2dfec6d9bee0b9de4e2e5c5748224a_3e69c5ff';
+
+    // Look up the hospital's own Cashfree keys from the payment record
+    let clinicSettings: any = {};
+    try {
+      const paymentRecord = await prisma.payment.findFirst({ where: { providerOrderId: orderId }, include: { clinic: true } });
+      if (paymentRecord?.clinic?.settings) {
+        clinicSettings = JSON.parse(paymentRecord.clinic.settings);
+      }
+    } catch (e) {}
+
+    const cfAppId = clinicSettings.cashfreeAppId || process.env.CASHFREE_APP_ID || '133552174c102e641875b3c58081255331';
+    const cfSecret = clinicSettings.cashfreeSecretKey || process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_2f2dfec6d9bee0b9de4e2e5c5748224a_3e69c5ff';
     const cfEnv = process.env.CASHFREE_ENVIRONMENT || 'production';
     const baseUrl = cfEnv === 'production' ? 'https://api.cashfree.com/pg/orders' : 'https://sandbox.cashfree.com/pg/orders';
 

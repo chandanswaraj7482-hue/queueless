@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
-import { socket, broadcastLocalSync } from '../utils/socket';
+import { socket, broadcastLocalSync, clinicalSyncChannel } from '../utils/socket';
 import {
   Stethoscope,
   CheckCircle,
@@ -868,12 +868,24 @@ export const DoctorView: React.FC = () => {
     socket.on('queue_updated', fetchDoctorQueue);
     socket.on('patient_called', fetchDoctorQueue);
 
+    const onLocalMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'queue_updated' || event.data?.type === 'patient_called') {
+        fetchDoctorQueue();
+      }
+    };
+    if (clinicalSyncChannel) {
+      clinicalSyncChannel.addEventListener('message', onLocalMessage);
+    }
+
     // Resilient Real-Time Fallback Polling (Every 3 seconds)
     const interval = setInterval(fetchDoctorQueue, 3000);
 
     return () => {
       socket.off('queue_updated');
       socket.off('patient_called');
+      if (clinicalSyncChannel) {
+        clinicalSyncChannel.removeEventListener('message', onLocalMessage);
+      }
       clearInterval(interval);
     };
   }, [selectedDoctorId, clinicId]);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { API_BASE_URL } from '../config/api';
+import { broadcastLocalSync } from '../utils/socket';
 import {
   Clock,
   ShieldCheck,
@@ -67,13 +68,86 @@ const COMMON_SYMPTOMS = [
   { label: '🤢 Nausea & Vomiting', text: 'Nausea, vomiting & weakness' },
 ];
 
+const DEFAULT_CLINIC_DATA: ClinicData = {
+  id: 'city-health',
+  name: 'City Health Multi-Specialty Hospital',
+  slug: 'city-health',
+  address: 'Suite 402, Metro Healthcare Towers, MG Road',
+  logoUrl: '',
+  openingHours: '08:30 AM - 08:30 PM',
+  contactPhone: '+91 98765 43210',
+  followUpDays: 15,
+  doctors: [
+    {
+      id: 'doc-1',
+      displayName: 'Dr. Rohan Sharma, MD',
+      specialty: 'General Medicine (Cabin 1)',
+      roomNumber: 'Cabin 1',
+      waitingCount: 0,
+      currentlyServing: undefined,
+      estimatedWaitMinutes: 0,
+      isAvailableNow: true,
+    },
+    {
+      id: 'doc-2',
+      displayName: 'Dr. Priya Patel, DNB',
+      specialty: 'Pediatrics (Cabin 2)',
+      roomNumber: 'Cabin 2',
+      waitingCount: 0,
+      currentlyServing: undefined,
+      estimatedWaitMinutes: 0,
+      isAvailableNow: true,
+    },
+  ],
+  services: [
+    { id: 'srv-1', name: 'General Consultation OPD', fee: 500, durationMinutes: 15, active: true },
+    { id: 'srv-2', name: 'Pediatric Care & Vaccination', fee: 650, durationMinutes: 20, active: true },
+    { id: 'srv-3', name: 'Specialist Consultation OPD', fee: 800, durationMinutes: 20, active: true },
+    { id: 'srv-4', name: '15-Day Free Follow-Up Review', fee: 0, durationMinutes: 10, active: true },
+  ],
+};
+
 export const PatientCheckIn: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const clinicSlug = slug || 'city-health';
 
-  const [clinic, setClinic] = useState<ClinicData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [clinic, setClinic] = useState<ClinicData>(() => {
+    let customName = DEFAULT_CLINIC_DATA.name;
+    let customAddress = DEFAULT_CLINIC_DATA.address;
+    let customLogo = '';
+    try {
+      const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
+      if (clinicSlug && storedHospitals[clinicSlug]) {
+        customName = storedHospitals[clinicSlug].name;
+        customAddress = storedHospitals[clinicSlug].address || customAddress;
+        customLogo = storedHospitals[clinicSlug].logoUrl || '';
+      } else if (clinicSlug && clinicSlug !== 'city-health') {
+        const words = clinicSlug
+          .split('-')
+          .map((w) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
+          .join(' ');
+        customName = words.toLowerCase().endsWith('opd') ||
+          words.toLowerCase().endsWith('clinic') ||
+          words.toLowerCase().endsWith('hospital') ||
+          words.toLowerCase().endsWith('center')
+          ? words
+          : words + ' OPD';
+      }
+      if (!customLogo && clinicSlug) {
+        customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';
+      }
+    } catch (e) {}
+
+    return {
+      ...DEFAULT_CLINIC_DATA,
+      name: customName,
+      address: customAddress,
+      logoUrl: customLogo,
+      slug: clinicSlug || 'city-health',
+    };
+  });
+  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -99,8 +173,8 @@ export const PatientCheckIn: React.FC = () => {
   const [bloodGroup, setBloodGroup] = useState('');
   const [address, setAddress] = useState('');
   const [emergencyContact, setEmergencyContact] = useState('');
-  const [doctorId, setDoctorId] = useState('');
-  const [serviceId, setServiceId] = useState('');
+  const [doctorId, setDoctorId] = useState('doc-1');
+  const [serviceId, setServiceId] = useState('srv-1');
   const [visitReason, setVisitReason] = useState('');
   const [consent, setConsent] = useState(false);
   const [showPolicyModal, setShowPolicyModal] = useState(false);
@@ -144,48 +218,9 @@ export const PatientCheckIn: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState<'UPI' | 'PAY_AT_CLINIC'>('UPI');
   const [paymentProcessing, setPaymentProcessing] = useState(false);
 
-  const DEFAULT_CLINIC_DATA: ClinicData = {
-    id: 'city-health',
-    name: 'City Health Multi-Specialty Hospital',
-    slug: 'city-health',
-    address: 'Suite 402, Metro Healthcare Towers, MG Road',
-    logoUrl: '',
-    openingHours: '08:30 AM - 08:30 PM',
-    contactPhone: '+91 98765 43210',
-    followUpDays: 15,
-    doctors: [
-      {
-        id: 'doc-1',
-        displayName: 'Dr. Rohan Sharma, MD',
-        specialty: 'General Medicine (Cabin 1)',
-        roomNumber: 'Cabin 1',
-        waitingCount: 0,
-        currentlyServing: undefined,
-        estimatedWaitMinutes: 0,
-        isAvailableNow: true,
-      },
-      {
-        id: 'doc-2',
-        displayName: 'Dr. Priya Patel, DNB',
-        specialty: 'Pediatrics (Cabin 2)',
-        roomNumber: 'Cabin 2',
-        waitingCount: 0,
-        currentlyServing: undefined,
-        estimatedWaitMinutes: 0,
-        isAvailableNow: true,
-      },
-    ],
-    services: [
-      { id: 'srv-1', name: 'General Consultation OPD', fee: 500, durationMinutes: 15, active: true },
-      { id: 'srv-2', name: 'Pediatric Care & Vaccination', fee: 650, durationMinutes: 20, active: true },
-      { id: 'srv-3', name: 'Specialist Consultation OPD', fee: 800, durationMinutes: 20, active: true },
-      { id: 'srv-4', name: '15-Day Free Follow-Up Review', fee: 0, durationMinutes: 10, active: true },
-    ],
-  };
-
   useEffect(() => {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 2500);
+    const timer = setTimeout(() => controller.abort(), 8000);
 
     fetch(`${API_BASE_URL}/api/v1/clinics/public/${clinicSlug}`, { signal: controller.signal })
       .then((res) => res.json())
@@ -210,82 +245,10 @@ export const PatientCheckIn: React.FC = () => {
           if (data.data.doctors?.length > 0) setDoctorId(data.data.doctors[0].id);
           const activeServices = data.data.services?.filter((s: any) => s.active !== false) || [];
           if (activeServices.length > 0) setServiceId(activeServices[0].id);
-        } else {
-          let customName = DEFAULT_CLINIC_DATA.name;
-          let customAddress = DEFAULT_CLINIC_DATA.address;
-          let customLogo = '';
-          try {
-            const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
-            if (clinicSlug && storedHospitals[clinicSlug]) {
-              customName = storedHospitals[clinicSlug].name;
-              customAddress = storedHospitals[clinicSlug].address || customAddress;
-              customLogo = storedHospitals[clinicSlug].logoUrl || '';
-            } else if (clinicSlug && clinicSlug !== 'city-health') {
-              const words = clinicSlug
-                .split('-')
-                .map((w) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
-                .join(' ');
-              customName = words.toLowerCase().endsWith('opd') ||
-                words.toLowerCase().endsWith('clinic') ||
-                words.toLowerCase().endsWith('hospital') ||
-                words.toLowerCase().endsWith('center')
-                ? words
-                : words + ' OPD';
-            }
-            if (!customLogo && clinicSlug) {
-              customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';
-            }
-          } catch (e) { }
-
-          const activeClinic = {
-            ...DEFAULT_CLINIC_DATA,
-            name: customName,
-            address: customAddress,
-            logoUrl: customLogo,
-            slug: clinicSlug || 'city-health',
-          };
-          setClinic(activeClinic);
-          setDoctorId(activeClinic.doctors[0].id);
-          setServiceId(activeClinic.services[0].id);
         }
       })
       .catch(() => {
-        let customName = DEFAULT_CLINIC_DATA.name;
-        let customAddress = DEFAULT_CLINIC_DATA.address;
-        let customLogo = '';
-        try {
-          const storedHospitals = JSON.parse(localStorage.getItem('queueless_registered_hospitals') || '{}');
-          if (clinicSlug && storedHospitals[clinicSlug]) {
-            customName = storedHospitals[clinicSlug].name;
-            customAddress = storedHospitals[clinicSlug].address || customAddress;
-            customLogo = storedHospitals[clinicSlug].logoUrl || '';
-          } else if (clinicSlug && clinicSlug !== 'city-health') {
-            const words = clinicSlug
-              .split('-')
-              .map((w) => (w.toLowerCase() === 'opd' ? 'OPD' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()))
-              .join(' ');
-            customName = words.toLowerCase().endsWith('opd') ||
-              words.toLowerCase().endsWith('clinic') ||
-              words.toLowerCase().endsWith('hospital') ||
-              words.toLowerCase().endsWith('center')
-              ? words
-              : words + ' OPD';
-          }
-          if (!customLogo && clinicSlug) {
-            customLogo = localStorage.getItem('queueless_clinic_logo_' + clinicSlug) || '';
-          }
-        } catch (e) { }
-
-        const activeClinic = {
-          ...DEFAULT_CLINIC_DATA,
-          name: customName,
-          address: customAddress,
-          logoUrl: customLogo,
-          slug: clinicSlug || 'city-health',
-        };
-        setClinic(activeClinic);
-        setDoctorId(activeClinic.doctors[0].id);
-        setServiceId(activeClinic.services[0].id);
+        // Keep current clinic state intact without error
       })
       .finally(() => setLoading(false));
   }, [clinicSlug]);
@@ -662,6 +625,7 @@ export const PatientCheckIn: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setCreatedEntry(data.data);
+        broadcastLocalSync('queue_updated', { action: 'NEW_CHECKIN', entry: data.data });
         if (consultationFee === 0) {
           // Free follow-up: skip payment step completely and navigate to live pass
           const targetToken = data.data.publicToken || data.data.token;
@@ -714,6 +678,7 @@ export const PatientCheckIn: React.FC = () => {
         const stored = JSON.parse(localStorage.getItem('queueless_local_entries') || '{}');
         stored[generatedPublicToken] = fallbackEntry;
         localStorage.setItem('queueless_local_entries', JSON.stringify(stored));
+        broadcastLocalSync('queue_updated', { action: 'NEW_CHECKIN', entry: fallbackEntry });
       } catch (e) { }
 
       if (consultationFee === 0) {
@@ -851,11 +816,12 @@ export const PatientCheckIn: React.FC = () => {
       } catch (e) { }
       navigate(`/token/${createdEntry.publicToken}`);
     } finally {
+      broadcastLocalSync('queue_updated', { action: 'PAYMENT_COMPLETED' });
       setPaymentProcessing(false);
     }
   };
 
-  if (loading) {
+  if (loading && !clinic) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">

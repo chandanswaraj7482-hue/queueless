@@ -441,7 +441,7 @@ export const ClinicAdmin: React.FC = () => {
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000);
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
       const cRes = await fetch(`${API_BASE_URL}/api/v1/clinics/public/${activeSlug}`, { signal: controller.signal });
       clearTimeout(timeoutId);
       const cData = await cRes.json();
@@ -968,10 +968,6 @@ export const ClinicAdmin: React.FC = () => {
     }
   };
 
-  if (loading) {
-    return <div className="text-center py-20 text-slate-500 dark:text-slate-400">Loading Hospital Admin Panel...</div>;
-  }
-
   // Password Authentication Screen for Hospital Business Admin
   if (!isAuthenticated) {
     return (
@@ -1031,6 +1027,10 @@ export const ClinicAdmin: React.FC = () => {
         </div>
       </div>
     );
+  }
+
+  if (loading) {
+    return <div className="text-center py-20 text-slate-500 dark:text-slate-400">Loading Hospital Admin Panel...</div>;
   }
 
   return (

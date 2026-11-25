@@ -34,6 +34,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { PhoneCountryInput } from '../components/PhoneCountryInput';
+import { QRCodeCanvas } from 'qrcode.react';
 
 interface ClinicData {
   id: string;
@@ -217,6 +218,13 @@ export const PatientCheckIn: React.FC = () => {
   // Payment states
   const [paymentMethod, setPaymentMethod] = useState<'UPI' | 'PAY_AT_CLINIC'>('UPI');
   const [paymentProcessing, setPaymentProcessing] = useState(false);
+  const [directUpiData, setDirectUpiData] = useState<{
+    orderId: string;
+    directUpiId: string;
+    upiDeepLink: string;
+    amount: number;
+    clinicName: string;
+  } | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -736,6 +744,18 @@ export const PatientCheckIn: React.FC = () => {
           if (orderJson.success && orderJson.data?.hostedCheckoutUrl) {
             // Direct redirect to Cashfree or Dodo Payments Official Hosted Checkout
             window.location.href = orderJson.data.hostedCheckoutUrl;
+            return;
+          }
+
+          if (orderJson.success && orderJson.data?.provider === 'DIRECT_UPI' && orderJson.data?.upiDeepLink) {
+            setDirectUpiData({
+              orderId: orderJson.data.orderId,
+              directUpiId: orderJson.data.directUpiId,
+              upiDeepLink: orderJson.data.upiDeepLink,
+              amount: orderJson.data.amount || createdEntry.feeAmount || 500,
+              clinicName: orderJson.data.clinicName || clinic?.name || 'Hospital OPD',
+            });
+            setPaymentProcessing(false);
             return;
           }
 
@@ -1714,28 +1734,87 @@ export const PatientCheckIn: React.FC = () => {
             </div>
           </div>
 
-          <button
-            onClick={handleCompletePayment}
-            disabled={paymentProcessing}
-            className={`w-full text-white font-black py-4 px-4 rounded-2xl text-sm transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer ${paymentMethod === 'PAY_AT_CLINIC'
-                ? 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 shadow-amber-600/25'
-                : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-emerald-600/25'
-              }`}
-          >
-            {paymentProcessing ? (
-              <span>Processing...</span>
-            ) : paymentMethod === 'PAY_AT_CLINIC' ? (
-              <>
-                <Banknote className="w-4 h-4" />
-                <span>Proceed with Token {createdEntry.token} (Pay Cash at Desk)</span>
-              </>
-            ) : (
-              <>
-                <Lock className="w-4 h-4" />
-                <span>Pay ₹{createdEntry.feeAmount} via UPI & Issue Live Token</span>
-              </>
-            )}
-          </button>
+          {directUpiData ? (
+            <div className="p-5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border-2 border-emerald-300 dark:border-emerald-800 space-y-4 text-center">
+              <div className="space-y-1">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider">
+                  <QrCode className="w-3 h-3" />
+                  <span>Direct Hospital UPI (0% Fee)</span>
+                </span>
+                <h3 className="text-sm font-black text-slate-900 dark:text-white">
+                  Scan QR or Tap to Pay ₹{directUpiData.amount}
+                </h3>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400">
+                  Pay directly to <strong>{directUpiData.clinicName}</strong> ({directUpiData.directUpiId})
+                </p>
+              </div>
+
+              <div className="inline-block p-3 bg-white rounded-2xl border border-emerald-200 shadow-sm">
+                <QRCodeCanvas value={directUpiData.upiDeepLink} size={170} level="M" includeMargin />
+              </div>
+
+              <div className="flex flex-col gap-2.5">
+                <a
+                  href={directUpiData.upiDeepLink}
+                  className="w-full py-3 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-black flex items-center justify-center gap-2 shadow-md transition-all"
+                >
+                  <Smartphone className="w-4 h-4" />
+                  <span>Open UPI App (GPay / PhonePe / Paytm)</span>
+                </a>
+
+                <button
+                  type="button"
+                  disabled={paymentProcessing}
+                  onClick={async () => {
+                    setPaymentProcessing(true);
+                    try {
+                      await fetch(`${API_BASE_URL}/api/v1/payments/verify`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          queueEntryId: createdEntry.queueEntryId,
+                          provider: 'DIRECT_UPI',
+                          amount: directUpiData.amount,
+                          providerOrderId: directUpiData.orderId,
+                          providerPaymentId: 'upi_' + Date.now(),
+                        }),
+                      });
+                    } finally {
+                      setPaymentProcessing(false);
+                      navigate(`/token/${createdEntry.publicToken}`);
+                    }
+                  }}
+                  className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer disabled:opacity-50"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>{paymentProcessing ? 'Confirming...' : 'I Have Paid — Confirm & Issue Token'}</span>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={handleCompletePayment}
+              disabled={paymentProcessing}
+              className={`w-full text-white font-black py-4 px-4 rounded-2xl text-sm transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer ${paymentMethod === 'PAY_AT_CLINIC'
+                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 shadow-amber-600/25'
+                  : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-emerald-600/25'
+                }`}
+            >
+              {paymentProcessing ? (
+                <span>Processing...</span>
+              ) : paymentMethod === 'PAY_AT_CLINIC' ? (
+                <>
+                  <Banknote className="w-4 h-4" />
+                  <span>Proceed with Token {createdEntry.token} (Pay Cash at Desk)</span>
+                </>
+              ) : (
+                <>
+                  <Lock className="w-4 h-4" />
+                  <span>Pay ₹{createdEntry.feeAmount} via UPI & Issue Live Token</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
       )}
 

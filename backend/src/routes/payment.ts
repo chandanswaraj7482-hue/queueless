@@ -157,7 +157,7 @@ paymentRouter.post('/create-order', async (req, res) => {
     }
 
     // C. DIRECT HOSPITAL UPI (Zero-fee direct UPI deep link when configured)
-    if (activeProvider === 'DIRECT_UPI' && clinicSettings.directUpiId && !clinicSettings.cashfreeAppId) {
+    if (activeProvider === 'DIRECT_UPI' && clinicSettings.directUpiId) {
       const merchantName = encodeURIComponent(clinicSettings.bankAccountHolderName || entry.clinic.name);
       const upiDeepLink = `upi://pay?pa=${encodeURIComponent(clinicSettings.directUpiId)}&pn=${merchantName}&am=${finalAmount}&cu=INR&tn=${encodeURIComponent('OPD-' + orderId)}`;
       return res.json({
@@ -805,6 +805,67 @@ paymentRouter.post('/dodo/webhook', async (req, res) => {
         where: { id: metadata.queueEntryId },
         data: { paymentStatus: 'PAID', status: 'WAITING' },
       });
+    }
+
+    return res.json({ received: true });
+  } catch (error: any) {
+    return res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// 9. Razorpay Server-Side Webhook Receiver
+paymentRouter.post('/razorpay/webhook', async (req, res) => {
+  try {
+    const signature = req.headers['x-razorpay-signature'] as string | undefined;
+    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+
+    if (webhookSecret && signature) {
+      const expected = crypto
+        .createHmac('sha256', webhookSecret)
+        .update(JSON.stringify(req.body))
+        .digest('hex');
+      if (expected !== signature) {
+        return res.status(401).json({ success: false, error: 'Invalid Razorpay webhook signature' });
+      }
+    }
+
+    const event = req.body;
+    const eventType = event?.event;
+    console.log('[Razorpay Webhook Received]:', eventType || 'EVENT');
+
+    if (eventType === 'payment.captured' || eventType === 'order.paid') {
+      const paymentEntity = event?.payload?.payment?.entity;
+      const orderEntity = event?.payload?.order?.entity;
+      const providerOrderId = paymentEntity?.order_id || orderEntity?.id;
+      const providerPaymentId = paymentEntity?.id;
+
+      if (providerOrderId) {
+        const paymentRecord = await prisma.payment.findFirst({
+          where: { providerOrderId },
+          include: { queueEntry: true },
+        });
+
+        if (paymentRecord) {
+          await prisma.payment.update({
+            where: { id: paymentRecord.id },
+            data: {
+              status: 'PAID',
+              providerPaymentId: providerPaymentId || paymentRecord.providerPaymentId,
+            },
+          });
+
+          if (paymentRecord.queueEntryId) {
+            await prisma.queueEntry.update({
+              where: { id: paymentRecord.queueEntryId },
+              data: { paymentStatus: 'PAID', status: 'WAITING' },
+            });
+            broadcastQueueUpdate(paymentRecord.clinicId, 'queue_updated', {
+              type: 'PAYMENT_VERIFIED',
+              queueEntryId: paymentRecord.queueEntryId,
+            });
+          }
+        }
+      }
     }
 
     return res.json({ received: true });

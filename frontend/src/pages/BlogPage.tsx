@@ -18,6 +18,7 @@ import {
   Filter,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
+import { CommercialFooter } from '../components/CommercialFooter';
 import { SeoHead } from '../components/SeoHead';
 import { BLOG_POSTS, BlogPost } from '../data/blogPosts';
 
@@ -299,30 +300,30 @@ export const BlogPage: React.FC = () => {
           )}
         </div>
 
-        {/* High-Conversion Bottom Banner */}
-        <div className="mt-16 sm:mt-24 p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-950 text-white relative overflow-hidden shadow-2xl border border-blue-800/50">
-          <div className="relative z-10 max-w-2xl space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-bold border border-blue-400/30">
-              <Sparkles className="w-3 h-3" />
+        {/* High-Conversion Bottom Banner (Centered) */}
+        <div className="mt-16 sm:mt-24 p-8 sm:p-14 rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-950 text-white relative overflow-hidden shadow-2xl border border-blue-800/50 text-center">
+          <div className="relative z-10 max-w-2xl mx-auto space-y-4 flex flex-col items-center justify-center">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-bold border border-blue-400/30">
+              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
               <span>Automate Your Hospital Waiting Room</span>
             </span>
-            <h3 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
+            <h3 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight text-center">
               Ready to eliminate OPD counter crowding forever?
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed text-center max-w-xl">
               Join 50+ clinics and OPDs running on Queueless OS. 14-day free pilot, zero hardware capex, and instant vector QR passes.
             </p>
-            <div className="pt-2 flex items-center gap-3 flex-wrap">
+            <div className="pt-3 flex items-center justify-center gap-3 flex-wrap">
               <Link
                 to="/signup"
-                className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md transition-all inline-flex items-center gap-1.5 cursor-pointer"
+                className="px-6 py-3.5 bg-gradient-to-r from-blue-500 via-indigo-600 to-blue-600 hover:from-blue-600 hover:to-indigo-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-500/25 transition-all inline-flex items-center gap-2 cursor-pointer active:scale-98"
               >
                 <span>Start 14-Day Free Pilot</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/roi-calculator"
-                className="px-6 py-3 bg-white/10 hover:bg-white/15 text-white border border-white/20 text-xs sm:text-sm font-bold rounded-xl transition-all inline-flex items-center gap-1.5 cursor-pointer"
+                className="px-6 py-3.5 bg-white/10 hover:bg-white/15 text-white border border-white/20 text-xs sm:text-sm font-bold rounded-xl transition-all inline-flex items-center gap-2 cursor-pointer active:scale-98"
               >
                 <span>Calculate Hospital Savings</span>
               </Link>
@@ -330,6 +331,9 @@ export const BlogPage: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Commercial Footer */}
+      <CommercialFooter />
     </div>
   );
 };

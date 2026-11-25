@@ -15,6 +15,7 @@ import {
   Check,
 } from 'lucide-react';
 import { CommercialNavbar } from '../components/CommercialNavbar';
+import { CommercialFooter } from '../components/CommercialFooter';
 import { SeoHead } from '../components/SeoHead';
 import { BLOG_POSTS } from '../data/blogPosts';
 
@@ -256,21 +257,24 @@ export const BlogPostPage: React.FC = () => {
         </div>
 
         {/* Bottom CTA Banner */}
-        <div className="mt-16 p-8 rounded-3xl bg-gradient-to-r from-blue-900 to-indigo-950 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-blue-800/40">
+        <div className="mt-16 p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-blue-900 to-indigo-950 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-blue-800/40">
           <div className="space-y-2 text-center sm:text-left">
-            <h4 className="text-xl font-black">Transform your clinic OPD with Queueless OS</h4>
-            <p className="text-xs text-slate-300">
+            <h4 className="text-xl sm:text-2xl font-black">Transform your clinic OPD with Queueless OS</h4>
+            <p className="text-xs sm:text-sm text-slate-300">
               Zero setup fees • 14-day free pilot • Active in 50+ clinics and OPDs.
             </p>
           </div>
           <Link
             to="/signup"
-            className="px-5 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-md transition-all whitespace-nowrap"
+            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all whitespace-nowrap"
           >
             Start Free Pilot ➔
           </Link>
         </div>
       </main>
+
+      {/* Commercial Footer */}
+      <CommercialFooter />
     </div>
   );
 };

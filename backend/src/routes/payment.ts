@@ -27,14 +27,158 @@ paymentRouter.post('/create-order', async (req, res) => {
       clinicSettings = entry.clinic?.settings ? JSON.parse(entry.clinic.settings) : {};
     } catch (e) {}
 
-    // Priority: Hospital's own configured Cashfree App ID / Secret, fallback to platform gateway
+    const orderId = 'QL_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    const finalAmount = Number(amount) || Number(entry.feeAmount) || 500;
+    const activeProvider = clinicSettings.paymentGatewayProvider || 'CASHFREE';
+
+    // A. RAZORPAY (Hospital's own Razorpay Key ID & Secret)
+    if (activeProvider === 'RAZORPAY' && clinicSettings.razorpayKeyId && clinicSettings.razorpayKeySecret) {
+      try {
+        const authHeader = 'Basic ' + Buffer.from(`${clinicSettings.razorpayKeyId}:${clinicSettings.razorpayKeySecret}`).toString('base64');
+        const rzpRes = await fetch('https://api.razorpay.com/v1/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': authHeader,
+          },
+          body: JSON.stringify({
+            amount: Math.round(finalAmount * 100), // paise
+            currency: 'INR',
+            receipt: orderId,
+            notes: {
+              queueEntryId: entry.id,
+              clinicName: entry.clinic.name,
+              patientName: entry.patient?.name || 'Patient',
+            },
+          }),
+        });
+        const rzpOrder = (await rzpRes.json()) as any;
+        if (rzpOrder && rzpOrder.id) {
+          try {
+            await prisma.payment.create({
+              data: {
+                clinicId: entry.clinicId,
+                queueEntryId: entry.id,
+                provider: 'RAZORPAY',
+                providerOrderId: rzpOrder.id,
+                amount: finalAmount,
+                currency: 'INR',
+                status: 'PENDING',
+              },
+            });
+          } catch (e) {}
+
+          return res.json({
+            success: true,
+            data: {
+              provider: 'RAZORPAY',
+              orderId: rzpOrder.id,
+              keyId: clinicSettings.razorpayKeyId,
+              amount: finalAmount,
+              amountPaise: rzpOrder.amount,
+              currency: 'INR',
+              clinicName: entry.clinic.name,
+              patientName: entry.patient?.name || 'Patient',
+              patientPhone: entry.patient?.mobile || '',
+              patientEmail: entry.patient?.email || '',
+            },
+          });
+        }
+      } catch (rzpErr) {
+        console.warn('Razorpay order creation warning:', rzpErr);
+      }
+    }
+
+    // B. DODO PAYMENTS (Hospital's own Dodo API Key)
+    if (activeProvider === 'DODO' && clinicSettings.dodoApiKey) {
+      try {
+        const dodoEnv = clinicSettings.dodoEnvironment || 'production';
+        const dodoUrl = dodoEnv === 'production' ? 'https://api.dodopayments.com/checkouts' : 'https://test.dodopayments.com/checkouts';
+        const dodoRes = await fetch(dodoUrl, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${clinicSettings.dodoApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            billing: { country: 'IN' },
+            customer: {
+              email: entry.patient?.email || 'patient@queuelesslabs.com',
+              name: entry.patient?.name || 'Verified Patient',
+            },
+            payment_link: true,
+            product_cart: [
+              {
+                name: `OPD Consultation - ${entry.clinic.name}`,
+                amount: Math.round(finalAmount * 100),
+                quantity: 1,
+              },
+            ],
+            return_url: `https://queueless-os.vercel.app/token/${entry.publicToken}?order_id=${orderId}&provider=DODO`,
+            metadata: {
+              queueEntryId: entry.id,
+              clinicId: entry.clinicId,
+              orderId,
+            },
+          }),
+        });
+        const dodoData = (await dodoRes.json()) as any;
+        const checkoutLink = dodoData?.payment_link || dodoData?.checkout_url;
+        if (checkoutLink) {
+          try {
+            await prisma.payment.create({
+              data: {
+                clinicId: entry.clinicId,
+                queueEntryId: entry.id,
+                provider: 'DODO',
+                providerOrderId: orderId,
+                amount: finalAmount,
+                currency: 'INR',
+                status: 'PENDING',
+              },
+            });
+          } catch (e) {}
+
+          return res.json({
+            success: true,
+            data: {
+              provider: 'DODO',
+              orderId,
+              hostedCheckoutUrl: checkoutLink,
+              amount: finalAmount,
+              currency: 'INR',
+              clinicName: entry.clinic.name,
+            },
+          });
+        }
+      } catch (dodoErr) {
+        console.warn('Dodo hospital checkout warning:', dodoErr);
+      }
+    }
+
+    // C. DIRECT HOSPITAL UPI (Zero-fee direct UPI deep link when configured)
+    if (activeProvider === 'DIRECT_UPI' && clinicSettings.directUpiId && !clinicSettings.cashfreeAppId) {
+      const merchantName = encodeURIComponent(clinicSettings.bankAccountHolderName || entry.clinic.name);
+      const upiDeepLink = `upi://pay?pa=${encodeURIComponent(clinicSettings.directUpiId)}&pn=${merchantName}&am=${finalAmount}&cu=INR&tn=${encodeURIComponent('OPD-' + orderId)}`;
+      return res.json({
+        success: true,
+        data: {
+          provider: 'DIRECT_UPI',
+          orderId,
+          directUpiId: clinicSettings.directUpiId,
+          upiDeepLink,
+          amount: finalAmount,
+          currency: 'INR',
+          clinicName: entry.clinic.name,
+        },
+      });
+    }
+
+    // D. CASHFREE (Default / Priority: Hospital's own Cashfree App ID / Secret, fallback to platform demo gateway)
     const cfAppId = clinicSettings.cashfreeAppId || process.env.CASHFREE_APP_ID || '133552174c102e641875b3c58081255331';
     const cfSecret = clinicSettings.cashfreeSecretKey || process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_2f2dfec6d9bee0b9de4e2e5c5748224a_3e69c5ff';
     const cfEnv = process.env.CASHFREE_ENVIRONMENT || 'production';
     const baseUrl = cfEnv === 'production' ? 'https://api.cashfree.com/pg/orders' : 'https://sandbox.cashfree.com/pg/orders';
-
-    const orderId = 'QL_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6).toUpperCase();
-    const finalAmount = Number(amount) || Number(entry.feeAmount) || 500;
 
     try {
       const cfResponse = await fetch(baseUrl, {

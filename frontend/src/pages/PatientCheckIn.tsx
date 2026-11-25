@@ -734,9 +734,61 @@ export const PatientCheckIn: React.FC = () => {
           const orderJson = await orderRes.json();
 
           if (orderJson.success && orderJson.data?.hostedCheckoutUrl) {
-            // Direct redirect to Cashfree Official Hosted Checkout for native PhonePe / GPay / Paytm & UPI QR
+            // Direct redirect to Cashfree or Dodo Payments Official Hosted Checkout
             window.location.href = orderJson.data.hostedCheckoutUrl;
             return;
+          }
+
+          if (orderJson.success && orderJson.data?.provider === 'RAZORPAY' && orderJson.data?.keyId) {
+            const loadRazorpay = (): Promise<boolean> =>
+              new Promise((resolve) => {
+                if ((window as any).Razorpay) return resolve(true);
+                const script = document.createElement('script');
+                script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                script.onload = () => resolve(true);
+                script.onerror = () => resolve(false);
+                document.body.appendChild(script);
+              });
+
+            const loaded = await loadRazorpay();
+            if (loaded && (window as any).Razorpay) {
+              await new Promise<void>((resolve) => {
+                const rzp = new (window as any).Razorpay({
+                  key: orderJson.data.keyId,
+                  amount: orderJson.data.amountPaise || (createdEntry.feeAmount || 500) * 100,
+                  currency: 'INR',
+                  name: orderJson.data.clinicName || clinic?.name || 'Hospital OPD',
+                  description: `OPD Consultation - Token ${createdEntry.token}`,
+                  order_id: orderJson.data.orderId,
+                  prefill: {
+                    name: orderJson.data.patientName || name,
+                    contact: orderJson.data.patientPhone || mobile,
+                    email: orderJson.data.patientEmail || email,
+                  },
+                  theme: { color: '#0284c7' },
+                  handler: async (response: any) => {
+                    await fetch(`${API_BASE_URL}/api/v1/payments/verify`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        queueEntryId: createdEntry.queueEntryId,
+                        provider: 'RAZORPAY',
+                        amount: createdEntry.feeAmount || 500,
+                        providerOrderId: response.razorpay_order_id || orderJson.data.orderId,
+                        providerPaymentId: response.razorpay_payment_id || 'rzp_' + Date.now(),
+                      }),
+                    });
+                    navigate(`/token/${createdEntry.publicToken}`);
+                    resolve();
+                  },
+                  modal: {
+                    ondismiss: () => resolve(),
+                  },
+                });
+                rzp.open();
+              });
+              return;
+            }
           }
 
           if (orderJson.success && orderJson.data?.paymentSessionId && window.Cashfree) {

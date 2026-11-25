@@ -104,9 +104,13 @@ interface ClinicSettings {
   autoRouteSameDoctor?: boolean;
   priorityFollowUp?: boolean;
   // Hospital Direct Bank & Payment Gateway Settings
-  paymentGatewayProvider?: 'CASHFREE' | 'DIRECT_UPI' | 'STRIPE';
+  paymentGatewayProvider?: 'CASHFREE' | 'DIRECT_UPI' | 'RAZORPAY' | 'DODO';
   cashfreeAppId?: string;
   cashfreeSecretKey?: string;
+  razorpayKeyId?: string;
+  razorpayKeySecret?: string;
+  dodoApiKey?: string;
+  dodoEnvironment?: 'production' | 'test_mode';
   directUpiId?: string;
   bankAccountHolderName?: string;
   bankAccountNumber?: string;
@@ -2197,19 +2201,31 @@ export const ClinicAdmin: React.FC = () => {
               <label className="block text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-wider mb-2">
                 1. Select Hospital Payment Gateway Provider
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
                   {
                     id: 'DIRECT_UPI',
                     name: 'Direct Hospital UPI',
-                    badge: '⚡ 0% Fee / Instant',
+                    badge: '⚡ 0% Fee',
                     desc: 'Direct PhonePe / GPay Merchant VPA into your bank',
                   },
                   {
                     id: 'CASHFREE',
                     name: 'Cashfree Payments',
-                    badge: '💳 UPI + Cards + Netbanking',
+                    badge: '💳 UPI + Cards',
                     desc: 'Instant auto-settlement with automated webhooks',
+                  },
+                  {
+                    id: 'RAZORPAY',
+                    name: 'Razorpay',
+                    badge: '🇮🇳 India #1',
+                    desc: 'Accept UPI, Cards, Wallets & Netbanking via Razorpay',
+                  },
+                  {
+                    id: 'DODO',
+                    name: 'Dodo Payments',
+                    badge: '🌍 Global + Cards',
+                    desc: 'Accept USD/EUR/GBP, Apple Pay & International Cards',
                   },
                 ].map((p) => {
                   const isSelected = (settings.paymentGatewayProvider || 'DIRECT_UPI') === p.id;
@@ -2325,6 +2341,103 @@ export const ClinicAdmin: React.FC = () => {
                     {settings.cashfreeAppId && settings.cashfreeSecretKey
                       ? `✅ Cashfree Connected — AppID: ${settings.cashfreeAppId.slice(0, 8)}...${settings.cashfreeAppId.slice(-4)} • Patient payments will go directly to YOUR linked Cashfree bank account.`
                       : '⚠️ Not Connected — Enter your Cashfree Production API keys from dashboard.cashfree.com to activate direct patient payments.'}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {settings.paymentGatewayProvider === 'RAZORPAY' && (
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                <h4 className="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-wider">
+                  Razorpay Merchant API Credentials
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
+                      Razorpay Key ID *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="rzp_live_xxxxxxxxxxxxxxxx"
+                      value={settings.razorpayKeyId || ''}
+                      onChange={(e) => setSettings({ ...settings, razorpayKeyId: e.target.value })}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
+                      Razorpay Key Secret *
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="xxxxxxxxxxxxxxxxxxxxxxxx"
+                      value={settings.razorpayKeySecret || ''}
+                      onChange={(e) => setSettings({ ...settings, razorpayKeySecret: e.target.value })}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                </div>
+                <div className={`mt-2 p-3 rounded-xl border text-[11px] flex items-center gap-2 ${
+                  settings.razorpayKeyId && settings.razorpayKeySecret
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                    : 'bg-amber-50 border-amber-200 text-amber-800'
+                }`}>
+                  <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                    settings.razorpayKeyId && settings.razorpayKeySecret ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                  }`}></span>
+                  <span className="font-bold">
+                    {settings.razorpayKeyId && settings.razorpayKeySecret
+                      ? `✅ Razorpay Connected — Key ID: ${settings.razorpayKeyId.slice(0, 10)}... • Patient payments will settle directly into YOUR Razorpay bank account.`
+                      : '⚠️ Not Connected — Enter your Razorpay Key ID & Secret from dashboard.razorpay.com.'}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {settings.paymentGatewayProvider === 'DODO' && (
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                <h4 className="text-xs font-black text-slate-800 dark:text-slate-100 uppercase tracking-wider">
+                  Dodo Payments Global Merchant Credentials
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
+                      Dodo Payments API Key *
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="dodo_live_xxxxxxxxxxxxxxxx"
+                      value={settings.dodoApiKey || ''}
+                      onChange={(e) => setSettings({ ...settings, dodoApiKey: e.target.value })}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1">
+                      Environment
+                    </label>
+                    <select
+                      value={settings.dodoEnvironment || 'production'}
+                      onChange={(e) => setSettings({ ...settings, dodoEnvironment: e.target.value as 'production' | 'test_mode' })}
+                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                      <option value="production">Production (Live)</option>
+                      <option value="test_mode">Test Mode (Sandbox)</option>
+                    </select>
+                  </div>
+                </div>
+                <div className={`mt-2 p-3 rounded-xl border text-[11px] flex items-center gap-2 ${
+                  settings.dodoApiKey
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                    : 'bg-amber-50 border-amber-200 text-amber-800'
+                }`}>
+                  <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                    settings.dodoApiKey ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                  }`}></span>
+                  <span className="font-bold">
+                    {settings.dodoApiKey
+                      ? `✅ Dodo Payments Connected (${settings.dodoEnvironment || 'production'}) — International & Card payments go directly to YOUR Dodo account.`
+                      : '⚠️ Not Connected — Enter your Dodo Payments API Key from app.dodopayments.com.'}
                   </span>
                 </div>
               </div>

@@ -3296,8 +3296,8 @@ export const QueuelessWebsite: React.FC = () => {
 
               {/* Verified Clinical Stat Pillars */}
               <div className="lg:col-span-5 grid grid-cols-2 gap-3 text-center">
-                <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
-                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap max-w-full">
+                <div className="p-3 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center overflow-hidden">
+                  <div className="text-base xs:text-lg sm:text-xl lg:text-[22px] font-black text-emerald-400 tracking-tight tabular-nums whitespace-nowrap max-w-full overflow-hidden text-ellipsis">
                     <AnimatedCounter
                       end={
                         selectedCurrencyCode === 'INR'
@@ -3338,24 +3338,24 @@ export const QueuelessWebsite: React.FC = () => {
                     />
                   </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Monthly Recovered Fees</span>
-                  <span className="text-[10px] text-emerald-400/80 block mt-0.5 whitespace-nowrap">Average 6-Cabin Hospital</span>
+                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 whitespace-nowrap">Average 6-Cabin Hospital</span>
                 </div>
-                <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
-                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap">
+                <div className="p-3 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center overflow-hidden">
+                  <div className="text-base xs:text-lg sm:text-xl lg:text-[22px] font-black text-emerald-400 tracking-tight tabular-nums whitespace-nowrap">
                     <AnimatedCounter end={3.4} decimals={1} suffix=" Days" duration={1600} />
                   </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Average Payback</span>
                   <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 whitespace-nowrap">30-Day Guarantee</span>
                 </div>
-                <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
-                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap">
+                <div className="p-3 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center overflow-hidden">
+                  <div className="text-base xs:text-lg sm:text-xl lg:text-[22px] font-black text-emerald-400 tracking-tight tabular-nums whitespace-nowrap">
                     <AnimatedCounter end={2.4} decimals={1} suffix="x" duration={1600} />
                   </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">15-Day Follow-Up Rate</span>
                   <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 whitespace-nowrap">Automated Sync</span>
                 </div>
-                <div className="p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center">
-                  <div className="text-xl xs:text-2xl lg:text-[26px] xl:text-3xl font-black text-emerald-400 font-mono tracking-tight whitespace-nowrap">
+                <div className="p-3 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center overflow-hidden">
+                  <div className="text-base xs:text-lg sm:text-xl lg:text-[22px] font-black text-emerald-400 tracking-tight tabular-nums whitespace-nowrap">
                     <AnimatedCounter prefix="-" end={78} suffix="%" duration={1600} />
                   </div>
                   <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Corridor Crowding</span>

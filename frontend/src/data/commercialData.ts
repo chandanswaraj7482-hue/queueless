@@ -39,9 +39,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 49, annual: 468 },
-      GROWTH_OPD: { monthly: 99, annual: 948 },
-      ENTERPRISE: { monthly: 199, annual: 1908 },
+      STARTER: { monthly: 149, annual: 1490 },
+      GROWTH_OPD: { monthly: 249, annual: 2490 },
+      ENTERPRISE: { monthly: 399, annual: 3990 },
     },
   },
   INR: {
@@ -56,9 +56,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 50,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 2999, annual: 29990 },
-      GROWTH_OPD: { monthly: 6999, annual: 69990 },
-      ENTERPRISE: { monthly: 14999, annual: 149990 },
+      STARTER: { monthly: 9999, annual: 99990 },
+      GROWTH_OPD: { monthly: 18999, annual: 189990 },
+      ENTERPRISE: { monthly: 29999, annual: 299990 },
     },
   },
   GBP: {
@@ -73,9 +73,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 39, annual: 372 },
-      GROWTH_OPD: { monthly: 79, annual: 756 },
-      ENTERPRISE: { monthly: 159, annual: 1524 },
+      STARTER: { monthly: 119, annual: 1190 },
+      GROWTH_OPD: { monthly: 199, annual: 1990 },
+      ENTERPRISE: { monthly: 319, annual: 3190 },
     },
   },
   EUR: {
@@ -90,9 +90,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 5,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 45, annual: 432 },
-      GROWTH_OPD: { monthly: 89, annual: 852 },
-      ENTERPRISE: { monthly: 179, annual: 1716 },
+      STARTER: { monthly: 139, annual: 1390 },
+      GROWTH_OPD: { monthly: 229, annual: 2290 },
+      ENTERPRISE: { monthly: 369, annual: 3690 },
     },
   },
   AED: {
@@ -107,9 +107,9 @@ export const WORLDWIDE_CURRENCIES: Record<string, CurrencyConfig> = {
     feeStep: 10,
     standeeFee: 0,
     rates: {
-      STARTER: { monthly: 179, annual: 1716 },
-      GROWTH_OPD: { monthly: 359, annual: 3444 },
-      ENTERPRISE: { monthly: 729, annual: 6996 },
+      STARTER: { monthly: 549, annual: 5490 },
+      GROWTH_OPD: { monthly: 899, annual: 8990 },
+      ENTERPRISE: { monthly: 1469, annual: 14690 },
     },
   },
   SGD: {

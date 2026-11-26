@@ -1147,7 +1147,7 @@ export const QueuelessWebsite: React.FC = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.28, ease: 'easeOut' }}
-            className="pt-1 flex items-center justify-center gap-2.5 sm:gap-3"
+            className="pt-1 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3"
           >
             <div className="flex -space-x-2.5 overflow-hidden">
               <img

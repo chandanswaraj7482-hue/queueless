@@ -177,7 +177,7 @@ export const RoiCalculatorPage: React.FC = () => {
                 />
                 <div className="flex justify-between text-xs font-semibold text-slate-600 dark:text-slate-300">
                   <span>20 Patients</span>
-                  <span>600 Patients</span>
+                  <span className="hidden sm:inline text-slate-400">600 Patients</span>
                   <span>1,200 Patients</span>
                 </div>
               </div>

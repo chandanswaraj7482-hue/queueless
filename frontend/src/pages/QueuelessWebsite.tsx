@@ -2095,15 +2095,15 @@ export const QueuelessWebsite: React.FC = () => {
               <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
               <div className="space-y-5 relative z-10">
-                <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-md shadow-emerald-600/30 group-hover:scale-105 transition-transform">
+                <div className="flex flex-wrap items-center justify-between gap-2.5">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-md shadow-emerald-600/30 group-hover:scale-105 transition-transform shrink-0">
                     <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10.5px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="text-[9.5px] sm:text-[10.5px] font-black uppercase tracking-wider px-2.5 sm:px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 whitespace-nowrap">
                       🏛️ ABDM M1/M2 Certified
                     </span>
-                    <span className="text-[10.5px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-700">
+                    <span className="text-[9.5px] sm:text-[10.5px] font-black uppercase tracking-wider px-2.5 sm:px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-700 whitespace-nowrap">
                       NABH Audit-Ready
                     </span>
                   </div>
@@ -2120,12 +2120,12 @@ export const QueuelessWebsite: React.FC = () => {
 
                 {/* Micro-Mockup: Live ABDM & Quality Audit Log */}
                 <div className="p-4 rounded-2xl bg-white/90 dark:bg-slate-950/80 border border-emerald-500/20 dark:border-emerald-500/30 space-y-2.5 shadow-sm">
-                  <div className="flex items-center justify-between text-xs">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                     <span className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold">
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                      NHA ABHA Gateway Synced
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                      <span>NHA ABHA Gateway Synced</span>
                     </span>
-                    <span className="font-mono text-emerald-700 dark:text-emerald-300 font-black text-[10.5px] bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-700">
+                    <span className="font-mono text-emerald-700 dark:text-emerald-300 font-black text-[10px] bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-700 whitespace-nowrap">
                       VERIFIED • 100% AUDIT PASS
                     </span>
                   </div>
@@ -2539,12 +2539,12 @@ export const QueuelessWebsite: React.FC = () => {
               <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none group-hover/zerowait:bg-blue-500/25 group-hover/zerowait:scale-125 transition-all duration-700"></div>
 
               <div className="space-y-6 relative z-10">
-                <div className="flex items-center justify-between">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm group-hover/zerowait:scale-105 group-hover/zerowait:shadow-md transition-all duration-300">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full text-[10px] sm:text-[11px] font-black uppercase tracking-wider shadow-sm group-hover/zerowait:scale-105 group-hover/zerowait:shadow-md transition-all duration-300 whitespace-nowrap">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
                     <span>Queueless Clinical Benchmark</span>
                   </div>
-                  <span className="text-xs font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/80 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800 group-hover/zerowait:scale-105 group-hover/zerowait:bg-blue-600 group-hover/zerowait:text-white transition-all duration-300">
+                  <span className="text-[11px] sm:text-xs font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-0.5 rounded-md border border-blue-200 dark:border-blue-800 group-hover/zerowait:scale-105 group-hover/zerowait:bg-blue-600 group-hover/zerowait:text-white transition-all duration-300 whitespace-nowrap">
                     ABDM & HIPAA Ready
                   </span>
                 </div>

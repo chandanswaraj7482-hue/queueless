@@ -315,14 +315,16 @@ export const CommercialFooter: React.FC = () => {
             <span className="font-bold text-slate-300 uppercase tracking-wider text-[10px] hidden sm:inline">
               Payment & Security:
             </span>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-300 whitespace-nowrap shadow-xs">
-              <CreditCard className="w-3.5 h-3.5 text-sky-400 shrink-0" />
-              <span className="font-bold text-white">Dodo Payments & Cashfree</span>
-              <span className="text-slate-600">•</span>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-300 shadow-xs max-w-full">
+              <span className="inline-flex items-center gap-1.5">
+                <CreditCard className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                <span className="font-bold text-white">Dodo Payments & Cashfree</span>
+              </span>
+              <span className="hidden sm:inline text-slate-600">•</span>
               <span className="text-slate-400">Cards & UPI AutoPay</span>
               <span className="text-slate-600">•</span>
-              <span className="inline-flex items-center gap-1 text-emerald-400 font-medium">
-                <Lock className="w-3 h-3" /> 256-Bit SSL
+              <span className="inline-flex items-center gap-1 text-emerald-400 font-medium whitespace-nowrap">
+                <Lock className="w-3 h-3 shrink-0" /> 256-Bit SSL
               </span>
             </div>
           </div>

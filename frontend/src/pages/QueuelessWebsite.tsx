@@ -3601,24 +3601,24 @@ export const QueuelessWebsite: React.FC = () => {
                     </button>
                   </div>
                   <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1">
-                    <span>👈 Swipe or watch auto-slide • Card {activeKitIndex + 1} of 4</span>
+                    <span>👈 Swipe to explore • Card {activeKitIndex + 1} of 4</span>
                   </p>
                 </div>
               </div>
 
               {/* Security & Zero Capex Highlights */}
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-1 text-[10.5px] sm:text-[11px] font-bold text-slate-600 dark:text-slate-400">
-                <span className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 px-3 py-1 rounded-full border border-emerald-200/60 dark:border-emerald-800/60">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  Zero Courier Shipping Delay
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 sm:gap-2.5 pt-1 text-[10px] sm:text-[11px] font-bold text-slate-600 dark:text-slate-400">
+                <span className="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 px-2.5 sm:px-3 py-1 rounded-full border border-emerald-200/60 dark:border-emerald-800/60 whitespace-nowrap">
+                  <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600 shrink-0" />
+                  Zero Courier Delay
                 </span>
-                <span className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full border border-blue-200/60 dark:border-blue-800/60">
-                  <Check className="w-3.5 h-3.5 text-blue-600" />
-                  Instant Cloud Provisioning
+                <span className="inline-flex items-center gap-1 bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2.5 sm:px-3 py-1 rounded-full border border-blue-200/60 dark:border-blue-800/60 whitespace-nowrap">
+                  <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />
+                  Instant Cloud Setup
                 </span>
-                <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">
-                  <Check className="w-3.5 h-3.5 text-slate-500" />
-                  NABH & ABDM Level 3 Ready
+                <span className="inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2.5 sm:px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap">
+                  <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-500 shrink-0" />
+                  NABH & ABDM Ready
                 </span>
               </div>
 

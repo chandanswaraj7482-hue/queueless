@@ -941,28 +941,33 @@ export const ReceptionDashboard: React.FC = () => {
           </form>
         </div>
 
-        {/* Quick Pending Cash Patient Pills */}
+        {/* Quick Pending Cash Patient Cards (Name, Age, Token, One-Click Accept) */}
         {pendingCashPatients.length > 0 && (
           <div className="mt-4 pt-4 border-t border-slate-700/80">
-            <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider block mb-2">
+            <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider block mb-2.5">
               ⚠️ Patients waiting at reception to pay cash & get payment approved ({pendingCashPatients.length}):
             </span>
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2.5 flex-wrap">
               {pendingCashPatients.map((p) => (
                 <button
                   key={p.id}
                   onClick={() => handleCollectCash(p.id, 'CASH')}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800/90 hover:bg-emerald-950/80 hover:border-emerald-500 border border-slate-600 rounded-xl text-xs transition-all group"
-                  title="Click to approve cash payment and admit into doctor queue"
+                  className="inline-flex items-center gap-2.5 px-3.5 py-2 bg-slate-800/95 hover:bg-emerald-950/90 hover:border-emerald-500 border border-slate-600 rounded-xl text-xs transition-all group cursor-pointer shadow-sm"
+                  title="Click to accept cash payment and issue live token"
                 >
                   <span className="font-mono font-extrabold text-amber-400 group-hover:text-emerald-300">
-                    🎟️ {p.token || 'Token Pending'}
+                    🎟️ {p.token && p.token !== 'PENDING' ? p.token : 'Token Pending'}
                   </span>
-                  <span className="text-slate-200 font-semibold">{p.patient.name}</span>
+                  <span className="text-slate-100 font-bold">{p.patient.name}</span>
+                  <span className="text-slate-300 font-semibold bg-slate-700/80 px-1.5 py-0.5 rounded text-[10px]">
+                    {p.patient.age ? `${p.patient.age} yrs` : 'Age N/A'}
+                  </span>
                   <span className="text-emerald-400 font-bold bg-emerald-950 px-1.5 py-0.5 rounded text-[10px]">
                     ₹{p.feeAmount}
                   </span>
-                  <span className="text-[10px] text-amber-300 group-hover:text-emerald-300 font-bold">➔ Approve Payment</span>
+                  <span className="px-2 py-0.5 rounded-lg bg-emerald-500 text-slate-950 font-black text-[10px] group-hover:bg-emerald-400">
+                    ✓ Accept Cash
+                  </span>
                 </button>
               ))}
             </div>

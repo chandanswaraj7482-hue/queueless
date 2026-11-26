@@ -1095,7 +1095,7 @@ export const QueuelessWebsite: React.FC = () => {
       {/* ============================================================== */}
       {/* 2. WORLD-CLASS ENTERPRISE HEALTHCARE SAAS HERO                */}
       {/* ============================================================== */}
-      <section className="relative pt-20 sm:pt-24 lg:pt-28 pb-8 sm:pb-12 px-3 sm:px-6 z-10 overflow-hidden text-center">
+      <section className="relative pt-24 sm:pt-28 lg:pt-32 pb-8 sm:pb-12 px-3 sm:px-6 z-10 overflow-hidden text-center">
         {/* Soft Radial Ambient Lighting */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(56,189,248,0.18),rgba(99,102,241,0.08),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(14,165,233,0.18),rgba(99,102,241,0.08),rgba(0,0,0,0))] pointer-events-none -z-10" />
 
@@ -1106,15 +1106,17 @@ export const QueuelessWebsite: React.FC = () => {
             initial={{ opacity: 0, y: -14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="inline-flex items-center gap-1.5 sm:gap-2.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-blue-50/90 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800/80 text-[11px] sm:text-xs font-bold text-blue-700 dark:text-blue-300 shadow-sm backdrop-blur-md max-w-full overflow-hidden text-ellipsis whitespace-nowrap"
+            className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:gap-2.5 px-3.5 sm:px-4 py-1.5 rounded-2xl sm:rounded-full bg-blue-50/90 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800/80 text-[11px] sm:text-xs font-bold text-blue-700 dark:text-blue-300 shadow-sm backdrop-blur-md max-w-full"
           >
-            <span className="relative flex h-2 w-2 shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+              </span>
+              <span>ABDM Certified • Zero-Wait Clinical OS</span>
             </span>
-            <span className="truncate">ABDM Certified • Zero-Wait Clinical OS</span>
-            <span className="text-blue-300 dark:text-blue-700">•</span>
-            <span className="font-semibold text-slate-600 dark:text-slate-400 shrink-0">{selectedCurrency.flag} Trusted by 50+ Clinics & OPDs</span>
+            <span className="hidden sm:inline text-blue-300 dark:text-blue-700">•</span>
+            <span className="font-semibold text-slate-600 dark:text-slate-400">{selectedCurrency.flag} Trusted by 50+ Clinics & OPDs</span>
           </motion.div>
 
           {/* Master Headline: 5-Second Mobile-First Value Proposition */}
@@ -1122,10 +1124,10 @@ export const QueuelessWebsite: React.FC = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-            className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[62px] font-black text-slate-950 dark:text-white tracking-tight leading-[1.14] max-w-4xl mx-auto px-1"
+            className="text-[28px] xs:text-4xl sm:text-5xl md:text-6xl lg:text-[62px] font-black text-slate-950 dark:text-white tracking-tight leading-[1.15] max-w-4xl mx-auto px-1 break-words"
           >
-            <span className="whitespace-nowrap">Autonomous Zero-Wait</span> <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 whitespace-nowrap">
+            <span className="sm:whitespace-nowrap">Autonomous Zero-Wait</span> <br className="hidden sm:inline" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 sm:whitespace-nowrap">
               Clinical Operating System
             </span>
           </motion.h1>
@@ -3320,29 +3322,29 @@ export const QueuelessWebsite: React.FC = () => {
                       duration={1800}
                     />
                   </div>
-                  <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Monthly Recovered Fees</span>
-                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 whitespace-nowrap">Average 6-Cabin Hospital</span>
+                  <span className="text-[10px] sm:text-[11px] text-slate-300 font-medium block mt-1 leading-tight">Monthly Recovered Fees</span>
+                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 leading-tight">Average 6-Cabin Hospital</span>
                 </div>
                 <div className="p-3 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center overflow-hidden">
                   <div className="text-base xs:text-lg sm:text-xl lg:text-[22px] font-black text-emerald-400 tracking-tight tabular-nums whitespace-nowrap">
                     <AnimatedCounter end={3.4} decimals={1} suffix=" Days" duration={1600} />
                   </div>
-                  <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Average Payback</span>
-                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 whitespace-nowrap">30-Day Guarantee</span>
+                  <span className="text-[10px] sm:text-[11px] text-slate-300 font-medium block mt-1 leading-tight">Average Payback</span>
+                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 leading-tight">30-Day Guarantee</span>
                 </div>
                 <div className="p-3 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center overflow-hidden">
                   <div className="text-base xs:text-lg sm:text-xl lg:text-[22px] font-black text-emerald-400 tracking-tight tabular-nums whitespace-nowrap">
                     <AnimatedCounter end={2.4} decimals={1} suffix="x" duration={1600} />
                   </div>
-                  <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">15-Day Follow-Up Rate</span>
-                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 whitespace-nowrap">Automated Sync</span>
+                  <span className="text-[10px] sm:text-[11px] text-slate-300 font-medium block mt-1 leading-tight">15-Day Follow-Up Rate</span>
+                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 leading-tight">Automated Sync</span>
                 </div>
                 <div className="p-3 sm:p-4 bg-white/5 rounded-2xl border border-white/10 hover-card-premium flex flex-col justify-center items-center overflow-hidden">
                   <div className="text-base xs:text-lg sm:text-xl lg:text-[22px] font-black text-emerald-400 tracking-tight tabular-nums whitespace-nowrap">
                     <AnimatedCounter prefix="-" end={78} suffix="%" duration={1600} />
                   </div>
-                  <span className="text-[11px] text-slate-300 font-medium block mt-1 whitespace-nowrap">Corridor Crowding</span>
-                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 whitespace-nowrap">Calm Waiting Lounges</span>
+                  <span className="text-[10px] sm:text-[11px] text-slate-300 font-medium block mt-1 leading-tight">Corridor Crowding</span>
+                  <span className="text-[10px] text-emerald-400/90 font-semibold block mt-0.5 leading-tight">Calm Waiting Lounges</span>
                 </div>
               </div>
             </div>

@@ -813,6 +813,51 @@ paymentRouter.post('/dodo/webhook', async (req, res) => {
   }
 });
 
+// 10. Cashfree Server-Side Webhook Receiver
+paymentRouter.post('/cashfree/webhook', async (req, res) => {
+  try {
+    const event = req.body;
+    const eventType = event?.type;
+    console.log('[Cashfree Webhook Received]:', eventType || 'EVENT');
+
+    const orderId = event?.data?.order?.order_id;
+    const cfPaymentId = event?.data?.payment?.cf_payment_id;
+    const paymentStatus = event?.data?.payment?.payment_status;
+
+    if (orderId && (eventType === 'PAYMENT_SUCCESS_WEBHOOK' || paymentStatus === 'SUCCESS')) {
+      const paymentRecord = await prisma.payment.findFirst({
+        where: { providerOrderId: orderId },
+        include: { queueEntry: true },
+      });
+
+      if (paymentRecord) {
+        await prisma.payment.update({
+          where: { id: paymentRecord.id },
+          data: {
+            status: 'PAID',
+            providerPaymentId: cfPaymentId ? String(cfPaymentId) : paymentRecord.providerPaymentId,
+          },
+        });
+
+        if (paymentRecord.queueEntryId) {
+          await prisma.queueEntry.update({
+            where: { id: paymentRecord.queueEntryId },
+            data: { paymentStatus: 'PAID', status: 'WAITING' },
+          });
+          broadcastQueueUpdate(paymentRecord.clinicId, 'queue_updated', {
+            type: 'PAYMENT_VERIFIED',
+            queueEntryId: paymentRecord.queueEntryId,
+          });
+        }
+      }
+    }
+
+    return res.json({ received: true });
+  } catch (error: any) {
+    return res.status(400).json({ success: false, error: error.message });
+  }
+});
+
 // 9. Razorpay Server-Side Webhook Receiver
 paymentRouter.post('/razorpay/webhook', async (req, res) => {
   try {
@@ -864,6 +909,51 @@ paymentRouter.post('/razorpay/webhook', async (req, res) => {
               queueEntryId: paymentRecord.queueEntryId,
             });
           }
+        }
+      }
+    }
+
+    return res.json({ received: true });
+  } catch (error: any) {
+    return res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// 10. Cashfree Server-Side Webhook Receiver
+paymentRouter.post('/cashfree/webhook', async (req, res) => {
+  try {
+    const event = req.body;
+    const eventType = event?.type;
+    console.log('[Cashfree Webhook Received]:', eventType || 'EVENT');
+
+    const orderId = event?.data?.order?.order_id;
+    const cfPaymentId = event?.data?.payment?.cf_payment_id;
+    const paymentStatus = event?.data?.payment?.payment_status;
+
+    if (orderId && (eventType === 'PAYMENT_SUCCESS_WEBHOOK' || paymentStatus === 'SUCCESS')) {
+      const paymentRecord = await prisma.payment.findFirst({
+        where: { providerOrderId: orderId },
+        include: { queueEntry: true },
+      });
+
+      if (paymentRecord) {
+        await prisma.payment.update({
+          where: { id: paymentRecord.id },
+          data: {
+            status: 'PAID',
+            providerPaymentId: cfPaymentId ? String(cfPaymentId) : paymentRecord.providerPaymentId,
+          },
+        });
+
+        if (paymentRecord.queueEntryId) {
+          await prisma.queueEntry.update({
+            where: { id: paymentRecord.queueEntryId },
+            data: { paymentStatus: 'PAID', status: 'WAITING' },
+          });
+          broadcastQueueUpdate(paymentRecord.clinicId, 'queue_updated', {
+            type: 'PAYMENT_VERIFIED',
+            queueEntryId: paymentRecord.queueEntryId,
+          });
         }
       }
     }

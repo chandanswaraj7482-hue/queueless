@@ -3,6 +3,8 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   User as FirebaseUser,
 } from 'firebase/auth';
@@ -86,10 +88,52 @@ export const signInWithGoogle = async (): Promise<GoogleAuthResult> => {
     };
   } catch (error: any) {
     console.warn('Firebase Google Auth encountered notice:', error);
-    if (error?.code === 'auth/popup-closed-by-user') {
+    const code = error?.code || '';
+
+    if (
+      code === 'auth/popup-blocked' ||
+      code === 'auth/operation-not-supported-in-this-environment'
+    ) {
+      // Seamless mobile / in-app browser fallback via full-page redirect
+      const firebaseAuth = getFirebaseAuth();
+      await signInWithRedirect(firebaseAuth, googleProvider);
+      throw new Error('REDIRECTING_TO_GOOGLE');
+    }
+
+    if (code === 'auth/popup-closed-by-user') {
       throw new Error('Google sign-in was cancelled.');
     }
+
+    if (code === 'auth/unauthorized-domain') {
+      const host = typeof window !== 'undefined' ? window.location.hostname : 'this domain';
+      throw new Error(`Google sign-in not authorized for ${host}. Add ${host} to Firebase Authorized Domains.`);
+    }
+
     throw new Error(error?.message || 'Google sign-in failed. Please log in with your Registered ID and Password.');
+  }
+};
+
+/**
+ * Complete Google Sign-In when returning from a mobile signInWithRedirect flow
+ */
+export const completeGoogleRedirectSignIn = async (): Promise<GoogleAuthResult | null> => {
+  try {
+    const firebaseAuth = getFirebaseAuth();
+    const result = await getRedirectResult(firebaseAuth);
+    if (!result || !result.user) return null;
+    const user = result.user;
+    const idToken = await user.getIdToken().catch(() => 'simulated_id_token_' + Date.now());
+    return {
+      user,
+      email: user.email || '',
+      displayName: user.displayName || user.email?.split('@')[0] || 'User',
+      photoURL: user.photoURL || '',
+      uid: user.uid,
+      idToken,
+    };
+  } catch (err) {
+    console.warn('Google redirect completion notice:', err);
+    return null;
   }
 };
 

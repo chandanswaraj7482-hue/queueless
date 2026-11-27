@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../config/api';
-import { signInWithGoogle } from '../config/firebase';
+import { signInWithGoogle, completeGoogleRedirectSignIn } from '../config/firebase';
 import { SeoHead } from '../components/SeoHead';
 import {
   User,
@@ -133,11 +133,35 @@ export const PatientPortal: React.FC = () => {
   const [showFullHistoryModal, setShowFullHistoryModal] = useState(false);
 
   // Strictly clean inputs on initial mount — zero auto-login, zero pre-fill, zero auto-verify
+  // Also completes Google redirect sign-in if returning from mobile browser OAuth redirect
   useEffect(() => {
     setLoginLoading(false);
     setTrackLoading(false);
     setGoogleLoading(false);
     setSignupLoading(false);
+
+    completeGoogleRedirectSignIn().then(async (authResult) => {
+      if (!authResult || !authResult.email) return;
+      setGoogleLoading(true);
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/patient/google-login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: authResult.email,
+            name: authResult.displayName,
+            photoURL: authResult.photoURL,
+            uid: authResult.uid,
+          }),
+        });
+        const data = await res.json().catch(() => null);
+        if (data?.success && data?.data) {
+          setPortalData(data.data);
+        }
+      } finally {
+        setGoogleLoading(false);
+      }
+    });
   }, []);
 
   const handleGoogleSignIn = async () => {
@@ -173,10 +197,12 @@ export const PatientPortal: React.FC = () => {
       }
     } catch (err: any) {
       const msg = err?.message || '';
-      if (msg.includes('auth/popup-closed-by-user') || msg.includes('cancelled')) {
+      if (msg === 'REDIRECTING_TO_GOOGLE') {
+        return;
+      } else if (msg.includes('auth/popup-closed-by-user') || msg.includes('cancelled')) {
         setError('Google sign-in was cancelled.');
       } else {
-        setError('Google sign-in unavailable. Please log in with your registered Mobile/Email and Password below.');
+        setError(msg || 'Google sign-in unavailable. Please log in with your registered Mobile/Email and Password below.');
       }
     } finally {
       setGoogleLoading(false);

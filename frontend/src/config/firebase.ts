@@ -16,6 +16,10 @@ const firebaseConfig = {
     import.meta.env.VITE_FIREBASE_API_KEY ||
     'AIzaSyAQiAf7zRyhieQ8PcigTOLuFJghhFWaEJc',
   authDomain:
+    (typeof window !== 'undefined' &&
+      window.location.hostname !== 'localhost' &&
+      window.location.hostname !== '127.0.0.1' &&
+      window.location.host) ||
     import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ||
     'queueless-74dbb.firebaseapp.com',
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'queueless-74dbb',

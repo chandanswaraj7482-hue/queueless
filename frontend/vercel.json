@@ -32,7 +32,11 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!assets/|.*\\.(?:ico|png|jpg|jpeg|svg|webp|xml|txt|json|pdf)).*)",
+      "source": "/__/auth/:path*",
+      "destination": "https://queueless-74dbb.firebaseapp.com/__/auth/:path*"
+    },
+    {
+      "source": "/((?!assets/|__/auth/|.*\\.(?:ico|png|jpg|jpeg|svg|webp|xml|txt|json|pdf)).*)",
       "destination": "/index.html"
     }
   ]

@@ -35,8 +35,8 @@ let auth: any = null;
 export const isFirebaseConfigured = (): boolean => {
   return Boolean(
     firebaseConfig.apiKey &&
-      firebaseConfig.apiKey.length > 5 &&
-      firebaseConfig.projectId
+    firebaseConfig.apiKey.length > 5 &&
+    firebaseConfig.projectId
   );
 };
 
@@ -100,10 +100,7 @@ export const signInWithGoogle = async (): Promise<GoogleAuthResult> => {
       code === 'auth/popup-blocked' ||
       code === 'auth/operation-not-supported-in-this-environment'
     ) {
-      // Seamless mobile / in-app browser fallback via full-page redirect
-      const firebaseAuth = getFirebaseAuth();
-      await signInWithRedirect(firebaseAuth, googleProvider);
-      throw new Error('REDIRECTING_TO_GOOGLE');
+      throw new Error('Google sign-in popup was blocked by your browser. Please allow popups for this site or log in with your Mobile/Email below.');
     }
 
     if (code === 'auth/popup-closed-by-user') {

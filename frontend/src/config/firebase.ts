@@ -74,7 +74,13 @@ export interface GoogleAuthResult {
 export const signInWithGoogle = async (): Promise<GoogleAuthResult> => {
   try {
     const firebaseAuth = getFirebaseAuth();
-    const result = await signInWithPopup(firebaseAuth, googleProvider);
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Google sign-in timed out or popup was blocked. Please allow popups or log in with your Mobile/Email below.')), 45000)
+    );
+    const result = await Promise.race([
+      signInWithPopup(firebaseAuth, googleProvider),
+      timeoutPromise,
+    ]);
     const user = result.user;
     const idToken = await user.getIdToken().catch(() => 'simulated_id_token_' + Date.now());
 

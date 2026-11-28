@@ -2981,20 +2981,20 @@ export const QueuelessWebsite: React.FC = () => {
                 </div>
 
                 {/* Doctor Tablet Workstation Mockup */}
-                <div className="md:col-span-6 bg-slate-900 p-5 sm:p-6 rounded-3xl border-4 border-slate-700 text-slate-100 shadow-2xl space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-800 text-xs">
-                    <div className="flex items-center gap-2.5">
+                <div className="md:col-span-6 bg-slate-900 p-4 sm:p-6 rounded-3xl border-4 border-slate-700 text-slate-100 shadow-2xl space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800 text-xs">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       <img
                         src="/assets/avatars/doc-1.jpg"
                         alt="Dr. Rohan Sharma"
                         className="w-10 h-10 rounded-full object-cover border-2 border-purple-400 shrink-0 shadow-sm"
                       />
-                      <div>
-                        <strong className="text-white block">Dr. Rohan Sharma, MD</strong>
-                        <span className="text-[11px] text-purple-300 font-mono">Cabin 1 • General Medicine</span>
+                      <div className="min-w-0">
+                        <strong className="text-white block truncate">Dr. Rohan Sharma, MD</strong>
+                        <span className="text-[11px] text-purple-300 font-mono block truncate">Cabin 1 • General Medicine</span>
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-full border border-emerald-500/30 shrink-0">
+                    <span className="text-[10.5px] sm:text-xs font-bold text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-full border border-emerald-500/30 shrink-0 whitespace-nowrap">
                       Active In Consultation
                     </span>
                   </div>
@@ -3024,18 +3024,18 @@ export const QueuelessWebsite: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="pt-2 flex items-center gap-2">
+                  <div className="pt-2 flex flex-wrap sm:flex-nowrap items-center gap-2">
                     <button
                       type="button"
                       onClick={playClinicChime}
-                      className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                      className="flex-1 py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[11px] sm:text-xs rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap"
                     >
-                      <Volume2 className="w-3.5 h-3.5" />
-                      <span>Call Next Patient (Chime TV)</span>
+                      <Volume2 className="w-3.5 h-3.5 shrink-0" />
+                      <span>Call Next (Chime TV)</span>
                     </button>
                     <button
                       type="button"
-                      className="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-xl border border-slate-700"
+                      className="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-[11px] sm:text-xs rounded-xl border border-slate-700 whitespace-nowrap"
                     >
                       Print Rx
                     </button>

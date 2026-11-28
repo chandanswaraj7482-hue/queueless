@@ -813,6 +813,73 @@ paymentRouter.post('/dodo/webhook', async (req, res) => {
   }
 });
 
+// 11. Queueless SaaS Subscription Checkout via Official Cashfree PG
+paymentRouter.post('/saas/cashfree-create-order', async (req, res) => {
+  try {
+    const { hospitalName, adminEmail, phone, amount, planId, currency } = req.body;
+
+    const cfAppId = process.env.CASHFREE_APP_ID || '133552174c102e641875b3c58081255331';
+    const cfSecret = process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_2f2dfec6d9bee0b9de4e2e5c5748224a_3e69c5ff';
+    const cfEnv = process.env.CASHFREE_ENVIRONMENT || 'production';
+    const baseUrl = cfEnv === 'production' ? 'https://api.cashfree.com/pg/orders' : 'https://sandbox.cashfree.com/pg/orders';
+
+    const orderId = 'QL_SAAS_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    // Cashfree PG INR checkout (₹1 verification or plan amount)
+    const orderAmount = Math.max(1, Number(amount) || 1);
+    const cleanPhone = String(phone || '9876543210').replace(/[^0-9]/g, '').slice(-10) || '9876543210';
+
+    const cfResponse = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-version': '2023-08-01',
+        'x-client-id': cfAppId,
+        'x-client-secret': cfSecret,
+      },
+      body: JSON.stringify({
+        order_id: orderId,
+        order_amount: orderAmount,
+        order_currency: 'INR',
+        customer_details: {
+          customer_id: 'HOSP_' + Date.now(),
+          customer_phone: cleanPhone,
+          customer_name: (hospitalName || 'Hospital Director').slice(0, 50),
+          customer_email: adminEmail || 'director@hospital.com',
+        },
+        order_meta: {
+          return_url: `https://queueless-os.vercel.app/signup?cf_order_id={order_id}&cf_status=success`,
+        },
+        order_note: `Queueless OS ${planId || 'STARTER'} SaaS (${currency || 'INR'}) - ${hospitalName || 'Hospital'}`,
+      }),
+    });
+
+    const orderData = (await cfResponse.json()) as any;
+    if (orderData && orderData.payment_session_id) {
+      const hostedCheckoutUrl = cfEnv === 'production'
+        ? `https://payments.cashfree.com/order/#${orderData.payment_session_id}`
+        : `https://payments-test.cashfree.com/order/#${orderData.payment_session_id}`;
+
+      return res.json({
+        success: true,
+        data: {
+          orderId,
+          paymentSessionId: orderData.payment_session_id,
+          hostedCheckoutUrl,
+          environment: cfEnv,
+        },
+      });
+    }
+
+    return res.status(400).json({
+      success: false,
+      error: orderData?.message || 'Cashfree order creation failed',
+      details: orderData,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // 10. Cashfree Server-Side Webhook Receiver
 paymentRouter.post('/cashfree/webhook', async (req, res) => {
   try {
@@ -855,6 +922,73 @@ paymentRouter.post('/cashfree/webhook', async (req, res) => {
     return res.json({ received: true });
   } catch (error: any) {
     return res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// 11. Queueless SaaS Subscription Checkout via Official Cashfree PG
+paymentRouter.post('/saas/cashfree-create-order', async (req, res) => {
+  try {
+    const { hospitalName, adminEmail, phone, amount, planId, currency } = req.body;
+
+    const cfAppId = process.env.CASHFREE_APP_ID || '133552174c102e641875b3c58081255331';
+    const cfSecret = process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_2f2dfec6d9bee0b9de4e2e5c5748224a_3e69c5ff';
+    const cfEnv = process.env.CASHFREE_ENVIRONMENT || 'production';
+    const baseUrl = cfEnv === 'production' ? 'https://api.cashfree.com/pg/orders' : 'https://sandbox.cashfree.com/pg/orders';
+
+    const orderId = 'QL_SAAS_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    // Cashfree PG INR checkout (₹1 verification or plan amount)
+    const orderAmount = Math.max(1, Number(amount) || 1);
+    const cleanPhone = String(phone || '9876543210').replace(/[^0-9]/g, '').slice(-10) || '9876543210';
+
+    const cfResponse = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-version': '2023-08-01',
+        'x-client-id': cfAppId,
+        'x-client-secret': cfSecret,
+      },
+      body: JSON.stringify({
+        order_id: orderId,
+        order_amount: orderAmount,
+        order_currency: 'INR',
+        customer_details: {
+          customer_id: 'HOSP_' + Date.now(),
+          customer_phone: cleanPhone,
+          customer_name: (hospitalName || 'Hospital Director').slice(0, 50),
+          customer_email: adminEmail || 'director@hospital.com',
+        },
+        order_meta: {
+          return_url: `https://queueless-os.vercel.app/signup?cf_order_id={order_id}&cf_status=success`,
+        },
+        order_note: `Queueless OS ${planId || 'STARTER'} SaaS (${currency || 'INR'}) - ${hospitalName || 'Hospital'}`,
+      }),
+    });
+
+    const orderData = (await cfResponse.json()) as any;
+    if (orderData && orderData.payment_session_id) {
+      const hostedCheckoutUrl = cfEnv === 'production'
+        ? `https://payments.cashfree.com/order/#${orderData.payment_session_id}`
+        : `https://payments-test.cashfree.com/order/#${orderData.payment_session_id}`;
+
+      return res.json({
+        success: true,
+        data: {
+          orderId,
+          paymentSessionId: orderData.payment_session_id,
+          hostedCheckoutUrl,
+          environment: cfEnv,
+        },
+      });
+    }
+
+    return res.status(400).json({
+      success: false,
+      error: orderData?.message || 'Cashfree order creation failed',
+      details: orderData,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
   }
 });
 
@@ -919,6 +1053,73 @@ paymentRouter.post('/razorpay/webhook', async (req, res) => {
   }
 });
 
+// 11. Queueless SaaS Subscription Checkout via Official Cashfree PG
+paymentRouter.post('/saas/cashfree-create-order', async (req, res) => {
+  try {
+    const { hospitalName, adminEmail, phone, amount, planId, currency } = req.body;
+
+    const cfAppId = process.env.CASHFREE_APP_ID || '133552174c102e641875b3c58081255331';
+    const cfSecret = process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_2f2dfec6d9bee0b9de4e2e5c5748224a_3e69c5ff';
+    const cfEnv = process.env.CASHFREE_ENVIRONMENT || 'production';
+    const baseUrl = cfEnv === 'production' ? 'https://api.cashfree.com/pg/orders' : 'https://sandbox.cashfree.com/pg/orders';
+
+    const orderId = 'QL_SAAS_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    // Cashfree PG INR checkout (₹1 verification or plan amount)
+    const orderAmount = Math.max(1, Number(amount) || 1);
+    const cleanPhone = String(phone || '9876543210').replace(/[^0-9]/g, '').slice(-10) || '9876543210';
+
+    const cfResponse = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-version': '2023-08-01',
+        'x-client-id': cfAppId,
+        'x-client-secret': cfSecret,
+      },
+      body: JSON.stringify({
+        order_id: orderId,
+        order_amount: orderAmount,
+        order_currency: 'INR',
+        customer_details: {
+          customer_id: 'HOSP_' + Date.now(),
+          customer_phone: cleanPhone,
+          customer_name: (hospitalName || 'Hospital Director').slice(0, 50),
+          customer_email: adminEmail || 'director@hospital.com',
+        },
+        order_meta: {
+          return_url: `https://queueless-os.vercel.app/signup?cf_order_id={order_id}&cf_status=success`,
+        },
+        order_note: `Queueless OS ${planId || 'STARTER'} SaaS (${currency || 'INR'}) - ${hospitalName || 'Hospital'}`,
+      }),
+    });
+
+    const orderData = (await cfResponse.json()) as any;
+    if (orderData && orderData.payment_session_id) {
+      const hostedCheckoutUrl = cfEnv === 'production'
+        ? `https://payments.cashfree.com/order/#${orderData.payment_session_id}`
+        : `https://payments-test.cashfree.com/order/#${orderData.payment_session_id}`;
+
+      return res.json({
+        success: true,
+        data: {
+          orderId,
+          paymentSessionId: orderData.payment_session_id,
+          hostedCheckoutUrl,
+          environment: cfEnv,
+        },
+      });
+    }
+
+    return res.status(400).json({
+      success: false,
+      error: orderData?.message || 'Cashfree order creation failed',
+      details: orderData,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // 10. Cashfree Server-Side Webhook Receiver
 paymentRouter.post('/cashfree/webhook', async (req, res) => {
   try {
@@ -961,5 +1162,72 @@ paymentRouter.post('/cashfree/webhook', async (req, res) => {
     return res.json({ received: true });
   } catch (error: any) {
     return res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// 11. Queueless SaaS Subscription Checkout via Official Cashfree PG
+paymentRouter.post('/saas/cashfree-create-order', async (req, res) => {
+  try {
+    const { hospitalName, adminEmail, phone, amount, planId, currency } = req.body;
+
+    const cfAppId = process.env.CASHFREE_APP_ID || '133552174c102e641875b3c58081255331';
+    const cfSecret = process.env.CASHFREE_SECRET_KEY || 'cfsk_ma_prod_2f2dfec6d9bee0b9de4e2e5c5748224a_3e69c5ff';
+    const cfEnv = process.env.CASHFREE_ENVIRONMENT || 'production';
+    const baseUrl = cfEnv === 'production' ? 'https://api.cashfree.com/pg/orders' : 'https://sandbox.cashfree.com/pg/orders';
+
+    const orderId = 'QL_SAAS_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    // Cashfree PG INR checkout (₹1 verification or plan amount)
+    const orderAmount = Math.max(1, Number(amount) || 1);
+    const cleanPhone = String(phone || '9876543210').replace(/[^0-9]/g, '').slice(-10) || '9876543210';
+
+    const cfResponse = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-version': '2023-08-01',
+        'x-client-id': cfAppId,
+        'x-client-secret': cfSecret,
+      },
+      body: JSON.stringify({
+        order_id: orderId,
+        order_amount: orderAmount,
+        order_currency: 'INR',
+        customer_details: {
+          customer_id: 'HOSP_' + Date.now(),
+          customer_phone: cleanPhone,
+          customer_name: (hospitalName || 'Hospital Director').slice(0, 50),
+          customer_email: adminEmail || 'director@hospital.com',
+        },
+        order_meta: {
+          return_url: `https://queueless-os.vercel.app/signup?cf_order_id={order_id}&cf_status=success`,
+        },
+        order_note: `Queueless OS ${planId || 'STARTER'} SaaS (${currency || 'INR'}) - ${hospitalName || 'Hospital'}`,
+      }),
+    });
+
+    const orderData = (await cfResponse.json()) as any;
+    if (orderData && orderData.payment_session_id) {
+      const hostedCheckoutUrl = cfEnv === 'production'
+        ? `https://payments.cashfree.com/order/#${orderData.payment_session_id}`
+        : `https://payments-test.cashfree.com/order/#${orderData.payment_session_id}`;
+
+      return res.json({
+        success: true,
+        data: {
+          orderId,
+          paymentSessionId: orderData.payment_session_id,
+          hostedCheckoutUrl,
+          environment: cfEnv,
+        },
+      });
+    }
+
+    return res.status(400).json({
+      success: false,
+      error: orderData?.message || 'Cashfree order creation failed',
+      details: orderData,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, error: error.message });
   }
 });

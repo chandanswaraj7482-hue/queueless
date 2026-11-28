@@ -198,6 +198,68 @@ export const HospitalOnboarding: React.FC = () => {
   const surgeCost = tokenSurgeAddon ? (selectedCurrency.code === 'INR' ? 3999 : 49) : 0;
   const totalAmount = planRate + whiteLabelCost + whatsappCost + surgeCost;
 
+  // Handle Official Cashfree Return Callback (?cf_order_id=...&cf_status=success)
+  useEffect(() => {
+    const cfOrderId = searchParams.get('cf_order_id');
+    const pendingRaw = typeof window !== 'undefined' ? sessionStorage.getItem('queueless_pending_onboarding') : null;
+    if (!cfOrderId || !pendingRaw) return;
+
+    sessionStorage.removeItem('queueless_pending_onboarding');
+    try {
+      const saved = JSON.parse(pendingRaw);
+      setIsProcessing(true);
+      setCurrentStep(4);
+      fetch(`${API_BASE_URL}/api/v1/clinics/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          hospitalName: saved.hospitalName?.trim(),
+          slug: saved.slug?.trim(),
+          address: saved.address?.trim(),
+          city: saved.city?.trim(),
+          phone: saved.phone?.trim(),
+          adminEmail: saved.adminEmail?.trim(),
+          adminPassword: saved.adminPassword?.trim(),
+          receptionPassword: saved.receptionPin?.trim() || '2026',
+          doctorPin: saved.doctorPin?.trim() || '1234',
+          doctorPassword: saved.doctorPin?.trim() || '1234',
+          planId: saved.planId || 'STARTER',
+          planName: saved.planId || 'STARTER',
+          billingCycle: saved.billingCycle || 'MONTHLY',
+          currency: saved.currencyCode || 'INR',
+          hardwareAddon: !!saved.hardwareAddon,
+          whatsappAddon: !!saved.whatsappAddon,
+          tokenSurgeAddon: !!saved.tokenSurgeAddon,
+          totalAmount: saved.totalAmount || 0,
+          paymentMethod: 'CASHFREE',
+          autopay: {
+            status: 'ACTIVE',
+            mandateId: cfOrderId,
+            mode: 'CASHFREE_HOSTED',
+            amountDueToday: 0,
+            recurringAmount: saved.totalAmount || 0,
+            trialDaysRemaining: 14,
+          },
+          initialDoctorName: saved.initialDoctorName?.trim() || 'Dr. Chief Consultant, MD',
+          initialDoctorSpecialty: saved.initialDoctorSpecialty?.trim() || '',
+          initialDoctorRoom: saved.doctorCabinSlug?.trim() || saved.initialDoctorRoom?.trim() || 'Cabin 1',
+        }),
+      })
+        .then((r) => r.json())
+        .then((resData) => {
+          if (resData?.success && resData?.data) {
+            setProvisionedData(resData.data);
+            setCurrentStep(5);
+            playClinicChime();
+          } else {
+            setErrorMsg(resData?.error || 'Provisioning failed after Cashfree return.');
+          }
+        })
+        .catch(() => setErrorMsg('Network error finalizing workspace after Cashfree payment.'))
+        .finally(() => setIsProcessing(false));
+    } catch {}
+  }, []);
+
   // Step 1 Validation: Hospital Details & Master Login
   const handleStep1Submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -288,6 +350,8 @@ export const HospitalOnboarding: React.FC = () => {
           billingCycle,
           currency: currencyCode,
           hardwareAddon,
+          whatsappAddon,
+          tokenSurgeAddon,
           totalAmount,
           paymentMethod: paymentGateway,
           autopay: autopayRecord,
@@ -480,12 +544,60 @@ export const HospitalOnboarding: React.FC = () => {
       }
       await executeSubscriptionProvisioning();
     } else {
-      if (!upiVpa.includes('@') || upiVpa.trim().length < 5) {
-        setErrorMsg('Please enter a valid UPI VPA ID (e.g. director@okhdfcbank or 9876543210@ybl).');
-        return;
+      // Redirect directly to Official Cashfree Payments Checkout
+      setIsProcessing(true);
+      setErrorMsg(null);
+      try {
+        sessionStorage.setItem(
+          'queueless_pending_onboarding',
+          JSON.stringify({
+            hospitalName,
+            slug,
+            address,
+            city,
+            phone,
+            adminEmail,
+            adminPassword,
+            receptionPin,
+            doctorPin,
+            doctorCabinSlug,
+            initialDoctorName,
+            initialDoctorSpecialty,
+            initialDoctorRoom,
+            planId: selectedPlan.id,
+            billingCycle,
+            currencyCode,
+            hardwareAddon,
+            whatsappAddon,
+            tokenSurgeAddon,
+            totalAmount,
+          })
+        );
+
+        const orderRes = await fetch(`${API_BASE_URL}/api/v1/payments/saas/cashfree-create-order`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            hospitalName: hospitalName.trim() || 'Hospital Facility',
+            adminEmail: adminEmail.trim(),
+            phone: phone.trim(),
+            amount: currencyCode === 'INR' ? Math.max(1, totalAmount) : 1,
+            planId: selectedPlan.id,
+            currency: currencyCode,
+          }),
+        });
+        const orderJson = await orderRes.json();
+
+        if (orderJson.success && orderJson.data?.hostedCheckoutUrl) {
+          window.location.href = orderJson.data.hostedCheckoutUrl;
+          return;
+        }
+        setErrorMsg(orderJson.error || 'Could not initialize Cashfree checkout. Please try again.');
+      } catch (err: any) {
+        setErrorMsg(err?.message || 'Network error connecting to Cashfree.');
+      } finally {
+        setIsProcessing(false);
       }
-      // Open Official Cashfree AutoPay Mandate Modal
-      setShowCashfreeModal(true);
     }
   };
 
@@ -1474,77 +1586,24 @@ export const HospitalOnboarding: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="p-5 bg-gradient-to-br from-emerald-50/80 to-teal-50/40 dark:from-emerald-950/40 dark:to-teal-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800 space-y-4">
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-900 dark:text-white">
+                  <div className="p-5 bg-gradient-to-br from-emerald-50/80 to-teal-50/40 dark:from-emerald-950/40 dark:to-teal-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800 space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-slate-900 dark:text-white">
                       <div className="flex items-center gap-2">
-                        <Smartphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                        <span>Cashfree UPI AutoPay Mandate (RBI & NPCI Live Gateway)</span>
+                        <Smartphone className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                        <span>Official Cashfree Payments Checkout</span>
                       </div>
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-[10px] font-black uppercase border border-emerald-200 dark:border-emerald-800">
-                        Zero OTP on Day 15
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-[10px] font-black uppercase border border-emerald-200 dark:border-emerald-800">
+                        Live Production Gateway
                       </span>
                     </div>
 
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                        Select AutoPay UPI App or Enter VPA / UPI ID:
-                      </label>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setUpiVpa(phone ? `${phone}@okhdfcbank` : 'director@okhdfcbank');
-                          }}
-                          className="px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-500 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-xs cursor-pointer active:scale-95"
-                        >
-                          <span>⚡ Google Pay</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setUpiVpa(phone ? `${phone}@ybl` : 'director@ybl');
-                          }}
-                          className="px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-500 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-xs cursor-pointer active:scale-95"
-                        >
-                          <span>🟣 PhonePe</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setUpiVpa(phone ? `${phone}@paytm` : 'director@paytm');
-                          }}
-                          className="px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-500 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-xs cursor-pointer active:scale-95"
-                        >
-                          <span>🔷 Paytm</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setUpiVpa(phone ? `${phone}@upi` : 'director@upi');
-                          }}
-                          className="px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-500 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-xs cursor-pointer active:scale-95"
-                        >
-                          <span>🇮🇳 BHIM / Other</span>
-                        </button>
-                      </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                      Clicking the button below redirects you directly to the official <strong>Cashfree Payments Checkout</strong>, where you can pay securely via <strong>UPI (GPay, PhonePe, Paytm, BHIM), Cards, or NetBanking</strong>.
+                    </p>
 
-                      <div className="relative">
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g. 9876543210@okhdfcbank or hospital.director@ybl"
-                          value={upiVpa}
-                          onChange={(e) => setUpiVpa(e.target.value.trim().toLowerCase())}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700 text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                        />
-                        <span className="absolute right-3 top-2.5 text-[10px] bg-emerald-100 dark:bg-emerald-900/80 text-emerald-800 dark:text-emerald-200 font-bold px-2 py-0.5 rounded-md pointer-events-none">
-                          Cashfree AutoPay Verified
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap items-center justify-between gap-1 text-[10px] text-slate-500 dark:text-slate-400 mt-2">
-                        <span>✓ Powered by <strong>Cashfree Payments</strong> • Official RBI & NPCI e-Mandate Rail</span>
-                        <span>✓ Instant approval in Google Pay, PhonePe, Paytm or BHIM app • <strong>₹0 debited</strong></span>
-                      </div>
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400 pt-1 border-t border-emerald-200/60 dark:border-emerald-800/60">
+                      <span>✓ Powered by <strong>Cashfree Payments</strong> • PCI-DSS Level 1</span>
+                      <span>✓ Instant Hospital Workspace Activation</span>
                     </div>
                   </div>
                 )}

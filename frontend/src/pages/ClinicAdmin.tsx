@@ -117,6 +117,10 @@ interface ClinicSettings {
   bankIfscCode?: string;
   bankName?: string;
   autoDirectSettlement?: boolean;
+  // Hospital Self-Service WhatsApp Cloud API Settings
+  whatsappProvider?: 'WA_ME' | 'META_CLOUD' | 'INTERAKT' | 'AISENSY';
+  whatsappApiKey?: string;
+  whatsappPhoneNumberId?: string;
 }
 
 export const ClinicAdmin: React.FC = () => {
@@ -3336,6 +3340,62 @@ export const ClinicAdmin: React.FC = () => {
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                     Live token countdown updates, doctor calling notifications, and 1-tap digital Rx PDFs delivered directly to patient WhatsApp.
                   </p>
+                </div>
+
+                {/* Self-Service WhatsApp Cloud API Configuration */}
+                <div className="p-4 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-2xl border border-emerald-200/80 dark:border-emerald-800/70 space-y-2.5 text-left">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[11px] font-black text-emerald-900 dark:text-emerald-200 uppercase tracking-wider">
+                      Hospital WhatsApp API Key
+                    </span>
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${
+                      settings.whatsappApiKey
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                    }`}>
+                      {settings.whatsappApiKey ? '● API Connected' : '1-Click wa.me Mode'}
+                    </span>
+                  </div>
+
+                  <select
+                    aria-label="WhatsApp API Provider"
+                    value={settings.whatsappProvider || 'WA_ME'}
+                    onChange={(e) => setSettings({ ...settings, whatsappProvider: e.target.value as any })}
+                    className="w-full px-3 py-2 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  >
+                    <option value="WA_ME">1-Click wa.me Share (No API Key Needed)</option>
+                    <option value="META_CLOUD">Meta WhatsApp Cloud API</option>
+                    <option value="INTERAKT">Interakt WhatsApp Business API</option>
+                    <option value="AISENSY">AiSensy WhatsApp API</option>
+                  </select>
+
+                  {settings.whatsappProvider && settings.whatsappProvider !== 'WA_ME' && (
+                    <div className="space-y-2 pt-1">
+                      <input
+                        type="password"
+                        placeholder={`Enter ${settings.whatsappProvider === 'META_CLOUD' ? 'Meta Access Token' : settings.whatsappProvider + ' API Key'}`}
+                        value={settings.whatsappApiKey || ''}
+                        onChange={(e) => setSettings({ ...settings, whatsappApiKey: e.target.value.trim() })}
+                        className="w-full px-3 py-2 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-white dark:bg-slate-900 text-xs font-mono text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      />
+                      {settings.whatsappProvider === 'META_CLOUD' && (
+                        <input
+                          type="text"
+                          placeholder="Meta Phone Number ID (e.g. 104829104819204)"
+                          value={settings.whatsappPhoneNumberId || ''}
+                          onChange={(e) => setSettings({ ...settings, whatsappPhoneNumberId: e.target.value.trim() })}
+                          className="w-full px-3 py-2 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-white dark:bg-slate-900 text-xs font-mono text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                        />
+                      )}
+                      <button
+                        type="button"
+                        onClick={handleSaveSettings}
+                        className="w-full py-2 px-3 rounded-xl bg-slate-900 dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-700 text-white text-[11px] font-black transition-all cursor-pointer"
+                      >
+                        Save WhatsApp API Credentials
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* WhatsApp Dispatcher Interactive Test */}
